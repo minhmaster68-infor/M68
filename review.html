@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Ôn Tập - Shipbuilding English</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #0073E6;
+            --bg: #F8FAFC;
+            --white: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1E293B; }
+        .container { max-width: 1000px; margin: 0 auto; background: var(--white); padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        h2 { color: var(--accent); margin-top: 40px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Table Styles */
+        .table-wrapper { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #E2E8F0; vertical-align: middle; }
+        tr:hover { background-color: #f1f5f9; }
+
+        /* Speaker Button */
+        .btn-speak {
+            background: none; border: none; color: var(--accent); cursor: pointer; 
+            font-size: 1.1rem; padding: 5px 10px; transition: 0.2s;
+        }
+        .btn-speak:hover { transform: scale(1.2); color: #00D4B2; }
+        .ipa { color: #64748B; font-size: 0.9rem; font-family: monospace; }
+        .example { font-style: italic; color: #475569; font-size: 0.9rem; display: block; margin-top: 4px; }
+
+        /* Office Phrases Cards */
+        .phrase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .phrase-card { background: #fdfdfd; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; border-left: 5px solid var(--accent); }
+        .phrase-title { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { text-decoration: none; color: var(--accent); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .phrase-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="back-nav"><a href="index.html">← Quay lại trang chủ</a></div>
+    
+    <h1>BÀI ÔN TẬP CHUYÊN NGÀNH</h1>
+
+    <!-- PHẦN I: TỪ VỰNG -->
+    <h2><i class="fa-solid fa-ship"></i> I. Bảng Từ Vựng Chuyên Ngành</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Từ vựng / Phát âm</th>
+                    <th>Ý nghĩa</th>
+                    <th>Ví dụ ứng dụng (Bấm để nghe)</th>
+                </tr>
+            </thead>
+            <tbody id="vocab-table">
+                <!-- Dữ liệu sẽ được chèn bằng JS hoặc viết trực tiếp -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PHẦN II: CỤM TỪ CÔNG SỞ -->
+    <h2><i class="fa-solid fa-briefcase"></i> II. Cụm Từ Công Sở & Thương Mại</h2>
+    <div class="phrase-grid" id="phrase-list">
+        <!-- Dữ liệu cụm từ -->
+    </div>
+</div>
+
+<script>
+    // Dữ liệu Từ vựng
+    const vocabData = [
+        { term: "50,000 DWT Bulk Carrier", ipa: "/bulk ˈkæriər/", mean: "Tàu chở hàng rời 50.000 tấn", ex: "Structural approval for the 50,000 DWT Bulk Carrier." },
+        { term: "Classification Society", ipa: "/ˌklæsɪfɪˈkeɪʃn səˈsaɪəti/", mean: "Cơ quan Đăng kiểm (DNV, VR, ABS)", ex: "Meeting with the DNV Classification Society surveyors." },
+        { term: "Shop drawings", ipa: "/ʃɑːp ˈdrɔːɪŋz/", mean: "Bản vẽ thi công / bản vẽ xưởng", ex: "The department finalized the updated shop drawings." },
+        { term: "NDT (Non-Destructive Testing)", ipa: "/en-dee-tee/", mean: "Kiểm tra không phá hủy (Siêu âm/X-ray)", ex: "NDT inspection reports for the hull blocks." },
+        { term: "Hull blocks", ipa: "/hʌl blɑːks/", mean: "Các tổng đoạn / block vỏ tàu", ex: "Steel blocks prepared for hull assembly." },
+        { term: "Keel laying", ipa: "/kiːl ˈleɪɪŋ/", mean: "Lễ đặt sống chính (Khởi công)", ex: "The keel laying ceremony is on track for Friday." },
+        { term: "High-tensile steel plates", ipa: "/haɪ ˈtensl stiːl pleɪts/", mean: "Thép tấm cường độ cao", ex: "Imported high-tensile steel plates from Japan." },
+        { term: "Dockyard slot", ipa: "/ˈdɑːkjɑːrd slɑːt/", mean: "Vị trí triền đà / đốc đóng tàu", ex: "Re-sequence the dockyard slot allocation." },
+        { term: "Launching", ipa: "/ˈlɔːntʃɪŋ/", mean: "Lễ hạ thủy tàu", ex: "Don't hold up next week’s launching of the tanker." },
+        { term: "Sea Trials", ipa: "/siː traɪəlz/", mean: "Kỳ chạy thử tàu trên biển", ex: "They confirmed their schedule for the upcoming Sea Trials." },
+        { term: "Protocol of Delivery and Acceptance", ipa: "/ˈprəʊtəkɑːl.../", mean: "Biên bản nghiệm thu bàn giao", ex: "Sign the official Protocol of Delivery and Acceptance." },
+        { term: "Refund Guarantee (RG)", ipa: "/ˈriːfʌnd ˌɡærənˈtiː/", mean: "Thư bảo lãnh hoàn tiền", ex: "Review the Refund Guarantee (RG) letters." }
+    ];
+
+    // Dữ liệu Cụm từ
+    const phraseData = [
+        { ph: "Run through (the agenda)", mean: "Điểm qua / rà soát lịch trình", ex: "Could you please run me through today’s agenda?" },
+        { ph: "Top operational priorities", mean: "Các ưu tiên vận hành hàng đầu", ex: "Highlight our top operational priorities." },
+        { ph: "On track", mean: "Đúng tiến độ / kế hoạch", ex: "Is the ceremony still on track for Friday?" },
+        { ph: "Domino effect", mean: "Hiệu ứng dây chuyền (rủi ro lây lan)", ex: "We cannot afford any domino effect." },
+        { ph: "Hold up", mean: "Làm đình trệ / chậm trễ", ex: "So we don't hold up next week’s launching." },
+        { ph: "Seamless logistics", mean: "Khâu hậu cần mượt mà", ex: "Ensure their transfers and hotel accommodations are seamless." },
+        { ph: "Packed schedule", mean: "Lịch trình dày đặc", ex: "A packed schedule as always!" }
+    ];
+
+    // Hàm phát âm
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            // Hủy các yêu cầu đọc đang dang dở để đọc yêu cầu mới ngay lập tức
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            msg.rate = 0.9;
+            window.speechSynthesis.speak(msg);
+        }
+    }
+
+    // Render bảng từ vựng
+    const vocabTable = document.getElementById('vocab-table');
+    vocabData.forEach(item => {
+        vocabTable.innerHTML += `
+            <tr>
+                <td>
+                    <strong>${item.term}</strong> 
+                    <button class="btn-speak" onclick="speak('${item.term}')"><i class="fa-solid fa-volume-high"></i></button>
+                    <div class="ipa">${item.ipa}</div>
+                </td>
+                <td>${item.mean}</td>
+                <td>
+                    <span class="example">${item.ex}</span>
+                    <button class="btn-speak" onclick="speak('${item.ex.replace(/'/g, "\\'")}')" style="font-size:0.8rem">
+                        <i class="fa-solid fa-play"></i> Nghe câu ví dụ
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    // Render cụm từ công sở
+    const phraseList = document.getElementById('phrase-list');
+    phraseData.forEach(item => {
+        phraseList.innerHTML += `
+            <div class="phrase-card">
+                <div class="phrase-title">
+                    ${item.ph} 
+                    <button class="btn-speak" onclick="speak('${item.ph}')"><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+                <div style="color: #059669; font-weight:500; margin: 5px 0;">${item.mean}</div>
+                <div class="example">
+                    Ex: ${item.ex} 
+                    <button class="btn-speak" onclick="speak('${item.ex.replace(/'/g, "\\'")}')" style="font-size:0.8rem"><i class="fa-solid fa-play"></i></button>
+                </div>
+            </div>
+        `;
+    });
+</script>
+
+</body>
+</html>
