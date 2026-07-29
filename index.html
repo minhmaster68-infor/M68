@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Anh Ngành Đóng Tàu | Shipbuilding English</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS RESET & BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #0A2540;
+            --accent-cyan: #00D4B2;
+            --accent-blue: #0073E6;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            background-color: var(--primary-blue);
+            padding: 1rem 1.25rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--accent-cyan);
+            font-size: 1.4rem;
+        }
+
+        .tagline-badge {
+            background: rgba(0, 212, 178, 0.15);
+            color: var(--accent-cyan);
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0d3b66 100%);
+            color: var(--white);
+            padding: 3rem 1.25rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Họa tiết sóng trang trí phía sau */
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--bg-light);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .welcome-subtitle {
+            color: var(--accent-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: #E2E8F0;
+            margin-bottom: 2rem;
+        }
+
+        /* --- BUTTONS --- */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: var(--primary-blue);
+            box-shadow: 0 4px 14px rgba(0, 212, 178, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* --- FEATURES SECTION --- */
+        .features {
+            padding: 2.5rem 1.25rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: var(--primary-blue);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            background: rgba(0, 115, 230, 0.1);
+            color: var(--accent-blue);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .feature-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary-blue);
+        }
+
+        .feature-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--white);
+            border-top: 1px solid #E2E8F0;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        /* --- TABLET & DESKTOP RESPONSIVE --- */
+        @media (min-width: 640px) {
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            .cta-group {
+                flex-direction: row;
+                max-width: 100%;
+                justify-content: center;
+            }
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .feature-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid => fa-ship"></i>
+                <span>Shipbuilding English</span>
+            </a>
+            <span class="tagline-badge">Maritime Tech</span>
+        </div>
+    </header>
+
+    <!-- Hero Section (Lời chào mừng chính) -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="welcome-subtitle">Welcome aboard!</p>
+            <h1 class="hero-title">Chào Mừng Đến Với Trang Tiếng Anh Ngành Đóng Tàu</h1>
+            <p class="hero-desc">
+                Nâng cao vốn từ vựng chuyên ngành, đọc hiểu bản vẽ kỹ thuật và tự tin giao tiếp trong môi trường nhà máy đóng tàu quốc tế.
+            </p>
+            
+            <!-- Nút kêu gọi hành động (Call to Action) -->
+            <div class="cta-group">
+                <a href="#lessons" class="btn btn-primary">
+                    <i class="fa-solid fa-book-open"></i> Bắt đầu học ngay
+                </a>
+                <a href="#dictionary" class="btn btn-secondary">
+                    <i class="fa-solid fa-magnifying-glass"></i> Tra từ điển
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features / Các tính năng chính -->
+    <section class="features" id="lessons">
+        <h2 class="section-title">Bạn sẽ học được gì?</h2>
+        
+        <div class="features-grid">
+            <!-- Thẻ 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                </div>
+                <div class="feature-info">
+                    <h3>Từ Vựng Cấu Trúc Tàu</h3>
+                    <p>Nắm vững thuật ngữ về vỏ tàu (Hull), boong tàu (Deck), cabin, động cơ và thiết bị hàng hải.</p>
+                </div>
+            </div>
+
+            <!-- Thẻ 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-file-contract"></i>
+                </div>
+                <div class="feature-info">
+                    <h3>Tiêu Chuẩn & Quy Trình</h3>
+                    <p>Tiếng Anh cho công tác kiểm tra chất lượng (QC), đăng kiểm (Classification) và an toàn lao động.</p>
+                </div>
+            </div>
+
+            <!-- Thẻ 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-comments"></i>
+                </div>
+                <div class="feature-info">
+                    <h3>Giao Tiếp Nhà Máy</h3>
+                    <p>Hội thoại thực tế làm việc với chủ tàu, chuyên gia nước ngoài và đối tác quốc tế.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Shipbuilding English Hub. Chuyên nghiệp - Hiện đại - Tối ưu.</p>
+    </footer>
+
+</body>
+</html>
