@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipbuilding Challenge - Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #00D4B2;
+            --bg: #F0F4F8;
+            --white: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        #game-container {
+            background: var(--white);
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 600; color: var(--primary); }
+        .progress-bar { height: 10px; background: #E2E8F0; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        #progress { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+
+        .question-box { margin-bottom: 30px; }
+        .question-text { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .btn-audio { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; margin-bottom: 15px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .option-btn { 
+            padding: 15px; border: 2px solid #E2E8F0; border-radius: 12px; background: none;
+            font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            text-align: left;
+        }
+        .option-btn:hover { border-color: var(--accent); background: #f0fffb; }
+        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        #result-screen { display: none; }
+        .btn-restart { background: var(--accent); color: var(--primary); border: none; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        
+        .back-home { display: block; margin-top: 20px; text-decoration: none; color: #64748B; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- Màn hình chơi game -->
+    <div id="quiz-screen">
+        <div class="stats">
+            <span>Câu hỏi: <span id="current-idx">1</span>/10</span>
+            <span>Điểm: <span id="score">0</span></span>
+        </div>
+        <div class="progress-bar"><div id="progress"></div></div>
+
+        <div class="question-box">
+            <div class="question-text" id="question-text">Đang tải...</div>
+            <button class="btn-audio" onclick="playQuestionAudio()"><i class="fa-solid fa-volume-high"></i> Nghe phát âm</button>
+            <div style="color: #64748B; font-size: 0.9rem;">Chọn ý nghĩa đúng của thuật ngữ trên:</div>
+        </div>
+
+        <div class="options-grid" id="options">
+            <!-- Nút lựa chọn sẽ sinh ra ở đây -->
+        </div>
+    </div>
+
+    <!-- Màn hình kết thúc -->
+    <div id="result-screen">
+        <h1 style="color: var(--primary);">Kết quả</h1>
+        <div style="font-size: 3rem; margin: 20px 0;" id="final-score">0</div>
+        <p id="feedback-text">Cố gắng hơn nữa nhé!</p>
+        <button class="btn-restart" onclick="location.reload()">Chơi lại từ đầu</button>
+        <a href="index.html" class="back-home">Quay về Trang chủ</a>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu lấy từ bài học
+    const data = [
+        { q: "Bulk carrier", a: "Tàu chở hàng rời" },
+        { q: "Technical specifications", a: "Thông số kỹ thuật" },
+        { q: "Drydock", a: "Đốc khô (khu vực sửa chữa/đóng tàu)" },
+        { q: "Construction progress", a: "Tiến độ đóng tàu" },
+        { q: "Local logistics", a: "Khâu hậu cần tại địa phương" },
+        { q: "Private chauffeur", a: "Tài xế riêng" },
+        { q: "Accommodation", a: "Chỗ ở / Khách sạn" },
+        { q: "Dietary restrictions", a: "Yêu cầu ăn kiêng đặc biệt" },
+        { q: "Itinerary", a: "Lịch trình chi tiết" }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let shuffledQuestions = [];
+
+    // Khởi tạo game
+    function initGame() {
+        shuffledQuestions = data.sort(() => 0.5 - Math.random()).slice(0, 10);
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const qData = shuffledQuestions[currentQuestion];
+        document.getElementById('question-text').innerText = qData.q;
+        document.getElementById('current-idx').innerText = currentQuestion + 1;
+        document.getElementById('progress').style.width = (currentQuestion / 10) * 100 + "%";
+        
+        // Phát âm tự động khi sang câu mới
+        playQuestionAudio();
+
+        // Tạo đáp án nhiễu
+        let options = [qData.a];
+        while (options.length < 4) {
+            let randomA = data[Math.floor(Math.random() * data.length)].a;
+            if (!options.includes(randomA)) options.push(randomA);
+        }
+        options.sort(() => 0.5 - Math.random());
+
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = "";
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(btn, opt, qData.a);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function playQuestionAudio() {
+        const text = shuffledQuestions[currentQuestion].q;
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(msg);
+    }
+
+    function checkAnswer(btn, selected, correct) {
+        // Ngăn bấm nhiều lần
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        if (selected === correct) {
+            btn.classList.add('correct');
+            score += 10;
+            document.getElementById('score').innerText = score;
+        } else {
+            btn.classList.add('wrong');
+            // Hiển thị đáp án đúng
+            allBtns.forEach(b => {
+                if (b.innerText === correct) b.classList.add('correct');
+            });
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < shuffledQuestions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }, 1500);
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score').innerText = score + "/100";
+        
+        let feedback = "Cần cố gắng thêm!";
+        if (score >= 80) feedback = "Tuyệt vời! Bạn là chuyên gia đóng tàu!";
+        else if (score >= 50) feedback = "Khá tốt! Hãy ôn tập thêm nhé.";
+        document.getElementById('feedback-text').innerText = feedback;
+    }
+
+    initGame();
+</script>
+
+</body>
+</html>

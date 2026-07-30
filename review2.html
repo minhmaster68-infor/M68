@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Ôn Tập 2 - Shipyard Visit & Logistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0A2540; --accent: #00D4B2; --bg: #F8FAFC; --white: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        .dialogue-box { background: #f1f5f9; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 5px solid var(--primary); }
+        .speaker { font-weight: bold; color: var(--primary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #E2E8F0; }
+        .btn-speak { background: none; border: none; color: #0073E6; cursor: pointer; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { text-decoration: none; color: #0073E6; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="back-nav"><a href="index.html">← Quay lại trang chủ</a></div>
+    <h1>BÀI 2: TIẾP ĐÓN KHÁCH HÀNG & HẬU CẦN</h1>
+
+    <h2><i class="fa-solid fa-comments"></i> I. Hội thoại mẫu</h2>
+    <div class="dialogue-box">
+        <p><span class="speaker">Ms. Sophia:</span> I’m calling regarding your upcoming visit to our shipyard to discuss the <strong>technical specifications</strong>.</p>
+        <p><span class="speaker">Mr. Harrison:</span> Great! We will inspect our <strong>construction progress</strong> at <strong>Drydock</strong> No. 2?</p>
+        <p><span class="speaker">Ms. Sophia:</span> Exactly. We have arranged a <strong>private chauffeur</strong> and your <strong>accommodation</strong> at the Grand Harbor.</p>
+    </div>
+
+    <h2><i class="fa-solid fa-book"></i> II. Từ vựng trọng tâm</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Từ vựng</th>
+                <th>Phát âm</th>
+                <th>Nghĩa tiếng Việt</th>
+            </tr>
+        </thead>
+        <tbody id="vocab-body">
+            <!-- Dữ liệu JS -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const vocab2 = [
+        { q: "Bulk carrier", p: "/bʌlk ˈkæriər/", a: "Tàu chở hàng rời" },
+        { q: "Technical specifications", p: "/ˌteknɪkl ˌspesɪfɪˈkeɪʃnz/", a: "Thông số kỹ thuật" },
+        { q: "Drydock", p: "/ˈdraɪdɒk/", a: "Đốc khô (khu vực đóng/sửa tàu)" },
+        { q: "Construction progress", p: "/kənˈstrʌkʃn ˈprəʊɡres/", a: "Tiến độ đóng tàu" },
+        { q: "Local logistics", p: "/ˈləʊkl ləˈdʒɪstɪks/", a: "Khâu hậu cần tại địa phương" },
+        { q: "Private chauffeur", p: "/ˈpraɪvət ˈʃəʊfər/", a: "Tài xế riêng" },
+        { q: "Accommodation", p: "/əˌkɒməˈdeɪʃn/", a: "Chỗ ở / Khách sạn" },
+        { q: "Dietary restrictions", p: "/ˈdaɪətəri rɪˈstrɪkʃnz/", a: "Yêu cầu ăn kiêng đặc biệt" },
+        { q: "Itinerary", p: "/aɪˈtɪnərəri/", a: "Lịch trình chi tiết" }
+    ];
+
+    const tbody = document.getElementById('vocab-body');
+    vocab2.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${item.q}</strong> <button class="btn-speak" onclick="speak('${item.q}')"><i class="fa-solid fa-volume-high"></i></button></td>
+                <td style="color:#64748B; font-family:monospace;">${item.p}</td>
+                <td>${item.a}</td>
+            </tr>
+        `;
+    });
+
+    function speak(text) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+    }
+</script>
+</body>
+</html>
