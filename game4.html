@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant Roleplay Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0A2540; --assistant: #10b981; --boss: #3b82f6; --bg: #f0f4f8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        #game-container { width: 100%; max-width: 600px; background: white; display: flex; flex-direction: column; }
+        
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; }
+        
+        .bubble { margin-bottom: 20px; max-width: 85%; position: relative; }
+        .bubble.boss { align-self: flex-start; }
+        .bubble.linh { align-self: flex-end; margin-left: auto; }
+        
+        .label { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: block; text-transform: uppercase; }
+        .boss .label { color: var(--boss); }
+        .linh .label { color: var(--assistant); text-align: right; }
+        
+        .content { padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; position: relative; }
+        .boss .content { background: #e9ecef; color: #333; border-bottom-left-radius: 2px; }
+        .linh .content { background: var(--assistant); color: white; border-bottom-right-radius: 2px; cursor: pointer; }
+        
+        .hidden-text { filter: blur(5px); transition: 0.3s; user-select: none; }
+        .revealed { filter: blur(0); user-select: text; }
+        
+        .hint { font-size: 0.8rem; color: #666; margin-top: 5px; font-style: italic; }
+        .audio-btn { background: none; border: none; color: inherit; cursor: pointer; margin-left: 8px; }
+        
+        .controls { padding: 20px; border-top: 1px solid #eee; text-align: center; }
+        .btn-next { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="header">
+        <h3 style="margin:0;">Assistant Roleplay</h3>
+        <small>Nhấn vào phần hội thoại của Linh để xem đáp án & phát âm</small>
+    </div>
+
+    <div class="chat-area" id="chat-box">
+        <!-- Dialogue will be injected here -->
+    </div>
+
+    <div class="controls">
+        <button class="btn-next" id="next-btn" onclick="nextStep()">Bắt đầu hội thoại</button>
+        <div style="margin-top:10px;"><a href="index.html" style="color: #666; text-decoration:none; font-size:0.8rem;">Thoát</a></div>
+    </div>
+</div>
+
+<script>
+    const script = [
+        {
+            speaker: "Mr. Vance (Owner)",
+            text: "I want to be 100% confident in the skill level of your workforce before we cut the first steel plate.",
+            side: "boss",
+            reply: "Certainly. For the high-tensile steel structural framing, all welders assigned to this project hold 6G position certifications endorsed by DNV and Lloyd’s Register.",
+            hint: "Ms. Linh trả lời về chứng chỉ thợ hàn 6G của DNV/Lloyd's Register."
+        },
+        {
+            speaker: "Mr. Vance (Owner)",
+            text: "What about the coating application in the Water Ballast Tanks (WBT)? Any special certifications?",
+            side: "boss",
+            reply: "For all ballast tanks, our sandblasting crew guarantees a surface cleanliness of Sa 2.5. Our coating inspectors are NACE Level II certified.",
+            hint: "Ms. Linh nói về độ sạch Sa 2.5 và chứng chỉ NACE Level II."
+        },
+        {
+            speaker: "Mr. Tran (Director)",
+            text: "Linh, please tell Mr. Vance about the precision of our hatch coaming installation.",
+            side: "boss",
+            reply: "We utilize laser-guided alignment tools. The tolerance for coaming top flatness is strictly kept within ±2 mm over the entire length.",
+            hint: "Nói về thiết bị laser và sai số ±2 mm của nắp hầm hàng."
+        },
+        {
+            speaker: "Mr. Vance (Owner)",
+            text: "Excellent. I’d like to receive a weekly report on NDT pass rates.",
+            side: "boss",
+            reply: "I will compile those metrics and send them directly to your site supervision team every Friday afternoon, Mr. Vance.",
+            hint: "Xác nhận gửi báo cáo NDT vào mỗi chiều thứ Sáu."
+        }
+    ];
+
+    let currentStep = -1;
+    const chatBox = document.getElementById('chat-box');
+
+    function nextStep() {
+        currentStep++;
+        if (currentStep >= script.length) {
+            alert("Bạn đã hoàn thành buổi họp kỹ thuật!");
+            location.reload();
+            return;
+        }
+
+        document.getElementById('next-btn').innerText = "Tiếp tục";
+
+        const step = script[currentStep];
+
+        // 1. Show Boss/Director prompt
+        const bossDiv = document.createElement('div');
+        bossDiv.className = 'bubble boss';
+        bossDiv.innerHTML = `
+            <span class="label">${step.speaker}</span>
+            <div class="content">${step.text} <button class="audio-btn" onclick="speak('${step.text.replace(/'/g, "\\'")}')"><i class="fa-solid fa-volume-up"></i></button></div>
+        `;
+        chatBox.appendChild(bossDiv);
+        speak(step.text);
+
+        // 2. Show hidden Assistant response
+        setTimeout(() => {
+            const linhDiv = document.createElement('div');
+            linhDiv.className = 'bubble linh';
+            linhDiv.innerHTML = `
+                <span class="label">Ms. Linh (Assistant)</span>
+                <div class="content" onclick="revealResponse(this, '${step.reply.replace(/'/g, "\\'")}')">
+                    <span class="hidden-text">....................................................................................</span>
+                    <div class="hint">Gợi ý: ${step.hint}</div>
+                </div>
+            `;
+            chatBox.appendChild(linhDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 1000);
+    }
+
+    function revealResponse(element, text) {
+        const textSpan = element.querySelector('.hidden-text');
+        if (textSpan.classList.contains('revealed')) return;
+        
+        textSpan.innerText = text;
+        textSpan.classList.add('revealed');
+        speak(text);
+    }
+
+    function speak(txt) {
+        window.speechSynthesis.cancel();
+        const m = new SpeechSynthesisUtterance(txt);
+        m.lang = 'en-US';
+        m.rate = 0.9;
+        window.speechSynthesis.speak(m);
+    }
+</script>
+</body>
+</html>

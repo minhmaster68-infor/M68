@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 4: Technical & Workforce</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0A2540; --accent: #3498db; --bg: #F8FAFC; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: var(--primary); text-align: center; }
+        h2 { border-left: 5px solid var(--accent); padding-left: 15px; color: var(--primary); margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #E2E8F0; }
+        .btn-speak { background: none; border: none; color: #0073E6; cursor: pointer; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { text-decoration: none; color: var(--primary); font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="back-nav"><a href="index.html">← Quay lại trang chủ</a></div>
+    <h1>Bài 4: Technical & Workforce Alignment</h1>
+
+    <h2>I. Thuật ngữ Kỹ thuật (Technical Terms)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Thuật ngữ</th>
+                <th>Định nghĩa / Tiếng Việt</th>
+            </tr>
+        </thead>
+        <tbody id="vocab-body"></tbody>
+    </table>
+
+    <h2>II. Tiêu chuẩn Kiểm tra (Inspection Standards)</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top:15px;">
+        <div style="background:#eef2f7; padding:15px; border-radius:10px;">
+            <strong>IMO PSPC:</strong> Tiêu chuẩn hiệu năng phủ sơn bảo vệ cho két nước dằn.
+        </div>
+        <div style="background:#eef2f7; padding:15px; border-radius:10px;">
+            <strong>NDT (Non-Destructive Testing):</strong> Kiểm tra không phá hủy (Siêu âm UT, Từ tính MT).
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = [
+        { t: "Ultramax Bulk Carrier", m: "Tàu chở hàng rời (62,000 - 65,000 DWT)" },
+        { t: "Structural Integrity", m: "Độ bền / Tính toàn vẹn kết cấu" },
+        { t: "High-tensile Steel", m: "Thép cường độ cao" },
+        { t: "6G Position Certification", m: "Chứng chỉ thợ hàn 6G (mức độ khó nhất)" },
+        { t: "Water Ballast Tank (WBT)", m: "Két nước dằn tàu" },
+        { t: "Sa 2.5 Cleanliness", m: "Tiêu chuẩn làm sạch bề mặt phun cát Sa 2.5" },
+        { t: "Hatch Coaming", m: "Thành quây miệng hầm hàng" },
+        { t: "Dry Film Thickness (DFT)", m: "Độ dày màng sơn khô" }
+    ];
+
+    const body = document.getElementById('vocab-body');
+    data.forEach(item => {
+        body.innerHTML += `<tr>
+            <td><strong>${item.t}</strong> <button class="btn-speak" onclick="speak('${item.t}')"><i class="fa-solid fa-volume-high"></i></button></td>
+            <td>${item.m}</td>
+        </tr>`;
+    });
+
+    function speak(txt) {
+        const m = new SpeechSynthesisUtterance(txt);
+        m.lang = 'en-US';
+        window.speechSynthesis.speak(m);
+    }
+</script>
+</body>
+</html>
