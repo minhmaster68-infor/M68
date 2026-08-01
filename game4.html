@@ -9,30 +9,27 @@
     <style>
         :root { --primary: #0A2540; --assistant: #10b981; --boss: #3b82f6; --bg: #f0f4f8; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        #game-container { width: 100%; max-width: 600px; background: white; display: flex; flex-direction: column; }
+        #game-container { width: 100%; max-width: 600px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
         
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; }
-        .chat-area { flex: 1; padding: 20px; overflow-y: auto; }
+        .header { background: var(--primary); color: white; padding: 15px; text-align: center; }
         
-        .bubble { margin-bottom: 20px; max-width: 85%; position: relative; }
+        /* Video thu nhỏ trong game */
+        .game-video { width: 100%; height: 200px; border: none; background: #000; }
+
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
+        .bubble { margin-bottom: 20px; max-width: 85%; }
         .bubble.boss { align-self: flex-start; }
         .bubble.linh { align-self: flex-end; margin-left: auto; }
-        
-        .label { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: block; text-transform: uppercase; }
+        .label { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: block; }
         .boss .label { color: var(--boss); }
         .linh .label { color: var(--assistant); text-align: right; }
-        
-        .content { padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; position: relative; }
+        .content { padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; }
         .boss .content { background: #e9ecef; color: #333; border-bottom-left-radius: 2px; }
         .linh .content { background: var(--assistant); color: white; border-bottom-right-radius: 2px; cursor: pointer; }
-        
-        .hidden-text { filter: blur(5px); transition: 0.3s; user-select: none; }
-        .revealed { filter: blur(0); user-select: text; }
-        
-        .hint { font-size: 0.8rem; color: #666; margin-top: 5px; font-style: italic; }
-        .audio-btn { background: none; border: none; color: inherit; cursor: pointer; margin-left: 8px; }
-        
-        .controls { padding: 20px; border-top: 1px solid #eee; text-align: center; }
+        .hidden-text { filter: blur(5px); transition: 0.3s; }
+        .revealed { filter: blur(0); }
+        .hint { font-size: 0.8rem; color: #eee; margin-top: 5px; font-style: italic; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 5px; }
+        .controls { padding: 20px; border-top: 1px solid #eee; text-align: center; background: white; }
         .btn-next { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; }
     </style>
 </head>
@@ -40,16 +37,21 @@
 
 <div id="game-container">
     <div class="header">
-        <h3 style="margin:0;">Assistant Roleplay</h3>
-        <small>Nhấn vào phần hội thoại của Linh để xem đáp án & phát âm</small>
+        <h3 style="margin:0;">Meeting Roleplay: Assistant Challenge</h3>
     </div>
 
-    <div class="chat-area" id="chat-box">
-        <!-- Dialogue will be injected here -->
+    <!-- VIDEO MINH HỌA ĐẦU GAME -->
+    <iframe class="game-video" src="https://www.youtube.com/embed/l7_CP4w9ZJo" title="Video context" allowfullscreen></iframe>
+
+    <div class="chat-area" id="chat-box" style="display: flex; flex-direction: column;">
+        <!-- Dialogue injected here -->
+        <div style="text-align:center; color:#999; margin-top:50px;" id="start-msg">
+            Nhấn "Bắt đầu" để tham gia buổi họp kỹ thuật
+        </div>
     </div>
 
     <div class="controls">
-        <button class="btn-next" id="next-btn" onclick="nextStep()">Bắt đầu hội thoại</button>
+        <button class="btn-next" id="next-btn" onclick="nextStep()">Bắt đầu buổi họp</button>
         <div style="margin-top:10px;"><a href="index.html" style="color: #666; text-decoration:none; font-size:0.8rem;">Thoát</a></div>
     </div>
 </div>
@@ -59,30 +61,20 @@
         {
             speaker: "Mr. Vance (Owner)",
             text: "I want to be 100% confident in the skill level of your workforce before we cut the first steel plate.",
-            side: "boss",
             reply: "Certainly. For the high-tensile steel structural framing, all welders assigned to this project hold 6G position certifications endorsed by DNV and Lloyd’s Register.",
-            hint: "Ms. Linh trả lời về chứng chỉ thợ hàn 6G của DNV/Lloyd's Register."
+            hint: "Nói về chứng chỉ thợ hàn 6G của DNV và Lloyd's Register."
         },
         {
             speaker: "Mr. Vance (Owner)",
-            text: "What about the coating application in the Water Ballast Tanks (WBT)? Any special certifications?",
-            side: "boss",
-            reply: "For all ballast tanks, our sandblasting crew guarantees a surface cleanliness of Sa 2.5. Our coating inspectors are NACE Level II certified.",
-            hint: "Ms. Linh nói về độ sạch Sa 2.5 và chứng chỉ NACE Level II."
+            text: "What about the coating application in the Water Ballast Tanks (WBT)?",
+            reply: "For all ballast tanks, our sandblasting crew guarantees a surface cleanliness of Sa 2.5 and our coating inspectors are NACE Level II certified.",
+            hint: "Đề cập đến tiêu chuẩn Sa 2.5 và chứng chỉ NACE Level II."
         },
         {
             speaker: "Mr. Tran (Director)",
-            text: "Linh, please tell Mr. Vance about the precision of our hatch coaming installation.",
-            side: "boss",
-            reply: "We utilize laser-guided alignment tools. The tolerance for coaming top flatness is strictly kept within ±2 mm over the entire length.",
-            hint: "Nói về thiết bị laser và sai số ±2 mm của nắp hầm hàng."
-        },
-        {
-            speaker: "Mr. Vance (Owner)",
-            text: "Excellent. I’d like to receive a weekly report on NDT pass rates.",
-            side: "boss",
-            reply: "I will compile those metrics and send them directly to your site supervision team every Friday afternoon, Mr. Vance.",
-            hint: "Xác nhận gửi báo cáo NDT vào mỗi chiều thứ Sáu."
+            text: "Linh, please explain our hatch coaming installation precision.",
+            reply: "We utilize laser-guided alignment tools. The tolerance for coaming top flatness is strictly kept within ±2 mm.",
+            hint: "Nói về thiết bị laser và sai số ±2 mm."
         }
     ];
 
@@ -90,57 +82,52 @@
     const chatBox = document.getElementById('chat-box');
 
     function nextStep() {
+        if(currentStep === -1) document.getElementById('start-msg').remove();
+        
         currentStep++;
         if (currentStep >= script.length) {
-            alert("Bạn đã hoàn thành buổi họp kỹ thuật!");
+            alert("Bạn đã hoàn thành thử thách!");
             location.reload();
             return;
         }
 
-        document.getElementById('next-btn').innerText = "Tiếp tục";
-
+        document.getElementById('next-btn').innerText = "Tiếp theo";
         const step = script[currentStep];
 
-        // 1. Show Boss/Director prompt
+        // Boss Speak
         const bossDiv = document.createElement('div');
         bossDiv.className = 'bubble boss';
-        bossDiv.innerHTML = `
-            <span class="label">${step.speaker}</span>
-            <div class="content">${step.text} <button class="audio-btn" onclick="speak('${step.text.replace(/'/g, "\\'")}')"><i class="fa-solid fa-volume-up"></i></button></div>
-        `;
+        bossDiv.innerHTML = `<span class="label">${step.speaker}</span><div class="content">${step.text}</div>`;
         chatBox.appendChild(bossDiv);
         speak(step.text);
 
-        // 2. Show hidden Assistant response
+        // Assistant Hidden Reply
         setTimeout(() => {
             const linhDiv = document.createElement('div');
             linhDiv.className = 'bubble linh';
             linhDiv.innerHTML = `
-                <span class="label">Ms. Linh (Assistant)</span>
-                <div class="content" onclick="revealResponse(this, '${step.reply.replace(/'/g, "\\'")}')">
-                    <span class="hidden-text">....................................................................................</span>
+                <span class="label">Ms. Linh (Bạn)</span>
+                <div class="content" onclick="reveal(this, '${step.reply.replace(/'/g, "\\'")}')">
+                    <span class="hidden-text">......................................................</span>
                     <div class="hint">Gợi ý: ${step.hint}</div>
-                </div>
-            `;
+                </div>`;
             chatBox.appendChild(linhDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1000);
+        }, 800);
     }
 
-    function revealResponse(element, text) {
-        const textSpan = element.querySelector('.hidden-text');
-        if (textSpan.classList.contains('revealed')) return;
-        
-        textSpan.innerText = text;
-        textSpan.classList.add('revealed');
-        speak(text);
+    function reveal(el, txt) {
+        const span = el.querySelector('.hidden-text');
+        if(span.classList.contains('revealed')) return;
+        span.innerText = txt;
+        span.classList.add('revealed');
+        speak(txt);
     }
 
     function speak(txt) {
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(txt);
         m.lang = 'en-US';
-        m.rate = 0.9;
         window.speechSynthesis.speak(m);
     }
 </script>
