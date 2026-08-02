@@ -10,7 +10,22 @@
         :root { --primary: #0A2540; --accent: #e74c3c; --bg: #F8FAFC; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h1 { color: var(--primary); text-align: center; }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 20px; }
+        
+        /* CSS cho Video minh họa */
+        .video-wrapper { 
+            position: relative; 
+            padding-bottom: 56.25%; /* Tỉ lệ 16:9 */
+            height: 0; 
+            overflow: hidden; 
+            border-radius: 12px; 
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; 
+        }
+
         h2 { border-left: 5px solid var(--accent); padding-left: 15px; color: var(--primary); margin-top: 30px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { background: var(--primary); color: white; padding: 12px; text-align: left; }
@@ -24,6 +39,11 @@
     <div class="back-nav"><a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:bold;">← Quay lại trang chủ</a></div>
     <h1>Bài 5: Emergency Technical Meeting</h1>
 
+    <!-- VIDEO MINH HỌA -->
+    <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/4pmx65ULroY" title="Emergency Technical Meeting" allowfullscreen></iframe>
+    </div>
+
     <h2>I. Từ vựng trọng tâm (Key Vocabulary)</h2>
     <table>
         <thead>
@@ -35,8 +55,8 @@
         <tbody id="vocab-body"></tbody>
     </table>
 
-    <h2>II. Tình huống giả định</h2>
-    <p>Học viên đóng vai <strong>Thu (Senior Technical Coordinator)</strong> giải quyết các thắc mắc và áp lực từ <strong>Mr. Jonathan (Chủ tàu)</strong> chỉ 2 giờ trước khi tàu rời bến thử nghiệm đường biển.</p>
+    <h2>II. Tóm tắt tình huống</h2>
+    <p>Bạn sẽ đối mặt với các câu hỏi hóc búa về <strong>Main Engine Alarm</strong>, <strong>Steering Gear Leakage</strong> và <strong>Sea Trials Schedule</strong>. Hãy học kỹ từ vựng trước khi vào phần Roleplay.</p>
 </div>
 
 <script>
@@ -44,9 +64,9 @@
         { t: "Sea trials", m: "Thử nghiệm đường biển" },
         { t: "Cast off", m: "Rời bến / Tháo dây buộc tàu" },
         { t: "Main Engine alarm", m: "Báo động máy chính" },
-        { t: "Root cause", m: "Nguyên nhân gốc rễ" },
+        { t: "Faulty sensor", m: "Cảm biến bị lỗi" },
         { t: "Class Surveyor", m: "Đăng kiểm viên" },
-        { t: "Steering Gear", m: "Hệ thống máy lái" },
+        { t: "Hydraulic oil leakage", m: "Rò rỉ dầu thủy lực" },
         { t: "Blackout test", m: "Thử nghiệm mất điện toàn tàu" },
         { t: "Protocol of Acceptance", m: "Biên bản nghiệm thu" }
     ];
@@ -55,6 +75,7 @@
         body.innerHTML += `<tr><td><strong>${item.t}</strong> <button class="btn-speak" onclick="speak('${item.t}')"><i class="fa-solid fa-volume-high"></i></button></td><td>${item.m}</td></tr>`;
     });
     function speak(txt) {
+        window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(txt);
         m.lang = 'en-US';
         window.speechSynthesis.speak(m);
