@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Roleplay Challenge - Lesson 5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0A2540; --thu: #10b981; --jonathan: #e74c3c; --bg: #f0f4f8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        #game-container { width: 100%; max-width: 600px; background: white; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .header { background: var(--primary); color: white; padding: 15px; text-align: center; }
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; min-height: 400px; }
+        
+        .bubble { margin-bottom: 20px; max-width: 85%; position: relative; }
+        .bubble.jonathan { align-self: flex-start; }
+        .bubble.thu { align-self: flex-end; margin-left: auto; }
+        
+        .label { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: block; }
+        .jonathan .label { color: var(--jonathan); }
+        .thu .label { color: var(--thu); text-align: right; }
+        
+        .content { padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; }
+        .jonathan .content { background: #fee2e2; color: #333; border-bottom-left-radius: 2px; }
+        .thu .content { background: var(--thu); color: white; border-bottom-right-radius: 2px; }
+
+        .controls { padding: 20px; border-top: 1px solid #eee; text-align: center; background: white; }
+        .btn-mic { 
+            background: var(--jonathan); color: white; width: 70px; height: 70px; 
+            border-radius: 50%; border: none; cursor: pointer; font-size: 1.5rem; 
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+        }
+        .btn-mic:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+        .btn-mic.listening { background: #2ecc71; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        .status-msg { margin-top: 10px; font-size: 0.9rem; font-weight: 600; color: var(--primary); min-height: 1.2rem; }
+        .hint-text { font-size: 0.8rem; color: #666; font-style: italic; margin-top: 5px; }
+        .btn-start { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="header">
+        <h3 style="margin:0;">Roleplay: Emergency Meeting</h3>
+    </div>
+
+    <div class="chat-area" id="chat-box">
+        <div style="text-align:center; color:#999; margin-top:100px;" id="welcome-screen">
+            <i class="fa-solid fa-comments-pie" style="font-size: 3rem; color: #ddd; margin-bottom: 20px;"></i>
+            <p>Mr. Jonathan đang đợi bạn thảo luận về sự cố máy chính.</p>
+            <button class="btn-start" onclick="startMeeting()">Bắt đầu buổi họp</button>
+        </div>
+    </div>
+
+    <div class="controls" id="game-controls" style="display: none;">
+        <div class="status-msg" id="status-text">Đang đợi...</div>
+        <div class="hint-text" id="hint-area"></div>
+        <div style="margin: 15px 0;">
+            <button class="btn-mic" id="mic-btn" onclick="toggleListening()">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+        </div>
+        <button onclick="showHelp()" style="background:none; border:none; color:var(--thu); cursor:pointer; font-size:0.8rem; text-decoration:underline;">Xem gợi ý trả lời</button>
+        <div style="margin-top:15px;"><a href="index.html" style="color: #666; text-decoration:none; font-size:0.8rem;">Thoát</a></div>
+    </div>
+</div>
+
+<script>
+    const script = [
+        {
+            boss: "Morning, Thu. We are scheduled to cast off at 09:30 for the sea trials, but I just got a notification about an unverified alarm on the Main Engine. What’s the status?",
+            target: "Good morning, Mr. Jonathan. Regarding the Main Engine alarm, it was a high cooling water temperature warning during the 100 percent load test. But don't worry, it is resolved.",
+            keywords: ["morning", "engine", "alarm", "temperature", "resolved"],
+            hint: "Chào buổi sáng và giải thích đó là báo động nhiệt độ nước làm mát nhưng đã xử lý xong."
+        },
+        {
+            boss: "High cooling water temp? That’s critical! Did you find the root cause? Has it been re-tested?",
+            target: "It was just a faulty sensor giving false readings. We have already replaced the sensor and the Class Surveyor has signed off on the report.",
+            keywords: ["faulty", "sensor", "replaced", "surveyor", "signed off"],
+            hint: "Nói về cảm biến bị lỗi (faulty sensor), đã thay thế và Đăng kiểm đã ký duyệt."
+        },
+        {
+            boss: "Okay. What about the Steering Gear? I heard there was a hydraulic oil leakage last week.",
+            target: "We replaced the O-ring seals and performed the steering response test yesterday. There is zero delay now.",
+            keywords: ["o-ring", "seals", "steering", "test", "zero delay"],
+            hint: "Nói về việc thay vòng đệm O-ring và thử nghiệm máy lái không còn độ trễ."
+        }
+    ];
+
+    let currentStep = 0;
+    const chatBox = document.getElementById('chat-box');
+    const statusText = document.getElementById('status-text');
+    const hintArea = document.getElementById('hint-area');
+    const micBtn = document.getElementById('mic-btn');
+
+    // 1. Cấu hình Nhận diện giọng nói
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    if (Recognition) {
+        recognition = new Recognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            handleStudentReply(transcript);
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            if(statusText.innerText === "Đang nghe...") statusText.innerText = "Đã nghe xong.";
+        };
+    }
+
+    // 2. Hàm phát âm thanh (Giống Bài 4)
+    function speak(txt, onEndCallback) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(txt);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        
+        if (onEndCallback) {
+            utterance.onend = onEndCallback;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function startMeeting() {
+        document.getElementById('welcome-screen').remove();
+        document.getElementById('game-controls').style.display = 'block';
+        playStep();
+    }
+
+    function playStep() {
+        if (currentStep >= script.length) {
+            statusText.innerText = "Hoàn thành buổi họp!";
+            addBubble('jonathan', "Excellent work, Thu. Let's get ready for departure!");
+            speak("Excellent work, Thu. Let's get ready for departure!");
+            micBtn.disabled = true;
+            return;
+        }
+
+        const step = script[currentStep];
+        micBtn.disabled = true;
+        statusText.innerText = "Mr. Jonathan đang nói...";
+        hintArea.innerText = "";
+
+        addBubble('jonathan', step.boss);
+        
+        // Phát giọng nói và chỉ bật Micro khi nói xong
+        speak(step.boss, () => {
+            micBtn.disabled = false;
+            statusText.innerText = "Mời bạn trả lời (Nhấn Micro)";
+            hintArea.innerText = "Gợi ý: " + step.hint;
+        });
+    }
+
+    function toggleListening() {
+        if (!recognition) {
+            alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói.");
+            return;
+        }
+        recognition.start();
+        micBtn.classList.add('listening');
+        statusText.innerText = "Đang nghe...";
+    }
+
+    function handleStudentReply(text) {
+        addBubble('thu', text);
+        const step = script[currentStep];
+        const textLower = text.toLowerCase();
+        
+        // Đếm số từ khóa xuất hiện
+        const matchCount = step.keywords.filter(word => textLower.includes(word)).length;
+        const accuracy = (matchCount / step.keywords.length);
+
+        if (accuracy >= 0.4) { // Đúng trên 40% từ khóa là cho qua
+            statusText.innerHTML = "<span style='color:green;'>Chính xác! Đang chuyển tiếp...</span>";
+            currentStep++;
+            setTimeout(playStep, 2000);
+        } else {
+            statusText.innerHTML = "<span style='color:red;'>Chưa rõ, bạn thử nói lại nhé?</span>";
+            speak("I'm sorry, can you say that again?");
+        }
+    }
+
+    function addBubble(role, text) {
+        const div = document.createElement('div');
+        div.className = `bubble ${role}`;
+        div.innerHTML = `
+            <span class="label">${role === 'jonathan' ? 'Mr. Jonathan' : 'Ms. Thu (Bạn)'}</span>
+            <div class="content">${text}</div>
+        `;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showHelp() {
+        if(currentStep < script.length) {
+            alert("Bạn nên nói câu này:\n\n\"" + script[currentStep].target + "\"");
+        }
+    }
+</script>
+</body>
+</html>

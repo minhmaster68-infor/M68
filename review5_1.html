@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 5: Emergency Technical Meeting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0A2540; --accent: #e74c3c; --bg: #F8FAFC; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: var(--primary); text-align: center; }
+        h2 { border-left: 5px solid var(--accent); padding-left: 15px; color: var(--primary); margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #E2E8F0; }
+        .btn-speak { background: none; border: none; color: #0073E6; cursor: pointer; }
+        .back-nav { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="back-nav"><a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:bold;">← Quay lại trang chủ</a></div>
+    <h1>Bài 5: Emergency Technical Meeting</h1>
+
+    <h2>I. Từ vựng trọng tâm (Key Vocabulary)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Thuật ngữ</th>
+                <th>Ý nghĩa</th>
+            </tr>
+        </thead>
+        <tbody id="vocab-body"></tbody>
+    </table>
+
+    <h2>II. Tình huống giả định</h2>
+    <p>Học viên đóng vai <strong>Thu (Senior Technical Coordinator)</strong> giải quyết các thắc mắc và áp lực từ <strong>Mr. Jonathan (Chủ tàu)</strong> chỉ 2 giờ trước khi tàu rời bến thử nghiệm đường biển.</p>
+</div>
+
+<script>
+    const data = [
+        { t: "Sea trials", m: "Thử nghiệm đường biển" },
+        { t: "Cast off", m: "Rời bến / Tháo dây buộc tàu" },
+        { t: "Main Engine alarm", m: "Báo động máy chính" },
+        { t: "Root cause", m: "Nguyên nhân gốc rễ" },
+        { t: "Class Surveyor", m: "Đăng kiểm viên" },
+        { t: "Steering Gear", m: "Hệ thống máy lái" },
+        { t: "Blackout test", m: "Thử nghiệm mất điện toàn tàu" },
+        { t: "Protocol of Acceptance", m: "Biên bản nghiệm thu" }
+    ];
+    const body = document.getElementById('vocab-body');
+    data.forEach(item => {
+        body.innerHTML += `<tr><td><strong>${item.t}</strong> <button class="btn-speak" onclick="speak('${item.t}')"><i class="fa-solid fa-volume-high"></i></button></td><td>${item.m}</td></tr>`;
+    });
+    function speak(txt) {
+        const m = new SpeechSynthesisUtterance(txt);
+        m.lang = 'en-US';
+        window.speechSynthesis.speak(m);
+    }
+</script>
+</body>
+</html>
