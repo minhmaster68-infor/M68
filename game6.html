@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Shooter - Emergency English</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { margin: 0; background: #1a1a1a; color: white; font-family: 'Arial', sans-serif; overflow: hidden; text-align: center; }
+        #game-container { position: relative; width: 100vw; height: 100vh; background: linear-gradient(to bottom, #2c3e50, #000000); }
+        .target { position: absolute; padding: 15px 25px; background: rgba(255, 71, 87, 0.9); border-radius: 50px; font-weight: bold; font-size: 1.2rem; box-shadow: 0 0 20px #ff4757; transition: transform 0.1s; }
+        #crosshair { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 3rem; color: #2ed573; z-index: 100; }
+        #score-board { position: fixed; top: 20px; left: 20px; font-size: 1.5rem; color: #eccc68; }
+        #mic-status { position: fixed; top: 20px; right: 20px; padding: 10px; border-radius: 10px; }
+        .status-listening { background: #2ed573; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .btn-start { padding: 20px 40px; font-size: 1.5rem; background: #ff4757; border: none; color: white; border-radius: 50px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="start-screen">
+            <h1 style="color:#ff4757; font-size: 3rem;">VOICE SHOOTER</h1>
+            <p>Nhiệm vụ: Đọc to từ vựng đang rơi để tiêu diệt khí độc!</p>
+            <iframe width="300" height="170" src="https://www.youtube.com/embed/CrvMOG7fy6q" style="margin-bottom:20px; border-radius:10px;"></iframe>
+            <button class="btn-start" onclick="startGame()">BẮT ĐẦU CỨU HỘ</button>
+        </div>
+
+        <div id="score-board">Score: <span id="score">0</span></div>
+        <div id="mic-status">Microphone Ready</div>
+        <div id="crosshair"><i class="fa-solid fa-microphone-lines"></i></div>
+    </div>
+
+<script>
+    const words = ["MAYDAY", "EMERGENCY", "CONFINED", "TOXIC", "UNCONSCIOUS", "WELDING", "GAS LEAK", "VENTILATE", "RESCUE", "OXYGEN"];
+    let score = 0;
+    const container = document.getElementById('game-container');
+    const scoreEl = document.getElementById('score');
+    const micStatus = document.getElementById('mic-status');
+
+    // Speech Recognition Setup
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new Recognition();
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+        const last = event.results.length - 1;
+        const command = event.results[last][0].transcript.toUpperCase().trim();
+        console.log("Heard:", command);
+        checkHit(command);
+    };
+
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        recognition.start();
+        micStatus.classList.add('status-listening');
+        micStatus.innerText = "Listening...";
+        setInterval(spawnWord, 3000);
+    }
+
+    function spawnWord() {
+        const word = words[Math.floor(Math.random() * words.length)];
+        const el = document.createElement('div');
+        el.className = 'target';
+        el.innerText = word;
+        el.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+        el.style.top = '-50px';
+        container.appendChild(el);
+
+        let pos = -50;
+        const fall = setInterval(() => {
+            pos += 1.5; // Tốc độ rơi
+            el.style.top = pos + 'px';
+            if (pos > window.innerHeight - 100) {
+                el.remove();
+                clearInterval(fall);
+            }
+        }, 20);
+        el.dataset.intervalId = fall;
+    }
+
+    function checkHit(heardWord) {
+        const targets = document.querySelectorAll('.target');
+        targets.forEach(t => {
+            // Kiểm tra xem từ nghe được có chứa từ trong mục tiêu không (tăng độ chính xác)
+            if (heardWord.includes(t.innerText)) {
+                createExplosion(t.offsetLeft, t.offsetTop);
+                clearInterval(t.dataset.intervalId);
+                t.remove();
+                score += 10;
+                scoreEl.innerText = score;
+            }
+        });
+    }
+
+    function createExplosion(x, y) {
+        const exp = document.createElement('div');
+        exp.innerHTML = "💥";
+        exp.style.position = "absolute";
+        exp.style.left = x + 'px';
+        exp.style.top = y + 'px';
+        exp.style.fontSize = "2rem";
+        container.appendChild(exp);
+        setTimeout(() => exp.remove(), 500);
+    }
+
+    recognition.onend = () => recognition.start(); // Giữ mic luôn bật
+</script>
+</body>
+</html>

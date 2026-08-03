@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 6: Emergency Response</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --danger: #ff4757; --primary: #2f3542; --bg: #f1f2f6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 25px; border: 4px solid var(--danger); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        h1 { color: var(--danger); text-align: center; }
+        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .vocab-item { background: #fff5f5; padding: 10px; border-left: 4px solid var(--danger); border-radius: 4px; }
+        .dialogue-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 25px; border: 1px dashed #ccc; }
+        .role { font-weight: bold; color: var(--danger); }
+        .btn-audio { cursor: pointer; color: var(--danger); margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color: #666;">← Quay lại</a>
+        <h1>BÀI 6: EMERGENCY RESPONSE</h1>
+
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/CrvMOG7fy6q" title="Emergency in Shipbuilding" allowfullscreen></iframe>
+        </div>
+
+        <h3>I. Từ vựng khẩn cấp (Emergency Vocab)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item"><strong>Confined space</strong>: Không gian kín</div>
+            <div class="vocab-item"><strong>Toxic gas</strong>: Khí độc</div>
+            <div class="vocab-item"><strong>Unconscious</strong>: Bất tỉnh</div>
+            <div class="vocab-item"><strong>Cease all hot work</strong>: Dừng mọi việc cắt hàn</div>
+            <div class="vocab-item"><strong>Ventilation</strong>: Thông gió</div>
+            <div class="vocab-item"><strong>SCBA</strong>: Bình khí nén cá nhân</div>
+        </div>
+
+        <h3>II. Kịch bản cứu hộ (Rescue Dialogue)</h3>
+        <div class="dialogue-box">
+            <p><span class="role">Assistant:</span> Mayday! Mayday! We have a welder unconscious in Hull 102 Engine Room! <i class="fa-solid fa-volume-high btn-audio" onclick="speak('Mayday! Mayday! We have a welder unconscious in Hull 102 Engine Room!')"></i></p>
+            <p><span class="role">Specialist:</span> Copy that! Cease all hot work immediately! Is the space ventilated? <i class="fa-solid fa-volume-high btn-audio" onclick="speak('Copy that! Cease all hot work immediately! Is the space ventilated?')"></i></p>
+            <p><span class="role">Assistant:</span> Negative! Extraction fan is broken. Air is stagnant! <i class="fa-solid fa-volume-high btn-audio" onclick="speak('Negative! Extraction fan is broken. Air is stagnant!')"></i></p>
+            <p><span class="role">Specialist:</span> Do not enter without SCBA! Wait for the rescue team! <i class="fa-solid fa-volume-high btn-audio" onclick="speak('Do not enter without SCBA! Wait for the rescue team!')"></i></p>
+        </div>
+    </div>
+
+    <script>
+        function speak(text) {
+            const ut = new SpeechSynthesisUtterance(text);
+            ut.lang = 'en-US';
+            window.speechSynthesis.speak(ut);
+        }
+    </script>
+</body>
+</html>
