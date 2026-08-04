@@ -2,206 +2,77 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shipyard Roleplay - Bài 7</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 7: Shipyard Orientation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --expert-color: #3498db; --player-color: #2ecc71; --bg-overlay: rgba(0,0,0,0.85); }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: #1a1a1a; color: white; overflow: hidden; }
-
-        /* Nền game sử dụng ảnh bạn gửi */
-        #game-container {
-            width: 100vw; height: 100vh;
-            background: url('game7_bg.png') no-repeat center center;
-            background-size: cover; display: none; flex-direction: column;
-        }
-
-        /* Màn hình khởi động */
-        #start-screen {
-            position: fixed; inset: 0; background: var(--bg-overlay); z-index: 1000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
-        }
-        .video-box { width: 100%; max-width: 500px; aspect-ratio: 16/9; border: 3px solid var(--player-color); border-radius: 15px; overflow: hidden; margin: 20px 0; }
-
-        /* Khu vực hội thoại */
-        #chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
+        :root { --primary: #0A2540; --accent: #00D4B2; --bg: #F8FAFC; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; }
         
-        .bubble { max-width: 80%; padding: 12px 18px; border-radius: 15px; line-height: 1.4; position: relative; font-size: 1rem; }
-        .expert-bubble { align-self: flex-start; background: var(--expert-color); color: white; border-bottom-left-radius: 2px; }
-        .player-bubble { align-self: flex-end; background: #333; border: 2px dashed var(--player-color); border-bottom-right-radius: 2px; }
-        
-        /* Gợi ý cho người chơi */
-        #hint-panel {
-            background: rgba(0,0,0,0.9); padding: 20px; border-top: 2px solid var(--player-color);
-            display: flex; flex-direction: column; align-items: center;
+        /* CSS cho Video minh họa */
+        .video-wrapper { 
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            border-radius: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        #hint-text { color: #aaa; font-style: italic; margin-bottom: 10px; text-align: center; }
-        #target-text { font-weight: bold; color: var(--player-color); text-align: center; margin-bottom: 15px; font-size: 1.1rem; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        /* Nút Mic */
-        #mic-btn {
-            width: 70px; height: 70px; border-radius: 50%; background: #444;
-            border: none; color: white; font-size: 1.8rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s;
-        }
-        .listening { background: var(--player-color) !important; box-shadow: 0 0 20px var(--player-color); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
-        /* Phản hồi kết quả */
-        #feedback { font-size: 0.9rem; margin-top: 10px; min-height: 1.5rem; }
-        .correct { color: var(--player-color); }
-        .wrong { color: #ff4757; }
-
-        .score-badge { position: absolute; top: 10px; right: 10px; background: gold; color: black; padding: 5px 10px; border-radius: 10px; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #f1f9f8; padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent); }
+        .audio-btn { cursor: pointer; color: var(--primary); margin-left: 8px; transition: 0.2s; }
+        .audio-btn:hover { color: var(--accent); }
+        .grammar-box { background: #fff4e6; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #ffd8a8; }
+        .ipa { color: #666; font-family: monospace; font-size: 0.9rem; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color: #64748B;">← Quay lại trang chủ</a>
+        <h1>Bài 7: Shipyard Orientation & Guided Tour</h1>
 
-<div id="start-screen">
-    <h2 style="color:var(--player-color)">SHIPYARD ROLEPLAY</h2>
-    <p>Nhập vai Trợ lý An để đối đáp với chuyên gia David</p>
-    <div class="video-box">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/b3X3Cc3By6k" frameborder="0" allowfullscreen></iframe>
+        <!-- VIDEO MINH HỌA -->
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/b3X3Cc3By6k" title="Shipyard Tour Video" allowfullscreen></iframe>
+        </div>
+
+        <h3>I. Từ vựng & Phát âm (Vocabulary)</h3>
+        <div class="grid">
+            <div class="card">
+                <strong>Naval Architect</strong> <span class="ipa">/ˈneɪ.vəl ˈɑː.kɪ.tekt/</span>
+                <p>Kỹ sư thiết kế tàu <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Naval Architect')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Hull Assembly</strong> <span class="ipa">/hʌl əˈsem.bli/</span>
+                <p>Lắp ráp vỏ tàu <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Hull Assembly')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Dry Dock</strong> <span class="ipa">/draɪ dɒk/</span>
+                <p>Đốc khô <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Dry Dock')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Overhead Crane</strong> <span class="ipa">/ˌəʊ.və.hed kreɪn/</span>
+                <p>Cầu trục xưởng <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Overhead Crane')"></i></p>
+            </div>
+        </div>
+
+        <h3>II. Ngữ pháp chỉ đường (Giving Directions)</h3>
+        <div class="grammar-box">
+            <p><strong>1. Mô tả vị trí:</strong></p>
+            <ul>
+                <li>"Right next to this building..." (Ngay cạnh tòa nhà này) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Right next to this building')"></i></li>
+                <li>"Adjacent to that is..." (Kế bên đó là...) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Adjacent to that is')"></i></li>
+                <li>"Further down towards the waterfront..." (Đi xa hơn về phía bờ sông...) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Further down towards the waterfront')"></i></li>
+            </ul>
+        </div>
     </div>
-    <button class="btn-start" onclick="startGame()" style="padding: 15px 40px; border-radius: 50px; border:none; background: var(--player-color); font-weight:bold; cursor:pointer;">BẮT ĐẦU ĐỐI ĐÁP</button>
-</div>
 
-<div id="game-container">
-    <div class="score-badge">Accuracy: <span id="accuracy">0</span>%</div>
-    
-    <div id="chat-area">
-        <!-- Nội dung hội thoại sẽ hiện ở đây -->
-    </div>
-
-    <div id="hint-panel">
-        <div id="hint-text">Đến lượt bạn nói (Gợi ý):</div>
-        <div id="target-text">Đang tải kịch bản...</div>
-        
-        <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
-        <div id="feedback"></div>
-        <div id="live-transcript" style="font-size: 0.8rem; color: #777; margin-top: 5px;"></div>
-    </div>
-</div>
-
-<script>
-    // Kịch bản hội thoại
-    const script = [
-        {
-            expert: "Good morning, An. Thank you for the warm welcome! I’m looking forward to visiting the facilities.",
-            playerTarget: "Great! Before we head out, let me give you a quick overview of our company layout.",
-            hint: "Chào mừng và đề nghị giới thiệu sơ đồ công ty."
-        },
-        {
-            expert: "Understood. And where are the technical and engineering teams located?",
-            playerTarget: "The Design and Engineering Department is in the modern block right next to this building.",
-            hint: "Nói về vị trí phòng Thiết kế (ngay cạnh tòa nhà này)."
-        },
-        {
-            expert: "Excellent. And how about the production areas?",
-            playerTarget: "That brings us to the core of our shipyard. Look out the window to your left, you will see the Steel Fabrication Workshop.",
-            hint: "Giới thiệu xưởng gia công thép phía bên trái cửa sổ."
+    <script>
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
         }
-    ];
-
-    let currentStep = 0;
-    const chatArea = document.getElementById('chat-area');
-    const targetText = document.getElementById('target-text');
-    const micBtn = document.getElementById('mic-btn');
-    const feedback = document.getElementById('feedback');
-    const liveTranscript = document.getElementById('live-transcript');
-    const accuracyEl = document.getElementById('accuracy');
-
-    // Cấu hình míc và giọng nói
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-US';
-    recognition.interimResults = true;
-
-    function startGame() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('game-container').style.display = 'flex';
-        playStep();
-    }
-
-    // Chuyên gia nói
-    function playStep() {
-        const data = script[currentStep];
-        
-        // Hiện bóng chat của chuyên gia
-        addBubble(data.expert, 'expert');
-        
-        // Phát âm thanh chuyên gia
-        const utterance = new SpeechSynthesisUtterance(data.expert);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.9;
-        window.speechSynthesis.speak(utterance);
-
-        utterance.onend = () => {
-            // Sau khi chuyên gia nói xong, hiện gợi ý cho người chơi
-            targetText.innerText = data.playerTarget;
-            feedback.innerHTML = "<span style='color:orange'>Đã sẵn sàng! Hãy nhấn Mic và đọc câu trên.</span>";
-        };
-    }
-
-    function addBubble(text, side) {
-        const div = document.createElement('div');
-        div.className = `bubble ${side}-bubble`;
-        div.innerText = text;
-        chatArea.appendChild(div);
-        chatArea.scrollTop = chatArea.scrollHeight;
-    }
-
-    // Xử lý khi người chơi nói
-    micBtn.onclick = () => {
-        recognition.start();
-        micBtn.classList.add('listening');
-        feedback.innerText = "Đang lắng nghe...";
-    };
-
-    recognition.onresult = (event) => {
-        let interim = '';
-        let final = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) final += event.results[i][0].transcript;
-            else interim += event.results[i][0].transcript;
-        }
-        liveTranscript.innerText = "Máy nghe được: " + (final || interim);
-
-        if (final) {
-            checkResponse(final);
-        }
-    };
-
-    recognition.onend = () => {
-        micBtn.classList.remove('listening');
-    };
-
-    function checkResponse(spokenText) {
-        const target = script[currentStep].playerTarget.toLowerCase().replace(/[.,!]/g, "");
-        const input = spokenText.toLowerCase().replace(/[.,!]/g, "");
-
-        // Tính độ chính xác đơn giản (số từ khớp)
-        const targetWords = target.split(' ');
-        const inputWords = input.split(' ');
-        let matches = 0;
-        targetWords.forEach(w => { if(input.includes(w)) matches++; });
-        
-        const score = Math.round((matches / targetWords.length) * 100);
-        accuracyEl.innerText = score;
-
-        if (score > 60) {
-            addBubble(spokenText, 'player');
-            feedback.innerHTML = `<span class="correct">Tốt! Độ chính xác ${score}%.</span>`;
-            
-            currentStep++;
-            if (currentStep < script.length) {
-                setTimeout(playStep, 2000);
-            } else {
-                feedback.innerHTML = "<b style='color:gold'>XUẤT SẮC! Bạn đã hoàn thành chuyến tham quan!</b>";
-            }
-        } else {
-            feedback.innerHTML = `<span class="wrong">Chưa chính xác (${score}%). Bạn hãy đọc lại rõ các từ khóa nhé.</span>`;
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
