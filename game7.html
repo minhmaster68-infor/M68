@@ -3,219 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Voice Word Sorter - Bài 7</title>
+    <title>Shipyard Roleplay - Bài 7</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #00D4B2; --danger: #ff4757; --warning: #f1c40f; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: white; overflow: hidden; touch-action: manipulation; }
-        
-        /* Container chính co giãn theo màn hình */
+        :root { --expert-color: #3498db; --player-color: #2ecc71; --bg-overlay: rgba(0,0,0,0.85); }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: #1a1a1a; color: white; overflow: hidden; }
+
+        /* Nền game sử dụng ảnh bạn gửi */
         #game-container {
-            position: relative; width: 100vw; height: 100vh;
+            width: 100vw; height: 100vh;
             background: url('game7_bg.png') no-repeat center center;
-            background-size: cover; display: none; flex-direction: column; align-items: center;
+            background-size: cover; display: none; flex-direction: column;
         }
 
-        /* Màn hình Start */
+        /* Màn hình khởi động */
         #start-screen {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;
+            position: fixed; inset: 0; background: var(--bg-overlay); z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
         }
-        .video-box { width: 100%; max-width: 500px; aspect-ratio: 16/9; border: 3px solid var(--primary); border-radius: 15px; overflow: hidden; }
-        .btn-start { margin-top: 20px; padding: 15px 40px; font-size: 1.2rem; background: var(--primary); border: none; color: #000; font-weight: bold; border-radius: 50px; cursor: pointer; }
+        .video-box { width: 100%; max-width: 500px; aspect-ratio: 16/9; border: 3px solid var(--player-color); border-radius: 15px; overflow: hidden; margin: 20px 0; }
 
-        /* Bảng hiển thị thông tin lắng nghe (Phản hồi lỗi) */
-        #feedback-panel {
-            position: absolute; top: 10px; width: 90%; max-width: 500px;
-            background: rgba(0,0,0,0.8); padding: 10px; border-radius: 12px;
-            border-bottom: 3px solid var(--primary); text-align: center; z-index: 10;
+        /* Khu vực hội thoại */
+        #chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
+        
+        .bubble { max-width: 80%; padding: 12px 18px; border-radius: 15px; line-height: 1.4; position: relative; font-size: 1rem; }
+        .expert-bubble { align-self: flex-start; background: var(--expert-color); color: white; border-bottom-left-radius: 2px; }
+        .player-bubble { align-self: flex-end; background: #333; border: 2px dashed var(--player-color); border-bottom-right-radius: 2px; }
+        
+        /* Gợi ý cho người chơi */
+        #hint-panel {
+            background: rgba(0,0,0,0.9); padding: 20px; border-top: 2px solid var(--player-color);
+            display: flex; flex-direction: column; align-items: center;
         }
-        #transcript { color: var(--warning); font-style: italic; font-size: 0.9rem; margin: 5px 0; }
-        #error-msg { color: var(--danger); font-weight: bold; font-size: 0.9rem; min-height: 1.2rem; }
+        #hint-text { color: #aaa; font-style: italic; margin-bottom: 10px; text-align: center; }
+        #target-text { font-weight: bold; color: var(--player-color); text-align: center; margin-bottom: 15px; font-size: 1.1rem; }
 
-        /* Bảng gỗ chứa các ô chữ - Tối ưu cho Mobile */
-        #wood-board {
-            position: absolute; top: 55%; transform: translateY(-50%);
-            width: 90%; max-width: 600px;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            padding: 15px; background: rgba(101, 67, 33, 0.4); border-radius: 15px;
+        /* Nút Mic */
+        #mic-btn {
+            width: 70px; height: 70px; border-radius: 50%; background: #444;
+            border: none; color: white; font-size: 1.8rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
+        .listening { background: var(--player-color) !important; box-shadow: 0 0 20px var(--player-color); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        .word-slot {
-            aspect-ratio: 2/1; background: rgba(255,255,255,0.15);
-            border: 2px dashed rgba(255,255,255,0.5); border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; font-weight: bold; text-align: center; text-transform: uppercase;
-        }
-        .word-active { background: var(--warning) !important; color: #000; border: 2px solid #000; box-shadow: 0 0 15px var(--warning); }
+        /* Phản hồi kết quả */
+        #feedback { font-size: 0.9rem; margin-top: 10px; min-height: 1.5rem; }
+        .correct { color: var(--player-color); }
+        .wrong { color: #ff4757; }
 
-        /* Trạng thái Microphone */
-        #mic-indicator {
-            position: absolute; bottom: 20px; padding: 10px 25px;
-            border-radius: 50px; background: #333; display: flex; align-items: center; gap: 10px;
-        }
-        .pulse { animation: pulse-red 1.5s infinite; background: var(--danger) !important; }
-        @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
-        @media (max-width: 480px) {
-            #wood-board { grid-template-columns: repeat(2, 1fr); top: 50%; }
-            .word-slot { font-size: 0.7rem; }
-            #instruction-text { font-size: 0.8rem; }
-        }
+        .score-badge { position: absolute; top: 10px; right: 10px; background: gold; color: black; padding: 5px 10px; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<!-- MÀN HÌNH BẮT ĐẦU -->
 <div id="start-screen">
-    <h2 style="color:var(--primary)">VOICE WORD SORTER</h2>
-    <p>Nghe và đọc đúng từ + vị trí để xếp vào bảng gỗ</p>
+    <h2 style="color:var(--player-color)">SHIPYARD ROLEPLAY</h2>
+    <p>Nhập vai Trợ lý An để đối đáp với chuyên gia David</p>
     <div class="video-box">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/b3X3Cc3By6k" frameborder="0" allowfullscreen></iframe>
     </div>
-    <button class="btn-start" onclick="startGame()">BẮT ĐẦU NGAY</button>
+    <button class="btn-start" onclick="startGame()" style="padding: 15px 40px; border-radius: 50px; border:none; background: var(--player-color); font-weight:bold; cursor:pointer;">BẮT ĐẦU ĐỐI ĐÁP</button>
 </div>
 
-<!-- GIAO DIỆN GAME -->
 <div id="game-container">
-    <div id="feedback-panel">
-        <div id="instruction-text">Đọc: <b>[Từ vựng] + Position + [Số]</b></div>
-        <div id="transcript">Đang chờ bạn nói...</div>
-        <div id="error-msg"></div>
+    <div class="score-badge">Accuracy: <span id="accuracy">0</span>%</div>
+    
+    <div id="chat-area">
+        <!-- Nội dung hội thoại sẽ hiện ở đây -->
     </div>
 
-    <div id="wood-board">
-        <!-- Các ô chữ tự động sinh ra ở đây -->
-    </div>
-
-    <div id="mic-indicator">
-        <i class="fa-solid fa-microphone"></i>
-        <span id="mic-text">Chạm để bật Mic</span>
+    <div id="hint-panel">
+        <div id="hint-text">Đến lượt bạn nói (Gợi ý):</div>
+        <div id="target-text">Đang tải kịch bản...</div>
+        
+        <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+        <div id="feedback"></div>
+        <div id="live-transcript" style="font-size: 0.8rem; color: #777; margin-top: 5px;"></div>
     </div>
 </div>
 
 <script>
-    const targetSentence = ["THE", "NAVAL ARCHITECT", "WORKS", "IN", "THE", "DESIGN", "OFFICE"];
-    const container = document.getElementById('game-container');
-    const board = document.getElementById('wood-board');
-    const transcriptEl = document.getElementById('transcript');
-    const errorEl = document.getElementById('error-msg');
-    const micIndicator = document.getElementById('mic-indicator');
+    // Kịch bản hội thoại
+    const script = [
+        {
+            expert: "Good morning, An. Thank you for the warm welcome! I’m looking forward to visiting the facilities.",
+            playerTarget: "Great! Before we head out, let me give you a quick overview of our company layout.",
+            hint: "Chào mừng và đề nghị giới thiệu sơ đồ công ty."
+        },
+        {
+            expert: "Understood. And where are the technical and engineering teams located?",
+            playerTarget: "The Design and Engineering Department is in the modern block right next to this building.",
+            hint: "Nói về vị trí phòng Thiết kế (ngay cạnh tòa nhà này)."
+        },
+        {
+            expert: "Excellent. And how about the production areas?",
+            playerTarget: "That brings us to the core of our shipyard. Look out the window to your left, you will see the Steel Fabrication Workshop.",
+            hint: "Giới thiệu xưởng gia công thép phía bên trái cửa sổ."
+        }
+    ];
 
-    let recognition;
-    let isListening = false;
+    let currentStep = 0;
+    const chatArea = document.getElementById('chat-area');
+    const targetText = document.getElementById('target-text');
+    const micBtn = document.getElementById('mic-btn');
+    const feedback = document.getElementById('feedback');
+    const liveTranscript = document.getElementById('live-transcript');
+    const accuracyEl = document.getElementById('accuracy');
+
+    // Cấu hình míc và giọng nói
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
 
     function startGame() {
         document.getElementById('start-screen').style.display = 'none';
-        container.style.display = 'flex';
-        initBoard();
-        setupSpeech();
+        document.getElementById('game-container').style.display = 'flex';
+        playStep();
     }
 
-    function initBoard() {
-        board.innerHTML = '';
-        targetSentence.forEach((_, i) => {
-            const slot = document.createElement('div');
-            slot.className = 'word-slot';
-            slot.id = `slot-${i + 1}`;
-            slot.innerHTML = `Slot ${i + 1}`;
-            board.appendChild(slot);
-        });
-    }
+    // Chuyên gia nói
+    function playStep() {
+        const data = script[currentStep];
+        
+        // Hiện bóng chat của chuyên gia
+        addBubble(data.expert, 'expert');
+        
+        // Phát âm thanh chuyên gia
+        const utterance = new SpeechSynthesisUtterance(data.expert);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
 
-    function setupSpeech() {
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!Speech) {
-            alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Hãy dùng Chrome!");
-            return;
-        }
-        recognition = new Speech();
-        recognition.lang = 'en-US';
-        recognition.continuous = true;
-        recognition.interimResults = true;
-
-        recognition.onstart = () => {
-            isListening = true;
-            micIndicator.classList.add('pulse');
-            document.getElementById('mic-text').innerText = "Đang lắng nghe...";
+        utterance.onend = () => {
+            // Sau khi chuyên gia nói xong, hiện gợi ý cho người chơi
+            targetText.innerText = data.playerTarget;
+            feedback.innerHTML = "<span style='color:orange'>Đã sẵn sàng! Hãy nhấn Mic và đọc câu trên.</span>";
         };
+    }
 
-        recognition.onresult = (event) => {
-            let interimTranscript = '';
-            let finalTranscript = '';
+    function addBubble(text, side) {
+        const div = document.createElement('div');
+        div.className = `bubble ${side}-bubble`;
+        div.innerText = text;
+        chatArea.appendChild(div);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
 
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript.toUpperCase();
-                } else {
-                    interimTranscript += event.results[i][0].transcript.toUpperCase();
-                }
-            }
+    // Xử lý khi người chơi nói
+    micBtn.onclick = () => {
+        recognition.start();
+        micBtn.classList.add('listening');
+        feedback.innerText = "Đang lắng nghe...";
+    };
 
-            transcriptEl.innerText = "Tôi nghe thấy: " + (finalTranscript || interimTranscript);
+    recognition.onresult = (event) => {
+        let interim = '';
+        let final = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) final += event.results[i][0].transcript;
+            else interim += event.results[i][0].transcript;
+        }
+        liveTranscript.innerText = "Máy nghe được: " + (final || interim);
+
+        if (final) {
+            checkResponse(final);
+        }
+    };
+
+    recognition.onend = () => {
+        micBtn.classList.remove('listening');
+    };
+
+    function checkResponse(spokenText) {
+        const target = script[currentStep].playerTarget.toLowerCase().replace(/[.,!]/g, "");
+        const input = spokenText.toLowerCase().replace(/[.,!]/g, "");
+
+        // Tính độ chính xác đơn giản (số từ khớp)
+        const targetWords = target.split(' ');
+        const inputWords = input.split(' ');
+        let matches = 0;
+        targetWords.forEach(w => { if(input.includes(w)) matches++; });
+        
+        const score = Math.round((matches / targetWords.length) * 100);
+        accuracyEl.innerText = score;
+
+        if (score > 60) {
+            addBubble(spokenText, 'player');
+            feedback.innerHTML = `<span class="correct">Tốt! Độ chính xác ${score}%.</span>`;
             
-            if (finalTranscript) {
-                processCommand(finalTranscript);
+            currentStep++;
+            if (currentStep < script.length) {
+                setTimeout(playStep, 2000);
+            } else {
+                feedback.innerHTML = "<b style='color:gold'>XUẤT SẮC! Bạn đã hoàn thành chuyến tham quan!</b>";
             }
-        };
-
-        recognition.onerror = () => {
-            stopMic();
-        };
-
-        // Bật/Tắt Mic khi chạm vào indicator
-        micIndicator.onclick = () => {
-            if (!isListening) recognition.start();
-            else stopMic();
-        };
-    }
-
-    function stopMic() {
-        recognition.stop();
-        isListening = false;
-        micIndicator.classList.remove('pulse');
-        document.getElementById('mic-text').innerText = "Chạm để bật Mic";
-    }
-
-    function processCommand(text) {
-        errorEl.innerText = ""; // Xóa lỗi cũ
-        let matchedAny = false;
-
-        targetSentence.forEach((word, index) => {
-            if (text.includes(word)) {
-                matchedAny = true;
-                const posNum = index + 1;
-                
-                // Kiểm tra xem người dùng có đọc đúng số vị trí không
-                // Ví dụ: "Naval Architect position 2"
-                if (text.includes("POSITION " + posNum) || text.includes("POSITION" + posNum) || text.includes("NUMBER " + posNum)) {
-                    const slot = document.getElementById(`slot-${posNum}`);
-                    slot.innerText = word;
-                    slot.classList.add('word-active');
-                    errorEl.style.color = "var(--primary)";
-                    errorEl.innerText = `Chính xác: ${word} vào ô ${posNum}!`;
-                    checkWin();
-                } else if (text.includes("POSITION")) {
-                    // Nếu nghe thấy từ đúng nhưng vị trí sai
-                    errorEl.style.color = "var(--danger)";
-                    errorEl.innerText = `Sai vị trí! Thử lại: "${word} position ${posNum}"`;
-                }
-            }
-        });
-
-        if (!matchedAny) {
-            errorEl.style.color = "var(--warning)";
-            errorEl.innerText = "Không khớp từ vựng nào. Hãy phát âm rõ hơn!";
-        }
-    }
-
-    function checkWin() {
-        const filled = document.querySelectorAll('.word-active').length;
-        if (filled === targetSentence.length) {
-            errorEl.innerText = "TUYỆT VỜI! BẠN ĐÃ HOÀN THÀNH CÂU!";
-            setTimeout(() => {
-                if(confirm("Bạn muốn chơi lại không?")) location.reload();
-            }, 1500);
+        } else {
+            feedback.innerHTML = `<span class="wrong">Chưa chính xác (${score}%). Bạn hãy đọc lại rõ các từ khóa nhé.</span>`;
         }
     }
 </script>
