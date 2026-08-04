@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Word Sorter - Bài 7</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Arial', sans-serif; background: #2c3e50; color: white; overflow: hidden; }
+        
+        #game-stage {
+            width: 100vw; height: 100vh;
+            background: url('game7_bg.png') no-repeat center center;
+            background-size: cover;
+            display: none; /* Ẩn đi để hiện màn hình start */
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* Màn hình Start */
+        #start-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .btn-start {
+            padding: 15px 40px; font-size: 1.5rem; background: #00D4B2;
+            border: none; color: white; border-radius: 50px; cursor: pointer; margin-top: 20px;
+        }
+
+        #wood-board {
+            width: 700px; height: 250px;
+            margin-top: 80px;
+            display: flex; flex-wrap: wrap;
+            justify-content: center; align-content: center; gap: 15px;
+            padding: 20px;
+            background: rgba(139, 69, 19, 0.2); border-radius: 20px;
+        }
+
+        .word-slot {
+            min-width: 110px; height: 60px;
+            background: rgba(255,255,255,0.2);
+            border: 2px dashed #fff; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1rem; text-align: center;
+        }
+
+        .word-active { background: #f1c40f !important; color: #000; border: 2px solid #000; transform: scale(1.1); transition: 0.3s; }
+        
+        #instruction {
+            background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px;
+            position: absolute; top: 20px; text-align: center; max-width: 80%;
+        }
+
+        #mic-status {
+            position: absolute; bottom: 30px;
+            padding: 10px 20px; border-radius: 50px;
+            background: #e74c3c;
+        }
+        .listening { background: #2ecc71 !important; }
+    </style>
+</head>
+<body>
+
+<!-- MÀN HÌNH BẮT ĐẦU VỚI VIDEO -->
+<div id="start-screen">
+    <h1 style="color:#00D4B2;">SHIPYARD WORD SORTER</h1>
+    <p>Xem video và chuẩn bị sắp xếp câu giới thiệu phòng thiết kế!</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/b3X3Cc3By6k" 
+            style="border: 5px solid #00D4B2; border-radius: 15px;" allowfullscreen></iframe>
+    <button class="btn-start" onclick="startGame()">BẮT ĐẦU CHƠI</button>
+</div>
+
+<div id="game-stage">
+    <div id="instruction">
+        <h2>Sắp xếp câu bằng giọng nói</h2>
+        <p>Mục tiêu: <b>THE NAVAL ARCHITECT WORKS IN THE DESIGN OFFICE</b></p>
+        <p><i>Cấu trúc lệnh: [Từ vựng] + "Position" + [Số thứ tự]</i></p>
+    </div>
+
+    <div id="wood-board"></div>
+
+    <div id="mic-status"><i class="fa-solid fa-microphone"></i> Mic đang tắt</div>
+</div>
+
+<script>
+    const targetSentence = ["THE", "NAVAL ARCHITECT", "WORKS", "IN", "THE", "DESIGN", "OFFICE"];
+    const board = document.getElementById('wood-board');
+    const micStatus = document.getElementById('mic-status');
+
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('game-stage').style.display = 'flex';
+        initBoard();
+        startListening();
+    }
+
+    function initBoard() {
+        targetSentence.forEach((_, index) => {
+            const slot = document.createElement('div');
+            slot.className = 'word-slot';
+            slot.id = 'slot-' + (index + 1);
+            slot.innerText = "Slot " + (index + 1);
+            board.appendChild(slot);
+        });
+    }
+
+    let recognition;
+    function startListening() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = true;
+
+        recognition.onstart = () => {
+            micStatus.innerHTML = '<i class="fa-solid fa-microphone"></i> Đang lắng nghe...';
+            micStatus.classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            const result = event.results[event.results.length - 1][0].transcript.toUpperCase();
+            console.log("Heard: " + result);
+
+            targetSentence.forEach((word, index) => {
+                if (result.includes(word)) {
+                    // Tìm số vị trí trong câu nói (ví dụ "position one")
+                    const posMatch = result.match(/POSITION (\w+)/); 
+                    // Chuyển chữ số sang số (đơn giản hóa bằng cách check trực tiếp số)
+                    const digitMatch = result.match(/\d+/); 
+
+                    let pos = digitMatch ? parseInt(digitMatch[0]) : 0;
+
+                    if (pos === index + 1) {
+                        const slot = document.getElementById('slot-' + pos);
+                        slot.innerText = word;
+                        slot.classList.add('word-active');
+                        checkWin();
+                    }
+                }
+            });
+        };
+        recognition.start();
+    }
+
+    function checkWin() {
+        const actives = document.querySelectorAll('.word-active');
+        if (actives.length === targetSentence.length) {
+            alert("Perfect! Bạn đã hoàn thành câu chính xác.");
+            location.reload();
+        }
+    }
+</script>
+</body>
+</html>

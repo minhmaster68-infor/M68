@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 7: Shipyard Orientation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #0A2540; --accent: #00D4B2; --bg: #F8FAFC; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* CSS cho Video minh họa */
+        .video-wrapper { 
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            border-radius: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #f1f9f8; padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent); }
+        .audio-btn { cursor: pointer; color: var(--primary); margin-left: 8px; transition: 0.2s; }
+        .audio-btn:hover { color: var(--accent); }
+        .grammar-box { background: #fff4e6; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #ffd8a8; }
+        .ipa { color: #666; font-family: monospace; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color: #64748B;">← Quay lại trang chủ</a>
+        <h1>Bài 7: Shipyard Orientation & Guided Tour</h1>
+
+        <!-- VIDEO MINH HỌA -->
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/b3X3Cc3By6k" title="Shipyard Tour Video" allowfullscreen></iframe>
+        </div>
+
+        <h3>I. Từ vựng & Phát âm (Vocabulary)</h3>
+        <div class="grid">
+            <div class="card">
+                <strong>Naval Architect</strong> <span class="ipa">/ˈneɪ.vəl ˈɑː.kɪ.tekt/</span>
+                <p>Kỹ sư thiết kế tàu <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Naval Architect')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Hull Assembly</strong> <span class="ipa">/hʌl əˈsem.bli/</span>
+                <p>Lắp ráp vỏ tàu <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Hull Assembly')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Dry Dock</strong> <span class="ipa">/draɪ dɒk/</span>
+                <p>Đốc khô <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Dry Dock')"></i></p>
+            </div>
+            <div class="card">
+                <strong>Overhead Crane</strong> <span class="ipa">/ˌəʊ.və.hed kreɪn/</span>
+                <p>Cầu trục xưởng <i class="fa-solid fa-volume-high audio-btn" onclick="speak('Overhead Crane')"></i></p>
+            </div>
+        </div>
+
+        <h3>II. Ngữ pháp chỉ đường (Giving Directions)</h3>
+        <div class="grammar-box">
+            <p><strong>1. Mô tả vị trí:</strong></p>
+            <ul>
+                <li>"Right next to this building..." (Ngay cạnh tòa nhà này) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Right next to this building')"></i></li>
+                <li>"Adjacent to that is..." (Kế bên đó là...) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Adjacent to that is')"></i></li>
+                <li>"Further down towards the waterfront..." (Đi xa hơn về phía bờ sông...) <i class="fa-solid fa-circle-play audio-btn" onclick="speak('Further down towards the waterfront')"></i></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
