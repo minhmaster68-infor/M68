@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ Điển AI Thông Minh - Smart Learning Hub</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #0A2540;
+            --accent-cyan: #00D4B2;
+            --accent-blue: #0073E6;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-blue);
+            padding: 1rem 1.25rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--accent-cyan);
+            font-size: 1.4rem;
+        }
+
+        .btn-back {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* SEARCH HERO */
+        .search-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0d3b66 100%);
+            color: var(--white);
+            padding: 2.5rem 1.25rem 3.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0, 212, 178, 0.2);
+            color: var(--accent-cyan);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(0, 212, 178, 0.3);
+        }
+
+        .search-box-container {
+            max-width: 650px;
+            margin: 1.5rem auto 0;
+            position: relative;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.25rem 1rem 3.2rem;
+            font-size: 1.05rem;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .btn-search {
+            background-color: var(--accent-cyan);
+            color: var(--primary-blue);
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(0, 212, 178, 0.3);
+        }
+
+        .btn-search:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 800px;
+            margin: -1.5rem auto 3rem;
+            padding: 0 1.25rem;
+            flex: 1;
+            z-index: 10;
+        }
+
+        /* RESULT CARD */
+        .result-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .word-title-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #F1F5F9;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .word-heading {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+        }
+
+        .phonetic-text {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 0.2rem;
+        }
+
+        .audio-btn-large {
+            background: rgba(0, 115, 230, 0.1);
+            color: var(--accent-blue);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .audio-btn-large:hover {
+            background: var(--accent-blue);
+            color: var(--white);
+            transform: scale(1.08);
+        }
+
+        /* SECTION TIẾNG VIỆT & AI ANALYSIS */
+        .section-block {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .vietnamese-translation {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0F766E;
+            background: #CCFBF1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .meaning-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .meaning-item {
+            background: #F8FAFC;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .part-of-speech {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #E2E8F0;
+            color: var(--text-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+        }
+
+        .eng-def {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .example-box {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* LOADING & ERROR STATES */
+        .loading-state, .error-state, .welcome-state {
+            background: var(--white);
+            padding: 3rem 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .spinner {
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--white);
+            border-top: 1px solid #E2E8F0;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Smart Learning Hub</span>
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Trang chủ
+            </a>
+        </div>
+    </header>
+
+    <section class="search-hero">
+        <div class="ai-badge">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Powered Dictionary
+        </div>
+        <h2>Tra Cuối Toàn Bộ Từ Vựng Cùng AI</h2>
+        <p style="color: #E2E8F0; font-size: 0.95rem; margin-top: 0.3rem;">Hỗ trợ tra cứu tất cả từ thông dụng, thuật ngữ chuyên ngành & phát âm chuẩn</p>
+
+        <form class="search-box-container" onsubmit="handleSearch(event)">
+            <div class="input-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Nhập từ tiếng Anh bất kỳ (VD: Engineer, Innovation, Success...)..." required>
+            </div>
+            <button type="submit" class="btn-search">
+                Tra Từ
+            </button>
+        </form>
+    </section>
+
+    <div class="container">
+        <!-- Trạng thái ban đầu -->
+        <div id="welcomeState" class="welcome-state">
+            <i class="fa-solid fa-robot" style="font-size: 3rem; color: var(--accent-blue); margin-bottom: 1rem;"></i>
+            <h3>Sẵn sàng tra cứu dữ liệu từ điển AI</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Hãy nhập bất kỳ từ tiếng Anh nào ở trên để xem nghĩa tiếng Việt, phiên âmIPA và ví dụ minh họa.</p>
+        </div>
+
+        <!-- Trạng thái Loading -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+            <i class="fa-solid fa-circle-notch spinner"></i>
+            <p>AI đang truy xuất dữ liệu & phân tích ngữ nghĩa...</p>
+        </div>
+
+        <!-- Trạng thái Báo lỗi -->
+        <div id="errorState" class="error-state" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.5rem; color: #EF4444; margin-bottom: 1rem;"></i>
+            <h3>Không tìm thấy kết quả</h3>
+            <p id="errorMessage" style="color: var(--text-muted); margin-top: 0.5rem;">Vui lòng kiểm tra lại chính tả của từ cần tra.</p>
+        </div>
+
+        <!-- Thẻ Kết quả Tra từ -->
+        <div id="resultCard" class="result-card">
+            <div class="word-title-group">
+                <div>
+                    <div id="resWord" class="word-heading">Word</div>
+                    <div id="resPhonetic" class="phonetic-text">/phonetic/</div>
+                </div>
+                <button class="audio-btn-large" onclick="playCurrentAudio()" title="Nghe phát âm chuẩn">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+
+            <!-- Nghĩa tiếng Việt từ AI -->
+            <div class="section-block">
+                <div class="section-label">
+                    <i class="fa-solid fa-language"></i> Nghĩa tiếng Việt (AI Translate)
+                </div>
+                <div id="resVietnamese" class="vietnamese-translation">Đang dịch...</div>
+            </div>
+
+            <!-- Định nghĩa Tiếng Anh & Ví dụ -->
+            <div class="section-block">
+                <div class="section-label">
+                    <i class="fa-solid fa-book-open"></i> Định nghĩa Tiếng Anh & Ví dụ
+                </div>
+                <div id="resMeanings" class="meaning-list">
+                    <!-- Javascript sẽ render nội dung tại đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Smart Learning Hub. Đột phá kiến thức - Bứt phá tương lai.</p>
+    </footer>
+
+    <script>
+        let currentAudioUrl = "";
+        let currentSearchWord = "";
+
+        async function handleSearch(event) {
+            event.preventDefault();
+            const word = document.getElementById("searchInput").value.trim().toLowerCase();
+            if (!word) return;
+
+            currentSearchWord = word;
+
+            // Chuyển đổi giao diện hiển thị sang Loading
+            document.getElementById("welcomeState").style.display = "none";
+            document.getElementById("errorState").style.display = "none";
+            document.getElementById("resultCard").style.display = "none";
+            document.getElementById("loadingState").style.display = "block";
+
+            try {
+                // 1. Gọi API Free Dictionary lấy thông tin Anh-Anh & Phiên âm & Audio
+                const dictPromise = fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+                    .then(res => res.ok ? res.json() : null);
+
+                // 2. Gọi AI Translation API để dịch nghĩa sang tiếng Việt
+                const transPromise = fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|vi`)
+                    .then(res => res.json());
+
+                const [dictData, transData] = await Promise.all([dictPromise, transPromise]);
+
+                document.getElementById("loadingState").style.display = "none";
+
+                if (!dictData && (!transData || !transData.responseData)) {
+                    showError("Không tìm thấy từ này trong hệ thống dữ liệu. Vui lòng thử từ khác.");
+                    return;
+                }
+
+                // Render kết quả ra màn hình
+                renderResult(word, dictData ? dictData[0] : null, transData ? transData.responseData.translatedText : "Chưa có bản dịch");
+
+            } catch (error) {
+                console.error("Lỗi khi tra từ:", error);
+                document.getElementById("loadingState").style.display = "none";
+                showError("Có lỗi kết nối mạng. Vui lòng thử lại sau.");
+            }
+        }
+
+        function renderResult(word, dictEntry, viTranslation) {
+            // Tên từ gốc
+            document.getElementById("resWord").textContent = dictEntry ? dictEntry.word : word;
+
+            // Phiên âm IPA
+            let phoneticText = "";
+            if (dictEntry) {
+                if (dictEntry.phonetic) {
+                    phoneticText = dictEntry.phonetic;
+                } else if (dictEntry.phonetics && dictEntry.phonetics.length > 0) {
+                    const found = dictEntry.phonetics.find(p => p.text);
+                    phoneticText = found ? found.text : "";
+                }
+            }
+            document.getElementById("resPhonetic").textContent = phoneticText || "/phát âm tự động/";
+
+            // Audio phát âm
+            currentAudioUrl = "";
+            if (dictEntry && dictEntry.phonetics) {
+                const audioObj = dictEntry.phonetics.find(p => p.audio && p.audio !== "");
+                if (audioObj) currentAudioUrl = audioObj.audio;
+            }
+
+            // Nghĩa tiếng Việt từ AI
+            document.getElementById("resVietnamese").textContent = viTranslation || "Không có bản dịch";
+
+            // Danh sách định nghĩa & ví dụ tiếng Anh
+            const meaningsContainer = document.getElementById("resMeanings");
+            meaningsContainer.innerHTML = "";
+
+            if (dictEntry && dictEntry.meanings) {
+                dictEntry.meanings.forEach(meaning => {
+                    meaning.definitions.slice(0, 2).forEach(def => {
+                        const itemHtml = `
+                            <div class="meaning-item">
+                                <span class="part-of-speech">${meaning.partOfSpeech}</span>
+                                <div class="eng-def">${def.definition}</div>
+                                ${def.example ? `<div class="example-box"><strong>Ví dụ:</strong> "${def.example}"</div>` : ''}
+                            </div>
+                        `;
+                        meaningsContainer.innerHTML += itemHtml;
+                    });
+                });
+            } else {
+                meaningsContainer.innerHTML = `
+                    <div class="meaning-item">
+                        <div class="eng-def">Từ này được tự động phân tích bởi AI Translate.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById("resultCard").style.display = "block";
+        }
+
+        function playCurrentAudio() {
+            if (currentAudioUrl) {
+                const audio = new Audio(currentAudioUrl);
+                audio.play();
+            } else {
+                // Sử dụng Text-to-Speech của trình duyệt nếu API không có sẵn file mp3
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(currentSearchWord);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert('Trình duyệt không hỗ trợ phát âm tự động.');
+                }
+            }
+        }
+
+        function showError(message) {
+            document.getElementById("errorMessage").textContent = message;
+            document.getElementById("errorState").style.display = "block";
+        }
+    </script>
+</body>
+</html>
