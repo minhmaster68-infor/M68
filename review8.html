@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 8: Operational Check-In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2c3e50; --accent: #f39c12; --bg: #fdfaf5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; color: #333; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin: 20px 0; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        h1 { color: var(--primary); font-size: 1.5rem; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        h3 { margin-top: 25px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        
+        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .vocab-card { background: #fffcf0; padding: 15px; border-radius: 10px; border: 1px solid #f9ebc8; position: relative; }
+        .vocab-card b { color: #d35400; display: block; font-size: 1.1rem; }
+        .ipa { font-size: 0.85rem; color: #7f8c8d; font-family: monospace; }
+        
+        .phrase-list { margin-top: 15px; }
+        .phrase-item { background: #ebf5fb; padding: 15px; border-radius: 10px; border-left: 5px solid #3498db; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .phrase-text b { display: block; color: #2980b9; }
+        
+        .audio-btn { width: 35px; height: 35px; border-radius: 50%; border: none; background: white; color: var(--accent); cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; }
+        .audio-btn:hover { background: var(--accent); color: white; }
+        .btn-back { display: inline-block; margin-bottom: 15px; color: #7f8c8d; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        <h1>Bài 8: Kiểm tra trạng thái vận hành</h1>
+
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/rfLvNj5Wq6s" title="Operational Check-In" allowfullscreen></iframe>
+        </div>
+
+        <h3><i class="fa-solid fa-face-smile"></i> 1. Từ vựng cảm xúc</h3>
+        <div class="vocab-grid">
+            <div class="vocab-card">
+                <b>Exhausted</b> <span class="ipa">/ɪɡˈzɔː.stɪd/</span> (Kiệt sức)
+                <button class="audio-btn" style="position:absolute; top:10px; right:10px;" onclick="speak('Exhausted')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <b>Anxious</b> <span class="ipa">/ˈæŋk.ʃəs/</span> (Lo âu)
+                <button class="audio-btn" style="position:absolute; top:10px; right:10px;" onclick="speak('Anxious')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <b>Frustrated</b> <span class="ipa">/frʌsˈtreɪ.tɪd/</span> (Bực bội)
+                <button class="audio-btn" style="position:absolute; top:10px; right:10px;" onclick="speak('Frustrated')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <b>Relieved</b> <span class="ipa">/rɪˈliːvd/</span> (Nhẹ nhõm)
+                <button class="audio-btn" style="position:absolute; top:10px; right:10px;" onclick="speak('Relieved')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+        </div>
+
+        <h3><i class="fa-solid fa-comment-dots"></i> 2. Mẫu câu quan trọng</h3>
+        <div class="phrase-list">
+            <div class="phrase-item">
+                <div class="phrase-text">
+                    <b>"How are you holding up?"</b>
+                    <span>Anh vẫn ổn/đang cố gắng tốt chứ?</span>
+                </div>
+                <button class="audio-btn" onclick="speak('How are you holding up?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="phrase-item">
+                <div class="phrase-text">
+                    <b>"Safety comes before any deadline."</b>
+                    <span>An toàn luôn đi trước mọi hạn chót.</span>
+                </div>
+                <button class="audio-btn" onclick="speak('Safety comes before any deadline.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="phrase-item">
+                <div class="phrase-text">
+                    <b>"How can I support you right now?"</b>
+                    <span>Tôi có thể hỗ trợ gì cho anh lúc này?</span>
+                </div>
+                <button class="audio-btn" onclick="speak('How can I support you right now?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="phrase-item" style="border-left-color: #27ae60; background: #eafaf1;">
+                <div class="phrase-text">
+                    <b>"Consider it done."</b>
+                    <span>Cứ coi như là xong rồi (Tôi sẽ làm ngay).</span>
+                </div>
+                <button class="audio-btn" style="color:#27ae60" onclick="speak('Consider it done.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel(); // Dừng các âm thanh đang phát
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            msg.rate = 0.9; // Tốc độ nói hơi chậm một chút để dễ nghe
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shipyard Check-in Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --alex: #2980b9; --minh: #27ae60; --bg: #f0f2f5; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+        /* Màn hình khởi động */
+        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; color: white; }
+        .video-box { width: 100%; max-width: 500px; aspect-ratio: 16/9; border: 2px solid var(--alex); border-radius: 15px; overflow: hidden; margin: 15px 0; }
+
+        /* Game Header */
+        .game-header { background: white; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; height: 60px; flex-shrink: 0; }
+        .score-box { background: #fffae6; padding: 5px 12px; border-radius: 15px; border: 1px solid #ffe58f; font-weight: bold; font-size: 0.9rem; }
+
+        /* Chat window */
+        #chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .msg { max-width: 85%; padding: 10px 14px; border-radius: 18px; line-height: 1.4; font-size: 0.95rem; position: relative; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-minh { align-self: flex-start; background: white; color: #333; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .msg-alex { align-self: flex-end; background: var(--alex); color: white; border-bottom-right-radius: 2px; }
+        .speaker-name { font-size: 0.7rem; margin-bottom: 4px; font-weight: bold; opacity: 0.8; }
+
+        /* Controls */
+        .control-panel { background: white; padding: 15px; border-top: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+        #target-hint { color: #555; text-align: center; font-size: 0.85rem; font-style: italic; min-height: 35px; }
+        #target-english { color: var(--alex); font-weight: bold; text-align: center; font-size: 1rem; margin-bottom: 5px; }
+
+        #mic-btn { width: 65px; height: 65px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        #mic-btn.active { background: #e74c3c; color: white; animation: pulse 1.2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
+        
+        #feedback { font-size: 0.8rem; height: 1.2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="overlay">
+    <h2 style="color:var(--alex)">SHIPYARD ROLEPLAY</h2>
+    <div class="video-box">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/rfLvNj5Wq6s" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <p>Bạn là <b>Alex</b>. Hãy lắng nghe <b>Minh</b> và trả lời.<br>(Cần bật âm thanh thiết bị)</p>
+    <button onclick="startGame()" style="padding: 15px 40px; border-radius: 30px; border:none; background: var(--alex); color:white; font-weight:bold; cursor:pointer;">BẮT ĐẦU</button>
+</div>
+
+<div class="game-header">
+    <b><i class="fa-solid fa-comments"></i> Alex & Minh</b>
+    <div class="score-box">Khớp: <span id="accuracy">0</span>%</div>
+</div>
+
+<div id="chat-window"></div>
+
+<div class="control-panel">
+    <div id="target-hint">Nhấn nút để bắt đầu...</div>
+    <div id="target-english">---</div>
+    <button id="mic-btn" disabled><i class="fa-solid fa-microphone"></i></button>
+    <div id="feedback"></div>
+</div>
+
+<script>
+    const script = [
+        {
+            minh: "Hi Alex. Honestly, I’m feeling pretty exhausted today. The heat inside the hull was intense.",
+            alexGoal: "I completely understand. Working in confined spaces under this weather is tough.",
+            hint: "Hãy bày tỏ sự cảm thông: 'Tôi hoàn toàn hiểu. Làm việc trong không gian kín dưới thời tiết này thật khó khăn.'",
+            keywords: ["understand", "confined", "spaces", "weather", "tough"]
+        },
+        {
+            minh: "We had a delay with the overhead crane, and I was worried we wouldn't meet the deadline.",
+            alexGoal: "Safety comes before any deadline. Please don't rush.",
+            hint: "Nhắc nhở về an toàn: 'An toàn luôn đi trước mọi hạn chót. Đừng quá vội vàng.'",
+            keywords: ["safety", "comes", "before", "deadline", "rush"]
+        },
+        {
+            minh: "Everyone is feeling the pressure, but seeing the ship come together is satisfying.",
+            alexGoal: "You and the team are doing an incredible job. How can I support you right now?",
+            hint: "Khen ngợi và đề nghị giúp đỡ: 'Anh và đội đang làm rất tốt. Tôi có thể hỗ trợ gì lúc này?'",
+            keywords: ["incredible", "job", "how", "support", "now"]
+        },
+        {
+            minh: "If we could get an extra ventilation fan for the lower deck, that would be much better.",
+            alexGoal: "Consider it done. I will arrange the equipment right away.",
+            hint: "Xác nhận hỗ trợ: 'Cứ coi như xong rồi. Tôi sẽ sắp xếp thiết bị ngay lập tức.'",
+            keywords: ["consider", "done", "arrange", "equipment", "away"]
+        }
+    ];
+
+    let step = 0;
+    const chatWin = document.getElementById('chat-window');
+    const micBtn = document.getElementById('mic-btn');
+    const targetEng = document.getElementById('target-english');
+    const targetHint = document.getElementById('target-hint');
+    const feedback = document.getElementById('feedback');
+
+    function speakAI(text, callback) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        msg.rate = 0.95;
+        msg.onend = callback; // Gọi hàm tiếp theo khi nói xong
+        window.speechSynthesis.speak(msg);
+    }
+
+    function startGame() {
+        document.getElementById('overlay').style.display = 'none';
+        const initialMinh = "Hi Alex, do you have a few minutes? How are you today?";
+        addMessage("Minh", initialMinh, 'minh');
+        
+        speakAI(initialMinh, () => {
+            targetHint.innerText = "Chào Minh và hỏi bác ấy đang thế nào.";
+            targetEng.innerText = "How are you holding up today?";
+            micBtn.disabled = false;
+        });
+    }
+
+    function addMessage(name, text, side) {
+        const div = document.createElement('div');
+        div.className = `msg msg-${side}`;
+        div.innerHTML = `<div class="speaker-name">${name}</div>${text}`;
+        chatWin.appendChild(div);
+        chatWin.scrollTop = chatWin.scrollHeight;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+
+    micBtn.onclick = () => {
+        recognition.start();
+        micBtn.classList.add('active');
+        feedback.innerText = "Đang lắng nghe...";
+    };
+
+    recognition.onresult = (event) => {
+        micBtn.classList.remove('active');
+        const speech = event.results[0][0].transcript;
+        processResult(speech);
+    };
+
+    function processResult(speech) {
+        let currentKeywords = (step === 0) ? ["holding", "up", "today"] : script[step-1].keywords;
+        const input = speech.toLowerCase();
+        let matches = 0;
+        currentKeywords.forEach(kw => { if(input.includes(kw)) matches++; });
+        const score = Math.round((matches / currentKeywords.length) * 100);
+        
+        document.getElementById('accuracy').innerText = score;
+
+        if (score >= 40) {
+            addMessage("Alex (Bạn)", speech, 'alex');
+            feedback.innerHTML = `<span style="color:#27ae60">Tốt! (${score}%)</span>`;
+            micBtn.disabled = true;
+
+            if (step < script.length) {
+                setTimeout(() => {
+                    const nextMinh = script[step].minh;
+                    addMessage("Minh", nextMinh, 'minh');
+                    
+                    speakAI(nextMinh, () => {
+                        targetHint.innerText = script[step].hint;
+                        targetEng.innerText = script[step].alexGoal;
+                        micBtn.disabled = false;
+                        step++;
+                    });
+                }, 1000);
+            } else {
+                targetEng.innerText = "NHIỆM VỤ HOÀN THÀNH!";
+                targetHint.innerText = "Bạn đã hoàn thành xuất sắc ca trực hôm nay.";
+            }
+        } else {
+            feedback.innerHTML = `<span style="color:#e74c3c">Chưa rõ, thử lại nhé...</span>`;
+        }
+    }
+</script>
+</body>
+</html>
