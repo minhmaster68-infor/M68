@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Voice Word Puzzle: Ship Launching</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a085;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --bg: #f2fcf9;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--secondary);
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .game-header {
+            background: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-title i { color: var(--primary); }
+        .progress-indicator {
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #e8f8f5;
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: var(--primary);
+        }
+
+        /* Video box */
+        .video-container {
+            background: white;
+            padding: 8px 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .video-box {
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 16/9;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Ship Animation Area */
+        .animation-zone {
+            height: 90px;
+            background: linear-gradient(to bottom, #d6eaf8 65%, #3498db 35%);
+            position: relative;
+            border-bottom: 3px solid #2980b9;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .slipway-line {
+            position: absolute;
+            bottom: 25px;
+            left: 0;
+            width: 75%;
+            height: 4px;
+            background: #7f8c8d;
+            transform: rotate(5deg);
+            transform-origin: left bottom;
+        }
+        .ship-sprite {
+            position: absolute;
+            font-size: 2.2rem;
+            bottom: 26px;
+            left: 10px;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.15));
+            z-index: 10;
+        }
+        .water-splash {
+            position: absolute;
+            bottom: 12px;
+            right: 25%;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        .splash-active {
+            animation: splashAnim 0.6s ease-out forwards;
+        }
+        @keyframes splashAnim {
+            0% { transform: scale(0.5) translateY(10px); opacity: 0; }
+            50% { transform: scale(1.3) translateY(-15px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 0; }
+        }
+
+        /* Workspace container */
+        .workspace {
+            flex: 1;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        /* Quest Card */
+        .quest-card {
+            background: white;
+            padding: 12px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .quest-vietnamese {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 4px;
+        }
+        .quest-sub {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Word Pools */
+        .word-pool {
+            min-height: 55px;
+            background: rgba(255,255,255,0.6);
+            border: 2px dashed #bdc3c7;
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            align-content: center;
+        }
+        .word-pool.target-zone {
+            background: #fff;
+            border: 2px solid #a3e4d7;
+            min-height: 65px;
+        }
+
+        /* Word chips */
+        .word-chip {
+            background: white;
+            border: 1px solid #d5dbdb;
+            color: var(--secondary);
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            user-select: none;
+        }
+        .word-chip:active {
+            transform: scale(0.95);
+        }
+        .word-chip.selected {
+            background: #e2e8f0;
+            color: #94a3b8;
+            border-color: #cbd5e1;
+            box-shadow: none;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Action bar for voice input */
+        .voice-section {
+            background: white;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .voice-instruction {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        #mic-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #ecf0f1;
+            color: #95a5a6;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        #mic-btn.unlocked {
+            background: var(--primary);
+            color: white;
+            pointer-events: auto;
+            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3);
+        }
+        #mic-btn.listening {
+            background: #e74c3c;
+            color: white;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .speech-transcript {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-style: italic;
+            min-height: 18px;
+        }
+        .feedback-message {
+            font-size: 0.85rem;
+            font-weight: bold;
+            height: 18px;
+        }
+
+        /* Controls */
+        .button-row {
+            display: flex;
+            width: 100%;
+            gap: 8px;
+        }
+        .btn-game {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-reset {
+            background: #f5b041;
+            color: white;
+        }
+        .btn-skip {
+            background: #bdc3c7;
+            color: #2c3e50;
+        }
+
+        /* Particle Splash system */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #5dade2;
+            pointer-events: none;
+            animation: particleAnim 0.7s ease-out forwards;
+        }
+        @keyframes particleAnim {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        }
+
+        /* Overlays */
+        #game-complete-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 62, 80, 0.95);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #game-complete-overlay h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="game-header">
+        <span class="header-title"><i class="fa-solid fa-anchor"></i> Lễ Hạ Thủy: Voice Puzzle</span>
+        <div class="progress-indicator">Vòng: <span id="round-num">1</span>/10</div>
+    </div>
+
+    <!-- PHẦN NHÚNG VIDEO YOUTUBE (Sử dụng ID abcd để dễ tìm kiếm/thay thế) -->
+    <div class="video-container">
+        <div class="video-box">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/c6KR3bkIgoA" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Animation Area (Ship Yard Slipway) -->
+    <div class="animation-zone" id="animation-zone">
+        <div class="slipway-line"></div>
+        <div class="ship-sprite" id="ship-sprite">🚢</div>
+        <div class="water-splash" id="water-splash">💦</div>
+    </div>
+
+    <!-- Main Game Workspace -->
+    <div class="workspace">
+        
+        <!-- Câu hỏi dịch thuật -->
+        <div class="quest-card">
+            <div class="quest-sub">Dịch nghĩa câu sau sang tiếng Anh</div>
+            <div class="quest-vietnamese" id="quest-vi">Đang tải...</div>
+        </div>
+
+        <!-- Ô kết quả ghép chữ -->
+        <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="font-size:0.7rem; color:#7f8c8d; font-weight:bold;">CÂU GHÉP CỦA BẠN (Nhấp vào từ để gỡ bỏ):</div>
+            <div class="word-pool target-zone" id="target-zone"></div>
+        </div>
+
+        <!-- Các thẻ từ xáo trộn -->
+        <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="font-size:0.7rem; color:#7f8c8d; font-weight:bold;">CHỌN TỪ ĐỂ GHÉP CÂU:</div>
+            <div class="word-pool" id="source-zone"></div>
+        </div>
+
+        <!-- Section kiểm tra giọng nói -->
+        <div class="voice-section">
+            <div class="voice-instruction" id="voice-status">Bước 1: Ghép các từ ở trên thành câu hoàn chỉnh!</div>
+            <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+            <div class="speech-transcript" id="speech-transcript"></div>
+            <div class="feedback-message" id="feedback-msg"></div>
+            
+            <div class="button-row">
+                <button class="btn-game btn-reset" onclick="resetCurrentPuzzle()"><i class="fa-solid fa-rotate-right"></i> Ghép lại</button>
+                <button class="btn-game btn-skip" onclick="skipRound()">Bỏ qua vòng <i class="fa-solid fa-forward"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Complete Overlay -->
+    <div id="game-complete-overlay">
+        <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: #1abc9c; margin-bottom: 20px;"></i>
+        <h2>HẠ THỦY THÀNH CÔNG!</h2>
+        <p style="margin-bottom: 30px; font-size: 1.1rem; color: #bdc3c7;">Chúc mừng! Con tàu đã trôi xuống nước an toàn và bạn đã thành thạo kỹ năng giao tiếp cơ bản của buổi lễ hạ thủy.</p>
+        <button onclick="restartGame()" style="padding: 15px 40px; border-radius: 30px; border:none; background: var(--primary); color:white; font-weight:bold; font-size:1.1rem; cursor:pointer;">Chơi Lại Từ Đầu</button>
+    </div>
+
+    <script>
+        // 10 rounds of dataset
+        const roundsData = [
+            {
+                vi: "Chào mừng quý vị đến với lễ hạ thủy chính thức của tàu số hiệu 102.",
+                en: "Welcome to the official launching ceremony of Hull No 102",
+                words: ["Welcome", "to", "the", "official", "launching", "ceremony", "of", "Hull", "No", "102"]
+            },
+            {
+                vi: "Hôm nay đánh dấu một cột mốc quan trọng khi chúng ta di chuyển con tàu này.",
+                en: "Today marks a significant milestone as we transfer this vessel",
+                words: ["Today", "marks", "a", "significant", "milestone", "as", "we", "transfer", "this", "vessel"]
+            },
+            {
+                vi: "Độ toàn vẹn cấu trúc của tàu đáp ứng mọi yêu cầu của đăng kiểm.",
+                en: "Her structural integrity meets every class society requirement",
+                words: ["Her", "structural", "integrity", "meets", "every", "class", "society", "requirement"]
+            },
+            {
+                vi: "Tất cả các thiết bị dưới nước đã vượt qua đợt kiểm tra nghiêm ngặt.",
+                en: "All underwater fittings have passed rigorous inspection",
+                words: ["All", "underwater", "fittings", "have", "passed", "rigorous", "inspection"]
+            },
+            {
+                vi: "Tôi xin mời bà Elena thực hiện nghi thức đặt tên tàu truyền thống.",
+                en: "I invite Ms Elena to perform the traditional christening ritual",
+                words: ["I", "invite", "Ms", "Elena", "to", "perform", "the", "traditional", "christening", "ritual"]
+            },
+            {
+                vi: "Tôi đặt tên cho con tàu này là MV Horizon Pioneer.",
+                en: "I name this vessel MV Horizon Pioneer",
+                words: ["I", "name", "this", "vessel", "MV", "Horizon", "Pioneer"]
+            },
+            {
+                vi: "Kích hoạt cơ cấu nhả cò sập và dọn sạch bệ hạ thủy!",
+                en: "Release the trigger mechanism and clear the slipway",
+                words: ["Release", "the", "trigger", "mechanism", "and", "clear", "the", "slipway"]
+            },
+            {
+                vi: "Tàu đang trượt rất êm ái xuống đường trượt hạ thủy.",
+                en: "She is sliding smoothly down the launching ways",
+                words: ["She", "is", "sliding", "smoothly", "down", "the", "launching", "ways"]
+            },
+            {
+                vi: "Các xích hãm đang bám để kiểm soát đà quán tính của tàu.",
+                en: "The drag chains are engaging to control her momentum",
+                words: ["The", "drag", "chains", "are", "engaging", "to", "control", "her", "momentum"]
+            },
+            {
+                vi: "Chúng ta sẽ tiến hành các thử nghiệm tại bến cuối cùng.",
+                en: "We will now proceed with final dock trials",
+                words: ["We", "will", "now", "proceed", "with", "final", "dock", "trials"]
+            }
+        ];
+
+        let currentRoundIndex = 0;
+        let selectedWords = [];
+        let scrambledWords = [];
+        let isPuzzleSolved = false;
+
+        // Elements
+        const questVi = document.getElementById('quest-vi');
+        const sourceZone = document.getElementById('source-zone');
+        const targetZone = document.getElementById('target-zone');
+        const micBtn = document.getElementById('mic-btn');
+        const voiceStatus = document.getElementById('voice-status');
+        const speechTranscript = document.getElementById('speech-transcript');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const shipSprite = document.getElementById('ship-sprite');
+        const waterSplash = document.getElementById('water-splash');
+        const roundNumSpan = document.getElementById('round-num');
+        const animZone = document.getElementById('animation-zone');
+
+        // Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        }
+
+        function initRound() {
+            isPuzzleSolved = false;
+            selectedWords = [];
+            feedbackMsg.innerText = "";
+            speechTranscript.innerText = "";
+            
+            const currentData = roundsData[currentRoundIndex];
+            roundNumSpan.innerText = currentRoundIndex + 1;
+            questVi.innerText = currentData.vi;
+
+            // Xáo trộn từ
+            scrambledWords = [...currentData.words]
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
+
+            renderSourcePool();
+            renderTargetPool();
+            updateShipPosition();
+
+            // Disable mic ban đầu
+            micBtn.classList.remove('unlocked', 'listening');
+            voiceStatus.innerText = "Bước 1: Ghép các từ ở trên thành câu hoàn chỉnh!";
+        }
+
+        function renderSourcePool() {
+            sourceZone.innerHTML = "";
+            scrambledWords.forEach((word, index) => {
+                const isUsed = selectedWords.includes(index);
+                const chip = document.createElement('button');
+                chip.className = `word-chip ${isUsed ? 'selected' : ''}`;
+                chip.innerText = word;
+                chip.onclick = () => {
+                    if (!isUsed) {
+                        selectedWords.push(index);
+                        renderSourcePool();
+                        renderTargetPool();
+                        checkPuzzleSolution();
+                    }
+                };
+                sourceZone.appendChild(chip);
+            });
+        }
+
+        function renderTargetPool() {
+            targetZone.innerHTML = "";
+            selectedWords.forEach((scrambledIdx, targetPosition) => {
+                const wordText = scrambledWords[scrambledIdx];
+                const chip = document.createElement('button');
+                chip.className = "word-chip";
+                chip.style.borderColor = "var(--primary)";
+                chip.innerText = wordText;
+                chip.onclick = () => {
+                    // Xóa từ khỏi lựa chọn
+                    selectedWords.splice(targetPosition, 1);
+                    renderSourcePool();
+                    renderTargetPool();
+                    checkPuzzleSolution();
+                };
+                targetZone.appendChild(chip);
+            });
+        }
+
+        function checkPuzzleSolution() {
+            const currentData = roundsData[currentRoundIndex];
+            const currentAssembled = selectedWords.map(idx => scrambledWords[idx]).join(' ').toLowerCase();
+            const targetSentence = currentData.en.toLowerCase();
+
+            // So sánh chuẩn hóa không dấu câu
+            if (cleanString(currentAssembled) === cleanString(targetSentence)) {
+                isPuzzleSolved = true;
+                voiceStatus.innerText = "Chính xác! Bước 2: Hãy nhấn giữ hoặc nhấp mic để đọc to câu trên!";
+                micBtn.classList.add('unlocked');
+                feedbackMsg.innerHTML = "<span style='color:var(--success)'>Ghép chữ thành công! Hãy luyện nói.</span>";
+                triggerMiniConfetti();
+            } else {
+                isPuzzleSolved = false;
+                micBtn.classList.remove('unlocked');
+                feedbackMsg.innerText = "";
+                if (selectedWords.length === currentData.words.length) {
+                    feedbackMsg.innerHTML = "<span style='color:#e74c3c'>Thứ tự từ chưa chính xác, hãy thử lại.</span>";
+                }
+            }
+        }
+
+        function resetCurrentPuzzle() {
+            selectedWords = [];
+            renderSourcePool();
+            renderTargetPool();
+            checkPuzzleSolution();
+        }
+
+        function skipRound() {
+            nextRound();
+        }
+
+        function cleanString(str) {
+            return str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ").trim();
+        }
+
+        // Voice handling
+        if (recognition) {
+            micBtn.onclick = () => {
+                if (!isPuzzleSolved) return;
+                
+                recognition.start();
+                micBtn.classList.add('listening');
+                feedbackMsg.innerText = "Hệ thống đang nghe...";
+            };
+
+            recognition.onresult = (event) => {
+                micBtn.classList.remove('listening');
+                const speechResult = event.results[0][0].transcript;
+                speechTranscript.innerText = `Bạn đã nói: "${speechResult}"`;
+                evaluateSpeech(speechResult);
+            };
+
+            recognition.onerror = () => {
+                micBtn.classList.remove('listening');
+                feedbackMsg.innerHTML = "<span style='color:#e74c3c'>Lỗi nhận dạng, hãy thử nói lại.</span>";
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+            };
+        } else {
+            micBtn.onclick = () => {
+                alert("Trình duyệt không hỗ trợ nhận diện giọng nói trực tiếp. Hãy chuyển qua Chrome hoặc Edge để chơi mượt mà nhất!");
+                // Tự động bỏ qua bước nói nếu không có API hỗ trợ
+                nextRound();
+            };
+        }
+
+        function evaluateSpeech(spokenText) {
+            const targetText = roundsData[currentRoundIndex].en;
+            const spokenClean = cleanString(spokenText.toLowerCase()).split(' ');
+            const targetClean = cleanString(targetText.toLowerCase()).split(' ');
+
+            // Tính số lượng từ khớp
+            let matchCount = 0;
+            targetClean.forEach(word => {
+                if (spokenClean.includes(word)) matchCount++;
+            });
+
+            const accuracy = (matchCount / targetClean.length) * 100;
+
+            if (accuracy >= 55) {
+                feedbackMsg.innerHTML = `<span style='color:var(--success)'><i class='fa-solid fa-circle-check'></i> Quá tốt! Phát âm chính xác (${Math.round(accuracy)}%)</span>`;
+                setTimeout(() => {
+                    nextRound();
+                }, 1500);
+            } else {
+                feedbackMsg.innerHTML = `<span style='color:#e74c3c'>Độ chính xác thấp (${Math.round(accuracy)}%). Thử phát âm lại chậm và rõ hơn nhé.</span>`;
+            }
+        }
+
+        function nextRound() {
+            triggerSplashEffect();
+            if (currentRoundIndex < roundsData.length - 1) {
+                currentRoundIndex++;
+                initRound();
+            } else {
+                // Kết thúc game
+                document.getElementById('game-complete-overlay').style.display = 'flex';
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('game-complete-overlay').style.display = 'none';
+            currentRoundIndex = 0;
+            initRound();
+        }
+
+        // Visuals & Animations
+        function updateShipPosition() {
+            const progress = currentRoundIndex / 10;
+            // Tàu trượt xéo xuống triền đà
+            const startX = 10; // Left %
+            const startY = 26; // Bottom px
+            
+            const moveX = progress * 70; // Di chuyển tối đa 70% chiều dài
+            const moveY = progress * -15; // Hạ thấp dần xuống nước
+
+            shipSprite.style.left = `calc(${startX}% + ${moveX}%)`;
+            shipSprite.style.bottom = `${startY + moveY}px`;
+
+            // Nghiêng tàu một chút khi trượt
+            if (currentRoundIndex > 0 && currentRoundIndex < 7) {
+                shipSprite.style.transform = "rotate(4deg)";
+            } else {
+                shipSprite.style.transform = "rotate(0deg)";
+            }
+        }
+
+        function triggerSplashEffect() {
+            waterSplash.classList.add('splash-active');
+            createParticles();
+            setTimeout(() => {
+                waterSplash.classList.remove('splash-active');
+            }, 600);
+        }
+
+        // Tạo bọt nước văng lên khi tàu trượt
+        function createParticles() {
+            const rect = shipSprite.getBoundingClientRect();
+            const zoneRect = animZone.getBoundingClientRect();
+            const startX = rect.left - zoneRect.left + (rect.width / 2);
+            const startY = rect.top - zoneRect.top + rect.height;
+
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${startX}px`;
+                particle.style.top = `${startY}px`;
+
+                // Góc ngẫu nhiên hướng lên trên
+                const angle = (Math.random() * Math.PI) - Math.PI; 
+                const distance = 40 + Math.random() * 60;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+
+                particle.style.setProperty('--dx', `${dx}px`);
+                particle.style.setProperty('--dy', `${dy}px`);
+                particle.style.background = `hsl(${200 + Math.random() * 20}, 75%, ${70 + Math.random() * 20}%)`;
+
+                animZone.appendChild(particle);
+                setTimeout(() => particle.remove(), 700);
+            }
+        }
+
+        // Hiệu ứng pháo hoa giấy mini khi ghép đúng chữ
+        function triggerMiniConfetti() {
+            const container = document.getElementById('target-zone');
+            const rect = container.getBoundingClientRect();
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'particle';
+                confetti.style.left = `${rect.left + (rect.width / 2) - 10}px`;
+                confetti.style.top = `${rect.top - 50}px`;
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 30 + Math.random() * 50;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+
+                confetti.style.setProperty('--dx', `${dx}px`);
+                confetti.style.setProperty('--dy', `${dy}px`);
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 700);
+            }
+        }
+
+        // Khởi động vòng 1 khi tải trang
+        window.onload = () => {
+            initRound();
+        };
+    </script>
+</body>
+</html>
