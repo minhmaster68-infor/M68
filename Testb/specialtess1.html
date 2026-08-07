@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice & Reading Assessment Game</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 10px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 25px; }
+
+        .reading-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            text-align: left;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 90px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.9rem; color: #94a3b8; }
+        .stat-value { font-size: 1.3rem; font-weight: bold; color: var(--text); display: block; }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; cursor: not-allowed; transform: none; }
+
+        .mic-btn { background-color: #f59e0b; color: #fff; }
+        .mic-btn.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Voice & Speed Reading Challenge</h1>
+    <p class="subtitle">Read the text aloud clearly. The system will measure your response speed and speech accuracy.</p>
+
+    <div class="stats-panel">
+        <div class="stat-item">Target Words<span id="wordCount" class="stat-value">0</span></div>
+        <div class="stat-item">Time Elapsed<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Accuracy<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="reading-box" id="targetText">Click "Start Challenge" to load sentence...</div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startChallenge()">Start Challenge</button>
+        <button id="micBtn" class="mic-btn" onclick="toggleListening()" disabled>🎤 Read Aloud</button>
+        <button id="nextBtn" onclick="nextSentence()" disabled>Next Passage ➔</button>
+    </div>
+
+    <div class="transcript-box">
+        <strong>Speech Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for user voice input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const passages = [
+        "Overpopulation is one of the country's most pressing social problems.",
+        "Farmers and market gardeners have been badly affected by the severe drought.",
+        "The next generation of airplane flight will be able to transport more people.",
+        "Mars has two moons called Phobos and Deimos, both captured by gravitational forces.",
+        "The river provides a plentiful supply of clean water to nearby villages."
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+
+    // Check browser SpeechRecognition API support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech recognition error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    } else {
+        alert("Speech Recognition API is not supported in this browser. Please use Google Chrome or MS Edge.");
+    }
+
+    function startChallenge() {
+        currentIndex = 0;
+        loadPassage();
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('micBtn').disabled = false;
+    }
+
+    function loadPassage() {
+        clearInterval(timerInterval);
+        const text = passages[currentIndex];
+        document.getElementById('targetText').innerText = text;
+        document.getElementById('wordCount').innerText = text.split(" ").length;
+        document.getElementById('speechResult').innerText = "Press 'Read Aloud' and speak into your microphone.";
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        // Reset Stats
+        document.getElementById('timer').innerText = "0.0s";
+        document.getElementById('accuracy').innerText = "0%";
+        
+        // Start Timer
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function toggleListening() {
+        if (!recognition) return;
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read Aloud";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval); // Stop Timer
+        const target = passages[currentIndex].toLowerCase().replace(/[^\w\s]/gi, "");
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        const targetWords = target.split(" ");
+        const spokenWords = spokenClean.split(" ");
+
+        let correctMatches = 0;
+        targetWords.forEach(word => {
+            if (spokenWords.includes(word)) correctMatches++;
+        });
+
+        const accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        document.getElementById('accuracy').innerText = accuracyScore + "%";
+
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+
+        if (accuracyScore >= 75) {
+            badge.className = "score-badge score-good";
+            badge.innerText = `Great Job! Time: ${elapsedTime}s | Pronunciation: ${accuracyScore}%`;
+            document.getElementById('nextBtn').disabled = false;
+        } else {
+            badge.className = "score-badge score-bad";
+            badge.innerText = `Needs Practice (${accuracyScore}%). Try speaking clearer!`;
+        }
+    }
+
+    function nextSentence() {
+        currentIndex++;
+        if (currentIndex < passages.length) {
+            loadPassage();
+        } else {
+            document.getElementById('targetText').innerText = "🎉 All Passages Completed Successfully!";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
