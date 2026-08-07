@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Roleplay: Strategic HR Boardroom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #d69e2e;
+            --success: #319795;
+            --danger: #e53e3e;
+            --bg: #edf2f7;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--secondary);
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .game-header {
+            background: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-indicator {
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #ebf8ff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: #2b6cb0;
+        }
+
+        /* Video Box (Placeholder abcd) */
+        .video-container {
+            background: white;
+            padding: 8px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .video-box {
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 16/9;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Interactive Boardroom Visual Area */
+        .boardroom-zone {
+            height: 110px;
+            background: linear-gradient(to bottom, #ebf8ff, #bee3f8);
+            position: relative;
+            border-bottom: 3px solid #63b3ed;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 10px;
+            flex-shrink: 0;
+        }
+        .actor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .actor i {
+            font-size: 2.2rem;
+            color: #4a5568;
+            background: white;
+            padding: 8px;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .actor.active i {
+            transform: scale(1.15);
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 12px rgba(214, 158, 46, 0.6);
+        }
+        .table-center {
+            position: absolute;
+            bottom: 0;
+            width: 60%;
+            height: 25px;
+            background: #718096;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Workspace container */
+        .workspace {
+            flex: 1;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        /* Prompt/Dialogue Bubbles */
+        .dialogue-card {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .speaker-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .speaker-label.robert { color: #2b6cb0; }
+        .speaker-label.sarah { color: var(--success); }
+        .dialogue-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .dialogue-translation {
+            font-size: 0.8rem;
+            color: #718096;
+            font-style: italic;
+        }
+
+        /* Voice Interaction Section */
+        .voice-section {
+            background: white;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .voice-instruction {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        #mic-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(26, 54, 147, 0.3);
+        }
+        #mic-btn.listening {
+            background: var(--danger);
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(229, 62, 98, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(229, 62, 98, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(229, 62, 98, 0); }
+        }
+
+        .speech-transcript {
+            font-size: 0.85rem;
+            color: #4a5568;
+            font-style: italic;
+            min-height: 18px;
+            background: #f7fafc;
+            padding: 6px;
+            border-radius: 6px;
+            width: 100%;
+        }
+        .feedback-message {
+            font-size: 0.85rem;
+            font-weight: bold;
+            height: 18px;
+        }
+
+        /* Controls */
+        .button-row {
+            display: flex;
+            width: 100%;
+            gap: 8px;
+        }
+        .btn-game {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-speak-robert {
+            background: #2b6cb0;
+            color: white;
+        }
+        .btn-skip {
+            background: #cbd5e0;
+            color: #2d3748;
+        }
+
+        /* Overlays */
+        #game-complete-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 54, 93, 0.95);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #game-complete-overlay h2 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="game-header">
+        <span class="header-title"><i class="fa-solid fa-users-gear"></i> AI Roleplay: Strategic Boardroom</span>
+        <div class="progress-indicator">Lượt nói: <span id="round-num">1</span>/5</div>
+    </div>
+
+    <!-- YouTube video with ID 'abcd' -->
+    <div class="video-container">
+        <div class="video-box">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/rcTmvjfq9NE" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Animated Interactive Boardroom Visuals -->
+    <div class="boardroom-zone" id="boardroom-zone">
+        <div class="actor" id="actor-robert">
+            <i class="fa-solid fa-user-tie"></i>
+            <span style="margin-top:5px; color: #1a365d;">MD Robert</span>
+        </div>
+        <div class="table-center">Executive Boardroom</div>
+        <div class="actor" id="actor-sarah">
+            <i class="fa-solid fa-user-gear"></i>
+            <span style="margin-top:5px; color: #319795;">HRD Sarah (Bạn)</span>
+        </div>
+    </div>
+
+    <!-- Main Game Workspace -->
+    <div class="workspace">
+        
+        <!-- Câu phát biểu của Giám đốc (Mr. Robert) -->
+        <div class="dialogue-card" style="border-left: 4px solid #2b6cb0;">
+            <div class="speaker-label robert"><i class="fa-solid fa-microphone-lines"></i> Mr. Robert (MD):</div>
+            <div class="dialogue-text" id="robert-text">Đang tải...</div>
+            <div class="dialogue-translation" id="robert-translation"></div>
+        </div>
+
+        <!-- Đoạn thoại học viên (Ms. Sarah) cần nói phản hồi -->
+        <div class="dialogue-card" style="border-left: 4px solid var(--success);">
+            <div class="speaker-label sarah"><i class="fa-solid fa-reply"></i> Phản hồi của bạn (Ms. Sarah):</div>
+            <div class="dialogue-text" id="sarah-text" style="color: #2d3748; font-weight: bold;">Đang tải...</div>
+            <div class="dialogue-translation" id="sarah-translation"></div>
+        </div>
+
+        <!-- Điều khiển giọng nói -->
+        <div class="voice-section">
+            <div class="voice-instruction" id="voice-status">Nhấp nghe Giám đốc nói hoặc bắt đầu trả lời bằng cách nhấp mic!</div>
+            <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+            <div class="speech-transcript" id="speech-transcript">Nhấp mic để trả lời...</div>
+            <div class="feedback-message" id="feedback-msg"></div>
+            
+            <div class="button-row">
+                <button class="btn-game btn-speak-robert" onclick="speakRobert()"><i class="fa-solid fa-volume-high"></i> Nghe Giám đốc phát biểu</button>
+                <button class="btn-game btn-skip" onclick="skipRound()">Bỏ qua lượt <i class="fa-solid fa-forward"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Complete Overlay -->
+    <div id="game-complete-overlay">
+        <i class="fa-solid fa-award" style="font-size: 5rem; color: var(--accent); margin-bottom: 20px;"></i>
+        <h2>HỘI NGHỊ THÀNH CÔNG!</h2>
+        <p style="margin-bottom: 30px; font-size: 1.1rem; color: #e2e8f0; max-width: 500px;">Chúc mừng bạn đã hoàn thành bài phản xạ chiến lược nhân sự, sẵn sàng kế hoạch cho dự án 50,000 DWT bulk carriers.</p>
+        <button onclick="restartGame()" style="padding: 15px 40px; border-radius: 30px; border:none; background: var(--accent); color:white; font-weight:bold; font-size:1.1rem; cursor:pointer;">Chơi Lại Lượt Đối Thoại</button>
+    </div>
+
+    <script>
+        // Kịch bản roleplay gồm 5 phân đoạn đối thoại chính giữa Robert và Sarah
+        const roleplayData = [
+            {
+                robert: "Good morning, Sarah. Thanks for meeting with me on short notice. As we prepare to sign the new contract for the 50,000 DWT bulk carriers next month, I want to review our human resource readiness. How is the department handling our current workforce capacity and specialized skills gap?",
+                robertVi: "Chào buổi sáng, Sarah. Cảm ơn cô đã họp gấp với tôi. Khi chúng ta chuẩn bị ký hợp đồng đóng mới tàu bulk carriers 50,000 DWT vào tháng tới, tôi muốn rà soát lại sự chuẩn bị về nhân sự. Bộ phận đang xử lý thế nào về năng lực lao động và sự thiếu hụt kỹ năng chuyên môn?",
+                sarah: "Good morning, Mr. Robert. I’m glad we’re discussing this today. Right now, our core operational activities are focused on three main areas: recruitment, compliance training, and workforce retention. For the upcoming bulk carrier project, we currently face a shortage of certified 6G welders, non-destructive testing technicians, and senior naval architects.",
+                sarahVi: "Chào buổi sáng, ông Robert. Tôi rất vui khi thảo luận việc này. Hiện tại, hoạt động cốt lõi của chúng tôi tập trung vào: tuyển dụng, đào tạo tuân thủ và giữ chân nhân sự. Đối với dự án sắp tới, chúng ta hiện đang thiếu hụt thợ hàn 6G có chứng chỉ, kỹ thuật viên NDT và kiến trúc sư hải quân cấp cao."
+            },
+            {
+                robert: "That is a critical bottleneck. How are you addressing the immediate recruitment drive, especially for licensed technical staff?",
+                robertVi: "Đó là một điểm nghẽn nghiêm trọng. Cô đang giải quyết đợt tuyển dụng cao điểm trước mắt này như thế nào, đặc biệt là các nhân sự kỹ thuật có chứng chỉ hành nghề?",
+                sarah: "On the operational side, we have partnered with local maritime universities and technical vocational colleges. We are setting up an accelerated apprenticeship program for hull structural fitters and marine engineers. Additionally, to ensure our existing workforce meets international class society standards, we are running mandatory recertification workshops next week.",
+                sarahVi: "Về vận hành, chúng tôi đã hợp tác với các đại học hàng hải và trường nghề kỹ thuật để mở chương trình học nghề cấp tốc cho thợ lắp ráp vỏ tàu và kỹ sư máy. Thêm vào đó, để lực lượng hiện tại đáp ứng tiêu chuẩn đăng kiểm quốc tế, chúng tôi sẽ mở các hội thảo cấp chứng chỉ bắt buộc vào tuần tới."
+            },
+            {
+                robert: "Excellent. But beyond day-to-day staffing, I need HR’s strategic consultation. The industry is shifting rapidly toward green shipbuilding, automation, and digital twin technology. How should we align our talent strategy with the company's 5-year growth plan?",
+                robertVi: "Tuyệt vời. Nhưng bên ngoài việc tuyển dụng hàng ngày, tôi cần sự tham mưu chiến lược của nhân sự. Ngành đang chuyển dịch sang đóng tàu xanh, tự động hóa và công nghệ digital twin. Chúng ta nên điều chỉnh chiến lược nhân tài thế nào cho phù hợp kế hoạch 5 năm của công ty?",
+                sarah: "From a strategic perspective, I recommend a two-pronged approach: upskilling existing staff and restructuring our talent acquisition model. First, we must establish an internal Skills Transformation Hub to train marine engineers in dual-fuel propulsion systems and LNG-fuelled vessel design. Second, to retain top-tier engineers, I advise restructuring our compensation and benefit packages.",
+                sarahVi: "Về mặt chiến lược, tôi đề xuất phương án tiếp cận hai hướng: nâng cao tay nghề nhân viên và tái cơ cấu mô hình tuyển dụng. Đầu tiên, chúng ta lập một Trung tâm chuyển đổi kỹ năng để đào tạo kỹ sư về động cơ nhiên liệu kép và thiết kế tàu LNG. Thứ hai, để giữ chân kỹ sư giỏi, tôi khuyên nên tái cơ cấu phúc lợi."
+            },
+            {
+                robert: "That aligns well with our long-term goals. What about occupational health and safety? Shipyards carry inherent high-risk environments, and any workplace accident severely impacts both morale and our production schedules.",
+                robertVi: "Điều đó rất phù hợp với mục tiêu dài hạn. Thế còn về an toàn sức khỏe lao động thì sao? Nhà máy đóng tàu vốn mang nhiều rủi ro, mọi tai nạn đều ảnh hưởng nghiêm trọng đến tinh thần và tiến độ.",
+                sarah: "Absolutely. HR is collaborating closely with the HSE department to implement a Zero-Harm Culture. We are integrating safety performance directly into key performance indicators for department heads and foremen. Furthermore, we are digitizing our safety orientation program so sub-contracted workers undergo mandatory safety pass verification.",
+                sarahVi: "Chắc chắn rồi. Nhân sự đang hợp tác chặt chẽ với phòng HSE để thực hiện Văn hóa Không Tai nạn. Chúng tôi tích hợp trực tiếp kết quả an toàn vào KPI của trưởng bộ phận và quản đốc. Đồng thời số hóa hướng dẫn an toàn để lao động thầu phụ bắt buộc phải xác minh trước khi vào đốc."
+            },
+            {
+                robert: "Very thorough. Final question: What budget or executive support do you need from me to roll out these strategic initiatives?",
+                robertVi: "Rất chi tiết. Câu hỏi cuối cùng: Cô cần ngân sách hay sự hỗ trợ điều hành gì từ tôi để triển khai các sáng kiến chiến lược này?",
+                sarah: "I will present a formal proposal next Monday detailing the budget allocation for the Skills Transformation Hub, safety compliance upgrades, and university partnership sponsorships. Approval for this investment will ensure our shipyard remains competitive, agile, and fully staffed for upcoming projects.",
+                sarahVi: "Tôi sẽ trình một bản đề xuất chính thức vào thứ Hai tới chi tiết về phân bổ ngân sách cho Trung tâm Chuyển đổi Kỹ năng, nâng cấp hệ thống an toàn và tài trợ hợp tác đại học. Chấp thuận đầu tư này giúp nhà máy luôn cạnh tranh, linh hoạt và đủ nhân sự."
+            }
+        ];
+
+        let currentRound = 0;
+
+        // Elements
+        const robertText = document.getElementById('robert-text');
+        const robertTranslation = document.getElementById('robert-translation');
+        const sarahText = document.getElementById('sarah-text');
+        const sarahTranslation = document.getElementById('sarah-translation');
+        const roundNumSpan = document.getElementById('round-num');
+        const voiceStatus = document.getElementById('voice-status');
+        const speechTranscript = document.getElementById('speech-transcript');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const micBtn = document.getElementById('mic-btn');
+        const actorRobert = document.getElementById('actor-robert');
+        const actorSarah = document.getElementById('actor-sarah');
+
+        // Speech Recognition Setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        }
+
+        function initRound() {
+            feedbackMsg.innerText = "";
+            speechTranscript.innerText = "Nhấp mic để trả lời...";
+            
+            const currentData = roleplayData[currentRound];
+            roundNumSpan.innerText = currentRound + 1;
+
+            // Hiển thị kịch bản
+            robertText.innerText = currentData.robert;
+            robertTranslation.innerText = currentData.robertVi;
+            sarahText.innerText = currentData.sarah;
+            sarahTranslation.innerText = currentData.sarahVi;
+
+            // Highlight vai hoạt động
+            actorRobert.classList.add('active');
+            actorSarah.classList.remove('active');
+
+            voiceStatus.innerText = "Bước 1: Nghe Mr. Robert nói hoặc bấm micro để tự đọc câu trả lời của bạn.";
+        }
+
+        // Đọc giọng Mr. Robert qua SpeechSynthesis
+        function speakRobert() {
+            window.speechSynthesis.cancel();
+            actorRobert.classList.add('active');
+            actorSarah.classList.remove('active');
+            
+            const textToSpeak = roleplayData[currentRound].robert;
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.95;
+
+            utterance.onend = () => {
+                actorRobert.classList.remove('active');
+                actorSarah.classList.add('active');
+                voiceStatus.innerText = "Đến lượt bạn! Hãy bấm biểu tượng Micro đỏ để trả lời.";
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Xử lý Voice Input nhận diện giọng nói
+        if (recognition) {
+            micBtn.onclick = () => {
+                actorRobert.classList.remove('active');
+                actorSarah.classList.add('active');
+                recognition.start();
+                micBtn.classList.add('listening');
+                voiceStatus.innerText = "Hệ thống đang nghe, vui lòng đọc to câu trả lời của Sarah...";
+            };
+
+            recognition.onresult = (event) => {
+                micBtn.classList.remove('listening');
+                const speechResult = event.results[0][0].transcript;
+                speechTranscript.innerText = `Bạn đã nói: "${speechResult}"`;
+                evaluateSpeech(speechResult);
+            };
+
+            recognition.onerror = () => {
+                micBtn.classList.remove('listening');
+                feedbackMsg.innerHTML = "<span style='color:var(--danger)'>Không nhận diện được, hãy thử lại!</span>";
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+            };
+        } else {
+            micBtn.onclick = () => {
+                alert("Trình duyệt không hỗ trợ nhận dạng giọng nói trực tiếp. Hãy chuyển qua trình duyệt hỗ trợ Speech API (như Chrome/Edge) hoặc bấm bỏ qua lượt!");
+            };
+        }
+
+        // So sánh chuỗi và đánh giá kết quả
+        function cleanString(str) {
+            return str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ").trim().toLowerCase();
+        }
+
+        function evaluateSpeech(spokenText) {
+            const targetText = roleplayData[currentRound].sarah;
+            const spokenClean = cleanString(spokenText).split(' ');
+            const targetClean = cleanString(targetText).split(' ');
+
+            // Tính toán số lượng từ chính xác khớp trong câu
+            let matchCount = 0;
+            targetClean.forEach(word => {
+                if (spokenClean.includes(word)) matchCount++;
+            });
+
+            // Tỷ lệ khớp từ
+            const accuracy = (matchCount / targetClean.length) * 100;
+
+            // Vì bài nói dài, cấu hình độ chính xác chỉ cần đạt 45%+ để vượt qua và khích lệ người học
+            if (accuracy >= 45) {
+                feedbackMsg.innerHTML = `<span style='color:var(--success)'><i class='fa-solid fa-circle-check'></i> Tuyệt vời! Độ chính xác từ khóa đạt ${Math.round(accuracy)}%</span>`;
+                setTimeout(() => {
+                    nextRound();
+                }, 2500);
+            } else {
+                feedbackMsg.innerHTML = `<span style='color:var(--danger)'><i class='fa-solid fa-circle-xmark'></i> Độ khớp hơi thấp (${Math.round(accuracy)}%). Thử phát âm chậm và rõ chữ hơn nhé.</span>`;
+            }
+        }
+
+        function nextRound() {
+            if (currentRound < roleplayData.length - 1) {
+                currentRound++;
+                initRound();
+            } else {
+                document.getElementById('game-complete-overlay').style.display = 'flex';
+            }
+        }
+
+        function skipRound() {
+            nextRound();
+        }
+
+        function restartGame() {
+            document.getElementById('game-complete-overlay').style.display = 'none';
+            currentRound = 0;
+            initRound();
+        }
+
+        window.onload = () => {
+            initRound();
+        };
+    </script>
+</body>
+</html>
