@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Science & Tech - Voice & Reading Assessment</title>
+    <style>
+        :root {
+            --bg: #0b132b;
+            --card: #1c2541;
+            --accent: #64dfdf;
+            --accent-hover: #72efdd;
+            --text: #f8fafc;
+            --success: #10b981;
+            --warning: #ef4444;
+            --highlight: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #3a506b;
+        }
+
+        h1 { 
+            color: var(--accent); 
+            margin-bottom: 8px; 
+            font-size: 2rem; 
+            letter-spacing: -0.5px;
+        }
+        
+        p.subtitle { 
+            color: #94a3b8; 
+            font-size: 0.95rem; 
+            margin-bottom: 25px; 
+            line-height: 1.5;
+        }
+
+        .level-selector {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-selector label {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        select {
+            background-color: #0b132b;
+            color: var(--accent);
+            border: 1px solid #3a506b;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #0b132b;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #1c2541;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.3rem; font-weight: bold; color: var(--text); display: block; margin-top: 5px; }
+
+        .reading-box {
+            background: #070a13;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            text-align: left;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            min-height: 100px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 0.2px;
+        }
+
+        .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        button {
+            background-color: var(--accent);
+            color: #0b132b;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(100, 223, 223, 0.2);
+        }
+
+        button:hover { 
+            background-color: var(--accent-hover);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(100, 223, 223, 0.3);
+        }
+
+        button:disabled { 
+            background-color: #334155; 
+            color: #64748b;
+            cursor: not-allowed; 
+            transform: none; 
+            box-shadow: none;
+        }
+
+        .mic-btn { background-color: var(--highlight); color: #0b132b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2); }
+        .mic-btn:hover { background-color: #fbbf24; }
+        .mic-btn.recording { background-color: var(--warning); color: #fff; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #0b132b;
+            border-radius: 10px;
+            border: 1px dashed #3a506b;
+            color: #cbd5e1;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .transcript-box strong { color: var(--accent); }
+
+        .score-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        .score-good { background-color: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+        
+        .progress-bar-container {
+            width: 100%;
+            background-color: #0b132b;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Advanced Science & Tech Reading Challenge</h1>
+    <p class="subtitle">Read high-level scientific and technical passages aloud. The system checks speech recognition accuracy, pace, and pronunciation mastery.</p>
+
+    <div class="level-selector">
+        <label for="categorySelect">Choose Focus Module:</label>
+        <select id="categorySelect" onchange="changeCategory()">
+            <option value="all">All Scientific Modules (10 Passages)</option>
+            <option value="botany">Plant Physiology & Photosynthesis</option>
+            <option value="tech">Biotechnology & Precision Ag Tech</option>
+            <option value="climate">Climate Science & Ecosystems</option>
+        </select>
+    </div>
+
+    <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Passage<span id="passageNum" class="stat-value">0/0</span></div>
+        <div class="stat-item">Target Words<span id="wordCount" class="stat-value">0</span></div>
+        <div class="stat-item">Time Elapsed<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Accuracy<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="reading-box" id="targetText">Click "Start Assessment" to begin reading practice...</div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startChallenge()">Start Assessment</button>
+        <button id="micBtn" class="mic-btn" onclick="toggleListening()" disabled>🎤 Read Aloud</button>
+        <button id="nextBtn" onclick="nextSentence()" disabled>Next Passage ➔</button>
+    </div>
+
+    <div class="transcript-box">
+        <strong>Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 8px 0 0 0; font-style: italic;">Awaiting microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const passageDatabase = {
+        botany: [
+            "Water serves a dual regulatory function in photosynthesis by dictating the turgor pressure of guard cells and maintaining gas exchange efficiency.",
+            "Elevated ambient carbon dioxide concentrations generally enhance photosynthetic intensity, provided temperatures remain within optimal biological thresholds.",
+            "When carbon dioxide saturation levels exceed point two percent, plants risk severe metabolic toxicity and compromised assimilation pathways.",
+            "Optimal photosynthetic activity for temperate crop species usually requires ambient temperatures spanning between twenty-five and thirty-five degrees Celsius."
+        ],
+        tech: [
+            "Bioengineers do not need to manually synthesize additional stomatal inhibitor compounds after deploying automated environmental misting networks.",
+            "It is highly probable that automated irrigation sensors miscalculated soil moisture levels during the stress simulation test.",
+            "Precision agricultural systems utilize real-time gas analyzers to monitor stomatal conductance without disturbing delicate plant tissue."
+        ],
+        climate: [
+            "Severe drought conditions force stomatal closure, restricting carbon dioxide diffusion into the mesophyll and halting sugar production.",
+            "Thermal stress exceeding forty degrees Celsius induces enzyme denaturation, causing a drastic decline in overall vegetative productivity.",
+            "Modern environmental control chambers allow scientists to simulate extreme climate shifts and measure photosynthetic recovery rates accurately."
+        ]
+    };
+
+    let currentPassages = [];
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+    let totalScoreSum = 0;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening... Speak Now";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech recognition error: " + event.error + ". Please check microphone permissions.";
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    } else {
+        alert("Speech Recognition API is not supported in this browser. Please open this file in Google Chrome or Microsoft Edge.");
+    }
+
+    function getSelectedPassages() {
+        const category = document.getElementById('categorySelect').value;
+        if (category === 'all') {
+            return [...passageDatabase.botany, ...passageDatabase.tech, ...passageDatabase.climate];
+        } else {
+            return [...passageDatabase[category]];
+        }
+    }
+
+    function changeCategory() {
+        if (document.getElementById('startBtn').disabled) {
+            // Reset if changing mid-test
+            clearInterval(timerInterval);
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('targetText').innerText = "Module changed. Click 'Start Assessment' to begin new set.";
+            document.getElementById('feedbackBadge').style.display = 'none';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+    }
+
+    function startChallenge() {
+        currentPassages = getSelectedPassages();
+        currentIndex = 0;
+        totalScoreSum = 0;
+        loadPassage();
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('micBtn').disabled = false;
+    }
+
+    function loadPassage() {
+        clearInterval(timerInterval);
+        const text = currentPassages[currentIndex];
+        
+        // Update Stats Display
+        document.getElementById('targetText').innerText = text;
+        document.getElementById('wordCount').innerText = text.split(" ").length;
+        document.getElementById('passageNum').innerText = `${currentIndex + 1}/${currentPassages.length}`;
+        document.getElementById('speechResult').innerText = "Press 'Read Aloud' and speak into your microphone clearly.";
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        // Update Progress Bar
+        const progressPercent = ((currentIndex) / currentPassages.length) * 100;
+        document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+        // Reset Timers
+        document.getElementById('timer').innerText = "0.0s";
+        document.getElementById('accuracy').innerText = "0%";
+        
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function toggleListening() {
+        if (!recognition) return;
+        if (!isListening) {
+            try {
+                recognition.start();
+            } catch(e) {
+                console.log(e);
+            }
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read Aloud";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        
+        // Text normalization
+        const targetClean = passagesClean(currentPassages[currentIndex]);
+        const spokenClean = passagesClean(spoken);
+
+        const targetWords = targetClean.split(" ");
+        const spokenWords = spokenClean.split(" ");
+
+        let correctMatches = 0;
+        
+        // Simple word match check
+        targetWords.forEach(word => {
+            if (spokenWords.includes(word)) correctMatches++;
+        });
+
+        const accuracyScore = Math.min(100, Math.round((correctMatches / targetWords.length) * 100));
+        document.getElementById('accuracy').innerText = accuracyScore + "%";
+        totalScoreSum += accuracyScore;
+
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+
+        if (accuracyScore >= 70) {
+            badge.className = "score-badge score-good";
+            badge.innerText = `Excellent! Time: ${elapsedTime}s | Accuracy: ${accuracyScore}%`;
+            document.getElementById('nextBtn').disabled = false;
+        } else {
+            badge.className = "score-badge score-bad";
+            badge.innerText = `Accuracy ${accuracyScore}%. Try enunciating complex terms clearly!`;
+        }
+    }
+
+    function passagesClean(str) {
+        return str.toLowerCase()
+                  .replace(/[^\w\s]/gi, "")
+                  .replace(/\s+/g, " ")
+                  .trim();
+    }
+
+    function nextSentence() {
+        currentIndex++;
+        if (currentIndex < currentPassages.length) {
+            loadPassage();
+        } else {
+            // Finish Assessment
+            document.getElementById('progressBar').style.width = '100%';
+            const avgScore = Math.round(totalScoreSum / currentPassages.length);
+            document.getElementById('targetText').innerHTML = `🎉 <strong>Module Completed!</strong><br>Average Accuracy Score: <span style="color:var(--accent); font-size:1.4rem;">${avgScore}%</span>`;
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('startBtn').innerText = "Restart Assessment";
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
