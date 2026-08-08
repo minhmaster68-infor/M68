@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Roleplay: Financial Boardroom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #0f172a; --accent: #10b981; --danger: #ef4444; --ceo-color: #3b82f6; --cfo-color: #10b981; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100dvh; }
+        
+        /* Header & Video */
+        .header { background: var(--primary); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .video-min { width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; border: 2px solid var(--accent); }
+
+        /* Boardroom Visuals */
+        .boardroom { flex: 1; position: relative; background: linear-gradient(to bottom, #1e293b, #334155); display: flex; justify-content: space-around; align-items: center; padding: 20px; }
+        .char-box { text-align: center; color: white; transition: 0.5s; position: relative; }
+        .char-icon { font-size: 5rem; background: white; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin-bottom: 10px; border: 5px solid transparent; }
+        .char-box.active .char-icon { border-color: var(--accent); transform: scale(1.1); box-shadow: 0 0 30px var(--accent); }
+        .char-box.active::after { content: "SPEAKER"; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: var(--accent); padding: 2px 10px; border-radius: 10px; font-size: 0.7rem; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { top: -20px; } 50% { top: -30px; } }
+
+        /* Dialog Area */
+        .interaction-area { background: white; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 20px; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 15px; }
+        .dialogue-display { background: #f8fafc; padding: 15px; border-radius: 15px; border-left: 5px solid var(--ceo-color); min-height: 80px; font-size: 1.1rem; position: relative; }
+        .translation { font-size: 0.9rem; color: #64748b; font-style: italic; margin-top: 5px; }
+
+        /* Controls */
+        .controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        #mic-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ceo-color); color: white; font-size: 1.8rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+        #mic-btn.listening { background: var(--danger); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* Selection Screen */
+        #setup-screen { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
+        .role-cards { display: flex; gap: 20px; margin-top: 30px; }
+        .role-card { background: #334155; padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; width: 150px; border: 2px solid transparent; }
+        .role-card:hover { transform: scale(1.05); border-color: var(--accent); }
+        .role-card i { font-size: 3rem; margin-bottom: 15px; display: block; }
+
+        .score-badge { position: absolute; top: 10px; right: 10px; background: #1e293b; color: var(--accent); padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="setup-screen">
+        <h2>CHỌN VAI TRÒ CỦA BẠN</h2>
+        <div class="video-min" style="margin: 20px auto;">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/4gIdzC3Btso" frameborder="0"></iframe>
+        </div>
+        <div class="role-cards">
+            <div class="role-card" onclick="startGame('ceo')">
+                <i class="fa-solid fa-user-tie" style="color: var(--ceo-color);"></i>
+                <span>CEO<br>Mr. Arthur</span>
+            </div>
+            <div class="role-card" onclick="startGame('cfo')">
+                <i class="fa-solid fa-chart-pie" style="color: var(--cfo-color);"></i>
+                <span>CFO<br>Ms. Elena</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div><i class="fa-solid fa-building-columns"></i> Financial Strategy Game</div>
+        <div id="round-info">Round 1/5</div>
+    </div>
+
+    <div class="boardroom">
+        <div class="char-box" id="box-ceo">
+            <div class="char-icon" style="color: var(--ceo-color);"><i class="fa-solid fa-user-tie"></i></div>
+            <div>Mr. Arthur (CEO)</div>
+        </div>
+        <div class="char-box" id="box-cfo">
+            <div class="char-icon" style="color: var(--cfo-color);"><i class="fa-solid fa-user-nurse"></i></div>
+            <div>Ms. Elena (CFO)</div>
+        </div>
+        <div class="score-badge" id="accuracy-display">Accuracy: --%</div>
+    </div>
+
+    <div class="interaction-area">
+        <div id="status-msg" style="text-align:center; font-weight:bold; color: var(--ceo-color);">Đang chờ...</div>
+        <div class="dialogue-display" id="dialogue-display">
+            <div id="current-text">Chọn vai để bắt đầu</div>
+            <div class="translation" id="current-vi"></div>
+        </div>
+        <div class="controls">
+            <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+            <button onclick="playAI()" style="background:none; border: 1px solid #cbd5e1; padding: 10px; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-volume-high"></i> Nghe lại</button>
+        </div>
+        <div id="transcript" style="text-align:center; font-size: 0.8rem; color: #94a3b8;">Transcript will appear here...</div>
+    </div>
+
+    <script>
+        const script = [
+            {
+                ceo: "Good morning, Elena. As we prepare to sign the new contract for the two 82,000 DWT bulk carriers, I want to ensure our financial framework is fully aligned.",
+                ceoVi: "Chào Elena. Khi chuẩn bị ký hợp đồng mới cho 2 tàu hàng rời 82.000 DWT, tôi muốn đảm bảo khung tài chính đã hoàn toàn khớp.",
+                cfo: "Good morning, Mr. Arthur. I’ve reviewed the cash flow projections. Maintaining optimal working capital is our top priority.",
+                cfoVi: "Chào ông Arthur. Tôi đã xem xét dự báo dòng tiền. Duy trì vốn lưu động tối ưu là ưu tiên hàng đầu."
+            },
+            {
+                ceo: "What is the proposed refund guarantee structure for this contract?",
+                ceoVi: "Cấu trúc bảo lãnh hoàn tiền đề xuất cho hợp đồng này là gì?",
+                cfo: "We are securing the Refund Guarantee through First Commercial Bank to secure stage payments like steel cutting and launching.",
+                cfoVi: "Chúng ta đang chốt bảo lãnh hoàn tiền thông qua Ngân hàng Thương mại số 1 để bảo vệ các khoản thanh toán tiến độ như cắt thép và hạ thủy."
+            },
+            {
+                ceo: "How are we managing the currency risk? The contract is in US Dollars but labor costs are in Vietnam Dong.",
+                ceoVi: "Chúng ta quản lý rủi ro tỷ giá thế nào? Hợp đồng bằng USD nhưng chi phí nhân công bằng VNĐ.",
+                cfo: "We are using FX forward contracts and currency options to lock in favorable exchange rates for 60% of the contract value.",
+                cfoVi: "Chúng ta dùng hợp đồng tỷ giá kỳ hạn và quyền chọn tiền tệ để chốt tỷ giá có lợi cho 60% giá trị hợp đồng."
+            }
+        ];
+
+        let userRole = ''; 
+        let currentRound = 0;
+        const micBtn = document.getElementById('mic-btn');
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        function startGame(role) {
+            userRole = role;
+            document.getElementById('setup-screen').style.display = 'none';
+            loadRound();
+        }
+
+        function loadRound() {
+            if(currentRound >= script.length) {
+                alert("Chúc mừng! Bạn đã hoàn thành buổi họp chiến lược.");
+                location.reload();
+                return;
+            }
+            
+            document.getElementById('round-info').innerText = `Round ${currentRound + 1}/${script.length}`;
+            
+            if (userRole === 'ceo') {
+                // User là CEO -> AI là CFO nói trước (hoặc ngược lại tùy logic)
+                // Ở đây giả định CEO luôn khơi mào:
+                showToSpeak();
+            } else {
+                // User là CFO -> AI là CEO nói trước
+                playAI();
+            }
+        }
+
+        function showToSpeak() {
+            const data = script[currentRound];
+            const text = userRole === 'ceo' ? data.ceo : data.cfo;
+            const vi = userRole === 'ceo' ? data.ceoVi : data.cfoVi;
+            
+            document.getElementById('current-text').innerText = text;
+            document.getElementById('current-vi').innerText = vi;
+            document.getElementById('status-msg').innerText = "ĐẾN LƯỢT BẠN NÓI";
+            document.getElementById(`box-${userRole}`).classList.add('active');
+            document.getElementById(`box-${userRole === 'ceo' ? 'cfo' : 'ceo'}`).classList.remove('active');
+        }
+
+        function playAI() {
+            const data = script[currentRound];
+            const aiRole = userRole === 'ceo' ? 'cfo' : 'ceo';
+            const aiText = userRole === 'ceo' ? data.cfo : data.ceo;
+            const aiVi = userRole === 'ceo' ? data.cfoVi : data.ceoVi;
+
+            document.getElementById(`box-${aiRole}`).classList.add('active');
+            document.getElementById(`box-${userRole}`).classList.remove('active');
+            document.getElementById('status-msg').innerText = "AI ĐANG NÓI...";
+            document.getElementById('current-text').innerText = aiText;
+            document.getElementById('current-vi').innerText = aiVi;
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(aiText);
+            utterance.lang = 'en-US';
+            utterance.onend = () => {
+                if (userRole === 'ceo' && aiRole === 'cfo') {
+                    // Nếu CEO nói xong rồi CFO nói xong -> Qua round mới
+                    currentRound++;
+                    setTimeout(loadRound, 1000);
+                } else {
+                    // Nếu AI (CEO) vừa nói xong -> Đợi User (CFO) phản hồi
+                    showToSpeak();
+                }
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        micBtn.onclick = () => {
+            recognition.start();
+            micBtn.classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            micBtn.classList.remove('listening');
+            const result = event.results[0][0].transcript.toLowerCase();
+            document.getElementById('transcript').innerText = `You said: "${result}"`;
+            
+            const target = (userRole === 'ceo' ? script[currentRound].ceo : script[currentRound].cfo).toLowerCase();
+            
+            // So sánh đơn giản tính độ chính xác
+            const targetWords = target.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ");
+            const resultWords = result.split(" ");
+            let matches = 0;
+            targetWords.forEach(w => { if(resultWords.includes(w)) matches++; });
+            const accuracy = Math.round((matches / targetWords.length) * 100);
+
+            document.getElementById('accuracy-display').innerText = `Accuracy: ${accuracy}%`;
+
+            if(accuracy > 40) {
+                document.getElementById('status-msg').innerText = "CHÍNH XÁC!";
+                document.getElementById('status-msg').style.color = "var(--accent)";
+                setTimeout(() => {
+                    if(userRole === 'ceo') playAI(); // Sau khi CEO nói, AI (CFO) phản hồi
+                    else { currentRound++; loadRound(); } // Sau khi CFO phản hồi, qua round mới
+                }, 1500);
+            } else {
+                document.getElementById('status-msg').innerText = "HÃY THỬ LẠI!";
+                document.getElementById('status-msg').style.color = "var(--danger)";
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 10: Financial Strategy & Shipbuilding Finance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #0a2540; --secondary: #1e293b; --accent: #00d4b2; --bg: #f8fafc; 
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; color: #333; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        /* Video wrapper */
+        .video-wrapper { 
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            border-radius: 15px; margin-bottom: 25px; border: 3px solid var(--primary);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        h1 { color: var(--primary); font-size: 1.8rem; border-bottom: 4px solid var(--accent); padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        h3 { margin-top: 30px; color: var(--secondary); display: flex; align-items: center; gap: 10px; border-left: 5px solid var(--accent); padding-left: 15px; background: #f1f5f9; padding: 10px; border-radius: 0 8px 8px 0; }
+        
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
+        .vocab-card { background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .vocab-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: var(--accent); }
+        .vocab-card b { color: var(--primary); font-size: 1.1rem; }
+        .ipa { font-size: 0.85rem; color: #64748b; font-family: monospace; }
+        
+        .audio-btn { width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .dialogue-box { background: #f8fafc; border-radius: 15px; padding: 20px; margin-top: 20px; border: 1px solid #e2e8f0; }
+        .line { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0; }
+        .speaker { font-weight: 800; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 5px; display: block; }
+        .ceo { color: #0284c7; }
+        .cfo { color: #059669; }
+        .text-en { font-size: 1.05rem; font-weight: 500; color: #1e293b; margin-bottom: 8px; }
+        .text-vi { font-size: 0.95rem; color: #64748b; font-style: italic; }
+
+        .highlight-box { background: #fff4e5; border-left: 5px solid #f59e0b; padding: 20px; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration: none; color: #64748b;"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/4gIdzC3Btso" title="Shipbuilding Finance" allowfullscreen></iframe>
+        </div>
+
+        <h1><i class="fa-solid fa-chart-line"></i> Bài 10: Chiến Lược Tài Chính & Vận Hành Đóng Tàu</h1>
+
+        <h3><i class="fa-solid fa-book"></i> 1. Thuật ngữ Tài chính Đóng tàu (Glossary)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-card">
+                <div><b>Refund Guarantee (RG)</b><br><span class="ipa">/ˈriːfʌnd ˌɡærənˈtiː/</span><br>Bảo lãnh hoàn tiền</div>
+                <button class="audio-btn" onclick="speak('Refund Guarantee')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Working Capital</b><br><span class="ipa">/ˈwɜːrkɪŋ ˈkæpɪtl/</span><br>Vốn lưu động</div>
+                <button class="audio-btn" onclick="speak('Working Capital')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>FX Hedging</b><br><span class="ipa">/ef eks ˈhedʒɪŋ/</span><br>Phòng ngừa rủi ro tỷ giá</div>
+                <button class="audio-btn" onclick="speak('Foreign Exchange Hedging')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>CapEx (Capital Expenditure)</b><br><span class="ipa">/ˈkæpeks/</span><br>Chi phí đầu tư tài sản cố định</div>
+                <button class="audio-btn" onclick="speak('Capital Expenditure')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Milestone Payments</b><br><span class="ipa">/ˈmaɪlstəʊn ˈpeɪmənts/</span><br>Thanh toán theo tiến độ</div>
+                <button class="audio-btn" onclick="speak('Milestone Payments')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>L/C (Letter of Credit)</b><br><span class="ipa">/ˈletər əv ˈkredɪt/</span><br>Thư tín dụng</div>
+                <button class="audio-btn" onclick="speak('Letter of Credit')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+        </div>
+
+        <h3><i class="fa-solid fa-comments"></i> 2. Phân tích Nội dung Hội thoại</h3>
+        <div class="dialogue-box">
+            <div class="line">
+                <span class="speaker ceo">Mr. Arthur (CEO)</span>
+                <p class="text-en">"As we prepare to sign the new contract for the two 82,000 DWT bulk carriers, I want to ensure our financial framework is fully aligned with our shipyard’s production schedule."</p>
+                <p class="text-vi">"Khi chúng ta chuẩn bị ký hợp đồng mới cho hai tàu hàng rời 82.000 DWT, tôi muốn đảm bảo khung tài chính của chúng ta hoàn toàn khớp với tiến độ sản xuất của nhà máy."</p>
+            </div>
+            <div class="line">
+                <span class="speaker cfo">Ms. Elena (CFO)</span>
+                <p class="text-en">"Since shipbuilding is a capital-intensive industry with long gestation periods, maintaining optimal working capital is our top priority."</p>
+                <p class="text-vi">"Vì đóng tàu là ngành thâm dụng vốn với thời gian chuẩn bị dài, việc duy trì vốn lưu động tối ưu là ưu tiên hàng đầu của chúng ta."</p>
+            </div>
+            <div class="line">
+                <span class="speaker cfo">Ms. Elena (CFO)</span>
+                <p class="text-en">"The buyer requires an RG to secure their stage payments—specifically upon steel cutting, keel laying, launching, and sea trials."</p>
+                <p class="text-vi">"Người mua yêu cầu bảo lãnh hoàn tiền để bảo vệ các khoản thanh toán theo giai đoạn—cụ thể là khi cắt thép, đặt sống trâu, hạ thủy và thử đường biển."</p>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Key Takeaway:</h4>
+            <p>Trong tài chính đóng tàu, <b>Refund Guarantee (RG)</b> là cực kỳ quan trọng. Nếu nhà máy không thể bàn giao tàu, ngân hàng sẽ hoàn lại tiền cho chủ tàu. Điều này giúp chủ tàu an tâm giải ngân hàng triệu USD theo tiến độ (Milestones).</p>
+        </div>
+    </div>
+    <script>
+        function speak(t) {
+            window.speechSynthesis.cancel();
+            let m = new SpeechSynthesisUtterance(t);
+            m.lang = 'en-US';
+            window.speechSynthesis.speak(m);
+        }
+    </script>
+</body>
+</html>
