@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Structure - English Speaking Test Game</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Atomic Structure Speaking Game</h1>
+    <p class="subtitle">Listen to Person A, then speak Person B's answer clearly into your microphone.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 30</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Accuracy<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Person A (Auto-spoken Question):</div>
+        <div class="speech-text" id="questionText">Click "Start Test Game" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b">Person B (Your Target Answer):</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Test Game</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Replay Question</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled>🎤 Read Your Answer</button>
+        <button id="nextBtn" onclick="nextDialogue()" disabled>Next Question ➔</button>
+    </div>
+
+    <div class="transcript-box">
+        <strong>Your Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const dialogues = [
+        { q: "Is the atomic structure solid or hollow?", a: "An atom has a hollow structure with a nucleus at the center." },
+        { q: "Where is the nucleus located in an atom?", a: "The nucleus is located at the center of the atom." },
+        { q: "What surrounds the nucleus of an atom?", a: "Electrons surround the nucleus in the electron shell." },
+        { q: "Is an atom tightly packed or mostly empty space?", a: "An atom is mostly empty space with electrons moving around." },
+        { q: "How do electrons move around the nucleus?", a: "Electrons move in defined orbits forming electron shells." },
+        { q: "What electric charge does the nucleus carry?", a: "The nucleus carries a positive electric charge." },
+        { q: "What electric charge does an electron carry?", a: "An electron carries a negative electric charge." },
+        { q: "How are electrons arranged in an atom?", a: "Electrons are arranged in shells from the inside to the outside." },
+        { q: "How many electrons can the innermost shell hold at most?", a: "The innermost shell can hold a maximum of two electrons." },
+        { q: "Can the second electron shell hold up to eight electrons?", a: "Yes, outer shells can hold up to eight or more electrons." },
+        { q: "Which subatomic particles are found in the nucleus of most atoms?", a: "The nucleus usually contains protons and neutrons." },
+        { q: "Does a hydrogen nucleus contain neutrons?", a: "No, a hydrogen nucleus consists of only one proton." },
+        { q: "What three subatomic particles make up a standard atom?", a: "An atom is made of electrons, protons, and neutrons." },
+        { q: "Why is an atom electrically neutral overall?", a: "Because the number of protons equals the number of electrons." },
+        { q: "Where is most of an atom's mass concentrated?", a: "Most of the mass is concentrated in the nucleus." },
+        { q: "Why is electron mass considered negligible?", a: "Because electrons are much lighter than protons and neutrons." },
+        { q: "What particle determines the positive charge of the nucleus?", a: "Protons determine the positive charge of the nucleus." },
+        { q: "Which model describes electrons moving in fixed orbits?", a: "The Rutherford-Bohr atomic model." },
+        { q: "What charge does a neutron have?", a: "A neutron has no electric charge and is neutral." },
+        { q: "Are electrons lighter than protons?", a: "Yes, electrons have a much smaller mass than protons." },
+        { q: "What happens when an atom loses an electron?", a: "It becomes a positively charged ion." },
+        { q: "What happens when an atom gains an electron?", a: "It becomes a negatively charged ion." },
+        { q: "How many protons are in a hydrogen atom?", a: "A hydrogen atom contains exactly one proton." },
+        { q: "Do all atoms of the same element have the same proton count?", a: "Yes, proton count defines the chemical element." },
+        { q: "What fills the space between the nucleus and electrons?", a: "It is empty space within the atomic structure." },
+        { q: "Is the nucleus smaller than the total atomic size?", a: "Yes, the nucleus is extremely small compared to the atom." },
+        { q: "How are electron shells filled?", a: "They fill sequentially from the inner shell to the outer shell." },
+        { q: "What subatomic particle moves continuously around the center?", a: "The electron moves continuously around the nucleus." },
+        { q: "Why do positive and negative charges balance out?", a: "Because equal amounts of positive protons and negative electrons exist." },
+        { q: "What is the primary topic of chapter one in chemistry?", a: "The structure of atoms and the periodic table of elements." }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    } else {
+        alert("Speech Recognition is not supported on this browser. Please use Google Chrome or Microsoft Edge.");
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('micBtn').disabled = false;
+        document.getElementById('replayBtn').disabled = false;
+        loadDialogue();
+    }
+
+    function loadDialogue() {
+        clearInterval(timerInterval);
+        const item = dialogues[currentIndex];
+        
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${dialogues.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / dialogues.length) * 100}%`;
+        
+        document.getElementById('questionText').innerText = item.q;
+        document.getElementById('targetAnswer').innerText = item.a;
+        
+        document.getElementById('speechResult').innerText = "Click 'Read Your Answer' and speak into your microphone.";
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        document.getElementById('accuracy').innerText = "0%";
+        
+        // Auto-read Person A's question
+        playQuestionAudio();
+
+        // Start timer
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Clear previous queue
+            const utterance = new SpeechSynthesisUtterance(dialogues[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function toggleListening() {
+        if (!recognition) return;
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read Your Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        
+        const target = dialogues[currentIndex].a.toLowerCase().replace(/[^\w\s]/gi, "");
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        const targetWords = target.split(" ");
+        const spokenWords = spokenClean.split(" ");
+
+        let correctMatches = 0;
+        targetWords.forEach(word => {
+            if (spokenWords.includes(word)) correctMatches++;
+        });
+
+        const accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        document.getElementById('accuracy').innerText = accuracyScore + "%";
+
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+
+        if (accuracyScore >= 75) {
+            badge.className = "score-badge score-good";
+            badge.innerText = `Excellent! Time: ${elapsedTime}s | Accuracy: ${accuracyScore}%`;
+            document.getElementById('nextBtn').disabled = false;
+        } else {
+            badge.className = "score-badge score-bad";
+            badge.innerText = `Accuracy ${accuracyScore}% (<75%). Please try reading again!`;
+        }
+    }
+
+    function nextDialogue() {
+        currentIndex++;
+        if (currentIndex < dialogues.length) {
+            loadDialogue();
+        } else {
+            document.getElementById('questionText').innerText = "🎉 Game Completed! All 30 dialogues passed!";
+            document.getElementById('targetAnswer').innerText = "Congratulations on finishing the assessment.";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
