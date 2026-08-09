@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Game: Award Ceremony Workshop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #1e3a8a; --accent: #10b981; --warning: #f59e0b; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
+        .setup-screen { position: fixed; inset: 0; background: #1e293b; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .role-card { background: #334155; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+        .role-card:hover { border-color: var(--accent); background: #475569; }
+
+        .game-header { background: #1e3a8a; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .video-box { width: 100%; max-height: 200px; background: #000; }
+        
+        .main-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .character-display { display: flex; gap: 20px; margin-bottom: 30px; }
+        .char { opacity: 0.3; transition: 0.5s; text-align: center; }
+        .char.active { opacity: 1; transform: scale(1.2); }
+        .char i { font-size: 3rem; display: block; margin-bottom: 5px; }
+
+        .dialogue-bubble { background: white; color: #1e293b; padding: 20px; border-radius: 20px; width: 90%; max-width: 600px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .dialogue-bubble::after { content: ''; position: absolute; top: -10px; left: 50%; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid white; transform: translateX(-50%); }
+        
+        .controls { padding: 30px; display: flex; flex-direction: column; align-items: center; gap: 10px; background: #1e293b; }
+        #mic-btn { width: 80px; height: 80px; border-radius: 50%; border: none; background: var(--accent); color: white; font-size: 2rem; cursor: pointer; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        #mic-btn.listening { background: #ef4444; animation: pulse 1s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .score-board { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
+        .hint { font-size: 0.9rem; color: var(--warning); margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="setup" class="setup-screen">
+        <h2>CHỌN VAI TRÒ CỦA BẠN</h2>
+        <p>Bạn sẽ đọc lời thoại của nhân vật đã chọn,<br>AI sẽ đóng các vai còn lại.</p>
+        <div class="video-box" style="margin-bottom: 20px; border-radius: 10px; overflow: hidden;">
+            <iframe width="100%" height="180" src="https://www.youtube.com/embed/mMSifpdkAwo" frameborder="0"></iframe>
+        </div>
+        <div class="role-grid">
+            <div class="role-card" onclick="start('David')"><i class="fa-solid fa-user-tie"></i><br>MD David</div>
+            <div class="role-card" onclick="start('Nam')"><i class="fa-solid fa-fire-burner"></i><br>Welder Nam</div>
+            <div class="role-card" onclick="start('Linh')"><i class="fa-solid fa-compass-drafting"></i><br>Architect Linh</div>
+            <div class="role-card" onclick="start('Huan')"><i class="fa-solid fa-clipboard-check"></i><br>QC Huan</div>
+        </div>
+    </div>
+
+    <div class="game-header">
+        <span><i class="fa-solid fa-award"></i> Workshop: Bài 12</span>
+        <div class="score-board" id="total-score">Score: 0</div>
+    </div>
+
+    <div class="main-stage">
+        <div class="character-display">
+            <div class="char" id="char-David"><i class="fa-solid fa-user-tie"></i>David</div>
+            <div class="char" id="char-Nam"><i class="fa-solid fa-fire-burner"></i>Nam</div>
+            <div class="char" id="char-Linh"><i class="fa-solid fa-compass-drafting"></i>Linh</div>
+            <div class="char" id="char-Huan"><i class="fa-solid fa-clipboard-check"></i>Huan</div>
+        </div>
+
+        <div class="dialogue-bubble">
+            <div id="speaker-name" style="font-weight: bold; color: var(--primary); margin-bottom: 5px;">Hệ thống:</div>
+            <div id="text-en" style="font-size: 1.2rem; line-height: 1.4;">Đang khởi tạo...</div>
+            <div id="text-vi" style="font-size: 0.9rem; color: #64748b; margin-top: 10px;"></div>
+        </div>
+        <div id="hint-box" class="hint">Bạn nên nói: <span id="full-answer"></span></div>
+    </div>
+
+    <div class="controls">
+        <div id="status">Nhấn mic để trả lời khi tới lượt</div>
+        <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+        <div id="transcript" style="color: #94a3b8; font-style: italic;"></div>
+    </div>
+
+    <script>
+        const script = [
+            { role: 'David', en: "Good morning, everyone! First of all, congratulations on receiving the Advanced Worker Award today.", vi: "Chào buổi sáng mọi người! Trước hết, chúc mừng các bạn đã nhận giải thưởng Công nhân Tiên tiến hôm nay." },
+            { role: 'David', en: "Your hard work on the 50,000 DWT bulk carrier project was outstanding.", vi: "Sự chăm chỉ của các bạn trong dự án tàu hàng rời 50.000 DWT thật xuất sắc." },
+            { role: 'Nam', en: "Thank you very much, Director David. It is a great honor for us.", vi: "Cảm ơn Giám đốc David rất nhiều. Đó là vinh dự lớn cho chúng tôi." },
+            { role: 'Nam', en: "Our welding team worked overtime to ensure all the hull plates were completed ahead of schedule.", vi: "Đội hàn của chúng tôi đã làm thêm giờ để đảm bảo tất cả tôn vỏ tàu được hoàn thành trước thời hạn." },
+            { role: 'David', en: "I saw the inspection report, Nam. Your weld seam quality on the double bottom section was exceptional.", vi: "Tôi đã xem báo cáo kiểm tra, Nam. Chất lượng mối hàn của bạn ở phần đáy đôi thật đặc biệt." },
+            { role: 'Linh', en: "We adjusted the 3D CAD models early on to avoid pipe clashes and optimize space.", vi: "Chúng tôi đã điều chỉnh mô hình CAD 3D sớm để tránh va chạm đường ống và tối ưu không gian." },
+            { role: 'Huan', en: "All NDT reports and watertight integrity tests have been approved by the surveyor.", vi: "Tất cả các báo cáo NDT và kiểm tra độ kín nước đã được đăng kiểm viên phê duyệt." },
+            { role: 'David', en: "Outstanding job, team. Keep up this high level of technical precision!", vi: "Công việc tuyệt vời cả đội. Hãy duy trì sự chính xác kỹ thuật cao độ này!" }
+        ];
+
+        let userRole = '';
+        let currentIdx = 0;
+        let score = 0;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        function start(role) {
+            userRole = role;
+            document.getElementById('setup').style.display = 'none';
+            playRound();
+        }
+
+        function playRound() {
+            if (currentIdx >= script.length) {
+                alert("Hoàn thành! Tổng điểm của bạn: " + score);
+                location.reload();
+                return;
+            }
+
+            const line = script[currentIdx];
+            document.querySelectorAll('.char').forEach(c => c.classList.remove('active'));
+            document.getElementById(`char-${line.role}`).classList.add('active');
+            
+            document.getElementById('speaker-name').innerText = line.role + ":";
+            document.getElementById('text-en').innerText = line.en;
+            document.getElementById('text-vi').innerText = line.vi;
+
+            if (line.role === userRole) {
+                document.getElementById('status').innerText = "ĐẾN LƯỢT BẠN (Hãy nói theo văn bản trên)";
+                document.getElementById('mic-btn').disabled = false;
+                document.getElementById('hint-box').style.display = 'none';
+            } else {
+                document.getElementById('status').innerText = "AI ĐANG NÓI...";
+                document.getElementById('mic-btn').disabled = true;
+                speakAI(line.en);
+            }
+        }
+
+        function speakAI(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            msg.onend = () => {
+                currentIdx++;
+                setTimeout(playRound, 1000);
+            };
+            window.speechSynthesis.speak(msg);
+        }
+
+        document.getElementById('mic-btn').onclick = () => {
+            recognition.start();
+            document.getElementById('mic-btn').classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            document.getElementById('mic-btn').classList.remove('listening');
+            const result = event.results[0][0].transcript.toLowerCase();
+            const target = script[currentIdx].en.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+            
+            document.getElementById('transcript').innerText = "Bạn nói: " + result;
+
+            // Tính điểm tương đồng đơn giản
+            let matches = 0;
+            const targetWords = target.split(' ');
+            targetWords.forEach(w => { if(result.includes(w)) matches++; });
+            const accuracy = (matches / targetWords.length) * 100;
+
+            if (accuracy > 50) {
+                score += Math.round(accuracy);
+                document.getElementById('total-score').innerText = "Score: " + score;
+                document.getElementById('status').innerText = "TUYỆT VỜI! (Tiếp tục)";
+                currentIdx++;
+                setTimeout(playRound, 1500);
+            } else {
+                document.getElementById('status').innerText = "CHƯA RÕ, HÃY THỬ LẠI!";
+                document.getElementById('hint-box').style.display = 'block';
+                document.getElementById('full-answer').innerText = script[currentIdx].en;
+            }
+        };
+
+        recognition.onerror = () => document.getElementById('mic-btn').classList.remove('listening');
+    </script>
+</body>
+</html>

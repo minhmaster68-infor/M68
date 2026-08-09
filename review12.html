@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 12: Advanced Worker Award Ceremony</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #1e3a8a; --accent: #f1c40f; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin-bottom: 25px; border: 4px solid var(--primary); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        .vocab-section { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
+        .vocab-card { background: #f1f5f9; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
+        .vocab-card b { color: #1e40af; }
+        .dialogue-area { background: #fffef0; border: 1px solid #fef3c7; border-radius: 15px; padding: 20px; }
+        .line { margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; }
+        .speaker { font-weight: bold; font-size: 0.9rem; margin-right: 10px; color: #1e3a8a; }
+        .en { display: block; font-size: 1.05rem; color: #1f2937; }
+        .vi { display: block; font-size: 0.9rem; color: #6b7280; font-style: italic; }
+        .btn-audio { background: var(--primary); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color:#64748b;"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/mMSifpdkAwo" title="Shipbuilding Award Ceremony" allowfullscreen></iframe>
+        </div>
+
+        <h1>Bài 12: Lễ Vinh Danh & Thành Tựu Kỹ Thuật</h1>
+        
+        <h3>1. Từ vựng cốt lõi (Core Vocabulary)</h3>
+        <div class="vocab-section">
+            <div class="vocab-card">
+                <div><b>Hull Plate</b><br><i>Tôn vỏ tàu</i></div>
+                <button class="btn-audio" onclick="speak('Hull Plate')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Weld Seam</b><br><i>Mối hàn</i></div>
+                <button class="btn-audio" onclick="speak('Weld Seam')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Double Bottom</b><br><i>Đáy đôi</i></div>
+                <button class="btn-audio" onclick="speak('Double Bottom')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Ultrasonic Testing (UT)</b><br><i>Kiểm tra siêu âm</i></div>
+                <button class="btn-audio" onclick="speak('Ultrasonic Testing')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Outfitting Phase</b><br><i>Giai đoạn lắp ráp thiết bị</i></div>
+                <button class="btn-audio" onclick="speak('Outfitting Phase')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Sea Trials</b><br><i>Thử nghiệm đường biển</i></div>
+                <button class="btn-audio" onclick="speak('Sea Trials')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+        </div>
+
+        <h3>2. Hội thoại mẫu (Dialogue)</h3>
+        <div class="dialogue-area">
+            <div class="line">
+                <span class="speaker">Mr. David:</span>
+                <span class="en">"Your work on the 50,000 DWT bulk carrier project was outstanding."</span>
+                <span class="vi">"Công việc của các bạn trong dự án tàu hàng rời 50.000 DWT thật xuất sắc."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">Nam (Welder):</span>
+                <span class="en">"Our welding team worked overtime to ensure all the hull plates were completed ahead of schedule."</span>
+                <span class="vi">"Đội hàn của chúng tôi đã làm thêm giờ để đảm bảo tất cả tôn vỏ tàu được hoàn thành trước thời hạn."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">Linh (Architect):</span>
+                <span class="en">"We adjusted the 3D CAD models early on to avoid pipe clashes."</span>
+                <span class="vi">"Chúng tôi đã điều chỉnh mô hình CAD 3D sớm để tránh va chạm đường ống."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">Huan (QC):</span>
+                <span class="en">"All NDT reports and watertight integrity tests have been approved."</span>
+                <span class="vi">"Tất cả các báo cáo NDT và kiểm tra độ kín nước đã được phê duyệt."</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
