@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Periodic Table - English Reading & Speaking Assessment</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Natural Science Assessment: Periodic Table</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: Reading Aloud & Pronunciation</div>
+    <p id="instructionText" class="subtitle">Listen to the science question, then read the target answer clearly into your microphone.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 8</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Accuracy<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / System:</div>
+        <div class="speech-text" id="questionText">Click "Start Science Test" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Target Answer (Read Aloud):</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Science Test</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Replay Audio</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled>🎤 Read / Speak Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint / Clue</button>
+        <button id="nextBtn" onclick="nextDialogue()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Content Clue / Hint:</strong> <span id="hintText"></span>
+    </div>
+
+    <div class="transcript-box">
+        <strong>Your Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const dialogues = [
+        // PHASE 1: Basic & Intermediate Reading Aloud (Phát âm & Đọc thành tiếng)
+        { 
+            q: "How are chemical elements arranged in the modern Periodic Table?", 
+            a: "Elements are arranged in order of increasing nuclear charge number.",
+            hint: "Look at the atomic numbers: elements go from left to right, top to bottom by increasing protons.",
+            keywords: ["arranged", "order", "increasing", "nuclear", "charge"]
+        },
+        { 
+            q: "What four main pieces of information are displayed in an element box like Carbon?", 
+            a: "It shows the atomic number, chemical symbol, element name, and atomic mass.",
+            hint: "Check figure 4.1: Top number (6), Symbol (C), Name (Carbon), Bottom mass number (12).",
+            keywords: ["atomic", "number", "symbol", "name", "mass"]
+        },
+        { 
+            q: "How does the number of valence electrons change as you move left to right across a period?", 
+            a: "The number of outer-shell electrons increases sequentially from left to right.",
+            hint: "In a row (period), outer electrons increase by 1 for each step to the right.",
+            keywords: ["number", "outer", "electrons", "increases", "right"]
+        },
+        { 
+            q: "What key characteristic do elements belonging to the same column or group share?", 
+            a: "Elements in the same group have the same number of valence electrons.",
+            hint: "Columns (groups) contain elements with matching outer shell electron counts.",
+            keywords: ["elements", "group", "same", "number", "electrons"]
+        },
+
+        // PHASE 2: Advanced Memory & Scientific Reasoning (Bí ẩn đáp án - Kiểm tra trí nhớ & Khả năng diễn đạt)
+        { 
+            q: "Why is the nuclear charge number crucial in determining the position of an element?", 
+            a: "Because each element has a unique number of protons which defines its chemical identity.",
+            hint: "The proton count (nuclear charge) determines the atomic number and chemical properties.",
+            keywords: ["unique", "protons", "defines", "chemical", "identity"]
+        },
+        { 
+            q: "In an element card for Carbon, what does the number four at the bottom indicate?", 
+            a: "It represents the number of electrons in the outermost electron shell.",
+            hint: "Bottom label in fig 4.1: 'Số electron ở lớp ngoài cùng: 4'.",
+            keywords: ["number", "electrons", "outermost", "shell"]
+        },
+        { 
+            q: "How can you classify elements into metals, non-metals, and noble gases using the Periodic Table?", 
+            a: "By identifying their group placement, valence electrons, and position relative to the zigzag dividing line.",
+            hint: "Metals are mostly on the left/middle, non-metals on the right, and noble gases in the far-right group.",
+            keywords: ["group", "placement", "valence", "electrons", "position"]
+        },
+        { 
+            q: "What trend is observed in metallic character across a period from left to right?", 
+            a: "Metallic character decreases while non-metallic character increases across a period.",
+            hint: "Left side elements easily lose electrons (metals), while right side elements gain electrons (non-metals).",
+            keywords: ["metallic", "decreases", "non-metallic", "increases", "period"]
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    } else {
+        alert("Speech Recognition is not supported on this browser. Please use Google Chrome or Microsoft Edge.");
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('micBtn').disabled = false;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadDialogue();
+    }
+
+    function loadDialogue() {
+        clearInterval(timerInterval);
+        const item = dialogues[currentIndex];
+        const isPhase1 = currentIndex < 4;
+        
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+
+        if (isPhase1) {
+            phaseTag.innerText = "Phase 1: Reading & Pronunciation Assessment";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Listen to the science question, then read the target answer clearly into your microphone.";
+            answerRoleTitle.innerText = "Target Answer (Read Aloud):";
+            targetAnswerBox.innerText = item.a;
+            targetAnswerBox.style.color = "#38bdf8";
+        } else {
+            phaseTag.innerText = "Phase 2: Advanced Recall & Speaking Test";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Listen to the question. The answer is HIDDEN! Answer directly using your memory and understanding.";
+            answerRoleTitle.innerText = "Target Answer (Hidden):";
+            targetAnswerBox.innerText = "🔒 [Hidden Answer - Speak your response directly or click Hint for help]";
+            targetAnswerBox.style.color = "#94a3b8";
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${dialogues.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / dialogues.length) * 100}%`;
+        
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and speak into your microphone.";
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        document.getElementById('accuracy').innerText = "0%";
+        
+        playQuestionAudio();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = dialogues[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(dialogues[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function toggleListening() {
+        if (!recognition) return;
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = dialogues[currentIndex];
+        const isPhase1 = currentIndex < 4;
+        
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        let accuracyScore = 0;
+
+        if (isPhase1) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        } else {
+            let matchCount = 0;
+            item.keywords.forEach(kw => {
+                if (spokenClean.includes(kw.toLowerCase())) {
+                    matchCount++;
+                }
+            });
+            accuracyScore = Math.min(100, Math.round((matchCount / item.keywords.length) * 100));
+            document.getElementById('targetAnswer').innerText = item.a + " (Revealed Reference)";
+            document.getElementById('targetAnswer').style.color = "#38bdf8";
+        }
+
+        document.getElementById('accuracy').innerText = accuracyScore + "%";
+
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+
+        if (accuracyScore >= 60) {
+            badge.className = "score-badge score-good";
+            badge.innerText = `Great Job! Time: ${elapsedTime}s | Accuracy: ${accuracyScore}%`;
+            document.getElementById('nextBtn').disabled = false;
+        } else {
+            badge.className = "score-badge score-bad";
+            badge.innerText = `Score ${accuracyScore}% (<60%). Check the hint and try speaking again!`;
+        }
+    }
+
+    function nextDialogue() {
+        currentIndex++;
+        if (currentIndex < dialogues.length) {
+            loadDialogue();
+        } else {
+            document.getElementById('phaseTag').innerText = "Assessment Completed";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Science Test Completed! Excellent work on reading and scientific recall!";
+            document.getElementById('targetAnswer').innerText = "You have finished all exercises on the Periodic Table of Elements.";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>

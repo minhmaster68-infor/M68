@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry & Science English Speaking Test</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Compounds & Molecules Science Test</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: Science Vocabulary & Reading</div>
+    <p id="instructionText" class="subtitle">Listen to the science question, then read the target answer clearly into your microphone.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 20</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Accuracy<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / System:</div>
+        <div class="speech-text" id="questionText">Click "Start Test Game" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Target Answer (Read Aloud):</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Test Game</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Replay Audio</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled>🎤 Read / Speak Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint / Clue</button>
+        <button id="nextBtn" onclick="nextDialogue()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Solution Hint:</strong> <span id="hintText"></span>
+    </div>
+
+    <div class="transcript-box">
+        <strong>Your Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const dialogues = [
+        // PHASE 1: Reading Aloud Practice (10 Questions based on Image Content)
+        { 
+            q: "What is a chemical compound?", 
+            a: "A compound is formed from two or more chemical elements.",
+            hint: "Think about substances made of multiple elements combined together.",
+            keywords: ["compound", "formed", "two", "more", "chemical", "elements"]
+        },
+        { 
+            q: "What elements make up a water molecule?", 
+            a: "Water is composed of hydrogen and oxygen.",
+            hint: "The chemical formula is H2O.",
+            keywords: ["water", "composed", "hydrogen", "oxygen"]
+        },
+        { 
+            q: "What role does carbon dioxide play in green plants?", 
+            a: "Carbon dioxide is essential for photosynthesis in green plants.",
+            hint: "Plants use this gas to convert light into food.",
+            keywords: ["carbon", "dioxide", "essential", "photosynthesis", "plants"]
+        },
+        { 
+            q: "What is the primary function of table salt in the human body?", 
+            a: "Sodium chloride helps maintain water balance in the human body.",
+            hint: "It helps regulate fluids in your body.",
+            keywords: ["sodium", "chloride", "maintain", "water", "balance"]
+        },
+        { 
+            q: "Which compound is the main component of limestone?", 
+            a: "Calcium carbonate is the main component of limestone.",
+            hint: "Formula CaCO3, used in construction and agriculture.",
+            keywords: ["calcium", "carbonate", "component", "limestone"]
+        },
+        { 
+            q: "What element components are found in simple sugars like glucose?", 
+            a: "Glucose contains carbon, hydrogen, and oxygen.",
+            hint: "It provides a lot of energy for the human body.",
+            keywords: ["glucose", "contains", "carbon", "hydrogen", "oxygen"]
+        },
+        { 
+            q: "What is the biological role of complex protein compounds?", 
+            a: "Proteins build, maintain, and develop the human body.",
+            hint: "They contain C, H, O, N and build body tissues.",
+            keywords: ["proteins", "build", "maintain", "develop", "body"]
+        },
+        { 
+            q: "How are inorganic and organic compounds distinguished in the text?", 
+            a: "Substances like sugar and protein are organic, while water and salt are inorganic.",
+            hint: "Glucose and proteins are organic; water, CO2, and salt are inorganic.",
+            keywords: ["sugar", "protein", "organic", "water", "salt", "inorganic"]
+        },
+        { 
+            q: "How is a molecule defined in chemistry?", 
+            a: "A molecule represents a substance and consists of linked atoms.",
+            hint: "It is a group of atoms bonded together representing chemical properties.",
+            keywords: ["molecule", "represents", "substance", "linked", "atoms"]
+        },
+        { 
+            q: "What atoms combine to form a methane molecule?", 
+            a: "Methane consists of one carbon atom linked to four hydrogen atoms.",
+            hint: "Formula CH4: 1 Carbon + 4 Hydrogens.",
+            keywords: ["methane", "one", "carbon", "four", "hydrogen"]
+        },
+
+        // PHASE 2: Advanced Comprehension & Speaking (10 Questions with Hidden Answers)
+        { 
+            q: "How many chemical compounds have humans identified so far?", 
+            a: "Humans have identified tens of millions of different compounds.",
+            hint: "The text mentions 'hàng chục triệu hợp chất khác nhau'.",
+            keywords: ["tens", "millions", "different", "compounds"]
+        },
+        { 
+            q: "What elements compose cooking gas hydrocarbons?", 
+            a: "Hydrocarbons consist of carbon and hydrogen atoms.",
+            hint: "They supply energy for human daily activities.",
+            keywords: ["hydrocarbons", "carbon", "hydrogen"]
+        },
+        { 
+            q: "Where is glucose naturally found in abundance according to the text?", 
+            a: "Glucose is abundant in ripe grapes.",
+            hint: "Look at the organic section mentioning 'quả nho chín'.",
+            keywords: ["glucose", "abundant", "ripe", "grapes"]
+        },
+        { 
+            q: "What is the main chemical difference between oxygen gas and carbon dioxide?", 
+            a: "Oxygen is an elemental substance while carbon dioxide is a compound.",
+            hint: "Oxygen has 1 element (O2); CO2 has 2 elements (C and O).",
+            keywords: ["oxygen", "elemental", "carbon", "dioxide", "compound"]
+        },
+        { 
+            q: "Why are there far more compounds than elemental substances in nature?", 
+            a: "Elements can combine in countless ways to form different compounds.",
+            hint: "A few dozen elements can link together in endless combinations.",
+            keywords: ["elements", "combine", "countless", "form", "compounds"]
+        },
+        { 
+            q: "How many nitrogen atoms link together to form a nitrogen gas molecule?", 
+            a: "Two nitrogen atoms link together to form a nitrogen molecule.",
+            hint: "Refers to Figure 5.3a showing two identical atoms bonded.",
+            keywords: ["two", "nitrogen", "atoms", "form", "molecule"]
+        },
+        { 
+            q: "What is the structure of a water molecule described in the text?", 
+            a: "One oxygen atom links with two hydrogen atoms.",
+            hint: "Formula H2O: 1 Oxygen + 2 Hydrogens.",
+            keywords: ["one", "oxygen", "two", "hydrogen"]
+        },
+        { 
+            q: "What is the elemental composition of complex proteins?", 
+            a: "Proteins contain carbon, hydrogen, oxygen, and nitrogen.",
+            hint: "Chemical symbols: C, H, O, N.",
+            keywords: ["proteins", "carbon", "hydrogen", "oxygen", "nitrogen"]
+        },
+        { 
+            q: "Are calcium carbonate and carbon dioxide organic or inorganic compounds?", 
+            a: "They are both classified as inorganic compounds.",
+            hint: "They belong to the group 'hợp chất vô cơ'.",
+            keywords: ["classified", "inorganic", "compounds"]
+        },
+        { 
+            q: "What forms a molecule of an elemental substance?", 
+            a: "It is formed by atoms of the same chemical element.",
+            hint: "Atoms belonging to the exact same element linked together.",
+            keywords: ["atoms", "same", "chemical", "element"]
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    } else {
+        alert("Speech Recognition is not supported on this browser. Please use Google Chrome or Microsoft Edge.");
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('micBtn').disabled = false;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadDialogue();
+    }
+
+    function loadDialogue() {
+        clearInterval(timerInterval);
+        const item = dialogues[currentIndex];
+        const isPhase1 = currentIndex < 10;
+        
+        // Update Phase UI
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+
+        if (isPhase1) {
+            phaseTag.innerText = "Phase 1: Vocabulary & Sentence Practice";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Listen to the science question, then read the target answer clearly into your microphone.";
+            answerRoleTitle.innerText = "Target Answer (Read Aloud):";
+            targetAnswerBox.innerText = item.a;
+            targetAnswerBox.style.color = "#38bdf8";
+        } else {
+            phaseTag.innerText = "Phase 2: Science Knowledge Assessment";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Listen to the question. The answer is HIDDEN! Answer directly using your scientific knowledge.";
+            answerRoleTitle.innerText = "Target Answer (Hidden):";
+            targetAnswerBox.innerText = "🔒 [Hidden Answer - Speak your response directly or click Hint]";
+            targetAnswerBox.style.color = "#94a3b8";
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${dialogues.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / dialogues.length) * 100}%`;
+        
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and speak into your microphone.";
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        document.getElementById('accuracy').innerText = "0%";
+        
+        // Auto-read question
+        playQuestionAudio();
+
+        // Start timer
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = dialogues[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(dialogues[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function toggleListening() {
+        if (!recognition) return;
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = dialogues[currentIndex];
+        const isPhase1 = currentIndex < 10;
+        
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        let accuracyScore = 0;
+
+        if (isPhase1) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        } else {
+            let matchCount = 0;
+            item.keywords.forEach(kw => {
+                if (spokenClean.includes(kw.toLowerCase())) {
+                    matchCount++;
+                }
+            });
+            accuracyScore = Math.min(100, Math.round((matchCount / item.keywords.length) * 100));
+            
+            document.getElementById('targetAnswer').innerText = item.a + " (Revealed)";
+            document.getElementById('targetAnswer').style.color = "#38bdf8";
+        }
+
+        document.getElementById('accuracy').innerText = accuracyScore + "%";
+
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+
+        if (accuracyScore >= 50) {
+            badge.className = "score-badge score-good";
+            badge.innerText = `Great Job! Time: ${elapsedTime}s | Pronunciation & Match: ${accuracyScore}%`;
+            document.getElementById('nextBtn').disabled = false;
+        } else {
+            badge.className = "score-badge score-bad";
+            badge.innerText = `Score ${accuracyScore}% (<50%). Check the hint and try speaking again!`;
+        }
+    }
+
+    function nextDialogue() {
+        currentIndex++;
+        if (currentIndex < dialogues.length) {
+            loadDialogue();
+        } else {
+            document.getElementById('phaseTag').innerText = "Test Completed";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Science Test Completed! Excellent work on reading and answering!";
+            document.getElementById('targetAnswer').innerText = "You have completed all 20 science questions successfully.";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
