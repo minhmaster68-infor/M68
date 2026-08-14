@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry & Chemical Formulas - Comprehensive English Assessment</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+            --input-bg: #090d16;
+            --input-border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        /* Interactive Area Styles */
+        .mcq-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mcq-options { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 2px solid #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent);
+            background: #0f172a;
+        }
+
+        .option-btn.selected-correct {
+            border-color: var(--success);
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .option-btn.selected-incorrect {
+            border-color: var(--warning);
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .fill-blank-area {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .fill-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .fill-input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+        .btn-submit { background-color: #22c55e; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Advanced Chemistry & Chemical Formulas Assessment</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: Multiple Choice Questions (10 Questions)</div>
+    <p id="instructionText" class="subtitle">Select the correct scientific answer for each question based on chemical principles.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 30</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Overall Score<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / Prompt:</div>
+        <div class="speech-text" id="questionText">Click "Start Chemistry Test" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Response Area:</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+
+        <!-- Dynamic Content Area -->
+        <div id="mcqArea" class="mcq-options" style="display:none;"></div>
+        <div id="fillArea" class="fill-blank-area" style="display:none;">
+            <input type="text" id="fillInput" class="fill-input" placeholder="Type your English answer here..." />
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Chemistry Test</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Replay Audio</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled style="display:none;">🎤 Read / Speak Answer</button>
+        <button id="submitBtn" class="btn-submit" onclick="submitFillAnswer()" disabled style="display:none;">✔️ Submit Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint / Formula Clue</button>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Content Clue / Formula Hint:</strong> <span id="hintText"></span>
+    </div>
+
+    <div id="transcriptBox" class="transcript-box" style="display:none;">
+        <strong>Your Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const questions = [
+        // PHASE 1: MULTIPLE CHOICE QUESTIONS (1-10)
+        {
+            phase: 1,
+            type: "mcq",
+            q: "1. According to the valence rule x·IV = y·II for sulfur dioxide, what is the simplified ratio x/y?",
+            options: ["A) 1/1", "B) 1/2", "C) 2/1", "D) 1/4"],
+            correct: 1,
+            hint: "x/y = II/IV = 1/2."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "2. If a hydrocarbon compound contains 75% Carbon and 25% Hydrogen by mass, what is the ratio of %C to %H?",
+            options: ["A) 1:1", "B) 2:1", "C) 3:1", "D) 4:1"],
+            correct: 2,
+            hint: "75% / 25% = 3 / 1."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "3. What is the molar mass of Methane (CH₄) given C = 12 amu and H = 1 amu?",
+            options: ["A) 12 amu", "B) 14 amu", "C) 16 amu", "D) 18 amu"],
+            correct: 2,
+            hint: "12 + (4 × 1) = 16 amu."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "4. Carbon dioxide contains carbon and oxygen in a mass ratio of 1 to 2.667. What is its chemical formula if molecular mass is 44 amu?",
+            options: ["A) CO", "B) CO₂", "C) C₂O", "D) CO₃"],
+            correct: 1,
+            hint: "Mass of C = 12 amu, Mass of O = 32 amu (12 * 2.667). 12 + 32 = 44 amu."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "5. In Hydrogen Sulfide (H₂S), Sulfur has a valence of II and Hydrogen has a valence of I. What is the subscript of Hydrogen?",
+            options: ["A) 1", "B) 2", "C) 3", "D) 4"],
+            correct: 1,
+            hint: "Valence cross rule: H (valence I) x 2 = S (valence II) x 1."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "6. What does a subscript in a chemical formula represent?",
+            options: [
+                "A) The valence of the element",
+                "B) The number of atoms of the element in a molecule",
+                "C) The molecular mass of the compound",
+                "D) The percentage mass of the element"
+            ],
+            correct: 1,
+            hint: "Subscripts are small numbers placed at the bottom right of an element symbol."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "7. How is the valence of an unknown element determined using Hydrogen (valence I) or Oxygen (valence II)?",
+            options: [
+                "A) By measuring its mass percentage",
+                "B) Based on the valence rule comparing atom ratios with H or O",
+                "C) By adding its atomic mass to oxygen",
+                "D) By dividing its atomic mass by hydrogen"
+            ],
+            correct: 1,
+            hint: "Valence of H is taken as I and O as II as standard references."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "8. What information is provided by a chemical formula of a compound?",
+            options: [
+                "A) Only the color and state of matter",
+                "B) The elements forming the substance, atom ratio, and molecular mass",
+                "C) The temperature required for chemical reaction",
+                "D) The volume occupied by one mole of gas"
+            ],
+            correct: 1,
+            hint: "Chemical formulas reveal component elements, quantitative atom ratios, and relative mass."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "9. If a compound CxHy has molecular mass 16 amu, and %C = (12·x·100%)/16 = 75%, what is the value of x?",
+            options: ["A) 1", "B) 2", "C) 3", "D) 4"],
+            correct: 0,
+            hint: "12x = (75 * 16)/100 = 12, so x = 1."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "10. Which practical application utilizes percent mass of elements derived from molecular formulas?",
+            options: [
+                "A) Determining product expiration dates",
+                "B) Calculating nutritional labels and fertilizer compositions",
+                "C) Measuring atmospheric pressure",
+                "D) Determining electrical conductivity"
+            ],
+            correct: 1,
+            hint: "See 'EM CÓ THỂ': Product labels for fertilizers, food, and beverages."
+        },
+
+        // PHASE 2: READING & PRONUNCIATION ASSESSMENT (11-20)
+        {
+            phase: 2,
+            type: "read",
+            q: "11. Read aloud: 'The chemical formula indicates the constituent elements and the atom ratio in a molecular compound.'",
+            a: "The chemical formula indicates the constituent elements and the atom ratio in a molecular compound.",
+            hint: "Focus on clear pronunciation of 'constituent', 'elements', and 'molecular'.",
+            keywords: ["chemical", "formula", "indicates", "constituent", "elements", "atom", "ratio", "molecular", "compound"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "12. Read aloud: 'According to the valence rule, the product of valence and atom count of one element equals that of the other.'",
+            a: "According to the valence rule, the product of valence and atom count of one element equals that of the other.",
+            hint: "Key terms: 'according', 'valence', 'product', 'equals'.",
+            keywords: ["according", "valence", "rule", "product", "atom", "count", "element", "equals"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "13. Read aloud: 'Carbon dioxide consists of one carbon atom and two oxygen atoms, giving a formula of CO2.'",
+            a: "Carbon dioxide consists of one carbon atom and two oxygen atoms, giving a formula of CO2.",
+            hint: "Say 'carbon dioxide' clearly and pronounce CO2 as 'C-O-two'.",
+            keywords: ["carbon", "dioxide", "consists", "atom", "oxygen", "giving", "formula"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "14. Read aloud: 'Hydrogen has a standard valence of one, while Oxygen has a standard valence of two.'",
+            a: "Hydrogen has a standard valence of one, while Oxygen has a standard valence of two.",
+            hint: "Key terms: 'Hydrogen', 'standard', 'valence', 'Oxygen'.",
+            keywords: ["hydrogen", "standard", "valence", "one", "oxygen", "two"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "15. Read aloud: 'The percentage mass of carbon in methane is calculated as twelve divided by sixteen times one hundred percent.'",
+            a: "The percentage mass of carbon in methane is calculated as twelve divided by sixteen times one hundred percent.",
+            hint: "Numbers and terms: 'percentage', 'methane', 'twelve', 'sixteen', 'hundred'.",
+            keywords: ["percentage", "mass", "carbon", "methane", "calculated", "twelve", "divided", "sixteen", "hundred"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "16. Read aloud: 'Hydrogen sulfide is a gaseous compound composed of hydrogen and sulfur with a molecular mass of thirty-four amu.'",
+            a: "Hydrogen sulfide is a gaseous compound composed of hydrogen and sulfur with a molecular mass of thirty-four amu.",
+            hint: "Key words: 'sulfide', 'gaseous', 'composed', 'thirty-four'.",
+            keywords: ["hydrogen", "sulfide", "gaseous", "compound", "composed", "sulfur", "molecular", "mass", "thirty-four"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "17. Read aloud: 'Determining element mass percentage is essential for analyzing commercial fertilizer labels.'",
+            a: "Determining element mass percentage is essential for analyzing commercial fertilizer labels.",
+            hint: "Key words: 'determining', 'percentage', 'essential', 'analyzing', 'fertilizer'.",
+            keywords: ["determining", "element", "mass", "percentage", "essential", "analyzing", "commercial", "fertilizer", "labels"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "18. Read aloud: 'In methane, carbon contributes seventy-five percent while hydrogen contributes twenty-five percent of the total mass.'",
+            a: "In methane, carbon contributes seventy-five percent while hydrogen contributes twenty-five percent of the total mass.",
+            hint: "Focus on numbers: 'seventy-five', 'twenty-five'.",
+            keywords: ["methane", "carbon", "contributes", "seventy-five", "percent", "hydrogen", "twenty-five", "total", "mass"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "19. Read aloud: 'A monoatomic element chemical formula is identical to its chemical symbol.'",
+            a: "A monoatomic element chemical formula is identical to its chemical symbol.",
+            hint: "Pronounce 'monoatomic' (mono-atomic) and 'identical'.",
+            keywords: ["monoatomic", "element", "chemical", "formula", "identical", "symbol"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "20. Speak your answer: 'Why is sulfur dioxide written as SO2 rather than S2O4?'",
+            a: "Because chemical formulas express the simplest whole number ratio of atoms in the molecule.",
+            hint: "Hidden target answer! Explain using 'simplest whole number ratio'.",
+            keywords: ["simplest", "whole", "number", "ratio", "atoms", "molecule"]
+        },
+
+        // PHASE 3: ENGLISH FILL-IN-THE-BLANK (21-30)
+        {
+            phase: 3,
+            type: "fill",
+            q: "21. Complete the term: The small number written at the lower right of an element symbol in a formula is called a _______.",
+            a: "subscript",
+            hint: "Starts with 'sub-'. Example: '2' in H2O."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "22. Complete the sentence: In the compound CH4, the element _______ accounts for 75% of the molecular mass.",
+            a: "carbon",
+            hint: "Chemical symbol C."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "23. Complete the sentence: Hydrogen has a fixed valence of _______ in chemical compounds.",
+            a: "I",
+            alt: ["1", "one"],
+            hint: "Roman numeral I or number 1."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "24. Complete the sentence: Oxygen has a fixed valence of _______ in chemical compounds.",
+            a: "II",
+            alt: ["2", "two"],
+            hint: "Roman numeral II or number 2."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "25. Complete the formula: The chemical formula for Carbon Dioxide is _______.",
+            a: "CO2",
+            alt: ["co2", "CO2"],
+            hint: "One Carbon, two Oxygens."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "26. Complete the formula: The chemical formula for Methane is _______.",
+            a: "CH4",
+            alt: ["ch4", "CH4"],
+            hint: "One Carbon, four Hydrogens."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "27. Complete the term: The sum of atomic masses of all atoms in a molecule is called the _______ mass.",
+            a: "molecular",
+            hint: "Adjective form of 'molecule'."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "28. Complete the term: A compound containing only Carbon and Hydrogen is chemically classified as a _______.",
+            a: "hydrocarbon",
+            hint: "Combines 'hydro-' and 'carbon'."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "29. Complete the term: The chemical formula for Hydrogen Sulfide is _______.",
+            a: "H2S",
+            alt: ["h2s", "H2S"],
+            hint: "Two Hydrogens, one Sulfur."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "30. Complete the sentence: To find element percentage mass, multiply the element mass by 100% and divide by the _______ mass.",
+            a: "molecular",
+            alt: ["molar", "total"],
+            hint: "Total molecular mass of the compound."
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        totalScore = 0;
+        answeredCount = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+        const mcqArea = document.getElementById('mcqArea');
+        const fillArea = document.getElementById('fillArea');
+        const micBtn = document.getElementById('micBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptBox = document.getElementById('transcriptBox');
+
+        // Reset UI Elements
+        mcqArea.style.display = "none";
+        fillArea.style.display = "none";
+        micBtn.style.display = "none";
+        submitBtn.style.display = "none";
+        transcriptBox.style.display = "none";
+        targetAnswerBox.innerText = "—";
+        targetAnswerBox.style.color = "#38bdf8";
+
+        if (item.phase === 1) {
+            phaseTag.innerText = "Phase 1: Multiple Choice Questions (Scientific Knowledge)";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Select the correct option below that accurately answers the chemical question.";
+            answerRoleTitle.innerText = "Options:";
+            mcqArea.style.display = "grid";
+            
+            mcqArea.innerHTML = "";
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                mcqArea.appendChild(btn);
+            });
+        } else if (item.phase === 2) {
+            phaseTag.innerText = "Phase 2: Reading Aloud & Pronunciation Assessment";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Listen to the prompt, then read or speak the sentence clearly into your microphone.";
+            answerRoleTitle.innerText = item.q.includes("Speak your answer") ? "Target Answer (Hidden):" : "Target Answer (Read Aloud):";
+            targetAnswerBox.innerText = item.q.includes("Speak your answer") ? "🔒 [Hidden Answer - Express in your own words or use hint]" : item.a;
+            if (item.q.includes("Speak your answer")) targetAnswerBox.style.color = "#94a3b8";
+
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and speak into your microphone.";
+        } else if (item.phase === 3) {
+            phaseTag.innerText = "Phase 3: English Fill-in-the-Blank Test";
+            phaseTag.style.background = "#059669";
+            instructionText.innerText = "Read the prompt carefully and type the missing scientific term or formula into the box.";
+            answerRoleTitle.innerText = "Type Answer:";
+            fillArea.style.display = "block";
+            submitBtn.style.display = "inline-block";
+            submitBtn.disabled = false;
+            document.getElementById('fillInput').value = "";
+            document.getElementById('fillInput').focus();
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${questions.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        
+        playQuestionAudio();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function selectOption(selectedIndex) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === item.correct) {
+                btn.classList.add('selected-correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('selected-incorrect');
+            }
+        });
+
+        const isCorrect = (selectedIndex === item.correct);
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? "Correct answer! Well done." : "Incorrect selection. Check the highlighted green option.");
+    }
+
+    function submitFillAnswer() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const userVal = document.getElementById('fillInput').value.trim().toLowerCase();
+        
+        if (!userVal) return;
+
+        let isCorrect = (userVal === item.a.toLowerCase());
+        if (!isCorrect && item.alt) {
+            isCorrect = item.alt.map(a => a.toLowerCase()).includes(userVal);
+        }
+
+        document.getElementById('submitBtn').disabled = true;
+
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? `Correct! Answer: '${item.a}'` : `Incorrect. Correct answer is: '${item.a}'`);
+    }
+
+    function toggleListening() {
+        if (!recognition) {
+            alert("Speech recognition is not supported in this browser. Please try Chrome/Edge.");
+            return;
+        }
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        let accuracyScore = 0;
+
+        if (item.a && !item.q.includes("Speak your answer")) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        } else {
+            let matchCount = 0;
+            item.keywords.forEach(kw => {
+                if (spokenClean.includes(kw.toLowerCase())) {
+                    matchCount++;
+                }
+            });
+            accuracyScore = Math.min(100, Math.round((matchCount / item.keywords.length) * 100));
+            document.getElementById('targetAnswer').innerText = item.a + " (Revealed Target)";
+            document.getElementById('targetAnswer').style.color = "#38bdf8";
+        }
+
+        totalScore += accuracyScore;
+        answeredCount++;
+        updateOverallScore();
+
+        const isGood = accuracyScore >= 60;
+        showFeedback(isGood, `Accuracy: ${accuracyScore}% | ${isGood ? 'Great pronunciation!' : 'Try speaking clearer or check hint.'}`);
+    }
+
+    function updateOverallScore() {
+        const avg = Math.round(totalScore / Math.max(1, answeredCount));
+        document.getElementById('accuracy').innerText = avg + "%";
+    }
+
+    function showFeedback(isSuccess, message) {
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+        badge.className = isSuccess ? "score-badge score-good" : "score-badge score-bad";
+        badge.innerText = message;
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = questions[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(questions[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('phaseTag').innerText = "Assessment Completed!";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Assessment Completed! Outstanding job mastering Chemistry & English Skills!";
+            document.getElementById('targetAnswer').innerText = "You have completed all 30 questions covering Choice, Reading & Speaking, and Fill-in-the-Blanks.";
+            document.getElementById('mcqArea').style.display = "none";
+            document.getElementById('fillArea').style.display = "none";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
