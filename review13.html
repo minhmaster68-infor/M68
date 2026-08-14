@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 13: Evaluation of Key Personnel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #3498db; --dark: #1a365d; --accent: #f1c40f; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        
+        /* Video Styling */
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin-bottom: 25px; border: 4px solid var(--primary); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        h1 { color: var(--dark); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-top: 10px; }
+        .vocab-section { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
+        .vocab-card { background: #f1f5f9; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
+        .vocab-card b { color: var(--dark); }
+        .dialogue-area { background: #f0f7ff; border: 1px solid #d1e9ff; border-radius: 15px; padding: 20px; }
+        .line { margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+        .speaker { font-weight: bold; font-size: 0.9rem; color: var(--dark); margin-right: 10px; }
+        .en { display: block; font-size: 1.05rem; color: #1e293b; }
+        .vi { display: block; font-size: 0.9rem; color: #64748b; font-style: italic; }
+        .btn-audio { background: var(--primary); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color:#64748b;"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        
+        <!-- Video Minh Họa -->
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/-qlmc_pIUOs" title="Shipbuilding Management Video" allowfullscreen></iframe>
+        </div>
+
+        <h1>Bài 13: Đánh giá Nhân sự & Quản lý Dự án</h1>
+        
+        <h3>1. Thuật ngữ chủ chốt (Key Terminology)</h3>
+        <div class="vocab-section">
+            <div class="vocab-card"><div><b>Naval Architect</b><br><i>Kỹ sư thiết kế tàu</i></div><button class="btn-audio" onclick="speak('Naval Architect')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Classification Society</b><br><i>Cơ quan Đăng kiểm</i></div><button class="btn-audio" onclick="speak('Classification Society')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Block Assembly</b><br><i>Lắp ráp tổng đoạn</i></div><button class="btn-audio" onclick="speak('Block Assembly')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Non-Destructive Testing</b><br><i>Kiểm tra không phá hủy</i></div><button class="btn-audio" onclick="speak('Non-Destructive Testing')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Safety Compliance</b><br><i>Tuân thủ an toàn</i></div><button class="btn-audio" onclick="speak('Safety Compliance')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Propulsion System</b><br><i>Hệ thống động lực</i></div><button class="btn-audio" onclick="speak('Propulsion System')"><i class="fa-solid fa-volume-high"></i></button></div>
+        </div>
+
+        <h3>2. Trích đoạn Hội thoại</h3>
+        <div class="dialogue-area">
+            <div class="line">
+                <span class="speaker">Mr. David (MD):</span>
+                <span class="en">"We need to evaluate the performance of our key personnel for the upcoming newbuilding project."</span>
+                <span class="vi">"Chúng ta cần đánh giá hiệu suất của nhân sự chủ chốt cho dự án đóng mới sắp tới."</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

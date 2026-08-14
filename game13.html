@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Game: Management Review</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #1a365d; --accent: #3498db; --success: #2ecc71; --error: #e74c3c; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        .setup-screen { position: fixed; inset: 0; background: #1e293b; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .video-box { width: 100%; max-width: 500px; background: #000; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent); }
+        
+        .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px; }
+        .role-card { background: #334155; padding: 15px; border-radius: 15px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .role-card:hover { border-color: var(--accent); background: #475569; }
+
+        .game-header { background: var(--primary); padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .main-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        
+        .char-box { display: flex; gap: 20px; margin-bottom: 30px; }
+        .char { opacity: 0.3; transition: 0.4s; font-size: 0.9rem; text-align: center; }
+        .char.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
+        .char i { font-size: 2.5rem; display: block; margin-bottom: 5px; }
+
+        .dialogue-bubble { background: white; color: #1e293b; padding: 25px; border-radius: 20px; width: 90%; max-width: 700px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+        .controls { padding: 30px; background: #1e293b; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        #mic-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--accent); color: white; font-size: 1.5rem; cursor: pointer; }
+        #mic-btn.listening { background: var(--error); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .score-display { font-size: 1.5rem; color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="setup" class="setup-screen">
+        <h2>BÀI 13: MANAGEMENT REVIEW</h2>
+        
+        <!-- Video Minh Họa Lồng Trong Setup -->
+        <div class="video-box">
+            <iframe width="100%" height="250" src="https://www.youtube.com/embed/-qlmc_pIUOs" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <p>Chọn vai trò để bắt đầu cuộc họp:</p>
+        <div class="role-grid">
+            <div class="role-card" onclick="start('David')"><i class="fa-solid fa-user-tie"></i><br>David (MD)</div>
+            <div class="role-card" onclick="start('Anna')"><i class="fa-solid fa-user-nurse"></i><br>Anna (Asst)</div>
+            <div class="role-card" onclick="start('Binh')"><i class="fa-solid fa-user-gear"></i><br>Binh (Asst)</div>
+        </div>
+    </div>
+
+    <div class="game-header">
+        <a href="index.html" style="color:white; text-decoration:none;"><i class="fa-solid fa-house"></i> Thoát</a>
+        <div class="score-display" id="score">Score: 0</div>
+    </div>
+
+    <div class="main-stage">
+        <div class="char-box">
+            <div class="char" id="char-David"><i class="fa-solid fa-user-tie"></i>David</div>
+            <div class="char" id="char-Anna"><i class="fa-solid fa-user-nurse"></i>Anna</div>
+            <div class="char" id="char-Binh"><i class="fa-solid fa-user-gear"></i>Binh</div>
+        </div>
+
+        <div class="dialogue-bubble">
+            <div id="speaker-label" style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">Hệ thống:</div>
+            <div id="text-en" style="font-size: 1.2rem; line-height: 1.4; margin-bottom: 10px;">Vui lòng chọn nhân vật để bắt đầu...</div>
+            <div id="text-vi" style="font-size: 0.9rem; color: #64748b;"></div>
+        </div>
+        <div id="feedback" style="margin-top: 15px; font-weight: bold;"></div>
+    </div>
+
+    <div class="controls">
+        <div id="status">Chờ đến lượt của bạn...</div>
+        <button id="mic-btn" disabled><i class="fa-solid fa-microphone"></i></button>
+        <div id="transcript" style="font-style: italic; color: #94a3b8;"></div>
+    </div>
+
+    <script>
+        const script = [
+            { role: 'David', en: "Good morning, everyone. We need to evaluate the performance of our key personnel for the upcoming newbuilding project.", vi: "Chào buổi sáng mọi người. Chúng ta cần đánh giá hiệu suất của nhân sự chủ chốt cho dự án đóng mới sắp tới." },
+            { role: 'Anna', en: "He is doing a great job. His team just finalized the hull design and the stability calculations.", vi: "Anh ấy đang làm rất tốt. Đội của anh ấy vừa hoàn thiện thiết kế vỏ tàu và tính toán độ ổn định." },
+            { role: 'David', en: "I see. Coordination with class inspectors is crucial. What about Mr. John, our Project Manager?", vi: "Tôi hiểu. Phối hợp với đăng kiểm viên là rất quan trọng. Còn ông John, Quản lý dự án thì sao?" },
+            { role: 'Binh', en: "He manages the production schedule tightly. However, he faced some issues with the supply chain.", vi: "Ông ấy quản lý tiến độ sản xuất rất chặt chẽ. Tuy nhiên, ông ấy gặp vấn đề với chuỗi cung ứng." },
+            { role: 'Anna', en: "John is doing excellent work at the dry dock. He personally oversees the block assembly and hull erection.", vi: "John làm việc xuất sắc tại âu tàu. Anh ấy trực tiếp giám sát việc lắp ráp tổng đoạn và đấu ghép vỏ." },
+            { role: 'David', en: "Good to hear. How is Ms. Lan performing as the QA-QC Lead?", vi: "Rất tốt. Cô Lan đang thể hiện thế nào với vai trò trưởng bộ phận QA-QC?" },
+            { role: 'Anna', en: "Ms. Lan is exceptionally strict. She identified several defects during the non-destructive testing on the welding seams.", vi: "Cô Lan cực kỳ nghiêm khắc. Cô ấy đã phát hiện một số lỗi khi kiểm tra NDT trên các mối hàn." },
+            { role: 'Binh', en: "Mr. Khanh has improved our safety compliance significantly. Zero lost-time injuries were recorded last quarter.", vi: "Ông Khanh cải thiện đáng kể tuân thủ an toàn. Không có tai nạn lao động nào quý trước." },
+            { role: 'David', en: "That's impressive. Let's wrap up and send out the action items. Thank you!", vi: "Thật ấn tượng. Hãy kết thúc và gửi các danh mục công việc cần làm. Cảm ơn!" }
+        ];
+
+        let userRole = '';
+        let currentIdx = 0;
+        let totalScore = 0;
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        function start(role) {
+            userRole = role;
+            document.getElementById('setup').style.display = 'none';
+            playRound();
+        }
+
+        function playRound() {
+            if (currentIdx >= script.length) {
+                alert("Hoàn thành! Điểm của bạn: " + totalScore);
+                location.reload();
+                return;
+            }
+
+            const line = script[currentIdx];
+            document.querySelectorAll('.char').forEach(c => c.classList.remove('active'));
+            document.getElementById(`char-${line.role}`).classList.add('active');
+            
+            document.getElementById('speaker-label').innerText = line.role + ":";
+            document.getElementById('text-en').innerText = line.en;
+            document.getElementById('text-vi').innerText = line.vi;
+
+            if (line.role === userRole) {
+                document.getElementById('status').innerText = "ĐẾN LƯỢT BẠN - Nhấn Mic và nói";
+                document.getElementById('mic-btn').disabled = false;
+            } else {
+                document.getElementById('status').innerText = "AI ĐANG NÓI...";
+                document.getElementById('mic-btn').disabled = true;
+                speakAI(line.en);
+            }
+        }
+
+        function speakAI(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.onend = () => { currentIdx++; setTimeout(playRound, 800); };
+            window.speechSynthesis.speak(u);
+        }
+
+        document.getElementById('mic-btn').onclick = () => {
+            recognition.start();
+            document.getElementById('mic-btn').classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            document.getElementById('mic-btn').classList.remove('listening');
+            const result = event.results[0][0].transcript.toLowerCase();
+            const target = script[currentIdx].en.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+            
+            document.getElementById('transcript').innerText = "Bạn nói: " + result;
+
+            let matches = 0;
+            const targetWords = target.split(' ');
+            targetWords.forEach(w => { if(result.includes(w)) matches++; });
+            const accuracy = (matches / targetWords.length) * 100;
+
+            if (accuracy > 40) {
+                totalScore += Math.round(accuracy);
+                document.getElementById('score').innerText = "Score: " + totalScore;
+                document.getElementById('feedback').innerText = "Tuyệt vời! +"+Math.round(accuracy);
+                document.getElementById('feedback').style.color = "var(--success)";
+                currentIdx++;
+                setTimeout(playRound, 1500);
+            } else {
+                document.getElementById('feedback').innerText = "Hãy thử nói lại rõ ràng hơn.";
+                document.getElementById('feedback').style.color = "var(--error)";
+            }
+        };
+    </script>
+</body>
+</html>
