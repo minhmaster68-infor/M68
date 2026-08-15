@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Communication Skills Assessment</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+            --input-bg: #090d16;
+            --input-border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .mcq-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mcq-options { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 2px solid #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent);
+            background: #0f172a;
+        }
+
+        .option-btn.selected-correct {
+            border-color: var(--success);
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .option-btn.selected-incorrect {
+            border-color: var(--warning);
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .fill-blank-area {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .fill-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .fill-input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+        .btn-submit { background-color: #22c55e; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>English Communication Assessment</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: Multiple Choice Test (10 Questions)</div>
+    <p id="instructionText" class="subtitle">Select the most appropriate conversational response for each context.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 30</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Overall Score<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / Situation:</div>
+        <div class="speech-text" id="questionText">Click "Start Test" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Response Area:</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+
+        <div id="mcqArea" class="mcq-options" style="display:none;"></div>
+        <div id="fillArea" class="fill-blank-area" style="display:none;">
+            <input type="text" id="fillInput" class="fill-input" placeholder="Type your English answer here..." />
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Test</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Replay Audio</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled style="display:none;">🎤 Read / Speak Answer</button>
+        <button id="submitBtn" class="btn-submit" onclick="submitFillAnswer()" disabled style="display:none;">✔️ Submit Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint</button>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Context Clue:</strong> <span id="hintText"></span>
+    </div>
+
+    <div id="transcriptBox" class="transcript-box" style="display:none;">
+        <strong>Your Speech Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const questions = [
+        // PHASE 1: MULTIPLE CHOICE QUESTIONS (1-10) - Based on provided page
+        {
+            phase: 1,
+            type: "mcq",
+            q: "14. Person A: \"____\" - Person B: \"Promises are often like the dust.\"",
+            options: [
+                "A) We are still waiting for promises.",
+                "B) How can you keep your promises?",
+                "C) She promised to clean the room.",
+                "D) He failed to deliver on his promises."
+            ],
+            correct: 3,
+            hint: "Person B is commenting on someone failing to keep promises."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "15. Person A: \"Don't leave the lights on - it wastes electricity.\" - Person B: \"____\"",
+            options: [
+                "A) The lights run on solar energy.",
+                "B) There's enough daylight in the room.",
+                "C) I'll turn them off right now.",
+                "D) How can you save electricity?"
+            ],
+            correct: 2,
+            hint: "Choose a direct and helpful response to the request."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "16. Person A: \"Can I rent the equipment?\" - Person B: \"____\"",
+            options: [
+                "A) Yes, you'll have to bring your equipment up-to-date.",
+                "B) No, they are for sale only.",
+                "C) We have set up a special fund for equipment.",
+                "D) Is the equipment operational yet?"
+            ],
+            correct: 3,
+            hint: "Check which response fits as a follow-up inquiry about readiness."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "17. Person A: \"Can you show me any evidence for your statement?\" - Person B: \"____\"",
+            options: [
+                "A) I'm sending you reports and statistics.",
+                "B) The evidence is now crystal clear.",
+                "C) I'm innocent.",
+                "D) I'm not guilty."
+            ],
+            correct: 0,
+            hint: "Look for an action offering concrete evidence."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "18. Person A: \"____\" - Person B: \"Don't ignore the fog warning signs.\"",
+            options: [
+                "A) It's sunny and the road looks longer.",
+                "B) We need to find a rest stop and take a break.",
+                "C) This lane joins the main road further on.",
+                "D) The road seems too wet and steep."
+            ],
+            correct: 1,
+            hint: "A safety concern about driving conditions usually prompts a caution."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "19. Person A: \"How can we increase our happiness?\" - Person B: \"____\"",
+            options: [
+                "A) Money could not buy happiness.",
+                "B) Health is happiness.",
+                "C) Take time to engage in random acts of kindness.",
+                "D) Marriage is the bloom or blight of all men's happiness."
+            ],
+            correct: 2,
+            hint: "An actionable advice on how to build happiness."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "20. Person A: \"Would you like to come over for dinner tonight?\" - Person B: \"____\"",
+            options: [
+                "A) I'd love to, thanks for inviting me!",
+                "B) No, dinner is not good.",
+                "C) Yes, I cook very well.",
+                "D) Dinner is at six o'clock."
+            ],
+            correct: 0,
+            hint: "Polite acceptance of an invitation."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "21. Person A: \"Could you speak a bit louder? I can't hear you clearly.\" - Person B: \"____\"",
+            options: [
+                "A) Sure, I'm sorry about that.",
+                "B) Yes, you should hear better.",
+                "C) Speak louder please.",
+                "D) No, I am listening."
+            ],
+            correct: 0,
+            hint: "Polite agreement to adjust speaking volume."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "22. Person A: \"Thank you so much for helping me move the desk.\" - Person B: \"____\"",
+            options: [
+                "A) You're welcome! Glad I could help.",
+                "B) You must thank me.",
+                "C) It was very heavy.",
+                "D) I don't want to help."
+            ],
+            correct: 0,
+            hint: "Standard polite response to a thank you."
+        },
+        {
+            phase: 1,
+            type: "mcq",
+            q: "23. Person A: \"Do you mind if I open the window?\" - Person B: \"____\"",
+            options: [
+                "A) Not at all, go ahead.",
+                "B) Yes, please open it.",
+                "C) No, I mind it.",
+                "D) Open it quickly."
+            ],
+            correct: 0,
+            hint: "'Not at all' means you do not mind."
+        },
+
+        // PHASE 2: PRONUNCIATION / SPEAKING ASSESSMENT (11-20)
+        {
+            phase: 2,
+            type: "read",
+            q: "11. Read aloud: 'He failed to deliver on his promises.'",
+            a: "He failed to deliver on his promises.",
+            hint: "Pay attention to 'failed', 'deliver', and 'promises'.",
+            keywords: ["he", "failed", "deliver", "promises"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "12. Read aloud: 'I will turn off the lights right now to save electricity.'",
+            a: "I will turn off the lights right now to save electricity.",
+            hint: "Pronounce 'electricity' and 'turn off' clearly.",
+            keywords: ["turn", "off", "lights", "save", "electricity"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "13. Read aloud: 'Is the equipment operational yet?'",
+            a: "Is the equipment operational yet?",
+            hint: "Focus on 'equipment' and 'operational'.",
+            keywords: ["equipment", "operational"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "14. Read aloud: 'I am sending you detailed reports and statistics.'",
+            a: "I am sending you detailed reports and statistics.",
+            hint: "Key vocabulary: 'detailed', 'reports', 'statistics'.",
+            keywords: ["sending", "reports", "statistics"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "15. Read aloud: 'Don't ignore the fog warning signs on the highway.'",
+            a: "Don't ignore the fog warning signs on the highway.",
+            hint: "Pronounce 'ignore', 'warning', and 'highway'.",
+            keywords: ["ignore", "fog", "warning", "signs"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "16. Read aloud: 'Take time to engage in random acts of kindness.'",
+            a: "Take time to engage in random acts of kindness.",
+            hint: "Focus on 'engage', 'random', and 'kindness'.",
+            keywords: ["engage", "random", "acts", "kindness"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "17. Read aloud: 'Promises are often like the dust in the wind.'",
+            a: "Promises are often like the dust in the wind.",
+            hint: "Focus on clear enunciation of 'promises' and 'dust'.",
+            keywords: ["promises", "often", "dust", "wind"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "18. Read aloud: 'We need to find a rest stop and take a short break.'",
+            a: "We need to find a rest stop and take a short break.",
+            hint: "Say 'rest stop' and 'short break' fluently.",
+            keywords: ["rest", "stop", "take", "break"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "19. Read aloud: 'Could you please show me any clear evidence?'",
+            a: "Could you please show me any clear evidence?",
+            hint: "Focus on intonation for polite questions.",
+            keywords: ["please", "show", "clear", "evidence"]
+        },
+        {
+            phase: 2,
+            type: "read",
+            q: "20. Speak your answer: 'What should you do when you see fog warning signs?'",
+            a: "You should drive carefully and take a break if needed.",
+            hint: "Mention driving carefully or finding a rest stop.",
+            keywords: ["drive", "carefully", "rest", "stop", "break", "slow"]
+        },
+
+        // PHASE 3: FILL-IN-THE-BLANK (21-30)
+        {
+            phase: 3,
+            type: "fill",
+            q: "21. Fill in the missing word: Don't leave the lights on - it _______ electricity.",
+            a: "wastes",
+            hint: "Verb meaning to use inefficiently or unnecessarily."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "22. Fill in the missing word: He failed to _______ on his promises.",
+            a: "deliver",
+            hint: "Verb meaning to carry out or fulfill."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "23. Fill in the missing word: Can you show me any _______ for your statement?",
+            a: "evidence",
+            hint: "Noun meaning facts or information proving a belief."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "24. Fill in the missing word: Take time to engage in random acts of _______.",
+            a: "kindness",
+            hint: "Noun meaning the quality of being friendly and generous."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "25. Fill in the missing word: Don't _______ the fog warning signs.",
+            a: "ignore",
+            hint: "Verb meaning to refuse to take notice of."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "26. Fill in the missing word: Is the equipment _______ yet?",
+            a: "operational",
+            alt: ["ready", "working"],
+            hint: "Adjective meaning ready for use or working."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "27. Fill in the missing word: We need to find a rest _______ and take a break.",
+            a: "stop",
+            hint: "Noun completing 'rest ____'."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "28. Fill in the missing word: The evidence is now _______ clear.",
+            a: "crystal",
+            hint: "Word in the idiom '_______ clear'."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "29. Fill in the missing word: Promises are often like the _______.",
+            a: "dust",
+            hint: "Noun referring to fine powder or earth particles."
+        },
+        {
+            phase: 3,
+            type: "fill",
+            q: "30. Fill in the missing word: How can we increase our _______?",
+            a: "happiness",
+            hint: "Noun for the state of feeling happy."
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Speech recognition error: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        totalScore = 0;
+        answeredCount = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+        const mcqArea = document.getElementById('mcqArea');
+        const fillArea = document.getElementById('fillArea');
+        const micBtn = document.getElementById('micBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptBox = document.getElementById('transcriptBox');
+
+        mcqArea.style.display = "none";
+        fillArea.style.display = "none";
+        micBtn.style.display = "none";
+        submitBtn.style.display = "none";
+        transcriptBox.style.display = "none";
+        targetAnswerBox.innerText = "—";
+        targetAnswerBox.style.color = "#38bdf8";
+
+        if (item.phase === 1) {
+            phaseTag.innerText = "Phase 1: Multiple Choice (10 Questions)";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Select the correct option that completes the dialogue logically.";
+            answerRoleTitle.innerText = "Options:";
+            mcqArea.style.display = "grid";
+            
+            mcqArea.innerHTML = "";
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                mcqArea.appendChild(btn);
+            });
+        } else if (item.phase === 2) {
+            phaseTag.innerText = "Phase 2: Pronunciation & Speaking Assessment (10 Questions)";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Listen to the prompt, then speak clearly into your microphone.";
+            answerRoleTitle.innerText = item.q.includes("Speak your answer") ? "Target Answer (Express in own words):" : "Sentence to Read:";
+            targetAnswerBox.innerText = item.q.includes("Speak your answer") ? "🔒 [Express answer in your own words]" : item.a;
+            if (item.q.includes("Speak your answer")) targetAnswerBox.style.color = "#94a3b8";
+
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and talk into your microphone.";
+        } else if (item.phase === 3) {
+            phaseTag.innerText = "Phase 3: Vocabulary & Grammar Fill-in-the-Blank (10 Questions)";
+            phaseTag.style.background = "#059669";
+            instructionText.innerText = "Type the missing English word into the text box below.";
+            answerRoleTitle.innerText = "Type Answer:";
+            fillArea.style.display = "block";
+            submitBtn.style.display = "inline-block";
+            submitBtn.disabled = false;
+            document.getElementById('fillInput').value = "";
+            document.getElementById('fillInput').focus();
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${questions.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        
+        playQuestionAudio();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function selectOption(selectedIndex) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === item.correct) {
+                btn.classList.add('selected-correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('selected-incorrect');
+            }
+        });
+
+        const isCorrect = (selectedIndex === item.correct);
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? "Correct answer! Excellent!" : "Incorrect selection. Check the highlighted green option.");
+    }
+
+    function submitFillAnswer() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const userVal = document.getElementById('fillInput').value.trim().toLowerCase();
+        
+        if (!userVal) return;
+
+        let isCorrect = (userVal === item.a.toLowerCase());
+        if (!isCorrect && item.alt) {
+            isCorrect = item.alt.map(a => a.toLowerCase()).includes(userVal);
+        }
+
+        document.getElementById('submitBtn').disabled = true;
+
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? `Correct! Answer: '${item.a}'` : `Incorrect. Correct answer is: '${item.a}'`);
+    }
+
+    function toggleListening() {
+        if (!recognition) {
+            alert("Speech recognition is not supported in this browser. Please try using Chrome or Microsoft Edge.");
+            return;
+        }
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        let accuracyScore = 0;
+
+        if (item.a && !item.q.includes("Speak your answer")) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+        } else {
+            let matchCount = 0;
+            item.keywords.forEach(kw => {
+                if (spokenClean.includes(kw.toLowerCase())) {
+                    matchCount++;
+                }
+            });
+            accuracyScore = Math.min(100, Math.round((matchCount / item.keywords.length) * 100));
+            document.getElementById('targetAnswer').innerText = item.a;
+            document.getElementById('targetAnswer').style.color = "#38bdf8";
+        }
+
+        totalScore += accuracyScore;
+        answeredCount++;
+        updateOverallScore();
+
+        const isGood = accuracyScore >= 60;
+        showFeedback(isGood, `Accuracy: ${accuracyScore}% | ${isGood ? 'Great pronunciation!' : 'Try speaking clearer or check hint.'}`);
+    }
+
+    function updateOverallScore() {
+        const avg = Math.round(totalScore / Math.max(1, answeredCount));
+        document.getElementById('accuracy').innerText = avg + "%";
+    }
+
+    function showFeedback(isSuccess, message) {
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+        badge.className = isSuccess ? "score-badge score-good" : "score-badge score-bad";
+        badge.innerText = message;
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = questions[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(questions[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('phaseTag').innerText = "Assessment Completed!";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Assessment Completed! Excellent effort!";
+            document.getElementById('targetAnswer').innerText = "You have completed all 30 questions covering Choice, Pronunciation, and Fill-in-the-Blanks.";
+            document.getElementById('mcqArea').style.display = "none";
+            document.getElementById('fillArea').style.display = "none";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
