@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 14: Strategic Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #8e44ad; --dark: #2c3e50; --bg: #fdf0ff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* Video Responsive Styling */
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin: 20px 0; border: 4px solid var(--primary); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-top: 10px; }
+        h2 { color: var(--dark); margin-top: 30px; background: #f0f0f0; padding: 10px; border-radius: 8px; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }
+        .vocab-card { background: #f9f9f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .strategy-box { background: #fff4e5; border: 1px solid #ffcc80; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .dialogue-area { background: #f8f9fa; padding: 20px; border-radius: 15px; border: 1px solid #eee; }
+        .line { margin-bottom: 20px; }
+        .en { font-weight: 600; color: #1a1a1a; display: block; }
+        .vi { color: #666; font-style: italic; display: block; font-size: 0.9rem; }
+        .speaker { font-weight: 800; color: var(--primary); text-transform: uppercase; font-size: 0.8rem; }
+        .btn-audio { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color:#64748b;"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        
+        <!-- Video Youtube Minh Họa -->
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/kC4EjTRmYTQ" title="Strategic Management in Shipbuilding" allowfullscreen></iframe>
+        </div>
+
+        <h1>Lesson 14: Strategic Management & Executive Communication</h1>
+
+        <h2>1. Key Terminology (Thuật ngữ chuyên ngành)</h2>
+        <div class="vocab-grid">
+            <div class="vocab-card"><div><b>Hull Number (e.g., Hull 402)</b><br>Mã số vỏ tàu/dự án</div><button class="btn-audio" onclick="speak('Hull Number')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Dry Dock / Block Assembly</b><br>Đốc khô / Lắp ráp tổng thành</div><button class="btn-audio" onclick="speak('Dry Dock')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Class Approval (DNV)</b><br>Đăng kiểm / Tiêu chuẩn kỹ thuật</div><button class="btn-audio" onclick="speak('Class Approval')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Liquidated Damages Clause</b><br>Điều khoản bồi thường trễ tiến độ</div><button class="btn-audio" onclick="speak('Liquidated Damages Clause')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Sea Trials</b><br>Thử nghiệm trên biển</div><button class="btn-audio" onclick="speak('Sea Trials')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Change Order</b><br>Yêu cầu thay đổi khối lượng</div><button class="btn-audio" onclick="speak('Change Order')"><i class="fa-solid fa-volume-high"></i></button></div>
+        </div>
+
+        <h2>2. Communication Strategies (Chiến lược giao tiếp)</h2>
+        <div class="strategy-box">
+            <b>1. De-escalating Pressure:</b> Chuyển hướng sự chú ý từ Delay sang Mitigation Plan.
+        </div>
+        <div class="strategy-box">
+            <b>2. Internal Mediation:</b> Cân bằng giữa Technical Integrity và Commercial Viability.
+        </div>
+
+        <h2>3. Full Training Script</h2>
+        <div class="dialogue-area">
+            <div class="line">
+                <span class="speaker">MD (Richard):</span>
+                <span class="en">"Sophia, do you have a minute? The client for Hull 402 called me directly—he’s furious."</span>
+                <span class="vi">"Sophia, cô có rảnh không? Khách hàng dự án Hull 402 vừa gọi cho tôi—ông ấy rất giận dữ."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">EA (Sophia):</span>
+                <span class="en">"I recommend we present a revised mitigation timeline to keep him from invoking the liquidated damages clause."</span>
+                <span class="vi">"Tôi đề xuất chúng ta trình bày một lộ trình khắc phục để ngăn ông ấy kích hoạt điều khoản bồi thường thiệt hại."</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

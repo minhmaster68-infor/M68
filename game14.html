@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Game: Executive Strategy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #8e44ad; --accent: #2ecc71; --error: #e74c3c; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
+        .setup-screen { position: fixed; inset: 0; background: #1e293b; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
+        
+        /* Video Box for Game */
+        .video-box { width: 100%; max-width: 550px; background: #000; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 3px solid var(--primary); box-shadow: 0 0 20px rgba(142, 68, 173, 0.4); }
+
+        .role-btn { background: var(--primary); color: white; padding: 15px 40px; border-radius: 30px; border: none; font-size: 1.1rem; cursor: pointer; margin: 10px; transition: 0.3s; font-weight: bold; }
+        .role-btn:hover { background: #9b59b6; transform: translateY(-3px); }
+        
+        .game-container { flex: 1; display: flex; flex-direction: column; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; }
+        
+        .stage { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; }
+        .dialogue-bubble { background: #1e293b; border-radius: 20px; padding: 30px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 2px solid #334155; min-height: 200px; position: relative; }
+        
+        .text-en { font-size: 1.3rem; line-height: 1.5; color: #f8fafc; transition: 0.3s; }
+        .text-en.hidden { filter: blur(10px); user-select: none; }
+        
+        .hint-btn { background: #334155; color: #94a3b8; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
+        
+        .controls { height: 160px; background: #1e293b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; border-top: 2px solid #334155; }
+        #mic-btn { width: 80px; height: 80px; border-radius: 50%; border: none; background: var(--primary); color: white; font-size: 2rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #mic-btn.listening { background: var(--error); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        .score-box { font-size: 1.5rem; color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="setup" class="setup-screen">
+        <h2 style="color: var(--primary);">LESSON 14: EXECUTIVE STRATEGY</h2>
+        
+        <!-- Video Youtube Minh Họa trong Game Setup -->
+        <div class="video-box">
+            <iframe width="100%" height="300" src="https://www.youtube.com/embed/kC4EjTRmYTQ" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <p>Xem video để nắm bắt ngữ cảnh, sau đó chọn vai diễn của bạn:</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <button class="role-btn" onclick="start('MD')"><i class="fa-solid fa-user-tie"></i> Mr. Vance (MD)</button>
+            <button class="role-btn" onclick="start('EA')"><i class="fa-solid fa-user-pen"></i> Ms. Sophia (EA)</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <a href="index.html" style="color:white; text-decoration: none;"><i class="fa-solid fa-house"></i> Home</a>
+        <div id="progress" style="color: #94a3b8;">Step: 0/16</div>
+        <div class="score-box" id="score">Accuracy: 0%</div>
+    </div>
+
+    <div class="game-container">
+        <div class="stage">
+            <div id="role-label" style="color: var(--primary); font-weight: bold; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;"></div>
+            <div class="dialogue-bubble">
+                <div id="text-en" class="text-en hidden">Nội dung sẽ hiện tại đây...</div>
+                <button class="hint-btn" onclick="toggleHint()"><i class="fa-solid fa-eye"></i> Show Text (Hint)</button>
+            </div>
+            <div id="feedback" style="height: 20px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div id="status" style="font-weight: 500;">Please select a role to begin</div>
+        <button id="mic-btn" disabled><i class="fa-solid fa-microphone"></i></button>
+        <div id="transcript" style="font-style: italic; color: #64748b; font-size: 0.85rem; max-width: 90%;"></div>
+    </div>
+
+    <script>
+        // ... (Giữ nguyên phần Script giống như tôi đã gửi ở trên)
+        const script = [
+            { role: 'MD', en: "Sophia, do you have a minute? The client for Hull 402 called me directly—he’s furious. He heard rumors that block assembly is two weeks behind schedule. What's the actual status on the dry dock?" },
+            { role: 'EA', en: "The delay is accurate, caused by a temporary shortage of high-tensile steel plates. However, rather than giving the client bad news outright, I recommend we present a revised mitigation timeline." },
+            { role: 'MD', en: "Good thinking. How should we phrase the update to keep him from invoking the liquidated damages clause?" },
+            { role: 'EA', en: "We can say: We are optimizing the block assembly sequence to absorb the material delay, ensuring the final sea trials and delivery date remain unaffected." },
+            { role: 'MD', en: "Excellent. Send that draft to my inbox right away. Now, there’s a heated conflict between Chief Engineer Miller and the Procurement Director, Mr. Aris." },
+            { role: 'EA', en: "Engineering insists on ordering main engines from a preferred Japanese vendor to ensure DNV classification compliance. However, Procurement signed an intent with a cheaper vendor whose certification is still pending." },
+            { role: 'MD', en: "That’s a bottleneck we can’t afford. How do you suggest I handle the joint meeting this afternoon?" },
+            { role: 'EA', en: "I suggest framing the discussion around project risk rather than cost. You might say to Engineer Miller: We fully respect technical integrity, but we must align it with commercial viability." },
+            { role: 'MD', en: "Perfect. Set up a 15-minute alignment call with both of them before lunch. Wait, I just received an urgent report from Yard 3. A crane load slipped." },
+            { role: 'EA', en: "Fortunately, there are no fatalities, but two workers sustained minor injuries, and local reporters are already gathering outside the main gate." },
+            { role: 'MD', en: "Oh no. We need to handle this carefully. Should I go down to speak with the press immediately?" },
+            { role: 'EA', en: "I strongly advise against an off-the-cuff statement, sir. I suggest issuing a concise, factual statement while Safety Control secures the area." },
+            { role: 'MD', en: "What key points should we cover in that statement?" },
+            { role: 'EA', en: "Our immediate priority is the health and safety of our personnel. The situation is under control, and a formal investigation is underway." },
+            { role: 'MD', en: "Agreed. One last thing—the HVAC subcontractor sent an invoice for a 15% budget overrun. How do we push back?" },
+            { role: 'EA', en: "You can address their Director by saying: We value our long-term partnership, but we must strictly adhere to the agreed lump-sum terms unless a formal Change Order was approved." }
+        ];
+
+        let userRole = '';
+        let currentIdx = 0;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        function start(role) {
+            userRole = role;
+            document.getElementById('setup').style.display = 'none';
+            playRound();
+        }
+
+        function toggleHint() {
+            document.getElementById('text-en').classList.toggle('hidden');
+        }
+
+        function playRound() {
+            if (currentIdx >= script.length) {
+                alert("Hoàn thành bài luyện tập!");
+                location.reload();
+                return;
+            }
+
+            const line = script[currentIdx];
+            document.getElementById('progress').innerText = `Step: ${currentIdx + 1}/${script.length}`;
+            document.getElementById('role-label').innerText = line.role;
+            document.getElementById('text-en').innerText = line.en;
+            document.getElementById('text-en').classList.add('hidden'); 
+            document.getElementById('feedback').innerText = "";
+
+            if (line.role === userRole) {
+                document.getElementById('status').innerText = "YOUR TURN - Listen and Repeat";
+                document.getElementById('mic-btn').disabled = false;
+            } else {
+                document.getElementById('status').innerText = "AI SPEAKING...";
+                document.getElementById('mic-btn').disabled = true;
+                speakAI(line.en);
+            }
+        }
+
+        function speakAI(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = 0.9;
+            u.onend = () => { currentIdx++; setTimeout(playRound, 1000); };
+            window.speechSynthesis.speak(u);
+        }
+
+        document.getElementById('mic-btn').onclick = () => {
+            recognition.start();
+            document.getElementById('mic-btn').classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            document.getElementById('mic-btn').classList.remove('listening');
+            const result = event.results[0][0].transcript.toLowerCase();
+            document.getElementById('transcript').innerText = "You said: " + result;
+            
+            const target = script[currentIdx].en.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+            const targetWords = target.split(' ');
+            let matches = 0;
+            targetWords.forEach(w => { if(result.includes(w)) matches++; });
+            
+            const accuracy = (matches / targetWords.length) * 100;
+            document.getElementById('score').innerText = "Accuracy: " + Math.round(accuracy) + "%";
+
+            if (accuracy > 40) {
+                document.getElementById('feedback').innerText = "Good job! Moving to next...";
+                document.getElementById('feedback').style.color = "var(--accent)";
+                setTimeout(() => { currentIdx++; playRound(); }, 2000);
+            } else {
+                document.getElementById('feedback').innerText = "Try again clearly or check Hint.";
+                document.getElementById('feedback').style.color = "var(--error)";
+            }
+        };
+    </script>
+</body>
+</html>
