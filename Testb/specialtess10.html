@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English & History Integrated Assessment Test</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+            --input-bg: #090d16;
+            --input-border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .mcq-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mcq-options { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 2px solid #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover { border-color: var(--accent); background: #0f172a; }
+        .option-btn.selected-correct { border-color: var(--success); background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .option-btn.selected-incorrect { border-color: var(--warning); background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+        .fill-blank-area { margin-top: 15px; text-align: left; }
+        .fill-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .fill-input:focus { border-color: var(--accent); }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+        .btn-submit { background-color: #22c55e; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>English & Tran Dynasty History Test</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: History & English Multiple Choice</div>
+    <p id="instructionText" class="subtitle">Select the correct English answer combining Tran Dynasty history and grammar.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 32</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Overall Score<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / Prompt:</div>
+        <div class="speech-text" id="questionText">Click "Start Test" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Response Area:</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+
+        <div id="mcqArea" class="mcq-options" style="display:none;"></div>
+        <div id="fillArea" class="fill-blank-area" style="display:none;">
+            <input type="text" id="fillInput" class="fill-input" placeholder="Type or speak the missing word..." />
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Test</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Listen Prompt</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled style="display:none;">🎤 Read / Speak Answer</button>
+        <button id="submitBtn" class="btn-submit" onclick="submitFillAnswer()" disabled style="display:none;">✔️ Submit Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint</button>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Hint Clue:</strong> <span id="hintText"></span>
+    </div>
+
+    <div id="transcriptBox" class="transcript-box" style="display:none;">
+        <strong>Voice Recognition Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for microphone input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const questions = [
+        // PHASE 1: MULTIPLE CHOICE (QUESTIONS 1 - 12)
+        {
+            phase: 1, type: "mcq",
+            q: "1. King Tran Nhan Tong was the founder of Truc Lam Zen sect. How ______ monks followed his path later?",
+            options: ["A. much", "B. many", "C. a little", "D. some"], correct: 1,
+            hint: "Monks is a countable plural noun, so use 'many'."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "2. The Tran Dynasty court organized examinations every 7 years to select ______ top scholars (Tam Khoi).",
+            options: ["A. a few", "B. a little", "C. much", "D. any"], correct: 0,
+            hint: "Top scholars are countable, so use 'a few'."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "3. Le Van Huu spent ______ time compiling 'Dai Viet Su Ky', the first national official history book.",
+            options: ["A. many", "B. a lot of", "C. a few", "D. these"], correct: 1,
+            hint: "Time is an uncountable noun."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "4. Tue Tinh was a famous physician who researched ______ local Southern medicinal plants.",
+            options: ["A. a lot of", "B. a little", "C. much", "D. every"], correct: 0,
+            hint: "Plants is plural countable."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "5. Did the Tran army have ______ military strategy manuals written by Tran Quoc Tuan?",
+            options: ["A. some", "B. any", "C. much", "D. a little"], correct: 1,
+            hint: "Use 'any' in general questions."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "6. - 'How often were Confucian examinations held during the Tran Dynasty?' - '_______'",
+            options: [
+                "A. Every 7 years.",
+                "B. Yes, they were held in Hanoi.",
+                "C. By Chu Van An.",
+                "D. A lot of students passed."
+            ], correct: 0, hint: "Question asks for frequency ('How often')."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "7. - 'Who compiled Dai Viet Su Ky?' - '_______'",
+            options: [
+                "A. It was written by Le Van Huu.",
+                "B. In Yen Tu mountains.",
+                "C. To teach royal children.",
+                "D. No, it wasn't."
+            ], correct: 0, hint: "Question asks 'Who'."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "8. Stores inventory their stock twice a month to check ______ goods in stock.",
+            options: ["A. much", "B. some", "C. a little", "D. lens"], correct: 1, hint: "From source grammar exercise."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "9. We went to the countryside for ______ peace and quiet.",
+            options: ["A. some", "B. any", "C. a few", "D. many"], correct: 0, hint: "Positive statement with uncountable noun."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "10. He used a piece of tissue to clean his ______.",
+            options: ["A. sunglass", "B. sunglasses", "C. lens", "D. glasseses"], correct: 1, hint: "Sunglasses is always plural."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "11. The chief sciences are chemistry, ______, and biology.",
+            options: ["A. physic", "B. physics", "C. physician", "D. physical"], correct: 1, hint: "Name of the subject ends with -s."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "12. The dish doesn't contain ______ sugar and is full of antioxidants.",
+            options: ["A. some", "B. any", "C. a few", "D. many"], correct: 1, hint: "Negative sentence uses 'any'."
+        },
+
+        // PHASE 2: READING & PRONUNCIATION ASSESSMENT (READ ALOUD - QUESTIONS 13 - 22)
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Emperor Tran Nhan Tong was the founder of Truc Lam Zen sect in Yen Tu.'",
+            a: "Emperor Tran Nhan Tong was the founder of Truc Lam Zen sect in Yen Tu.",
+            hint: "Focus on pronouncing 'Emperor', 'founder', and 'sect' clearly."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Phap Loa and Huyen Quang continued his spiritual legacy.'",
+            a: "Phap Loa and Huyen Quang continued his spiritual legacy.",
+            hint: "Pronounce 'spiritual' and 'legacy' correctly."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Quoc Tu Giam was expanded to educate princes and high ranking officials.'",
+            a: "Quoc Tu Giam was expanded to educate princes and high ranking officials.",
+            hint: "Clear pronunciation of 'expanded', 'educate', and 'officials'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Thai Hoc Sinh was the highest academic degree during the Tran Dynasty.'",
+            a: "Thai Hoc Sinh was the highest academic degree during the Tran Dynasty.",
+            hint: "Focus on 'highest', 'academic', and 'degree'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Le Van Huu compiled Dai Viet Su Ky, our country first national history book.'",
+            a: "Le Van Huu compiled Dai Viet Su Ky, our country first national history book.",
+            hint: "Focus on 'compiled', 'national', and 'history'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Tran Quoc Tuan authored famous military manuals like Binh Thu Yeu Luoc.'",
+            a: "Tran Quoc Tuan authored famous military manuals like Binh Thu Yeu Luoc.",
+            hint: "Key English words: 'authored', 'famous', 'military', 'manuals'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Tue Tinh was a renowned physician who studied Southern medicinal herbs.'",
+            a: "Tue Tinh was a renowned physician who studied Southern medicinal herbs.",
+            hint: "Pronounce 'renowned' (re-nownd) and 'physician' (fi-zi-shan)."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'She got a lot of enjoyment from her grandchildren.'",
+            a: "She got a lot of enjoyment from her grandchildren.",
+            hint: "From source image exercise 61."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'They use fingerprinting as a means of identification.'",
+            a: "They use fingerprinting as a means of identification.",
+            hint: "From source image exercise 68."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'The waters of the two rivers mingled to form one river.'",
+            a: "The waters of the two rivers mingled to form one river.",
+            hint: "From source image exercise 73."
+        },
+
+        // PHASE 3: FILL IN THE BLANK (QUESTIONS 23 - 32)
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Tran Nhan Tong, Phap Loa, and Huyen Quang are called Truc Lam Tam _______.",
+            a: "to", hint: "Vietnamese Sino word for ancestors/masters (To)."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: The highest degree exam was held every 7 _______ during the Tran dynasty.",
+            a: "years", hint: "Unit of time mentioned in the text."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Chu Van An was a famous teacher at Huynh Cung school in _______.",
+            a: "hanoi", hint: "Capital city of Vietnam mentioned in the history text."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Dai Viet Su Ky is the first national _______ book of Vietnam.",
+            a: "history", hint: "Field related to past events (Sử)."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Tran Quoc Tuan wrote books about _______ strategy.",
+            a: "military", hint: "Related to army and war tactics."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Tue Tinh researched and wrote books about Southern medicinal _______.",
+            a: "plants", hint: "Herbs or vegetation used for medicine."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: You need to sweeten the mixture with a _______ honey.",
+            a: "little", hint: "Quantifier for uncountable honey (from source image ex 63)."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: Oh dear! You have spent a lot of _______ on clothes!",
+            a: "money", hint: "Uncountable noun from source image ex 66."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: I'd like to ask you a _______ questions if you don't mind.",
+            a: "few", hint: "Quantifier for plural countable questions (from source image ex 71)."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank & read: You've passed your entrance exams. _______!",
+            a: "congratulations", hint: "Plural noun expression from source image ex 80."
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            
+            if (questions[currentIndex].phase === 3) {
+                document.getElementById('fillInput').value = spokenText;
+            }
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Mic error or speech not recognized: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        totalScore = 0;
+        answeredCount = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+        const mcqArea = document.getElementById('mcqArea');
+        const fillArea = document.getElementById('fillArea');
+        const micBtn = document.getElementById('micBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptBox = document.getElementById('transcriptBox');
+
+        mcqArea.style.display = "none";
+        fillArea.style.display = "none";
+        micBtn.style.display = "none";
+        submitBtn.style.display = "none";
+        transcriptBox.style.display = "none";
+        targetAnswerBox.innerText = "—";
+        targetAnswerBox.style.color = "#38bdf8";
+
+        if (item.phase === 1) {
+            phaseTag.innerText = "Phase 1: Multiple Choice (Question 1 - 12)";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Select the correct English answer combining Tran Dynasty history and grammar.";
+            answerRoleTitle.innerText = "Select Answer:";
+            mcqArea.style.display = "grid";
+            
+            mcqArea.innerHTML = "";
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                mcqArea.appendChild(btn);
+            });
+        } else if (item.phase === 2) {
+            phaseTag.innerText = "Phase 2: Reading & Pronunciation Assessment (Question 13 - 22)";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Click the microphone button and read the exact sentence out loud in English.";
+            answerRoleTitle.innerText = "Target Sentence to Read:";
+            targetAnswerBox.innerText = item.a;
+
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and read the sentence above into your mic.";
+        } else if (item.phase === 3) {
+            phaseTag.innerText = "Phase 3: English Fill-in-the-Blank (Question 23 - 32)";
+            phaseTag.style.background = "#059669";
+            instructionText.innerText = "Type the missing word or click the microphone to speak it out loud.";
+            answerRoleTitle.innerText = "Fill Blank Answer:";
+            fillArea.style.display = "block";
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            submitBtn.style.display = "inline-block";
+            submitBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('fillInput').value = "";
+            document.getElementById('fillInput').focus();
+            document.getElementById('speechResult').innerText = "Type or speak the missing word.";
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${questions.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        
+        playQuestionAudio();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function selectOption(selectedIndex) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === item.correct) {
+                btn.classList.add('selected-correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('selected-incorrect');
+            }
+        });
+
+        const isCorrect = (selectedIndex === item.correct);
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? "Correct answer! Excellent job." : "Incorrect option selected.");
+    }
+
+    function submitFillAnswer() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const userVal = document.getElementById('fillInput').value.trim().toLowerCase();
+        
+        if (!userVal) return;
+
+        const isCorrect = userVal.includes(item.a.toLowerCase());
+
+        document.getElementById('submitBtn').disabled = true;
+
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? `Correct! Word: '${item.a}'` : `Incorrect. Correct word: '${item.a}'`);
+    }
+
+    function toggleListening() {
+        if (!recognition) {
+            alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+            return;
+        }
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        if (item.phase === 2) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            const accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+
+            totalScore += accuracyScore;
+            answeredCount++;
+            updateOverallScore();
+
+            const isGood = accuracyScore >= 60;
+            showFeedback(isGood, `Reading Accuracy: ${accuracyScore}% | ${isGood ? 'Great pronunciation!' : 'Try speaking clearer or check your mic.'}`);
+        } else if (item.phase === 3) {
+            const isCorrect = spokenClean.includes(item.a.toLowerCase());
+            if (isCorrect) {
+                totalScore += 100;
+                showFeedback(true, `Correct reading & pronunciation! Word: '${item.a}'`);
+            } else {
+                showFeedback(false, `Spoken word missed. Target word is: '${item.a}'`);
+            }
+            answeredCount++;
+            updateOverallScore();
+        }
+    }
+
+    function updateOverallScore() {
+        const avg = Math.round(totalScore / Math.max(1, answeredCount));
+        document.getElementById('accuracy').innerText = avg + "%";
+    }
+
+    function showFeedback(isSuccess, message) {
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+        badge.className = isSuccess ? "score-badge score-good" : "score-badge score-bad";
+        badge.innerText = message;
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = questions[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(questions[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('phaseTag').innerText = "Test Completed!";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Congratulations! You completed all 32 questions!";
+            document.getElementById('targetAnswer').innerText = "History & English Assessment Finished.";
+            document.getElementById('mcqArea').style.display = "none";
+            document.getElementById('fillArea').style.display = "none";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
