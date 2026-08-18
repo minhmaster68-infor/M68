@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 15: Accident Reporting & Welfare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #e67e22; --dark: #d35400; --bg: #fffaf0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin: 20px 0; border: 4px solid var(--primary); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        h2 { color: #2c3e50; margin-top: 30px; background: #fef5e7; padding: 10px; border-radius: 8px; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
+        .vocab-card { background: #f9f9f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .dialogue-area { background: #f8f9fa; padding: 20px; border-radius: 15px; }
+        .line { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .speaker { font-weight: 800; color: var(--dark); text-transform: uppercase; font-size: 0.8rem; }
+        .en { font-weight: 600; color: #1a1a1a; display: block; margin: 5px 0; }
+        .vi { color: #666; font-style: italic; font-size: 0.9rem; }
+        .btn-audio { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color:#64748b;"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/_Wf5i0ORsQM" title="Safety & Welfare" allowfullscreen></iframe>
+        </div>
+
+        <h1>Lesson 15: Accident Reporting & Workers' Welfare</h1>
+
+        <h2>1. Key Vocabulary (Từ vựng then chốt)</h2>
+        <div class="vocab-grid">
+            <div class="vocab-card"><div><b>Industrial Accident</b><br>Tai nạn lao động</div><button class="btn-audio" onclick="speak('Industrial Accident')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Root-cause analysis</b><br>Phân tích nguyên nhân gốc rễ</div><button class="btn-audio" onclick="speak('Root-cause analysis')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Personal Protective Equipment</b><br>Thiết bị bảo hộ cá nhân (PPE)</div><button class="btn-audio" onclick="speak('Personal Protective Equipment')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Frayed sling</b><br>Dây cẩu bị xơ tơi/hỏng</div><button class="btn-audio" onclick="speak('Frayed sling')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Workers' compensation</b><br>Bồi thường tai nạn lao động</div><button class="btn-audio" onclick="speak('Workers compensation')"><i class="fa-solid fa-volume-high"></i></button></div>
+            <div class="vocab-card"><div><b>Stop-work order</b><br>Lệnh dừng thi công</div><button class="btn-audio" onclick="speak('Stop-work order')"><i class="fa-solid fa-volume-high"></i></button></div>
+        </div>
+
+        <h2>2. Training Script (Kịch bản hội thoại)</h2>
+        <div class="dialogue-area">
+            <div class="line">
+                <span class="speaker">Mr. Vance:</span>
+                <span class="en">"Good morning, Minh. How are you feeling today? I came as soon as I heard about the industrial accident at the dry dock."</span>
+                <span class="vi">"Chào buổi sáng, Minh. Cậu thấy thế nào rồi? Tôi đến ngay khi nghe tin về vụ tai nạn lao động tại đốc khô."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">Minh:</span>
+                <span class="en">"I think one of the slings was frayed, or perhaps the load limit was exceeded. The impact caused me to lose my balance."</span>
+                <span class="vi">"Tôi nghĩ một trong những dây cẩu đã bị tơi, hoặc có lẽ đã quá tải. Cú va chạm làm tôi mất thăng bằng."</span>
+            </div>
+            <div class="line">
+                <span class="speaker">Mr. Vance:</span>
+                <span class="en">"Don't worry about your medical bills; the company’s insurance policy will cover everything, including your sick leave."</span>
+                <span class="vi">"Đừng lo về viện phí; bảo hiểm của công ty sẽ chi trả mọi thứ, bao gồm cả kỳ nghỉ phép chữa bệnh của cậu."</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

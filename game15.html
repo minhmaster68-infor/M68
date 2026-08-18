@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Game: Safety & Recovery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #e67e22; --accent: #27ae60; --error: #e74c3c; }
+        body { font-family: 'Inter', sans-serif; background: #1a1a1a; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        .setup-screen { position: fixed; inset: 0; background: #2c3e50; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .video-box { width: 100%; max-width: 500px; margin-bottom: 20px; border: 3px solid var(--primary); border-radius: 12px; overflow: hidden; }
+        .role-btn { background: var(--primary); color: white; padding: 15px 30px; border-radius: 30px; border: none; font-size: 1.1rem; cursor: pointer; margin: 10px; font-weight: bold; }
+        .game-container { flex: 1; display: flex; flex-direction: column; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .dialogue-bubble { background: #2d3436; border-radius: 20px; padding: 25px; border: 2px solid #636e72; min-height: 150px; margin: 20px 0; }
+        .text-en { font-size: 1.2rem; line-height: 1.5; color: #dfe6e9; }
+        .text-en.hidden { filter: blur(8px); }
+        .controls { height: 150px; background: #2d3436; display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 3px solid var(--primary); }
+        #mic-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--primary); color: white; font-size: 1.8rem; cursor: pointer; }
+        #mic-btn.listening { background: var(--error); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        #feedback { font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="setup" class="setup-screen">
+        <h2 style="color: var(--primary);">LESSON 15: ACCIDENT ROLEPLAY</h2>
+        <div class="video-box">
+            <iframe width="100%" height="250" src="https://www.youtube.com/embed/_Wf5i0ORsQM" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p>Chọn vai của bạn để bắt đầu luyện nói:</p>
+        <div>
+            <button class="role-btn" onclick="start('MD')">Mr. Vance (Director)</button>
+            <button class="role-btn" onclick="start('WK')">Minh (Worker)</button>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div id="role-label" style="color: var(--primary); font-weight: bold; text-align: center;"></div>
+        <div class="dialogue-bubble">
+            <div id="text-en" class="text-en hidden">Nội dung hội thoại...</div>
+            <button onclick="document.getElementById('text-en').classList.toggle('hidden')" style="margin-top:10px; background:none; border:1px solid #777; color:#aaa; cursor:pointer;">Show/Hide Text</button>
+        </div>
+        <div id="feedback" style="text-align: center;"></div>
+        <div id="transcript" style="font-style: italic; color: #999; text-align: center; margin-top: 10px;"></div>
+    </div>
+
+    <div class="controls">
+        <div id="status">Chọn vai để bắt đầu</div>
+        <button id="mic-btn" disabled><i class="fa-solid fa-microphone"></i></button>
+    </div>
+
+    <script>
+        const script = [
+            { role: 'MD', en: "Good morning, Minh. How are you feeling today? I came as soon as I heard about the industrial accident at the dry dock." },
+            { role: 'WK', en: "Good morning, Mr. Vance. Thank you for visiting me. The doctors say I have a minor fracture in my leg." },
+            { role: 'MD', en: "Could you walk me through what happened at the hull assembly area?" },
+            { role: 'WK', en: "I was doing overhead welding. A heavy steel plate slipped from the crane and hit the scaffolding I was standing on." },
+            { role: 'MD', en: "Did the rigging gear fail, or was it an operator error?" },
+            { role: 'WK', en: "I think one of the slings was frayed. Thankfully my safety lanyard caught me before I hit the tank top." },
+            { role: 'MD', en: "Don't worry about your medical bills. Your health and occupational safety are our top priorities. Get well soon!" },
+            { role: 'WK', en: "Thank you so much, Mr. Vance. I hope to return to the fabrication shop as soon as possible." }
+        ];
+
+        let userRole = '';
+        let currentIdx = 0;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        function start(role) {
+            userRole = role;
+            document.getElementById('setup').style.display = 'none';
+            playRound();
+        }
+
+        function playRound() {
+            if (currentIdx >= script.length) {
+                alert("Chúc mừng! Bạn đã hoàn thành bài đối thoại.");
+                location.reload();
+                return;
+            }
+
+            const line = script[currentIdx];
+            document.getElementById('role-label').innerText = "SPEAKER: " + (line.role === 'MD' ? "MR. VANCE" : "MINH");
+            document.getElementById('text-en').innerText = line.en;
+            document.getElementById('text-en').classList.add('hidden');
+
+            if (line.role === userRole) {
+                document.getElementById('status').innerText = "ĐẾN LƯỢT BẠN - Hãy đọc câu trên";
+                document.getElementById('mic-btn').disabled = false;
+            } else {
+                document.getElementById('status').innerText = "AI ĐANG NÓI...";
+                document.getElementById('mic-btn').disabled = true;
+                speakAI(line.en);
+            }
+        }
+
+        function speakAI(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.onend = () => { currentIdx++; setTimeout(playRound, 1000); };
+            window.speechSynthesis.speak(u);
+        }
+
+        document.getElementById('mic-btn').onclick = () => {
+            recognition.start();
+            document.getElementById('mic-btn').classList.add('listening');
+        };
+
+        recognition.onresult = (event) => {
+            document.getElementById('mic-btn').classList.remove('listening');
+            const result = event.results[0][0].transcript.toLowerCase();
+            document.getElementById('transcript').innerText = "Bạn đã nói: " + result;
+            
+            const target = script[currentIdx].en.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+            const accuracy = calculateAccuracy(result, target);
+
+            if (accuracy > 40) {
+                document.getElementById('feedback').innerText = "Chính xác! Đang chuyển tiếp...";
+                document.getElementById('feedback').style.color = "var(--accent)";
+                setTimeout(() => { currentIdx++; playRound(); }, 2000);
+            } else {
+                document.getElementById('feedback').innerText = "Chưa rõ lắm, hãy thử lại!";
+                document.getElementById('feedback').style.color = "var(--error)";
+            }
+        };
+
+        function calculateAccuracy(s1, s2) {
+            const words1 = s1.split(' ');
+            const words2 = s2.split(' ');
+            let matches = 0;
+            words2.forEach(w => { if(s1.includes(w)) matches++; });
+            return (matches / words2.length) * 100;
+        }
+    </script>
+</body>
+</html>
