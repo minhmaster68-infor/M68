@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asia Tech-Geography & English Mastery Quest</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #0284c7;
+      --bg-color: #0f172a;
+      --panel-bg: #1e293b;
+      --text-main: #f8fafc;
+      --accent: #f59e0b;
+      --success: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      min-height: 100vh;
+    }
+
+    header { text-align: center; margin-bottom: 15px; }
+    h1 { color: #38bdf8; font-size: 24px; }
+    .subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+
+    .game-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 15px; }
+    
+    .stats-bar {
+      background: var(--panel-bg);
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .map-wrapper {
+      position: relative;
+      width: 100%;
+      background: #0284c7;
+      border: 4px solid var(--primary);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    #map-canvas { width: 100%; height: 500px; display: block; }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: var(--panel-bg);
+      width: 620px;
+      max-width: 92%;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      border: 1px solid #334155;
+    }
+
+    .badge {
+      display: inline-block; padding: 4px 10px; font-size: 11px;
+      font-weight: bold; border-radius: 6px; color: white; margin-bottom: 10px;
+    }
+    .badge-tech { background: #8b5cf6; }
+    .badge-geo { background: #d97706; }
+
+    .question-text {
+      font-size: 15px; color: #e2e8f0; margin-bottom: 18px;
+      line-height: 1.5; background: #0f172a; padding: 12px;
+      border-left: 4px solid var(--secondary); border-radius: 4px;
+    }
+
+    .options-grid { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-opt {
+      background: #334155; border: 1px solid #475569; color: #f8fafc;
+      padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      text-align: left; cursor: pointer; transition: all 0.2s ease;
+    }
+    .btn-opt:hover { background: #475569; border-color: var(--secondary); }
+
+    .btn-close {
+      background: #475569; color: #94a3b8; border: none; padding: 8px 12px;
+      border-radius: 6px; font-size: 12px; cursor: pointer; float: right; margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌏 Asian Geography & Game Tech Expedition (30 Challenges)</h1>
+    <div class="subtitle">Master English Conjunctions, Asian Geography, and Game Engine Physics Libraries!</div>
+  </header>
+
+  <div class="game-container">
+    <div class="stats-bar">
+      <div>📍 Current Location: <span id="loc-name">1. Ural Mountains</span></div>
+      <div>⭐ Progress: <span id="progress-count">0</span> / 30 Waypoints</div>
+      <div>🪙 Score: <span id="score-val">0</span> pts</div>
+    </div>
+
+    <div class="map-wrapper">
+      <canvas id="map-canvas" width="960" height="500"></canvas>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="quiz-modal" class="modal-overlay">
+    <div class="modal-card">
+      <span id="quiz-badge" class="badge badge-tech">Game Tech & English</span>
+      <h3 id="quiz-title" style="margin-bottom: 10px;">Waypoint Challenge</h3>
+      <div id="quiz-question" class="question-text"></div>
+      <div id="quiz-body"></div>
+      <button class="btn-close" onclick="closeModal()">Dismiss</button>
+    </div>
+  </div>
+
+  <script>
+    // 30 Waypoints spanning Asia Geography, English Grammar (Conjunctions/Conditionals), and Open-Source Game Libraries
+    const waypoints = [
+      { id: 1, name: "Ural Mountains", x: 180, y: 120, engine: "Three.js", concept: "Heightmap Terrain" },
+      { id: 2, name: "Siberian Tundra", x: 380, y: 80, engine: "PixiJS", concept: "Snow Particle Emitter" },
+      { id: 3, name: "Borneo Island (Kalimantan)", x: 620, y: 400, engine: "Phaser.js", concept: "Rainforest Tilemap" },
+      { id: 4, name: "Himalayas Peak", x: 420, y: 260, engine: "Babylon.js", concept: "Raycasting Atmospheric Fog" },
+      { id: 5, name: "Gobi Desert", x: 520, y: 180, engine: "Matter.js", concept: "Sand Rigid Body Physics" },
+      { id: 6, name: "Yangtze River", x: 600, y: 240, engine: "Three.js", concept: "Water Shader Displacement" },
+      { id: 7, name: "Japanese Archipelago", x: 800, y: 200, engine: "PixiJS", concept: "Volcanic Sprite Sheets" },
+      { id: 8, name: "Arabian Peninsula", x: 160, y: 280, engine: "Babylon.js", concept: "PBR Sun Lighting Model" },
+      { id: 9, name: "Plateau of Tibet", x: 450, y: 220, engine: "Three.js", concept: "Level of Detail (LOD) Meshes" },
+      { id: 10, name: "Malay Peninsula", x: 580, y: 360, engine: "Phaser.js", concept: "Viewport Camera Tracking" },
+      { id: 11, name: "Caspian Sea Basin", x: 260, y: 180, engine: "Matter.js", concept: "Fluid Density Simulation" },
+      { id: 12, name: "Deccan Plateau", x: 380, y: 320, engine: "Babylon.js", concept: "Shadow Generator Lights" },
+      { id: 13, name: "Philippine Sea", x: 740, y: 320, engine: "PixiJS", concept: "Tsunami Wave Matrix Shift" },
+      { id: 14, name: "Indus River Valley", x: 320, y: 250, engine: "Phaser.js", concept: "Isometric Pathfinding A*" },
+      { id: 15, name: "Lake Baikal", x: 550, y: 110, engine: "Three.js", concept: "Refractive Ice Shaders" },
+      { id: 16, name: "Kamchatka Peninsula", x: 860, y: 90, engine: "Babylon.js", concept: "Volcanic Particle Eruption" },
+      { id: 17, name: "Mekong Delta", x: 620, y: 320, engine: "Matter.js", concept: "Floating Vessel Buoyancy" },
+      { id: 18, name: "Korean Peninsula", x: 720, y: 210, engine: "PixiJS", concept: "Skeletal Spine Animation" },
+      { id: 19, name: "Huang He (Yellow River)", x: 620, y: 190, engine: "Three.js", concept: "Sediment Flow Vector Mapping" },
+      { id: 20, name: "Sunda Trench", x: 520, y: 440, engine: "Babylon.js", concept: "Depth Buffer Lighting" },
+      { id: 21, name: "Karakoram Range", x: 360, y: 210, engine: "Phaser.js", concept: "Parallax Scrolling Layers" },
+      { id: 22, name: "Island of Sumatra", x: 540, y: 390, engine: "Matter.js", concept: "Collision Filtering Matrix" },
+      { id: 23, name: "Central Asian Steppe", x: 340, y: 150, engine: "Three.js", concept: "Instanced Grass Rendering" },
+      { id: 24, name: "Bay of Bengal", x: 450, y: 340, engine: "PixiJS", concept: "Cyclonic Motion Tweening" },
+      { id: 25, name: "Thar Desert", x: 300, y: 230, engine: "Babylon.js", concept: "Heat Waves Post-Processing" },
+      { id: 26, name: "Red Sea Passage", x: 120, y: 320, engine: "Phaser.js", concept: "Trigger Zone Event Logic" },
+      { id: 27, name: "Island of Sri Lanka", x: 420, y: 380, engine: "Matter.js", concept: "Gravity Vector Reversal" },
+      { id: 28, name: "Tian Shan Mountains", x: 390, y: 170, engine: "Three.js", concept: "Procedural Snow Generation" },
+      { id: 29, name: "Java Island", x: 590, y: 440, engine: "Babylon.js", concept: "Tectonic Mesh Deformation" },
+      { id: 30, name: "Strait of Malacca", x: 560, y: 370, engine: "PixiJS", concept: "Spatial Hash Grid Optimization" }
+    ];
+
+    const questions = [
+      { q: "Asia is part of the Euro-Asian landmass. Please say definitely whether you will be coming _______ not. (Conjunction Choice)", opts: ["A. or", "B. but", "C. nor", "D. and"], ans: "A. or" },
+      { q: "The rain has stopped in the Siberian tundra, _______ the game will go ahead after all. (Select correct conjunction)", opts: ["A. so", "B. or", "C. nor", "D. yet"], ans: "A. so" },
+      { q: "If game engineers use Three.js to render the Himalayas, they ________ (use) heightmaps to calculate peak elevation.", opts: ["A. would use", "B. will use", "C. used", "D. use"], ans: "A. would use" },
+      { q: "Borneo is the largest island in Asia and the third largest in the world, _______ its territory spans Indonesia, Brunei, and Malaysia.", opts: ["A. so", "B. and", "C. but", "D. nor"], ans: "B. and" },
+      { q: "______ her brothers ate breakfast, she rendered the desert sand particle physics in Phaser.js.", opts: ["A. When", "B. While", "C. After", "D. Before"], ans: "C. After" },
+      { q: "His bread was too hot, ______ he put some paper under it while configuring PixiJS sprites.", opts: ["A. so", "B. yet", "C. but", "D. or"], ans: "A. so" },
+      { q: "She hasn't phoned _______ she said she would visit the Yangtze River water shader demo.", opts: ["A. even though", "B. since", "C. as", "D. because"], ans: "A. even though" },
+      { q: "He doesn't like chicken _______ does he like pork or beef when traveling across Asia.", opts: ["A. nor", "B. or", "C. but", "D. so"], ans: "A. nor" },
+      { q: "I often make omelettes _______ they're quick and easy before testing Matter.js rigid bodies.", opts: ["A. because", "B. if", "C. unless", "D. although"], ans: "A. because" },
+      { q: "She is always frank and direct, _______ she is never rude when discussing open-source game engines.", opts: ["A. but", "B. so", "C. and", "D. or"], ans: "A. but" },
+      { q: "I enjoy playing football, _______ it's not my favourite sport.", opts: ["A. but", "B. because", "C. as", "D. so"], ans: "A. but" },
+      { q: "It is impossible to say _______ she will answer us or not regarding the spatial hash grid in PixiJS.", opts: ["A. whether", "B. while", "C. when", "D. since"], ans: "A. whether" },
+      { q: "Our car broke down in the Gobi Desert, _______ we had to draw it to a garage.", opts: ["A. so", "B. or", "C. and", "D. nor"], ans: "A. so" },
+      { q: "Not only did he turn up late, _______ he also forgot his books on Asian Geography.", opts: ["A. but", "B. yet", "C. and", "D. so"], ans: "A. but" },
+      { q: "My watch has a luminous dial, _______ I can see it in the dark while coding Babylon.js scenes.", opts: ["A. so", "B. for", "C. but", "D. nor"], ans: "A. so" },
+      { q: "The sun is shining brightly, _______ the children are still in bed.", opts: ["A. but", "B. nor", "C. and", "D. so"], ans: "A. but" },
+      { q: "The news is almost certainly true _______ it is not official yet.", opts: ["A. although", "B. because", "C. so", "D. for"], ans: "A. although" },
+      { q: "I went to bed very late last night, _______ I am tired this morning.", opts: ["A. so", "B. because", "C. if", "D. but"], ans: "A. so" },
+      { q: "Kalimantan has an area of over 740,000 km², _______ it is rich in tropical rainforest biodiversity.", opts: ["A. and", "B. but", "C. nor", "D. or"], ans: "A. and" },
+      { q: "If we _______ (modify) the water shader in Three.js, the Yangtze river flow would appear more realistic.", opts: ["A. modified", "B. modify", "C. had modified", "D. will modify"], ans: "A. modified" },
+      { q: "Asia extends from above the Arctic Circle down to south of the Equator, _______ it spans diverse climate zones.", opts: ["A. so", "B. but", "C. nor", "D. or"], ans: "A. so" },
+      { q: "Is Asia's east-west width widest from the Mediterranean coast to the Pacific Ocean (approx 9,200 km)?", opts: ["A. Yes, approximately 9,200 km", "B. No, it is 5,000 km", "C. No, it is 12,000 km", "D. It is 3,000 km"], ans: "A. Yes, approximately 9,200 km" },
+      { q: "Which open-source 2D physics engine handles rigid body collisions for sand simulation in web games?", opts: ["A. Matter.js", "B. Three.js", "C. WebGL Direct", "D. Canvas2D Native"], ans: "A. Matter.js" },
+      { q: "Asia has an area of approximately 44.4 million km², _______ making it the largest continent on Earth.", opts: ["A. thus", "B. but", "C. nor", "D. or"], ans: "A. thus" },
+      { q: "If developers _______ (integrate) Babylon.js, they would easily render 3D post-processing heat waves.", opts: ["A. integrated", "B. integrate", "C. would integrate", "D. had integrated"], ans: "A. integrated" },
+      { q: "The Ural Mountains separate Europe and Asia, _______ they are considered a major geographical boundary.", opts: ["A. so", "B. but", "C. nor", "D. although"], ans: "A. so" },
+      { q: "What library is best suited for 2D WebGL sprite rendering like volcanic eruptions?", opts: ["A. PixiJS", "B. Three.js", "C. Cannon.js", "D. Ammo.js"], ans: "A. PixiJS" },
+      { q: "If a developer _______ (use) Phaser.js tilemaps, building rainforest levels would be significantly faster.", opts: ["A. used", "B. uses", "C. had used", "D. will use"], ans: "A. used" },
+      { q: "Lake Baikal is the deepest freshwater lake, _______ it holds about 20% of the world's unfrozen surface fresh water.", opts: ["A. and", "B. but", "C. yet", "D. or"], ans: "A. and" },
+      { q: "If we _______ (build) a 3D web game of Asia, Three.js and Babylon.js would be top open-source choices.", opts: ["A. built", "B. build", "C. will build", "D. have built"], ans: "A. built" }
+    ];
+
+    let currentWaypoint = 0;
+    let score = 0;
+    const completedWaypoints = new Array(30).fill(false);
+
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawMap() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Ocean Background
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grid lines
+      ctx.strokeStyle = "rgba(255,255,255,0.1)";
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // Asian Continent Landmass Outline
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(120, 100); ctx.lineTo(400, 50); ctx.lineTo(880, 70);
+      ctx.lineTo(850, 250); ctx.lineTo(650, 420); ctx.lineTo(500, 460);
+      ctx.lineTo(300, 350); ctx.lineTo(100, 320);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+
+      // Route lines
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      for (let i = 0; i < waypoints.length - 1; i++) {
+        ctx.beginPath();
+        ctx.moveTo(waypoints[i].x, waypoints[i].y);
+        ctx.lineTo(waypoints[i+1].x, waypoints[i+1].y);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+
+      // Nodes
+      waypoints.forEach((wp, idx) => {
+        const isCurrent = idx === currentWaypoint;
+        const isDone = completedWaypoints[idx];
+
+        ctx.beginPath();
+        ctx.arc(wp.x, wp.y, isCurrent ? 14 : 10, 0, Math.PI * 2);
+        
+        if (isDone) {
+          ctx.fillStyle = "#10b981"; ctx.strokeStyle = "#059669";
+        } else if (isCurrent) {
+          ctx.fillStyle = "#f59e0b"; ctx.strokeStyle = "#d97706";
+        } else {
+          ctx.fillStyle = "#475569"; ctx.strokeStyle = "#334155";
+        }
+
+        ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 9px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(idx + 1, wp.x, wp.y);
+      });
+
+      // Character Target Icon
+      const curr = waypoints[currentWaypoint];
+      ctx.font = "18px sans-serif";
+      ctx.fillText("🎮", curr.x, curr.y - 20);
+    }
+
+    canvas.addEventListener('click', function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      waypoints.forEach((wp, idx) => {
+        const dist = Math.hypot(clickX - wp.x, clickY - wp.y);
+        if (dist <= 18) {
+          if (idx === currentWaypoint) {
+            openQuizModal(idx);
+          } else if (completedWaypoints[idx]) {
+            alert(`Waypoint ${idx + 1}: ${wp.name} completed!`);
+          } else {
+            alert(`Waypoint ${idx + 1} locked. Complete Waypoint ${currentWaypoint + 1} first!`);
+          }
+        }
+      });
+    });
+
+    function openQuizModal(idx) {
+      const q = questions[idx];
+      const wp = waypoints[idx];
+
+      document.getElementById('quiz-badge').innerText = `${wp.engine} | ${wp.concept}`;
+      document.getElementById('quiz-title').innerText = `Challenge ${idx + 1}: ${wp.name}`;
+      document.getElementById('quiz-question').innerText = q.q;
+
+      const body = document.getElementById('quiz-body');
+      body.innerHTML = '';
+
+      const grid = document.createElement('div');
+      grid.className = 'options-grid';
+      q.opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opt';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt);
+        grid.appendChild(btn);
+      });
+      body.appendChild(grid);
+
+      document.getElementById('quiz-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(userAns) {
+      const q = questions[currentWaypoint];
+      if (userAns === q.ans) {
+        alert(`✨ Correct! +50 Points.`);
+        completedWaypoints[currentWaypoint] = true;
+        score += 50;
+
+        if (currentWaypoint < waypoints.length - 1) {
+          currentWaypoint++;
+        } else {
+          alert(`🎉 CONGRATULATIONS! You completed all 30 Asia Game Tech Challenges! Final Score: ${score}`);
+        }
+        closeModal();
+        updateUI();
+        drawMap();
+      } else {
+        alert(`❌ Incorrect. Try again!`);
+      }
+    }
+
+    function closeModal() { document.getElementById('quiz-modal').style.display = 'none'; }
+
+    function updateUI() {
+      document.getElementById('loc-name').innerText = `${currentWaypoint + 1}. ${waypoints[currentWaypoint].name}`;
+      document.getElementById('progress-count').innerText = completedWaypoints.filter(Boolean).length;
+      document.getElementById('score-val').innerText = score;
+    }
+
+    window.onload = function() {
+      updateUI();
+      drawMap();
+    };
+  </script>
+</body>
+</html>
