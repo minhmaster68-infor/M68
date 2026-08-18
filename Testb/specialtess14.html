@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sci-English Eco-Farm Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #e0f2fe;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 { color: #166534; margin-bottom: 5px; }
+    .stats-bar {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 20px;
+    }
+    
+    /* Farm Canvas Area */
+    #farm-grid {
+      width: 720px;
+      min-height: 400px;
+      background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+      border: 5px solid #15803d;
+      border-radius: 16px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    /* Plot Slot */
+    .plot {
+      width: 120px;
+      height: 120px;
+      background: #d97706;
+      border: 3px dashed #78350f;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .plot:hover {
+      transform: scale(1.05);
+      background: #b45309;
+    }
+    .plot-title { font-size: 12px; color: #fff; font-weight: bold; margin-top: 5px; }
+
+    /* Custom Unique Visual Plants (CSS Art) */
+    .plant { font-size: 40px; animation: pop 0.4s ease-out; }
+    @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+    /* Modal Overlay */
+    #quiz-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      width: 480px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: left;
+    }
+    .modal-content h3 { color: #15803d; margin-top: 0; }
+    .btn {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      margin: 6px 0;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #16a34a; }
+    .btn-ai { background: #3b82f6; }
+    .btn-ai:hover { background: #2563eb; }
+    .btn-close { background: #ef4444; margin-top: 15px; }
+    .btn-close:hover { background: #dc2626; }
+    
+    #speech-status {
+      font-size: 13px;
+      color: #64748b;
+      font-style: italic;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌱 Science & English Eco-Farm</h1>
+  <p>Plant crops by solving physics & English grammar challenges to expand your farm!</p>
+  
+  <div class="stats-bar">
+    Crops Grown: <span id="crop-count">0</span>/5 🌾 | Water: <span id="water-count">0</span> 💧 | Coins: <span id="coin-count">0</span> 🪙
+  </div>
+
+  <!-- Farm Land Grid -->
+  <div id="farm-grid">
+    <div class="plot" onclick="triggerChallenge(0)">
+      <span id="plant-0" class="plant">❓</span>
+      <span class="plot-title">Plot 1</span>
+    </div>
+    <div class="plot" onclick="triggerChallenge(1)">
+      <span id="plant-1" class="plant">🔒</span>
+      <span class="plot-title">Plot 2</span>
+    </div>
+    <div class="plot" onclick="triggerChallenge(2)">
+      <span id="plant-2" class="plant">🔒</span>
+      <span class="plot-title">Plot 3</span>
+    </div>
+    <div class="plot" onclick="triggerChallenge(3)">
+      <span id="plant-3" class="plant">🔒</span>
+      <span class="plot-title">Plot 4</span>
+    </div>
+    <div class="plot" onclick="triggerChallenge(4)">
+      <span id="plant-4" class="plant">🔒</span>
+      <span class="plot-title">Plot 5</span>
+    </div>
+  </div>
+
+  <!-- Quiz & AI Reading Modal -->
+  <div id="quiz-modal">
+    <div class="modal-content">
+      <h3 id="quiz-category">Challenge</h3>
+      <p id="quiz-question" style="font-size: 16px; font-weight: 600;">Question goes here...</p>
+      
+      <div id="quiz-options"></div>
+
+      <hr style="border: 0.5px solid #e2e8f0; margin: 15px 0;">
+
+      <h4>🎙️ AI Reading & Pronunciation Assessment</h4>
+      <p style="font-size: 13px; color: #475569;">Read the question aloud to earn bonus coins!</p>
+      <button class="btn btn-ai" onclick="startSpeechRecognition()">🎙️ Read Question Aloud</button>
+      <div id="speech-status">Click above and start speaking in English...</div>
+
+      <button class="btn btn-close" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPlotIndex = null;
+    let cropsGrown = 0;
+    let water = 0;
+    let coins = 0;
+
+    // Interesting Crop Visuals and Names
+    const cropVisuals = [
+      { name: "Glowing Speed-Berry", icon: "🫐⚡" },
+      { name: "Atmosphere Flower", icon: "☁️🌸" },
+      { name: "Volcanic Tomato", icon: "🌋🍅" },
+      { name: "Quantum Neon Wheat", icon: "🌾✨" },
+      { name: "Cosmic Galaxy Eggplant", icon: "🌌🍆" }
+    ];
+
+    // Quiz Questions based on image content (Physics & English Grammar)
+    const questions = [
+      {
+        category: "Physics & Speed Calculation",
+        q: "A speed camera records a truck traveling 10 meters in 0.50 seconds. What is its speed in km/h?",
+        options: ["36 km/h", "50 km/h", "72 km/h", "100 km/h"],
+        ans: "72 km/h"
+      },
+      {
+        category: "English Prepositions (Science)",
+        q: "Our atmosphere mainly consists _____ nitrogen, oxygen, argon, and carbon dioxide.",
+        options: ["up", "to", "of", "in"],
+        ans: "of"
+      },
+      {
+        category: "English Prepositions (Time)",
+        q: "The teacher got to school _____ time so that he could have a cup of coffee before his first class.",
+        options: ["on", "in", "at", "for"],
+        ans: "in"
+      },
+      {
+        category: "English Prepositions (Trends)",
+        q: "The number of foreign companies investing in developing countries is _____ the increase.",
+        options: ["in - in", "on - on", "on - in", "in - on"],
+        ans: "in - on"
+      },
+      {
+        category: "Physics & Traffic Safety",
+        q: "According to traffic safety guidelines, if a car travels at v = 25 m/s (90 km/h), what is the minimum safe distance?",
+        options: ["35 m", "55 m", "70 m", "100 m"],
+        ans: "70 m"
+      }
+    ];
+
+    // Status tracking for plot completion
+    const plotStates = [false, false, false, false, false];
+
+    function triggerChallenge(index) {
+      if (plotStates[index]) {
+        alert(`You have already grown a ${cropVisuals[index].name} in Plot ${index + 1}!`);
+        return;
+      }
+
+      if (index > 0 && !plotStates[index - 1]) {
+        alert("Please unlock and grow crops in the previous plot first!");
+        return;
+      }
+
+      currentPlotIndex = index;
+      const qData = questions[index];
+
+      document.getElementById('quiz-category').innerText = `Plot ${index + 1}: ${qData.category}`;
+      document.getElementById('quiz-question').innerText = qData.q;
+      
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = '';
+
+      qData.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById('speech-status').innerText = "Click above and start speaking in English...";
+      document.getElementById('quiz-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(selectedOption) {
+      const qData = questions[currentPlotIndex];
+      if (selectedOption === qData.ans) {
+        alert(`Correct! You earned +50 Water and planted a ${cropVisuals[currentPlotIndex].name}!`);
+        
+        // Mark as planted and update visual element
+        plotStates[currentPlotIndex] = true;
+        document.getElementById(`plant-${currentPlotIndex}`).innerText = cropVisuals[currentPlotIndex].icon;
+        
+        // Unlock next plot visual icon if available
+        if (currentPlotIndex + 1 < plotStates.length && !plotStates[currentPlotIndex + 1]) {
+          document.getElementById(`plant-${currentPlotIndex + 1}`).innerText = "🌱";
+        }
+
+        // Stats update
+        cropsGrown++;
+        water += 50;
+        document.getElementById('crop-count').innerText = cropsGrown;
+        document.getElementById('water-count').innerText = water;
+
+        closeModal();
+      } else {
+        alert("Incorrect answer. Please review your science/English knowledge and try again!");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('quiz-modal').style.display = 'none';
+    }
+
+    // AI Web Speech API for Reading Verification
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech Recognition API is not supported in this browser. Try Chrome or Edge.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      
+      document.getElementById('speech-status').innerText = "Listening... Speak the question out loud!";
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('speech-status').innerText = `AI Heard: "${transcript}"`;
+
+        // Check pronunciation matching against basic question keywords
+        const currentQuestion = questions[currentPlotIndex].q.toLowerCase();
+        const words = transcript.toLowerCase().split(" ");
+        let matches = 0;
+
+        words.forEach(w => {
+          if (w.length > 3 && currentQuestion.includes(w)) {
+            matches++;
+          }
+        });
+
+        if (matches >= 2) {
+          alert("AI Reading Check Passed! Great pronunciation! +20 Coins 🪙");
+          coins += 20;
+          document.getElementById('coin-count').innerText = coins;
+        } else {
+          alert("AI Assessment: Try speaking clearer or closer to the microphone.");
+        }
+      };
+
+      recognition.onerror = function(event) {
+        document.getElementById('speech-status').innerText = "Error recognizing speech. Try again.";
+      };
+    }
+  </script>
+</body>
+</html>
