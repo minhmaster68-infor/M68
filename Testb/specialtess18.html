@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Climate Quest 3D - 20 Boss Battle Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #ui-header {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 1px solid #38bdf8;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 { font-size: 18px; color: #38bdf8; margin-bottom: 4px; }
+    .status-bar { font-size: 13px; color: #cbd5e1; display: flex; gap: 15px; }
+    .highlight { color: #f59e0b; font-weight: bold; }
+
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Modal Quiz Overlay */
+    .modal-overlay {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 650px;
+      max-width: 90%;
+      background: rgba(15, 23, 42, 0.92);
+      border: 2px solid #38bdf8;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+
+    .boss-tag {
+      display: inline-block;
+      background: #ec4899;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .question-box {
+      font-size: 15px;
+      color: #f1f5f9;
+      margin-bottom: 15px;
+      line-height: 1.4;
+      background: #1e293b;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 4px solid #38bdf8;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-opt {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .btn-opt:hover {
+      background: #0284c7;
+      border-color: #38bdf8;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
+      text-align: center;
+    }
+    .fb-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .fb-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+  </style>
+  <!-- Three.js Library for 3D Game Engine Canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <div id="ui-header">
+    <h1>⚔️ Climate Quest 3D: Adorable Boss Battle</h1>
+    <div class="status-bar">
+      <div>Stage: <span id="stage-num" class="highlight">1 / 20</span></div>
+      <div>Score: <span id="score-val" class="highlight">0</span> pts</div>
+      <div>Boss HP: <span id="boss-hp" class="highlight">100%</span></div>
+    </div>
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="boss-tag" id="boss-title">STAGE 1: CUTE FROST BUNNY</div>
+    <div class="question-box" id="question-text">Loading question...</div>
+    <div class="options-grid" id="options-container"></div>
+    <div class="feedback" id="feedback-box"></div>
+  </div>
+
+  <script>
+    // 20 Geography Questions focused on European & Global Climate (Based on Geography Curriculum)
+    const questionsData = [
+      {
+        boss: "Stage 1: Fluffy Tundra Bunny 🐰",
+        q: "Which climate zone dominates Northern Scandinavia with very cold winters and short cool summers?",
+        opts: ["A. Tundra Climate", "B. Mediterranean Climate", "C. Arid Desert Climate"],
+        ans: "A. Tundra Climate"
+      },
+      {
+        boss: "Stage 2: Chilly Penguin Prince 🐧",
+        q: "What type of vegetation is primarily found in the Northern European Tundra zone?",
+        opts: ["A. Dense Tropical Rainforest", "B. Mosses, Lichens, and Low Shrubs", "C. Mediterranean Hardwood Forests"],
+        ans: "B. Mosses, Lichens, and Low Shrubs"
+      },
+      {
+        boss: "Stage 3: Tiny Taiga Fox 🦊",
+        q: "The Coniferous Forest (Taiga) region in Central and Northern Europe is mainly associated with which climate?",
+        opts: ["A. Subarctic / Cold Temperate Climate", "B. Equatorial Climate", "C. Oceanic Climate"],
+        ans: "A. Subarctic / Cold Temperate Climate"
+      },
+      {
+        boss: "Stage 4: Gentle Glacier Bear 🐻",
+        q: "In Western Europe (e.g., Glasgow, UK), winters are mild and summers are cool with rain year-round. What climate is this?",
+        opts: ["A. Temperate Continental Climate", "B. Temperate Maritime / Oceanic Climate", "C. Mediterranean Climate"],
+        ans: "B. Temperate Maritime / Oceanic Climate"
+      },
+      {
+        boss: "Stage 5: Sunny Lemon Chick 🐥",
+        q: "Southern Europe enjoys warm, dry summers and mild, rainy winters. What is this climate type called?",
+        opts: ["A. Mediterranean Subtropical Climate", "B. Subarctic Climate", "C. Polar Ice Cap Climate"],
+        ans: "A. Mediterranean Subtropical Climate"
+      },
+      {
+        boss: "Stage 6: Berry Steppe Hamster 🐹",
+        q: "Eastern Europe (e.g., Odesa) experiences hot summers, cold winters, and moderate/low rainfall. What climate is this?",
+        opts: ["A. Temperate Continental Climate", "B. Maritime Climate", "C. Equatorial Rainforest Climate"],
+        ans: "A. Temperate Continental Climate"
+      },
+      {
+        boss: "Stage 7: Windy Cloud Kitty 🐱",
+        q: "In a climate diagram, what does the continuous blue line or blue bar graph usually represent?",
+        opts: ["A. Monthly Temperature", "B. Monthly Precipitation (Rainfall)", "C. Wind Speed"],
+        ans: "B. Monthly Precipitation (Rainfall)"
+      },
+      {
+        boss: "Stage 8: Red Sun Dragonette 🐲",
+        q: "In a climate diagram, what does the continuous red curved line represent?",
+        opts: ["A. Monthly Average Temperature", "B. Total Annual Rainfall", "C. Elevation above Sea Level"],
+        ans: "A. Monthly Average Temperature"
+      },
+      {
+        boss: "Stage 9: Leafy Steppe Panda 🐼",
+        q: "Which biome featuring fertile black soil (Chernozem) and short grasses is typical in Eastern European continental areas?",
+        opts: ["A. Temperate Steppe / Grassland", "B. Tropical Savanna", "C. Alpine Meadow"],
+        ans: "A. Temperate Steppe / Grassland"
+      },
+      {
+        boss: "Stage 10: Olive Branch Turtle 🐢",
+        q: "Sclerophyllous forests and drought-resistant shrubs (Maquis) are characteristic of which European vegetation zone?",
+        opts: ["A. Mediterranean Zone", "B. Tundra Zone", "C. Taiga Zone"],
+        ans: "A. Mediterranean Zone"
+      },
+      {
+        boss: "Stage 11: Frosty Puff Seal 🦭",
+        q: "Which warm ocean current heavily moderates Western European weather, keeping winter temperatures relatively mild?",
+        opts: ["A. North Atlantic Drift / Gulf Stream", "B. Labrador Cold Current", "C. California Current"],
+        ans: "A. North Atlantic Drift / Gulf Stream"
+      },
+      {
+        boss: "Stage 12: Pinecone Squirrel 🐿️",
+        q: "Needle-leaf evergreen trees like pine, spruce, and fir dominate which biome?",
+        opts: ["A. Temperate Coniferous Forest", "B. Broadleaf Deciduous Forest", "C. Savannah Forest"],
+        ans: "A. Temperate Coniferous Forest"
+      },
+      {
+        boss: "Stage 13: Raindrop Sloth 🦥",
+        q: "Glasgow (UK) receives high annual precipitation (around 1,228 mm). Which wind system brings this moist oceanic air?",
+        opts: ["A. Westerlies (Prevailing Westerly Winds)", "B. Polar Easterlies", "C. Trade Winds"],
+        ans: "A. Westerlies (Prevailing Westerly Winds)"
+      },
+      {
+        boss: "Stage 14: Sweet Amber Koala 🐨",
+        q: "Why do Mediterranean climates experience summer droughts?",
+        opts: ["A. High-pressure subtropical belts shift north in summer", "B. Ocean currents freeze over", "C. Constant heavy snowfall"],
+        ans: "A. High-pressure subtropical belts shift north in summer"
+      },
+      {
+        boss: "Stage 15: Coral Starfish Biter ⭐️",
+        q: "Rome (Italy) records an average annual temperature around 15.8°C with dry summers. This fits which region?",
+        opts: ["A. Mediterranean Basin", "B. Arctic Circle", "C. Scandinavian Mountains"],
+        ans: "A. Mediterranean Basin"
+      },
+      {
+        boss: "Stage 16: Mountain Alpaca 🦙",
+        q: "How does climate change as you ascend high mountains like the Alps or Pyrenees?",
+        opts: ["A. Temperature decreases and vegetation forms vertical zones", "B. Temperature increases rapidly", "C. Rainfall completely stops"],
+        ans: "A. Temperature decreases and vegetation forms vertical zones"
+      },
+      {
+        boss: "Stage 17: Golden Desert Fennec 🦊",
+        q: "Compared to oceanic regions, inland continental climates exhibit:",
+        opts: ["A. Larger temperature ranges between summer and winter", "B. Equal rainfall in every month", "C. Warm ocean breeze year-round"],
+        ans: "A. Larger temperature ranges between summer and winter"
+      },
+      {
+        boss: "Stage 18: Snow Owl Whiz 🦉",
+        q: "Which wild animals are commonly adapted to the European temperate zone forests?",
+        opts: ["A. Brown Bears, Lynx, Wolves, and Deer", "B. Kangaroos and Ostriches", "C. Camel and Desert Iguana"],
+        ans: "A. Brown Bears, Lynx, Wolves, and Deer"
+      },
+      {
+        boss: "Stage 19: Meadow Sheep Lamb 🐑",
+        q: "Deciduous broadleaf forests (oak, beech) shed their leaves in autumn. Where are they predominantly located in Europe?",
+        opts: ["A. Western and Central Europe", "B. Far North Tundra", "C. Sahara Fringe"],
+        ans: "A. Western and Central Europe"
+      },
+      {
+        boss: "Stage 20: Cosmic Galaxy Kitten 🐱‍🚀",
+        q: "FINAL BOSS: What is the main factor determining Europe's overall mild climate compared to other regions at similar latitudes?",
+        opts: ["A. Surrounding warm seas and prevailing Westerly winds", "B. Volcanic active mountain ranges", "C. High desert winds"],
+        ans: "A. Surrounding warm seas and prevailing Westerly winds"
+      }
+    ];
+
+    let currentStage = 0;
+    let score = 0;
+    let bossHp = 100;
+
+    // --- THREE.JS 3D ENGINE & CUTE BOSS RENDERING ---
+    let scene, camera, renderer, bossGroup, earsMesh, eyesGroup;
+
+    function init3DEngine() {
+      const container = document.getElementById('canvas-container');
+      
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0f172a);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 2, 8);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(5, 10, 7);
+      dirLight.castShadow = true;
+      scene.add(dirLight);
+
+      const pointLight = new THREE.PointLight(0x38bdf8, 1, 10);
+      pointLight.position.set(0, 0, 3);
+      scene.add(pointLight);
+
+      // Cute Platform
+      const platformGeo = new THREE.CylinderGeometry(2.5, 2.8, 0.4, 32);
+      const platformMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 });
+      const platform = new THREE.Mesh(platformGeo, platformMat);
+      platform.position.y = -1.2;
+      scene.add(platform);
+
+      // Create Initial Boss
+      createCute3DBoss(currentStage);
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    // Procedural Cute Boss Model Engineer
+    function createCute3DBoss(stageIdx) {
+      if (bossGroup) scene.remove(bossGroup);
+
+      bossGroup = new THREE.Group();
+
+      // Colors palette per boss
+      const colors = [
+        0xf472b6, 0x38bdf8, 0xfacc15, 0x4ade80, 0xa78bfa,
+        0xf97316, 0x38bdf8, 0xef4444, 0x10b981, 0x84cc16,
+        0x06b6d4, 0xd97706, 0x6366f1, 0xec4899, 0x14b8a6,
+        0x8b5cf6, 0xeab308, 0x64748b, 0xf43f5e, 0xa855f7
+      ];
+      const mainColor = colors[stageIdx % colors.length];
+
+      // Cute Round Body
+      const bodyGeo = new THREE.SphereGeometry(1.2, 32, 32);
+      const bodyMat = new THREE.MeshStandardMaterial({ color: mainColor, roughness: 0.2 });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      bossGroup.add(body);
+
+      // Big Cute Eyes
+      eyesGroup = new THREE.Group();
+      const eyeGeo = new THREE.SphereGeometry(0.18, 16, 16);
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+
+      const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+      leftEye.position.set(-0.35, 0.2, 1.05);
+      const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+      rightEye.position.set(0.35, 0.2, 1.05);
+
+      // Eye Highlights (Kawaii Shine)
+      const shineGeo = new THREE.SphereGeometry(0.06, 8, 8);
+      const shineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const leftShine = new THREE.Mesh(shineGeo, shineMat);
+      leftShine.position.set(-0.3, 0.25, 1.2);
+      const rightShine = new THREE.Mesh(shineGeo, shineMat);
+      rightShine.position.set(0.4, 0.25, 1.2);
+
+      eyesGroup.add(leftEye, rightEye, leftShine, rightShine);
+      bossGroup.add(eyesGroup);
+
+      // Cute Rosy Cheeks
+      const cheekGeo = new THREE.SphereGeometry(0.12, 16, 16);
+      const cheekMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+      const leftCheek = new THREE.Mesh(cheekGeo, cheekMat);
+      leftCheek.position.set(-0.55, -0.05, 0.98);
+      const rightCheek = new THREE.Mesh(cheekGeo, cheekMat);
+      rightCheek.position.set(0.55, -0.05, 0.98);
+      bossGroup.add(leftCheek, rightCheek);
+
+      // Cute Ears (Bunny / Cat style)
+      earsMesh = new THREE.Group();
+      const earGeo = new THREE.ConeGeometry(0.35, 0.9, 16);
+      const earMat = new THREE.MeshStandardMaterial({ color: mainColor, roughness: 0.3 });
+
+      const leftEar = new THREE.Mesh(earGeo, earMat);
+      leftEar.position.set(-0.5, 1.4, 0);
+      leftEar.rotation.z = 0.2;
+
+      const rightEar = new THREE.Mesh(earGeo, earMat);
+      rightEar.position.set(0.5, 1.4, 0);
+      rightEar.rotation.z = -0.2;
+
+      earsMesh.add(leftEar, rightEar);
+      bossGroup.add(earsMesh);
+
+      // Tiny Feet
+      const footGeo = new THREE.SphereGeometry(0.25, 16, 16);
+      const footMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      const leftFoot = new THREE.Mesh(footGeo, footMat);
+      leftFoot.position.set(-0.5, -1.0, 0.4);
+      const rightFoot = new THREE.Mesh(footGeo, footMat);
+      rightFoot.position.set(0.5, -1.0, 0.4);
+      bossGroup.add(leftFoot, rightFoot);
+
+      bossGroup.position.y = 0.2;
+      scene.add(bossGroup);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Cute Floating Idle Animation
+      if (bossGroup) {
+        bossGroup.position.y = 0.2 + Math.sin(Date.now() * 0.003) * 0.15;
+        bossGroup.rotation.y += 0.008;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // --- GAME LOGIC & UI ---
+    function loadQuizStage(stageIdx) {
+      const data = questionsData[stageIdx];
+      document.getElementById('boss-title').innerText = data.boss;
+      document.getElementById('question-text').innerText = data.q;
+
+      const optsContainer = document.getElementById('options-container');
+      optsContainer.innerHTML = '';
+
+      document.getElementById('feedback-box').style.display = 'none';
+
+      data.opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opt';
+        btn.innerText = opt;
+        btn.onclick = () => submitAnswer(opt, data.ans);
+        optsContainer.appendChild(btn);
+      });
+
+      createCute3DBoss(stageIdx);
+      bossHp = 100;
+      updateUI();
+    }
+
+    function submitAnswer(selected, correct) {
+      const fb = document.getElementById('feedback-box');
+      fb.style.display = 'block';
+
+      if (selected === correct) {
+        score += 50;
+        bossHp = 0;
+        fb.className = 'feedback fb-success';
+        fb.innerText = "✨ Excellent! Critical Hit on Cute Boss!";
+
+        // Hurt Animation (Shake Boss)
+        bossGroup.position.x = 0.3;
+        setTimeout(() => bossGroup.position.x = -0.3, 100);
+        setTimeout(() => bossGroup.position.x = 0, 200);
+
+        setTimeout(() => {
+          if (currentStage < questionsData.length - 1) {
+            currentStage++;
+            loadQuizStage(currentStage);
+          } else {
+            alert(`🎉 CONGRATULATIONS! You defeated all 20 Adorable Bosses and Mastered Climate Geography! Final Score: ${score}`);
+          }
+        }, 1200);
+
+      } else {
+        fb.className = 'feedback fb-error';
+        fb.innerText = "❌ Incorrect answer! Try again to defeat the boss.";
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('stage-num').innerText = `${currentStage + 1} / 20`;
+      document.getElementById('score-val').innerText = score;
+      document.getElementById('boss-hp').innerText = `${bossHp}%`;
+    }
+
+    window.onload = () => {
+      init3DEngine();
+      loadQuizStage(0);
+    };
+  </script>
+</body>
+</html>
