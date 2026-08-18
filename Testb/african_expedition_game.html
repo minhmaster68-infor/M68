@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>African Expedition: History, Geography & English Mastery</title>
+  <style>
+    :root {
+      --primary: #854d0e;
+      --primary-dark: #713f12;
+      --secondary: #0284c7;
+      --bg-color: #fefce8;
+      --panel-bg: #ffffff;
+      --text-main: #1e293b;
+      --accent: #eab308;
+      --success: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      background: #fef08a;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 15px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Map Board Canvas Container */
+    .map-wrapper {
+      position: relative;
+      width: 100%;
+      background: #38bdf8; /* Ocean blue background */
+      border: 4px solid var(--primary);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    #map-canvas {
+      width: 100%;
+      height: 520px;
+      display: block;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: var(--panel-bg);
+      width: 580px;
+      max-width: 92%;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 6px;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .badge-geo { background: #d97706; }
+    .badge-grammar { background: #0284c7; }
+
+    .modal-card h3 {
+      font-size: 18px;
+      color: #0f172a;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .question-text {
+      font-size: 15px;
+      color: #334155;
+      margin-bottom: 18px;
+      line-height: 1.5;
+      background: #f8fafc;
+      padding: 12px;
+      border-left: 4px solid var(--secondary);
+      border-radius: 4px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-opt {
+      background: #f1f5f9;
+      border: 2px solid #e2e8f0;
+      color: #1e293b;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-opt:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-submit:hover { background: #15803d; }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: var(--secondary);
+    }
+
+    .speech-box {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-speech {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .btn-speech:hover { background: #0369a1; }
+
+    .speech-status {
+      font-size: 12px;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .btn-close {
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      float: right;
+      margin-top: 10px;
+    }
+    .btn-close:hover { background: #e2e8f0; }
+
+    /* Victory Modal Banner */
+    .victory-box {
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .victory-box h2 {
+      color: #d97706;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌍 African Expedition: History, Geography & English Challenge</h1>
+    <div class="subtitle">Navigate across the map of Africa by mastering geography, climate features, and English grammar!</div>
+  </header>
+
+  <div class="game-container">
+    <div class="stats-bar">
+      <div class="stat-item">📍 Location: <span id="loc-name">1. Sahara Desert</span></div>
+      <div class="stat-item">⭐ Completed: <span id="progress-count">0</span> / 15 Waypoints</div>
+      <div class="stat-item">🪙 Expedition Score: <span id="score-val">0</span> pts</div>
+    </div>
+
+    <div class="map-wrapper">
+      <canvas id="map-canvas" width="900" height="520"></canvas>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="quiz-modal" class="modal-overlay">
+    <div class="modal-card">
+      <span id="quiz-badge" class="badge badge-geo">Geography</span>
+      <h3 id="quiz-title">Waypoint Challenge</h3>
+      <div id="quiz-question" class="question-text"></div>
+      
+      <div id="quiz-body"></div>
+
+      <div class="speech-box">
+        <button class="btn-speech" onclick="startSpeechRecognition()">🎙️ Oral Challenge: Read aloud for +20 Bonus Coins</button>
+        <div id="speech-status" class="speech-status">Click to practice English pronunciation...</div>
+      </div>
+
+      <button class="btn-close" onclick="closeModal()">Dismiss</button>
+    </div>
+  </div>
+
+  <script>
+    // Map Waypoints Definition (X, Y coords mapped visually over stylized Africa continent layout)
+    const waypoints = [
+      { id: 1, name: "Sahara Desert", x: 420, y: 120, icon: "🏜️", desc: "Arid & Hyper-Arid Climate Zone" },
+      { id: 2, name: "Mount Kilimanjaro", x: 620, y: 320, icon: "🏔️", desc: "5,895m dormant volcano with permanent ice cap" },
+      { id: 3, name: "Congo River Basin", x: 450, y: 300, icon: "🌊", desc: "Equatorial Rainforest & River System" },
+      { id: 4, name: "Kalahari Desert", x: 480, y: 440, icon: "🌵", desc: "Semi-arid sandy savanna in Southern Africa" },
+      { id: 5, name: "Madagascar Island", x: 700, y: 410, icon: "🏝️", desc: "Unique biodiversity & tropical climate" },
+      { id: 6, name: "Ethiopian Highlands", x: 600, y: 220, icon: "⛰️", desc: "Horn of Africa high plateau terrain" },
+      { id: 7, name: "Nile River Valley", x: 530, y: 150, icon: "🛶", desc: "World's longest river flowing north into Mediterranean" },
+      { id: 8, name: "Atlas Mountains", x: 260, y: 90, icon: "🏔️", desc: "Northwest mountain range separating coast from Sahara" },
+      { id: 9, name: "Gulf of Guinea", x: 330, y: 260, icon: "⛵", desc: "Equatorial Atlantic coastal zone" },
+      { id: 10, name: "Great Rift Valley", x: 570, y: 270, icon: "🌋", desc: "Tectonic trench system across Eastern Africa" },
+      { id: 11, name: "Cape of Good Hope", x: 440, y: 490, icon: "🏰", desc: "Southernmost tip of African peninsula" },
+      { id: 12, name: "Lake Victoria", x: 550, y: 290, icon: "⛵", desc: "Largest tropical lake in the world" },
+      { id: 13, name: "Somali Peninsula", x: 680, y: 230, icon: "🐪", desc: "Arid coastal scrubland and trade gateway" },
+      { id: 14, name: "Sahel Transition Zone", x: 380, y: 180, icon: "🌾", desc: "Ecoregion between Sahara and Savanna" },
+      { id: 15, name: "Victoria Falls", x: 520, y: 390, icon: "🌊", desc: "Massive waterfall on the Zambezi River" }
+    ];
+
+    // 15 Challenging Integrated Questions (Geography, History & Advanced English Grammar / Conditionals)
+    const questions = [
+      // 1. Sahara Desert
+      {
+        type: "mcq",
+        category: "Geography & Grammar",
+        q: "If the Sahara Desert ________ (receive) sufficient rainfall each year, dense vegetation ________ (grow) across Northern Africa.",
+        options: [
+          "A. received / would grow",
+          "B. receives / will grow",
+          "C. had received / would have grown",
+          "D. receives / would grow"
+        ],
+        ans: "A. received / would grow"
+      },
+      // 2. Mount Kilimanjaro
+      {
+        type: "mcq",
+        category: "Geography & Science",
+        q: "Mount Kilimanjaro stands at 5,895 meters above sea level. Why does its summit remain covered in ice and snow despite being located near the Equator?",
+        options: [
+          "A. Ocean currents cool the mountain peak.",
+          "B. Temperatures decrease by approximately 6.5°C for every 1,000 meters of elevation.",
+          "C. It is located in the temperate climate zone.",
+          "D. Dense rainforest clouds block all solar radiation."
+        ],
+        ans: "B. Temperatures decrease by approximately 6.5°C for every 1,000 meters of elevation."
+      },
+      // 3. Congo Basin
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Complete the Type 2 conditional sentence: 'If local authorities ________ (not protect) the Congo Basin rainforest, many rare species would lose their habitat.'",
+        ans: "didn't protect"
+      },
+      // 4. Kalahari Desert
+      {
+        type: "mcq",
+        category: "Geography & Mineral Resources",
+        q: "Which group of high-value natural mineral resources is abundantly concentrated in the northern and southern regions of the African continent?",
+        options: [
+          "A. Coal, timber, and rubber",
+          "B. Copper, gold, uranium, petroleum, and diamonds",
+          "C. Natural gas and bauxite exclusively",
+          "D. Tin and iron ore only"
+        ],
+        ans: "B. Copper, gold, uranium, petroleum, and diamonds"
+      },
+      // 5. Madagascar
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Fill in the blank: 'If scientists ________ (study) Madagascar's isolated ecosystem more closely, they would discover new plant compounds.'",
+        ans: "studied"
+      },
+      // 6. Ethiopian Highlands
+      {
+        type: "mcq",
+        category: "English & Geography Integration",
+        q: "Choose the correct sentence combining high-altitude plateau geography with correct conditional structure:",
+        options: [
+          "A. If the Ethiopian Highlands were lower, the surrounding regions would be much hotter and drier.",
+          "B. If the Ethiopian Highlands are lower, the surrounding regions would be much hotter.",
+          "C. If the Ethiopian Highlands were lower, the surrounding regions will be drier.",
+          "D. If the Ethiopian Highlands would be lower, regions were hotter."
+        ],
+        ans: "A. If the Ethiopian Highlands were lower, the surrounding regions would be much hotter and drier."
+      },
+      // 7. Nile River Valley
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Complete the sentence with the correct verb form: 'Unless the Nile River ________ (flow) through Egypt, ancient civilization wouldn't have flourished in the desert.' (Type 2 form: 'If the Nile River didn't flow...')",
+        ans: "flowed"
+      },
+      // 8. Atlas Mountains
+      {
+        type: "mcq",
+        category: "Geography & Topography",
+        q: "How does the African landscape primarily differ from other continents in terms of average plateau elevation?",
+        options: [
+          "A. It consists mostly of low-lying coastal river plains below 100 meters.",
+          "B. It is a massive high plateau with an average elevation of ~750m, fractured by deep rift valleys in the east.",
+          "C. It is dominated by continuous linear mountain chains like the Andes.",
+          "D. It is entirely covered by glacial depressions."
+        ],
+        ans: "B. It is a massive high plateau with an average elevation of ~750m, fractured by deep rift valleys in the east."
+      },
+      // 9. Gulf of Guinea
+      {
+        type: "mcq",
+        category: "English Grammar",
+        q: "If sailors ________ (navigate) along the warm Guinea Current without a compass, they ________ easily get lost.",
+        options: [
+          "A. navigated / would",
+          "B. navigate / would",
+          "C. navigated / will",
+          "D. had navigated / would"
+        ],
+        ans: "A. navigated / would"
+      },
+      // 10. Great Rift Valley
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Complete the sentence: 'If tectonic forces ________ (crack) the African crust further in the future, a new ocean basin would eventually form.'",
+        ans: "cracked"
+      },
+      // 11. Cape of Good Hope
+      {
+        type: "mcq",
+        category: "Geography & Ocean Currents",
+        q: "What impact do the warm Agulhas Current and cold Benguela Current have on Southern Africa's coastal climate?",
+        options: [
+          "A. They make the region completely uninhabitable.",
+          "B. They create distinct coastal climate zones and influence rainfall patterns along the East and West coasts.",
+          "C. They cause year-round snowfall at ocean level.",
+          "D. They eliminate all wind currents."
+        ],
+        ans: "B. They create distinct coastal climate zones and influence rainfall patterns along the East and West coasts."
+      },
+      // 12. Lake Victoria
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Fill in the blank: 'If I ________ (be) an explorer visiting Lake Victoria, I would record the endemic fish species.'",
+        ans: "were"
+      },
+      // 13. Somali Peninsula
+      {
+        type: "mcq",
+        category: "Geography & Climate Belts",
+        q: "Which climatic belt covers the central area around the Equator in Africa, characterized by high temperatures and heavy rainfall year-round?",
+        options: [
+          "A. Desert / Arid Belt",
+          "B. Equatorial Climate Belt",
+          "C. Subtropical Mediterranean Belt",
+          "D. Temperate Highland Belt"
+        ],
+        ans: "B. Equatorial Climate Belt"
+      },
+      // 14. Sahel Transition Zone
+      {
+        type: "fill",
+        category: "English Grammar",
+        q: "Complete the sentence: 'If nomadic herders ________ (overgraze) the fragile grasslands, desertification would spread rapidly.'",
+        ans: "overgrazed"
+      },
+      // 15. Victoria Falls
+      {
+        type: "mcq",
+        category: "English Grammar Mastery",
+        q: "Which sentence correctly uses the subjunctive mood (Type 2 Conditional) for an unreal situation at Victoria Falls?",
+        options: [
+          "A. If Victoria Falls was wider, it will be the largest curtain of falling water.",
+          "B. If Victoria Falls were wider, it would create an even greater mist cloud.",
+          "C. If Victoria Falls is wider, it would have created more mist.",
+          "D. If Victoria Falls would be wider, it was spectacular."
+        ],
+        ans: "B. If Victoria Falls were wider, it would create an even greater mist cloud."
+      }
+    ];
+
+    // Game State
+    let currentWaypoint = 0; // 0-indexed
+    let score = 0;
+    const completedWaypoints = new Array(15).fill(false);
+
+    // Canvas setup
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawMap() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 1. Draw stylized ocean grid
+      ctx.fillStyle = "#e0f2fe";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Subtle grid lines
+      ctx.strokeStyle = "#bae6fd";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // 2. Draw stylized Africa Continent background silhouette
+      ctx.fillStyle = "#fef08a"; // Warm yellow-gold land mass
+      ctx.strokeStyle = "#ca8a04";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      // Approximate Africa shape outline points
+      ctx.moveTo(240, 80);
+      ctx.lineTo(580, 80);  // N Africa Mediterranean
+      ctx.lineTo(650, 160); // Red Sea coast
+      ctx.lineTo(710, 240); // Horn of Africa
+      ctx.lineTo(620, 360); // E Coast
+      ctx.lineTo(500, 500); // South Cape
+      ctx.lineTo(410, 480);
+      ctx.lineTo(320, 310); // Gulf of Guinea
+      ctx.lineTo(220, 220); // West bulge
+      ctx.lineTo(210, 120);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Madagascar island outline
+      ctx.beginPath();
+      ctx.ellipse(700, 410, 25, 60, Math.PI / 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Climate color shading zones inside landmass
+      // Sahara (North)
+      ctx.fillStyle = "rgba(251, 146, 60, 0.25)";
+      ctx.fillRect(230, 85, 400, 100);
+      // Equatorial forest (Middle)
+      ctx.fillStyle = "rgba(34, 197, 94, 0.25)";
+      ctx.fillRect(320, 250, 300, 100);
+
+      // 3. Draw Route Connections between waypoints
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 6]);
+      for (let i = 0; i < waypoints.length - 1; i++) {
+        const p1 = waypoints[i];
+        const p2 = waypoints[i + 1];
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]); // Reset line style
+
+      // 4. Draw Waypoint Nodes
+      waypoints.forEach((wp, idx) => {
+        const isCurrent = idx === currentWaypoint;
+        const isDone = completedWaypoints[idx];
+
+        // Circle base
+        ctx.beginPath();
+        ctx.arc(wp.x, wp.y, isCurrent ? 22 : 16, 0, Math.PI * 2);
+        
+        if (isDone) {
+          ctx.fillStyle = "#22c55e"; // Completed - green
+          ctx.strokeStyle = "#15803d";
+        } else if (isCurrent) {
+          ctx.fillStyle = "#eab308"; // Current target - gold
+          ctx.strokeStyle = "#a16207";
+        } else {
+          ctx.fillStyle = "#cbd5e1"; // Locked/Upcoming - grey
+          ctx.strokeStyle = "#64748b";
+        }
+        
+        ctx.lineWidth = 3;
+        ctx.fill();
+        ctx.stroke();
+
+        // Node index text or icon
+        ctx.fillStyle = "#ffffff";
+        ctx.font = isCurrent ? "bold 14px sans-serif" : "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(idx + 1, wp.x, wp.y);
+
+        // Label below node
+        ctx.fillStyle = "#1e293b";
+        ctx.font = "bold 11px sans-serif";
+        ctx.fillText(wp.name, wp.x, wp.y + 28);
+      });
+
+      // 5. Draw Animated Character (Explorer Avatar 🚶‍♂️) at current waypoint position
+      const currNode = waypoints[currentWaypoint];
+      
+      // Avatar pulse ring
+      ctx.beginPath();
+      ctx.arc(currNode.x, currNode.y, 28, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(234, 179, 8, 0.6)";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Avatar Icon
+      ctx.font = "26px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🧭", currNode.x, currNode.y - 35);
+    }
+
+    // Canvas click detection for interactive waypoints
+    canvas.addEventListener('click', function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      waypoints.forEach((wp, idx) => {
+        const dist = Math.hypot(clickX - wp.x, clickY - wp.y);
+        if (dist <= 25) {
+          if (idx === currentWaypoint) {
+            openQuizModal(idx);
+          } else if (completedWaypoints[idx]) {
+            alert(`Waypoint ${idx + 1}: ${wp.name} is already completed!`);
+          } else {
+            alert(`Waypoint ${idx + 1}: ${wp.name} is locked. Complete Waypoint ${currentWaypoint + 1} first!`);
+          }
+        }
+      });
+    });
+
+    function openQuizModal(idx) {
+      const q = questions[idx];
+      const wp = waypoints[idx];
+
+      document.getElementById('quiz-badge').innerText = q.category;
+      document.getElementById('quiz-title').innerText = `Waypoint ${idx + 1}: ${wp.name} (${wp.icon})`;
+      document.getElementById('quiz-question').innerText = q.q;
+
+      const body = document.getElementById('quiz-body');
+      body.innerHTML = '';
+
+      if (q.type === 'mcq') {
+        const grid = document.createElement('div');
+        grid.className = 'options-grid';
+        q.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-opt';
+          btn.innerText = opt;
+          btn.onclick = () => checkAnswer(opt);
+          grid.appendChild(btn);
+        });
+        body.appendChild(grid);
+      } else if (q.type === 'fill') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'fill-ans';
+        input.placeholder = 'Type your answer in English here...';
+
+        const subBtn = document.createElement('button');
+        subBtn.className = 'btn-submit';
+        subBtn.innerText = 'Submit Answer';
+        subBtn.onclick = () => checkAnswer(document.getElementById('fill-ans').value.trim());
+
+        body.appendChild(input);
+        body.appendChild(subBtn);
+      }
+
+      document.getElementById('speech-status').innerText = "Click above and speak clearly...";
+      document.getElementById('quiz-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(userAns) {
+      const q = questions[currentWaypoint];
+      let isCorrect = false;
+
+      if (q.type === 'fill') {
+        isCorrect = userAns.toLowerCase() === q.ans.toLowerCase();
+      } else {
+        isCorrect = userAns === q.ans;
+      }
+
+      if (isCorrect) {
+        alert(`🌟 Excellent! Correct answer. You have successfully navigated to ${waypoints[currentWaypoint].name}! (+50 Points)`);
+        
+        completedWaypoints[currentWaypoint] = true;
+        score += 50;
+        
+        if (currentWaypoint < waypoints.length - 1) {
+          currentWaypoint++;
+        } else {
+          // Final Victory
+          triggerVictory();
+          closeModal();
+          updateUI();
+          drawMap();
+          return;
+        }
+
+        closeModal();
+        updateUI();
+        drawMap();
+      } else {
+        alert(`❌ Incorrect. Review your English grammar (Conditional Type 2: If + Past Simple, would + V) or African Geography facts and try again!`);
+      }
+    }
+
+    function triggerVictory() {
+      setTimeout(() => {
+        alert(`🎉 CONGRATULATIONS EXPEDITION LEADER! 🎉
+You have traversed all 15 waypoints across Africa, mastering Geography, Climate Science, and English Grammar! Final Score: ${score} Points.`);
+      }, 300);
+    }
+
+    function closeModal() {
+      document.getElementById('quiz-modal').style.display = 'none';
+    }
+
+    function updateUI() {
+      document.getElementById('loc-name').innerText = `${currentWaypoint + 1}. ${waypoints[currentWaypoint].name}`;
+      const completedCount = completedWaypoints.filter(Boolean).length;
+      document.getElementById('progress-count').innerText = completedCount;
+      document.getElementById('score-val').innerText = score;
+    }
+
+    // Speech Recognition API for Pronunciation Testing
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Web Speech API is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      document.getElementById('speech-status').innerText = "Listening... Read the question or passage out loud!";
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('speech-status').innerText = `AI Heard: "${transcript}"`;
+
+        if (transcript.length > 8) {
+          alert("🎉 Pronunciation Challenge Passed! Excellent speech clarity! +20 Bonus Points 🪙");
+          score += 20;
+          document.getElementById('score-val').innerText = score;
+        } else {
+          alert("Speech recognized! Speak a bit louder or closer to the microphone for full credit.");
+        }
+      };
+
+      recognition.onerror = function() {
+        document.getElementById('speech-status').innerText = "Speech not recognized. Please try again.";
+      };
+    }
+
+    // Initialize Game
+    window.onload = function() {
+      updateUI();
+      drawMap();
+    };
+  </script>
+</body>
+</html>
