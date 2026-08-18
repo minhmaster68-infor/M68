@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English & Natural Science Assessment Platform</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --success: #22c55e;
+            --warning: #ef4444;
+            --speaker: #a855f7;
+            --hint-bg: #1e1b4b;
+            --hint-border: #6366f1;
+            --input-bg: #090d16;
+            --input-border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; }
+        p.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .phase-indicator {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #334155;
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dialogue-box {
+            background: #090d16;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .role {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .role-a { color: var(--speaker); }
+        .role-b { color: var(--accent); }
+
+        .speech-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat-item { font-size: 0.85rem; color: #94a3b8; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--text); display: block; }
+
+        .mcq-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mcq-options { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 2px solid #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover { border-color: var(--accent); background: #0f172a; }
+        .option-btn.selected-correct { border-color: var(--success); background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .option-btn.selected-incorrect { border-color: var(--warning); background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+        .fill-blank-area, .essay-area { margin-top: 15px; text-align: left; }
+        .fill-input, .essay-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .essay-input {
+            height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .fill-input:focus, .essay-input:focus { border-color: var(--accent); }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+
+        button {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background-color: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .btn-audio { background-color: var(--speaker); color: #fff; }
+        .btn-mic { background-color: #f59e0b; color: #fff; }
+        .btn-mic.recording { background-color: var(--warning); animation: pulse 1.5s infinite; }
+        .btn-hint { background-color: #6366f1; color: #fff; }
+        .btn-submit { background-color: #22c55e; color: #fff; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .transcript-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .hint-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 8px;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            text-align: left;
+            display: none;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .score-good { background-color: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .score-bad { background-color: rgba(239, 68, 68, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>English & Natural Science Interactive Test</h1>
+    <div id="phaseTag" class="phase-indicator">Phase 1: Multiple Choice (Science & Conjunctions)</div>
+    <p id="instructionText" class="subtitle">Select the correct answer in English based on science and grammar principles.</p>
+
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+
+    <div class="stats-panel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0 / 30</span></div>
+        <div class="stat-item">Time Spent<span id="timer" class="stat-value">0.0s</span></div>
+        <div class="stat-item">Overall Score<span id="accuracy" class="stat-value">0%</span></div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="role role-a">Question / Prompt:</div>
+        <div class="speech-text" id="questionText">Click "Start Test" to begin...</div>
+        
+        <hr style="border-color: #334155; margin: 15px 0;">
+        
+        <div class="role role-b" id="answerRoleTitle">Response Area:</div>
+        <div class="speech-text" id="targetAnswer" style="color: #38bdf8;">—</div>
+
+        <div id="mcqArea" class="mcq-options" style="display:none;"></div>
+        <div id="fillArea" class="fill-blank-area" style="display:none;">
+            <input type="text" id="fillInput" class="fill-input" placeholder="Type or speak the missing word..." />
+        </div>
+        <div id="essayArea" class="essay-area" style="display:none;">
+            <textarea id="essayInput" class="essay-input" placeholder="Write your response in English (at least 20-30 words)..."></textarea>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" onclick="startGame()">Start Test</button>
+        <button id="replayBtn" class="btn-audio" onclick="playQuestionAudio()" disabled>🔊 Listen Prompt</button>
+        <button id="micBtn" class="btn-mic" onclick="toggleListening()" disabled style="display:none;">🎤 Read / Speak Answer</button>
+        <button id="submitBtn" class="btn-submit" onclick="submitTextAnswer()" disabled style="display:none;">✔️ Submit Answer</button>
+        <button id="hintBtn" class="btn-hint" onclick="toggleHint()" disabled>💡 Hint</button>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>Next Question ➔</button>
+    </div>
+
+    <div id="hintBox" class="hint-box">
+        <strong>💡 Hint Clue:</strong> <span id="hintText"></span>
+    </div>
+
+    <div id="transcriptBox" class="transcript-box" style="display:none;">
+        <strong>Voice Recognition / AI Output:</strong>
+        <p id="speechResult" style="margin: 5px 0 0 0;">Waiting for input...</p>
+    </div>
+
+    <div id="feedbackBadge" class="score-badge" style="display:none;"></div>
+</div>
+
+<script>
+    const questions = [
+        // PHASE 1: MULTIPLE CHOICE (QUESTIONS 1 - 10)
+        {
+            phase: 1, type: "mcq",
+            q: "1. The chemical bond between hydrogen and oxygen atoms in a water molecule is a ______ bond.",
+            options: ["A. covalent", "B. ionic", "C. metallic", "D. non-metallic"], correct: 0,
+            hint: "Atoms share electrons in water molecules (Covalent / Cộng hoá trị)."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "2. Chemical bonds between oxygen and hydrogen in water are formed when atoms ______ electrons.",
+            options: ["A. gain", "B. lose", "C. share", "D. transfer protons"], correct: 2,
+            hint: "Non-metal atoms share electrons to achieve a stable configuration."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "3. In an oxygen molecule (O2), two oxygen atoms join together by ______ electrons.",
+            options: ["A. sharing", "B. losing", "C. gaining", "D. destroying"], correct: 0,
+            hint: "Two non-metal atoms form a covalent bond by sharing valence electrons."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "4. Potassium (K) and Chlorine (Cl) atoms in Potassium Chloride (KCl) bind together via ______ bonds.",
+            options: ["A. covalent", "B. ionic", "C. metallic", "D. hydrogen"], correct: 1,
+            hint: "A metal transfers electrons to a non-metal, forming ions."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "5. You may have either vanilla ______ chocolate ice cream.",
+            options: ["A. or", "B. nor", "C. and", "D. but"], correct: 0,
+            hint: "Correlative conjunction pair: 'either ... or'."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "6. He was punished ______ he was rude to his teacher.",
+            options: ["A. but", "B. or", "C. because", "D. although"], correct: 2,
+            hint: "Expresses a reason for the punishment."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "7. Max loves Singapore, ______ he is thinking of moving there.",
+            options: ["A. so", "B. but", "C. or", "D. nor"], correct: 0,
+            hint: "Expresses a consequence or result."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "8. Susan works hard, ______ she doesn't earn a lot of money.",
+            options: ["A. so", "B. and", "C. yet", "D. because"], correct: 2,
+            hint: "'Yet' expresses contrast (similar to 'but')."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "9. It's quite pleasant today ______ the wind is rather cool.",
+            options: ["A. though", "B. nor", "C. if", "D. unless"], correct: 0,
+            hint: "Conjunction introducing a contrasting clause."
+        },
+        {
+            phase: 1, type: "mcq",
+            q: "10. Neither my mother ______ my father went to university.",
+            options: ["A. or", "B. nor", "C. and", "D. but"], correct: 1,
+            hint: "Correlative conjunction pair: 'neither ... nor'."
+        },
+
+        // PHASE 2: READING & SPEAKING EVALUATION (QUESTIONS 11 - 20)
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'A covalent bond is formed when atoms share one or more pairs of electrons.'",
+            a: "A covalent bond is formed when atoms share one or more pairs of electrons.",
+            hint: "Pronounce 'covalent', 'formed', and 'electrons' clearly."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'An ionic bond is formed by the electrostatic attraction between oppositely charged ions.'",
+            a: "An ionic bond is formed by the electrostatic attraction between oppositely charged ions.",
+            hint: "Pay attention to 'electrostatic', 'attraction', and 'oppositely'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'The brave man hazards his life, but not his conscience.'",
+            a: "The brave man hazards his life, but not his conscience.",
+            hint: "Pronounce 'hazards' and 'conscience' (kon-shens) accurately."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Training is useless unless there is proof that it works.'",
+            a: "Training is useless unless there is proof that it works.",
+            hint: "Focus on 'useless', 'unless', and 'proof'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Her heart beat violently when she received the email.'",
+            a: "Her heart beat violently when she received the email.",
+            hint: "Focus on 'violently' and 'received'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'If you wait long enough, you will get what you want.'",
+            a: "If you wait long enough, you will get what you want.",
+            hint: "Pronounce 'enough' (e-nuf) correctly."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Because it is so cold outside, we should stay inside.'",
+            a: "Because it is so cold outside, we should stay inside.",
+            hint: "Stress key content words: 'cold', 'outside', 'stay', 'inside'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'It was extremely hot, and I was feeling rather uneasy.'",
+            a: "It was extremely hot, and I was feeling rather uneasy.",
+            hint: "Focus on 'extremely' and 'uneasy'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'Your neighbours are friendly, but they are quite noisy.'",
+            a: "Your neighbours are friendly, but they are quite noisy.",
+            hint: "Focus on 'neighbours' and 'friendly'."
+        },
+        {
+            phase: 2, type: "read",
+            q: "Read aloud: 'He is in the mall because he wants to buy a pair of shoes.'",
+            a: "He is in the mall because he wants to buy a pair of shoes.",
+            hint: "Pronounce 'mall' and 'because' clearly."
+        },
+
+        // PHASE 3: FILL IN THE BLANK (QUESTIONS 21 - 27)
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: Lithium fluoride (LiF) is formed by an ______ bond between Li and F.",
+            a: "ionic", hint: "Bond formed between a metal (Lithium) and non-metal (Fluorine)."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: Many people like dogs a lot ______ they are so friendly.",
+            a: "because", hint: "Conjunction indicating reason."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: Sometimes we feel tired ______ we are lost in our life.",
+            a: "because", hint: "Conjunction explaining cause."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: They really love the music of Beethoven ______ Mozart.",
+            a: "and", hint: "Conjunction connecting two equal nouns."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: Potassium oxide (K2O) consists of positive potassium ions and negative ______ ions.",
+            a: "oxygen", hint: "Non-metal element in K2O."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: Calcium oxide (CaO) is an ionic compound formed by calcium and ______.",
+            a: "oxygen", hint: "The 'O' in CaO stands for this element."
+        },
+        {
+            phase: 3, type: "fill",
+            q: "Fill in blank: An atom that loses an electron becomes a positively charged ______.",
+            a: "ion", hint: "General term for a charged particle."
+        },
+
+        // PHASE 4: SHORT ESSAY / AI WRITING EVALUATION (QUESTIONS 28 - 30)
+        {
+            phase: 4, type: "essay",
+            q: "28. Essay Question: Explain the primary difference between a covalent bond and an ionic bond in English.",
+            keywords: ["covalent", "ionic", "share", "transfer", "electron"],
+            hint: "Mention that covalent bonds share electrons while ionic bonds transfer electrons."
+        },
+        {
+            phase: 4, type: "essay",
+            q: "29. Essay Question: Describe how water (H2O) molecules are formed using electron sharing.",
+            keywords: ["water", "hydrogen", "oxygen", "share", "covalent"],
+            hint: "Explain how oxygen shares valence electrons with two hydrogen atoms."
+        },
+        {
+            phase: 4, type: "essay",
+            q: "30. Essay Question: Why do we use conjunctions like 'because', 'although', and 'but' in English sentences?",
+            keywords: ["conjunction", "connect", "reason", "contrast", "clause"],
+            hint: "Discuss how conjunctions link clauses together to show reasons, contrast, or results."
+        }
+    ];
+
+    let currentIndex = 0;
+    let timerInterval = null;
+    let startTime = 0;
+    let elapsedTime = 0;
+    let recognition = null;
+    let isListening = false;
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').innerText = "🎙️ Listening...";
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('speechResult').innerText = `"${spokenText}"`;
+            
+            if (questions[currentIndex].phase === 3) {
+                document.getElementById('fillInput').value = spokenText;
+            }
+            evaluateSpeech(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            document.getElementById('speechResult').innerText = "Mic error or speech not recognized: " + event.error;
+            stopListeningUI();
+        };
+
+        recognition.onend = function() {
+            stopListeningUI();
+        };
+    }
+
+    function startGame() {
+        currentIndex = 0;
+        totalScore = 0;
+        answeredCount = 0;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('replayBtn').disabled = false;
+        document.getElementById('hintBtn').disabled = false;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        
+        const phaseTag = document.getElementById('phaseTag');
+        const instructionText = document.getElementById('instructionText');
+        const answerRoleTitle = document.getElementById('answerRoleTitle');
+        const targetAnswerBox = document.getElementById('targetAnswer');
+        const mcqArea = document.getElementById('mcqArea');
+        const fillArea = document.getElementById('fillArea');
+        const essayArea = document.getElementById('essayArea');
+        const micBtn = document.getElementById('micBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptBox = document.getElementById('transcriptBox');
+
+        mcqArea.style.display = "none";
+        fillArea.style.display = "none";
+        essayArea.style.display = "none";
+        micBtn.style.display = "none";
+        submitBtn.style.display = "none";
+        transcriptBox.style.display = "none";
+        targetAnswerBox.innerText = "—";
+        targetAnswerBox.style.color = "#38bdf8";
+
+        if (item.phase === 1) {
+            phaseTag.innerText = "Phase 1: Multiple Choice (Question 1 - 10)";
+            phaseTag.style.background = "#0284c7";
+            instructionText.innerText = "Select the correct answer in English based on science and grammar principles.";
+            answerRoleTitle.innerText = "Select Answer:";
+            mcqArea.style.display = "grid";
+            
+            mcqArea.innerHTML = "";
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                mcqArea.appendChild(btn);
+            });
+        } else if (item.phase === 2) {
+            phaseTag.innerText = "Phase 2: Reading & Pronunciation Assessment (Question 11 - 20)";
+            phaseTag.style.background = "#7c3aed";
+            instructionText.innerText = "Click the microphone button and read the sentence out loud in English.";
+            answerRoleTitle.innerText = "Target Sentence to Read:";
+            targetAnswerBox.innerText = item.a;
+
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('speechResult').innerText = "Click 'Read / Speak Answer' and read the sentence into your mic.";
+        } else if (item.phase === 3) {
+            phaseTag.innerText = "Phase 3: Fill-in-the-Blank (Question 21 - 27)";
+            phaseTag.style.background = "#059669";
+            instructionText.innerText = "Type the missing word or click the microphone to speak it out loud.";
+            answerRoleTitle.innerText = "Fill Blank Answer:";
+            fillArea.style.display = "block";
+            micBtn.style.display = "inline-block";
+            micBtn.disabled = false;
+            submitBtn.style.display = "inline-block";
+            submitBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('fillInput').value = "";
+            document.getElementById('fillInput').focus();
+            document.getElementById('speechResult').innerText = "Type or speak the missing word.";
+        } else if (item.phase === 4) {
+            phaseTag.innerText = "Phase 4: AI Essay & Writing Evaluation (Question 28 - 30)";
+            phaseTag.style.background = "#d97706";
+            instructionText.innerText = "Write a complete explanation in English. AI will evaluate key science/grammar criteria.";
+            answerRoleTitle.innerText = "Your Essay Input:";
+            essayArea.style.display = "block";
+            submitBtn.style.display = "inline-block";
+            submitBtn.disabled = false;
+            transcriptBox.style.display = "block";
+            document.getElementById('essayInput').value = "";
+            document.getElementById('essayInput').focus();
+            document.getElementById('speechResult').innerText = "Awaiting your written answer for AI scoring...";
+        }
+
+        document.getElementById('questionNum').innerText = `${currentIndex + 1} / ${questions.length}`;
+        document.getElementById('progressFill').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        document.getElementById('questionText').innerText = item.q;
+        
+        document.getElementById('feedbackBadge').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        document.getElementById('nextBtn').disabled = true;
+        
+        document.getElementById('timer').innerText = "0.0s";
+        
+        playQuestionAudio();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            document.getElementById('timer').innerText = elapsedTime + "s";
+        }, 100);
+    }
+
+    function selectOption(selectedIndex) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+        
+        buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === item.correct) {
+                btn.classList.add('selected-correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('selected-incorrect');
+            }
+        });
+
+        const isCorrect = (selectedIndex === item.correct);
+        if (isCorrect) totalScore += 100;
+        answeredCount++;
+
+        updateOverallScore();
+        showFeedback(isCorrect, isCorrect ? "Correct answer! Excellent job." : "Incorrect option selected.");
+    }
+
+    function submitTextAnswer() {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        
+        if (item.phase === 3) {
+            const userVal = document.getElementById('fillInput').value.trim().toLowerCase();
+            if (!userVal) return;
+
+            const isCorrect = userVal.includes(item.a.toLowerCase());
+            document.getElementById('submitBtn').disabled = true;
+
+            if (isCorrect) totalScore += 100;
+            answeredCount++;
+
+            updateOverallScore();
+            showFeedback(isCorrect, isCorrect ? `Correct! Word: '${item.a}'` : `Incorrect. Correct word: '${item.a}'`);
+        } else if (item.phase === 4) {
+            const text = document.getElementById('essayInput').value.trim();
+            if (text.length < 10) {
+                alert("Please write a longer response (at least 10 words).");
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+            evaluateEssay(text, item);
+        }
+    }
+
+    function evaluateEssay(text, item) {
+        const lowerText = text.toLowerCase();
+        let matchedKeywords = 0;
+        
+        item.keywords.forEach(kw => {
+            if (lowerText.includes(kw)) matchedKeywords++;
+        });
+
+        const keywordRatio = matchedKeywords / item.keywords.length;
+        const wordCount = text.split(/\s+/).length;
+        
+        let score = Math.round(keywordRatio * 70) + Math.min(30, wordCount * 2);
+        score = Math.min(100, score);
+
+        totalScore += score;
+        answeredCount++;
+        updateOverallScore();
+
+        const isGood = score >= 60;
+        const feedbackMsg = `AI Score: ${score}/100 | Keywords matched: ${matchedKeywords}/${item.keywords.length} | Word count: ${wordCount}`;
+        document.getElementById('speechResult').innerText = feedbackMsg;
+        showFeedback(isGood, isGood ? `Pass! ${feedbackMsg}` : `Needs Improvement. ${feedbackMsg}`);
+    }
+
+    function toggleListening() {
+        if (!recognition) {
+            alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+            return;
+        }
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    }
+
+    function stopListeningUI() {
+        isListening = false;
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').innerText = "🎤 Read / Speak Answer";
+    }
+
+    function evaluateSpeech(spoken) {
+        clearInterval(timerInterval);
+        const item = questions[currentIndex];
+        const spokenClean = spoken.toLowerCase().replace(/[^\w\s]/gi, "");
+
+        if (item.phase === 2) {
+            const target = item.a.toLowerCase().replace(/[^\w\s]/gi, "");
+            const targetWords = target.split(" ");
+            const spokenWords = spokenClean.split(" ");
+
+            let correctMatches = 0;
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) correctMatches++;
+            });
+            const accuracyScore = Math.round((correctMatches / targetWords.length) * 100);
+
+            totalScore += accuracyScore;
+            answeredCount++;
+            updateOverallScore();
+
+            const isGood = accuracyScore >= 60;
+            showFeedback(isGood, `Reading Accuracy: ${accuracyScore}% | ${isGood ? 'Great pronunciation!' : 'Try speaking clearer or check your mic.'}`);
+        } else if (item.phase === 3) {
+            const isCorrect = spokenClean.includes(item.a.toLowerCase());
+            if (isCorrect) {
+                totalScore += 100;
+                showFeedback(true, `Correct reading & pronunciation! Word: '${item.a}'`);
+            } else {
+                showFeedback(false, `Spoken word missed. Target word is: '${item.a}'`);
+            }
+            answeredCount++;
+            updateOverallScore();
+        }
+    }
+
+    function updateOverallScore() {
+        const avg = Math.round(totalScore / Math.max(1, answeredCount));
+        document.getElementById('accuracy').innerText = avg + "%";
+    }
+
+    function showFeedback(isSuccess, message) {
+        const badge = document.getElementById('feedbackBadge');
+        badge.style.display = 'inline-block';
+        badge.className = isSuccess ? "score-badge score-good" : "score-badge score-bad";
+        badge.innerText = message;
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function toggleHint() {
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+            hintText.innerText = questions[currentIndex].hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    function playQuestionAudio() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(questions[currentIndex].q);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('phaseTag').innerText = "Test Completed!";
+            document.getElementById('phaseTag').style.background = "#22c55e";
+            document.getElementById('questionText').innerText = "🎉 Congratulations! You completed all 30 questions!";
+            document.getElementById('targetAnswer').innerText = "Assessment Finished.";
+            document.getElementById('mcqArea').style.display = "none";
+            document.getElementById('fillArea').style.display = "none";
+            document.getElementById('essayArea').style.display = "none";
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('hintBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>
