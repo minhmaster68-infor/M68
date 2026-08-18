@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sci-English Eco-Farm: Advanced Challenge</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0fdf4;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 { color: #15803d; margin-bottom: 5px; }
+    .stats-bar {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 20px;
+      background: #dcfce7;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    
+    #farm-grid {
+      max-width: 900px;
+      min-height: 400px;
+      background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+      border: 4px solid #16a34a;
+      border-radius: 16px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .plot {
+      height: 110px;
+      background: #b45309;
+      border: 3px dashed #78350f;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .plot:hover {
+      transform: scale(1.05);
+      background: #92400e;
+    }
+    .plot-title { font-size: 11px; color: #fff; font-weight: bold; margin-top: 4px; }
+    .plant { font-size: 36px; animation: pop 0.4s ease-out; }
+    @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+    #quiz-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .modal-content {
+      background: white;
+      width: 520px;
+      max-width: 90%;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: left;
+    }
+    .modal-content h3 { color: #15803d; margin-top: 0; font-size: 18px; }
+    .btn {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      margin: 5px 0;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #16a34a; }
+    .btn-submit { background: #0d9488; text-align: center; }
+    .btn-submit:hover { background: #0f766e; }
+    .btn-ai { background: #0284c7; text-align: center; }
+    .btn-ai:hover { background: #0369a1; }
+    .btn-close { background: #ef4444; margin-top: 15px; text-align: center; }
+    .btn-close:hover { background: #dc2626; }
+    
+    input[type="text"] {
+      width: 95%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    #speech-status {
+      font-size: 13px;
+      color: #64748b;
+      font-style: italic;
+      margin-top: 5px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 4px;
+      color: white;
+      background: #0284c7;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌸 Sci-English Botanical Garden</h1>
+  <p>Solve 30 Physics & English Conditional Challenges to cultivate a blooming garden!</p>
+  
+  <div class="stats-bar">
+    Plants Grown: <span id="crop-count">0</span>/30 🌺 | Score: <span id="score-count">0</span> 🪙
+  </div>
+
+  <div id="farm-grid"></div>
+
+  <!-- Quiz Modal -->
+  <div id="quiz-modal">
+    <div class="modal-content">
+      <span id="quiz-badge" class="badge">Category</span>
+      <h3 id="quiz-title">Plot Challenge</h3>
+      <p id="quiz-question" style="font-size: 15px; font-weight: 600; color: #1e293b;"></p>
+      
+      <div id="quiz-body"></div>
+
+      <hr style="border: 0.5px solid #e2e8f0; margin: 15px 0;">
+
+      <h4>🎙️ AI Pronunciation & Oral Test</h4>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 5px;">Read the question or target phrase out loud to earn bonus points!</p>
+      <button class="btn btn-ai" onclick="startSpeechRecognition()">🎙️ Practice Speaking (English)</button>
+      <div id="speech-status">Click above and speak clearly...</div>
+
+      <button class="btn btn-close" onclick="closeModal()">Close Window</button>
+    </div>
+  </div>
+
+  <script>
+    // 12 Diverse Plant and Flower Icons
+    const botanicalIcons = [
+      "🌸 Cherry Blossom", "🌻 Sunflower", "🌺 Hibiscus", "🪻 Lavender", 
+      "🌹 Rose", "🌷 Tulip", "🌴 Palm Tree", "🌵 Cactus", 
+      "🌲 Pine Tree", "🌾 Golden Wheat", "🍇 Grapevine", "🪷 Lotus"
+    ];
+
+    // 30 Comprehensive Questions based on Physics (Sound & Frequency) and English (Conditional Type 2 & Grammar)
+    const questions = [
+      // --- Physics & Sound (Acoustics & Waves) ---
+      { type: "mcq", category: "Physics - Acoustics", q: "When a sound wave has a HIGH frequency, what kind of pitch does it produce?", options: ["A. Low pitch sound", "B. High pitch sound (Sharp sound)", "C. Soft sound", "D. Loud sound"], ans: "B. High pitch sound (Sharp sound)" },
+      { type: "mcq", category: "Physics - Sound", q: "To make a whistle sound louder and travel farther, why must you blow harder into it?", options: ["A. To increase vibration frequency", "B. To increase the amplitude of air vibration", "C. To decrease sound speed", "D. To change the pitch"], ans: "B. To increase the amplitude of air vibration" },
+      { type: "calc", category: "Physics - Calculation", q: "A bee flaps its wings 880 times in 2 seconds while searching for nectar. What is its wing flapping frequency?", options: ["A. 880 Hz", "B. 220 Hz", "C. 440 Hz", "D. 1760 Hz"], ans: "C. 440 Hz" },
+      { type: "calc", category: "Physics - Calculation", q: "When returning to the hive, a bee flaps its wings 600 times in 2 seconds (300 Hz). How does its buzzing sound compare to when searching for nectar (440 Hz)?", options: ["A. Higher pitch", "B. Lower pitch (Deeper sound)", "C. Much louder sound", "D. No difference"], ans: "B. Lower pitch (Deeper sound)" },
+      { type: "mcq", category: "Physics - Acoustics Experiment", q: "In an experiment with 4 identical glass cups filled with increasing levels of water, tapping which cup produces the LOWEST pitch sound?", options: ["A. The cup with the least water", "B. The cup with the most water", "C. All cups produce the same pitch", "D. The empty cup"], ans: "B. The cup with the most water" },
+      { type: "mcq", category: "Physics - Oscilloscope", q: "An oscilloscope displays two sound waves. Wave A has taller peaks than Wave B, but they have the same spacing. What does Wave A represent?", options: ["A. A higher pitch sound", "B. A louder sound (Greater amplitude)", "C. A softer sound", "D. A lower frequency sound"], ans: "B. A louder sound (Greater amplitude)" },
+      { type: "fill", category: "Physics - Cloze Test", q: "Complete the sentence: Pitch is determined by the ________ of the sound wave.", ans: "frequency" },
+      { type: "fill", category: "Physics - Cloze Test", q: "Complete the sentence: The loudness of a sound depends on its vibration ________.", ans: "amplitude" },
+      { type: "mcq", category: "Physics - Sound Unit", q: "What is the standard unit used to measure the frequency of sound?", options: ["A. Decibel (dB)", "B. Hertz (Hz)", "C. Meter per second (m/s)", "D. Joule (J)"], ans: "B. Hertz (Hz)" },
+      { type: "mcq", category: "Physics - Oscilloscope Wave", q: "If two wave signals on an oscilloscope have the exact same amplitude but Wave B has more wave cycles per second, Wave B has:", options: ["A. Higher frequency and higher pitch", "B. Lower frequency and lower pitch", "C. Greater loudness", "D. Lower speed"], ans: "A. Higher frequency and higher pitch" },
+
+      // --- English Grammar: Conditional Sentences Type 2 & Verbs ---
+      { type: "fill", category: "English - Type 2 Conditional", q: "If he ________ (practise) answering these questions, he would succeed in his interview.", ans: "practised" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "She would go to school if she ________ (not be) sick.", ans: "were not" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "I would like Brian if he ________ (not like) Sylvie.", ans: "didn't like" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "I would not drink that coke if I ________ (be) you.", ans: "were" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "We ________ (invite) him if he wanted to join us.", ans: "would invite" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "I would eat the soup if it ________ (not be) so salty.", ans: "weren't" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "I would be angry if he ________ (make) more mistakes.", ans: "made" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If I were not tired, I ________ (play) a tennis set with you.", ans: "would play" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If we saved enough money, we ________ (fly) to the UK.", ans: "would fly" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If I raised a dog, I ________ (take) it for a walk every day.", ans: "would take" },
+      { type: "mcq", category: "English - Type 2 Conditional", q: "What ________ you do in that situation if you heard the fire alarm?", options: ["A. will", "B. would", "C. do", "D. did"], ans: "B. would" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If I ________ (know) the answer right now, I would tell you.", ans: "knew" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If he didn't play sports, he ________ (not be) healthy.", ans: "wouldn't be" },
+      { type: "mcq", category: "English - Type 2 Conditional", q: "What would you do if you ________ a million dollars?", options: ["A. have", "B. had", "C. would have", "D. will have"], ans: "B. had" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If you were me, ________ (you / accept) the proposal?", ans: "would you accept" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If I were you, I ________ (not wait) to study for the test.", ans: "wouldn't wait" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If you ________ (wear) a white polo, you would look brighter.", ans: "wore" },
+      { type: "fill", category: "English - Type 2 Conditional", q: "If Jenny ________ (see) a spider or a lizard, she would panic.", ans: "saw" },
+      { type: "mcq", category: "English Grammar", q: "Why do we use 'were' instead of 'was' in formal Type 2 Conditional sentences for all pronouns?", options: ["A. Because it refers to past reality", "B. Because it expresses an unreal/hypothetical situation (Subjunctive mood)", "C. Because it is future tense", "D. It is a modern slang rule"], ans: "B. Because it expresses an unreal/hypothetical situation (Subjunctive mood)" },
+      { type: "mcq", category: "Science & Language Integration", q: "Which conditional sentence correctly expresses a scientific hypothesis?\n'If we ________ the length of a vibrating string, the pitch ________ higher.'", options: ["A. shortened / would become", "B. shorten / will become", "C. shortened / became", "D. shorten / became"], ans: "A. shortened / would become" }
+    ];
+
+    let currentPlotIndex = null;
+    let plantsGrown = 0;
+    let score = 0;
+    const plotStates = new Array(30).fill(false);
+    const assignedPlants = [];
+
+    // Initialize Grid with 30 plots
+    function initFarmGrid() {
+      const grid = document.getElementById('farm-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 30; i++) {
+        // Randomly assign plant type for each plot
+        const randomPlant = botanicalIcons[Math.floor(Math.random() * botanicalIcons.length)];
+        assignedPlants.push(randomPlant);
+
+        const plot = document.createElement('div');
+        plot.className = 'plot';
+        plot.onclick = () => triggerChallenge(i);
+        plot.innerHTML = `
+          <span id="plant-${i}" class="plant">${i === 0 ? '🌱' : '🔒'}</span>
+          <span class="plot-title">Plot ${i + 1}</span>
+        `;
+        grid.appendChild(plot);
+      }
+    }
+
+    function triggerChallenge(index) {
+      if (plotStates[index]) {
+        alert(`Plot ${index + 1} already has a thriving ${assignedPlants[index]}!`);
+        return;
+      }
+      if (index > 0 && !plotStates[index - 1]) {
+        alert("Please unlock and solve the previous plot challenge first!");
+        return;
+      }
+
+      currentPlotIndex = index;
+      const q = questions[index];
+
+      document.getElementById('quiz-badge').innerText = q.category;
+      document.getElementById('quiz-title').innerText = `Plot ${index + 1} Challenge`;
+      document.getElementById('quiz-question').innerText = q.q;
+
+      const body = document.getElementById('quiz-body');
+      body.innerHTML = '';
+
+      if (q.type === 'mcq' || q.type === 'calc') {
+        q.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'btn';
+          btn.innerText = opt;
+          btn.onclick = () => checkAnswer(opt);
+          body.appendChild(btn);
+        });
+      } else if (q.type === 'fill') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'fill-input';
+        input.placeholder = 'Type your answer in English here...';
+        
+        const submitBtn = document.createElement('button');
+        submitBtn.className = 'btn btn-submit';
+        submitBtn.innerText = 'Submit Answer';
+        submitBtn.onclick = () => checkAnswer(document.getElementById('fill-input').value.trim());
+
+        body.appendChild(input);
+        body.appendChild(submitBtn);
+      }
+
+      document.getElementById('speech-status').innerText = "Click above and speak clearly...";
+      document.getElementById('quiz-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(userAns) {
+      const q = questions[currentPlotIndex];
+      let isCorrect = false;
+
+      if (q.type === 'fill') {
+        // Case-insensitive comparison for fill-in-the-blank
+        isCorrect = userAns.toLowerCase() === q.ans.toLowerCase();
+      } else {
+        isCorrect = userAns === q.ans;
+      }
+
+      if (isCorrect) {
+        alert(`Correct! You successfully cultivated a ${assignedPlants[currentPlotIndex]}! +50 Points 🪙`);
+        plotStates[currentPlotIndex] = true;
+        
+        // Update Visual
+        const plantIcon = assignedPlants[currentPlotIndex].split(' ')[0];
+        document.getElementById(`plant-${currentPlotIndex}`).innerText = plantIcon;
+
+        // Unlock next
+        if (currentPlotIndex + 1 < 30 && !plotStates[currentPlotIndex + 1]) {
+          document.getElementById(`plant-${currentPlotIndex + 1}`).innerText = '🌱';
+        }
+
+        plantsGrown++;
+        score += 50;
+        document.getElementById('crop-count').innerText = plantsGrown;
+        document.getElementById('score-count').innerText = score;
+
+        closeModal();
+      } else {
+        alert(`Incorrect! Please review your Physics/English grammar rules and try again.\n(Hint: Pay attention to verb tenses or frequency formula).`);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('quiz-modal').style.display = 'none';
+    }
+
+    // Speech Recognition API for Pronunciation Testing
+    function startSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Web Speech API is not supported in this browser. Please use Chrome or Edge.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      document.getElementById('speech-status').innerText = "Listening... Read the question out loud!";
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('speech-status').innerText = `AI Recognized: "${transcript}"`;
+
+        const currentQ = questions[currentPlotIndex].q.toLowerCase();
+        const spokenWords = transcript.toLowerCase().split(" ");
+        let matches = 0;
+
+        spokenWords.forEach(w => {
+          if (w.length > 3 && currentQ.includes(w)) {
+            matches++;
+          }
+        });
+
+        if (matches >= 2 || transcript.length > 10) {
+          alert("Pronunciation Assessment Passed! Excellent articulation! +20 Bonus Coins 🪙");
+          score += 20;
+          document.getElementById('score-count').innerText = score;
+        } else {
+          alert("Speech recognized, but try speaking more clearly or closer to the microphone.");
+        }
+      };
+
+      recognition.onerror = function() {
+        document.getElementById('speech-status').innerText = "Could not recognize speech. Please try again.";
+      };
+    }
+
+    window.onload = initFarmGrid;
+  </script>
+</body>
+</html>
