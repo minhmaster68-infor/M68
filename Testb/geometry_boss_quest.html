@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometry Quest: 30 English Math Bosses</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top HUD UI */
+    #ui-header {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 12px 24px;
+      border-radius: 16px;
+      border: 2px solid #38bdf8;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      width: 92%;
+      max-width: 850px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 { font-size: 16px; color: #38bdf8; letter-spacing: 0.5px; text-transform: uppercase; }
+    .status-group { display: flex; gap: 20px; font-size: 14px; font-weight: bold; }
+    .highlight { color: #f59e0b; }
+    
+    .bar-container { display: flex; align-items: center; gap: 8px; }
+    .hp-bar-bg { width: 100px; height: 12px; background: #334155; border-radius: 6px; overflow: hidden; }
+    .hp-player-fill { height: 100%; width: 100%; background: #22c55e; transition: width 0.3s ease; }
+    .hp-boss-fill { height: 100%; width: 100%; background: #ef4444; transition: width 0.3s ease; }
+
+    #canvas-container {
+      width: 100vw;
+      height: 52vh;
+      position: relative;
+    }
+
+    /* Question & Attack Card UI */
+    .modal-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      max-width: 94%;
+      height: 42vh;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #38bdf8;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .boss-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #831843;
+      color: #f472b6;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 8px;
+      border: 1px solid #f472b6;
+      text-transform: uppercase;
+    }
+
+    .question-box {
+      font-size: 15px;
+      color: #f1f5f9;
+      margin: 8px 0;
+      line-height: 1.4;
+      background: #1e293b;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border-left: 5px solid #38bdf8;
+      font-weight: 500;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .btn-opt {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #f8fafc;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .btn-opt:hover {
+      background: #0284c7;
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+    }
+
+    .feedback {
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: none;
+      text-align: center;
+    }
+    .fb-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .fb-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    /* Flash Screen Animation on Damage */
+    #damage-flash {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(239, 68, 68, 0.35);
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <div id="damage-flash"></div>
+
+  <div id="ui-header">
+    <h1>⚔️ Geometry Quest: 30 Bosses</h1>
+    <div class="status-group">
+      <div>STAGE: <span id="stage-num" class="highlight">1 / 30</span></div>
+      <div class="bar-container">
+        <span>PLAYER HP:</span>
+        <div class="hp-bar-bg"><div id="player-hp-fill" class="hp-player-fill"></div></div>
+      </div>
+      <div class="bar-container">
+        <span>BOSS HP:</span>
+        <div class="hp-bar-bg"><div id="boss-hp-fill" class="hp-boss-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <div class="modal-overlay">
+    <div class="boss-tag">
+      <span id="boss-title">STAGE 1: LORD MEDIAN CUBE</span>
+      <span id="boss-type">GEOMETRIC GUARDIAN</span>
+    </div>
+    <div class="question-box" id="question-text">Loading multi-step puzzle...</div>
+    <div class="options-grid" id="options-container"></div>
+    <div class="feedback" id="feedback-box"></div>
+  </div>
+
+  <script>
+    // 30 High-Difficulty Multi-Step Geometry & Logic English Puzzles
+    const questionsData = [
+      {
+        boss: "Stage 1: Lord Orthocenter Cube 🧊",
+        q: "In acute triangle ABC, three altitudes AI, BJ, CK intersect at H. If angle BAC = 70°, what is the measure of angle BHC?",
+        opts: ["A. 110°", "B. 70°", "C. 140°", "D. 90°"],
+        ans: "A. 110°"
+      },
+      {
+        boss: "Stage 2: Obtuse Orthocenter Phantom 👻",
+        q: "In triangle ABC with an obtuse angle at A (angle A = 120°), where is the orthocenter H located relative to triangle ABC?",
+        opts: ["A. Inside the triangle", "B. Outside the triangle, behind vertex A", "C. Coincident with vertex A", "D. At the midpoint of BC"],
+        ans: "B. Outside the triangle, behind vertex A"
+      },
+      {
+        boss: "Stage 3: Right Triangle Orthocenter Golem 🗿",
+        q: "If triangle ABC is right-angled at vertex A, where does the orthocenter H lie?",
+        opts: ["A. Inside triangle ABC", "B. Exactly at vertex A", "C. Outside triangle ABC", "D. At the midpoint of hypotenuse BC"],
+        ans: "B. Exactly at vertex A"
+      },
+      {
+        boss: "Stage 4: Equilateral Distance Warden 🛡️",
+        q: "In an equilateral triangle ABC with altitude h = 9 cm, what is the distance from orthocenter H to each of the three vertices?",
+        opts: ["A. 3 cm", "B. 4.5 cm", "C. 6 cm", "D. 9 cm"],
+        ans: "C. 6 cm"
+      },
+      {
+        boss: "Stage 5: Dual Altitude Solver 📐",
+        q: "In triangle ABC, altitudes AI and BJ intersect at H. If angle ABC = 50° and angle ACB = 60°, what is angle HAB?",
+        opts: ["A. 30°", "B. 40°", "C. 50°", "D. 20°"],
+        ans: "A. 30°"
+      },
+      {
+        boss: "Stage 6: Equilateral Perpendicular Overlord 👑",
+        q: "Prove statement: 'In an equilateral triangle, the orthocenter is equidistant from all 3 vertices.' Which theorem is essential?",
+        opts: [
+          "A. In an isosceles triangle, the altitude is also the perpendicular bisector",
+          "B. Pythagorean theorem only",
+          "C. The sum of angles in a triangle is 180°",
+          "D. Triangle inequality theorem"
+        ],
+        ans: "A. In an isosceles triangle, the altitude is also the perpendicular bisector"
+      },
+      {
+        boss: "Stage 7: Isosceles Base Angle Sphinx 🦅",
+        q: "In isosceles triangle ABC (AB = AC), altitude AI is drawn. If angle B = 65°, what is angle IAC?",
+        opts: ["A. 25°", "B. 65°", "C. 50°", "D. 35°"],
+        ans: "A. 25°"
+      },
+      {
+        boss: "Stage 8: Supplementary Angle Reaper 💀",
+        q: "In acute triangle ABC with orthocenter H, what is the mathematical relation between angle A and angle BHC?",
+        opts: ["A. Angle A + Angle BHC = 180°", "B. Angle A = Angle BHC", "C. Angle BHC = 2 * Angle A", "D. Angle A + Angle BHC = 90°"],
+        ans: "A. Angle A + Angle BHC = 180°"
+      },
+      {
+        boss: "Stage 9: Hypotenuse Midpoint Knight ⚔️",
+        q: "In right triangle ABC (angle A = 90°), M is the midpoint of BC. If AM = 7 cm, what is the length of BC?",
+        opts: ["A. 7 cm", "B. 14 cm", "C. 10.5 cm", "D. 21 cm"],
+        ans: "B. 14 cm"
+      },
+      {
+        boss: "Stage 10: Triple Concurrency Archmage 🧙‍♂️",
+        q: "In triangle ABC, AI ⊥ BC and BJ ⊥ AC. If AI and BJ intersect at H, then the line CH must be:",
+        opts: ["A. Parallel to AB", "B. Perpendicular to AB", "C. Angle bisector of angle C", "D. Equal to AB"],
+        ans: "B. Perpendicular to AB"
+      },
+      {
+        boss: "Stage 11: Congruent Altitude Beetle 🐞",
+        q: "If a triangle has two altitudes of equal length (AI = BJ), what type of triangle must it be?",
+        opts: ["A. Scalene triangle", "B. Isosceles triangle", "C. Right-angled scalene triangle", "D. Obtuse scalene triangle"],
+        ans: "B. Isosceles triangle"
+      },
+      {
+        boss: "Stage 12: Quad-Angle Multi-Step Hydra 🐍",
+        q: "In quadrilateral ABHC, if angle ABH = 90° and angle ACH = 90°, what is the sum of angle BAC and angle BHC?",
+        opts: ["A. 180°", "B. 360°", "C. 270°", "D. 90°"],
+        ans: "A. 180°"
+      },
+      {
+        boss: "Stage 13: S-A-S Multi-Layer Golem 🗿",
+        q: "To prove △ABI = △ACI in isosceles triangle ABC (AB=AC) with altitude AI, which condition is used?",
+        opts: ["A. Hypotenuse - Leg (Right Triangle)", "B. Side - Side - Side only", "C. Angle - Angle - Angle", "D. Side - Angle - Side only"],
+        ans: "A. Hypotenuse - Leg (Right Triangle)"
+      },
+      {
+        boss: "Stage 14: Perimeter Inequality Troll 🧌",
+        q: "In triangle ABC with altitudes AI, BJ, CK and orthocenter H, which inequality is ALWAYS true?",
+        opts: [
+          "A. AI + BJ + CK < AB + BC + CA",
+          "B. AI + BJ + CK > AB + BC + CA",
+          "C. AI + BJ + CK = AB + BC + CA",
+          "D. AI = BJ + CK"
+        ],
+        ans: "A. AI + BJ + CK < AB + BC + CA"
+      },
+      {
+        boss: "Stage 15: Complementary Angle Specter 👻",
+        q: "In right triangle ABC (angle A = 90°), altitude AH is drawn to BC. Which angle is equal to angle BAH?",
+        opts: ["A. Angle C", "B. Angle B", "C. Angle BAC", "D. Angle AHC"],
+        ans: "A. Angle C"
+      },
+      {
+        boss: "Stage 16: Centroid-Orthocenter Merge Dragon 🐉",
+        q: "In which specific triangle do the Orthocenter, Centroid, and Circumcenter merge into ONE single point?",
+        opts: ["A. Equilateral Triangle", "B. Right Isosceles Triangle", "C. Obtuse Isosceles Triangle", "D. Scalene Triangle"],
+        ans: "A. Equilateral Triangle"
+      },
+      {
+        boss: "Stage 17: Angle Bisector Altitude Hybrid 🧬",
+        q: "If line segment AI is both an altitude and an angle bisector in △ABC, then △ABC must be:",
+        opts: ["A. Isosceles at A", "B. Right-angled at B", "C. Scalene", "D. Isosceles at B"],
+        ans: "A. Isosceles at A"
+      },
+      {
+        boss: "Stage 18: Exterior Angle Logic Kraken 🦑",
+        q: "In △ABC, exterior angle at vertex A is 110°. If altitudes BJ and CK intersect at H, what is angle BHC?",
+        opts: ["A. 110°", "B. 70°", "C. 120°", "D. 140°"],
+        ans: "A. 110°"
+      },
+      {
+        boss: "Stage 19: Midsegment Parallel Warlock 🔮",
+        q: "In △ABC, D and E are midpoints of AB and AC. If altitude AI ⊥ BC, what is the angle between AI and DE?",
+        opts: ["A. 90°", "B. 45°", "C. 0° (Parallel)", "D. 180°"],
+        ans: "A. 90°"
+      },
+      {
+        boss: "Stage 20: 30-60-90 Special Right Titan 🗿",
+        q: "In right triangle ABC (angle A = 90°, angle B = 30°), altitude AH is drawn. What is the ratio BH / HC?",
+        opts: ["A. 3", "B. 2", "C. 1.5", "D. 4"],
+        ans: "A. 3"
+      },
+      {
+        boss: "Stage 21: Isosceles Right Triangle Chimera 🦁",
+        q: "In right isosceles triangle ABC at A, altitude AH = 5 cm. What is the length of hypotenuse BC?",
+        opts: ["A. 10 cm", "B. 5 cm", "C. 15 cm", "D. 20 cm"],
+        ans: "A. 10 cm"
+      },
+      {
+        boss: "Stage 22: Perpendicular Bisector Distance Gargoyle 🗿",
+        q: "If H is the orthocenter of △ABC and △ABC is acute, which point is equidistant from the 3 sides of △IJK (formed by foot of altitudes)?",
+        opts: ["A. Orthocenter H", "B. Centroid G", "C. Vertex A", "D. Midpoint of BC"],
+        ans: "A. Orthocenter H"
+      },
+      {
+        boss: "Stage 23: Isosceles Triangle Altitude Logic 📐",
+        q: "In △ABC, AB = AC = 10 cm, BC = 12 cm. What is the length of altitude AI?",
+        opts: ["A. 8 cm", "B. 6 cm", "C. 7 cm", "D. 9 cm"],
+        ans: "A. 8 cm"
+      },
+      {
+        boss: "Stage 24: Reflection Property Daemon 👿",
+        q: "If H is the orthocenter of △ABC, and H' is the reflection of H across side BC, where does H' lie?",
+        opts: ["A. On the circumcircle of △ABC", "B. Inside △ABC", "C. At vertex A", "D. On altitude AI"],
+        ans: "A. On the circumcircle of △ABC"
+      },
+      {
+        boss: "Stage 25: Euler Line Harbinger 🌌",
+        q: "In any non-equilateral triangle, the Orthocenter (H), Centroid (G), and Circumcenter (O) lie on a single line called:",
+        opts: ["A. Euler Line", "B. Fermat Line", "C. Pascal Line", "D. Altitude Line"],
+        ans: "A. Euler Line"
+      },
+      {
+        boss: "Stage 26: Euler Segment Ratio Behemoth 🦣",
+        q: "On the Euler Line of a triangle, what is the ratio of segment HG to GO (where H=Orthocenter, G=Centroid, O=Circumcenter)?",
+        opts: ["A. HG : GO = 2 : 1", "B. HG : GO = 1 : 1", "C. HG : GO = 3 : 1", "D. HG : GO = 1 : 2"],
+        ans: "A. HG : GO = 2 : 1"
+      },
+      {
+        boss: "Stage 27: Cyclic Quad Angle Solver 🐲",
+        q: "In acute △ABC with altitudes AI and BJ intersecting at H, what is angle HIJ + angle HBJ?",
+        opts: ["A. 90°", "B. 180°", "C. 60°", "D. 120°"],
+        ans: "A. 90°"
+      },
+      {
+        boss: "Stage 28: Area-Altitude Decipherer 📜",
+        q: "In △ABC, side a = 6 cm, b = 8 cm, c = 10 cm. What is the length of the altitude drawn to hypotenuse c?",
+        opts: ["A. 4.8 cm", "B. 5.0 cm", "C. 4.2 cm", "D. 3.6 cm"],
+        ans: "A. 4.8 cm"
+      },
+      {
+        boss: "Stage 29: Equilateral Inradius Master 🧘",
+        q: "In an equilateral triangle with side length 'a', what is the distance from orthocenter H to side BC?",
+        opts: ["A. (a * √3) / 6", "B. (a * √3) / 3", "C. (a * √3) / 2", "D. a / 2"],
+        ans: "A. (a * √3) / 6"
+      },
+      {
+        boss: "Stage 30: SUPREME GEOMETRY OVERLORD 🌌",
+        q: "FINAL BOSS: In △ABC, orthocenter H divides altitude AI such that AH : HI = 2 : 1. What type of triangle is △ABC?",
+        opts: [
+          "A. Equilateral Triangle",
+          "B. Right Isosceles Triangle",
+          "C. Obtuse Scalene Triangle",
+          "D. Right Scalene Triangle"
+        ],
+        ans: "A. Equilateral Triangle"
+      }
+    ];
+
+    let currentStage = 0;
+    let playerHp = 100;
+    let bossHp = 100;
+
+    // --- THREE.JS 3D ENGINE ---
+    let scene, camera, renderer, bossGroup, mathPropsGroup;
+
+    function init3DEngine() {
+      const container = document.getElementById('canvas-container');
+      
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x090d16);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight * 0.52), 0.1, 1000);
+      camera.position.set(0, 1.5, 7);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight * 0.52);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+      dirLight.position.set(5, 8, 5);
+      scene.add(dirLight);
+
+      const redLight = new THREE.PointLight(0xec4899, 1.5, 12);
+      redLight.position.set(-4, 2, 2);
+      scene.add(redLight);
+
+      // Math Grid Stage Platform
+      const gridHelper = new THREE.GridHelper(10, 20, 0x38bdf8, 0x1e293b);
+      gridHelper.position.y = -1.5;
+      scene.add(gridHelper);
+
+      build3DMathBoss(currentStage);
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    // Procedural Math Boss Builder
+    function build3DMathBoss(stageIdx) {
+      if (bossGroup) scene.remove(bossGroup);
+
+      bossGroup = new THREE.Group();
+      mathPropsGroup = new THREE.Group();
+
+      const bossColors = [0x38bdf8, 0xf472b6, 0xfacc15, 0x4ade80, 0xa78bfa, 0xf97316, 0xef4444];
+      const mainColor = bossColors[stageIdx % bossColors.length];
+
+      let bodyGeo;
+      const type = stageIdx % 5;
+
+      if (type === 0) bodyGeo = new THREE.BoxGeometry(1.6, 1.6, 1.6);
+      else if (type === 1) bodyGeo = new THREE.ConeGeometry(1.3, 2.2, 4);
+      else if (type === 2) bodyGeo = new THREE.OctahedronGeometry(1.4);
+      else if (type === 3) bodyGeo = new THREE.CylinderGeometry(0.8, 0.8, 1.9, 16);
+      else bodyGeo = new THREE.DodecahedronGeometry(1.3);
+
+      const bodyMat = new THREE.MeshStandardMaterial({ 
+        color: mainColor, 
+        roughness: 0.3,
+        metalness: 0.3
+      });
+      const mainBody = new THREE.Mesh(bodyGeo, bodyMat);
+      bossGroup.add(mainBody);
+
+      // Wireframe overlay for geometric mathematical visual
+      const wireMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.35 });
+      const wireMesh = new THREE.Mesh(bodyGeo, wireMat);
+      wireMesh.scale.set(1.03, 1.03, 1.03);
+      bossGroup.add(wireMesh);
+
+      // Boss Eyes
+      const eyeGeo = new THREE.SphereGeometry(0.2, 16, 16);
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const pupilGeo = new THREE.SphereGeometry(0.08, 12, 12);
+      const pupilMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+      const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+      leftEye.position.set(-0.35, 0.3, 1.0);
+      const leftPupil = new THREE.Mesh(pupilGeo, pupilMat);
+      leftPupil.position.set(-0.35, 0.3, 1.18);
+
+      const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+      rightEye.scale.set(1.3, 1.3, 1.3);
+      rightEye.position.set(0.35, 0.3, 1.0);
+      const rightPupil = new THREE.Mesh(pupilGeo, pupilMat);
+      rightPupil.position.set(0.35, 0.3, 1.22);
+
+      bossGroup.add(leftEye, leftPupil, rightEye, rightPupil);
+
+      // Floating Geometry Ring
+      const torusGeo = new THREE.TorusGeometry(0.35, 0.06, 8, 24);
+      const torusMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b });
+      const floatingRing = new THREE.Mesh(torusGeo, torusMat);
+      floatingRing.position.set(1.8, 1.0, 0);
+      mathPropsGroup.add(floatingRing);
+
+      bossGroup.add(mathPropsGroup);
+      bossGroup.position.y = 0.2;
+      scene.add(bossGroup);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (bossGroup) {
+        bossGroup.position.y = 0.2 + Math.sin(Date.now() * 0.003) * 0.18;
+        bossGroup.rotation.y += 0.01;
+        if (mathPropsGroup) mathPropsGroup.rotation.x += 0.02;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / (window.innerHeight * 0.52);
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight * 0.52);
+    }
+
+    // --- GAME ENGINE & ATTACK LOGIC ---
+    function loadStage(stageIdx) {
+      const data = questionsData[stageIdx];
+      document.getElementById('boss-title').innerText = data.boss;
+      document.getElementById('question-text').innerText = data.q;
+
+      const optsContainer = document.getElementById('options-container');
+      optsContainer.innerHTML = '';
+      document.getElementById('feedback-box').style.display = 'none';
+
+      data.opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opt';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt, data.ans);
+        optsContainer.appendChild(btn);
+      });
+
+      build3DMathBoss(stageIdx);
+      bossHp = 100;
+      updateUI();
+    }
+
+    function checkAnswer(selected, correct) {
+      const fb = document.getElementById('feedback-box');
+      fb.style.display = 'block';
+
+      if (selected === correct) {
+        bossHp = 0;
+        fb.className = 'feedback fb-success';
+        fb.innerText = "🎯 CRITICAL MATH HIT! You solved the multi-layer puzzle!";
+
+        // Hit animation
+        bossGroup.position.x = 0.5;
+        setTimeout(() => bossGroup.position.x = -0.5, 80);
+        setTimeout(() => bossGroup.position.x = 0, 160);
+
+        setTimeout(() => {
+          if (currentStage < questionsData.length - 1) {
+            currentStage++;
+            loadStage(currentStage);
+          } else {
+            alert(`🎉 CONGRATULATIONS! You defeated all 30 Math Bosses and Mastered High-Level Geometry!`);
+          }
+        }, 1000);
+
+      } else {
+        // Boss Attack Action on Wrong Answer
+        playerHp -= 25;
+        fb.className = 'feedback fb-error';
+        fb.innerText = "💥 WRONG DECODER! Boss attacked you! (-25 HP)";
+
+        // Screen Red Flash
+        const flash = document.getElementById('damage-flash');
+        flash.style.opacity = '1';
+        setTimeout(() => flash.style.opacity = '0', 200);
+
+        // Boss Lunges Forward Animation
+        bossGroup.position.z = 2.0;
+        setTimeout(() => bossGroup.position.z = 0, 250);
+
+        if (playerHp <= 0) {
+          playerHp = 0;
+          updateUI();
+          setTimeout(() => {
+            alert("☠️ GAME OVER! You ran out of HP. Restarting from Stage 1...");
+            currentStage = 0;
+            playerHp = 100;
+            loadStage(0);
+          }, 400);
+          return;
+        }
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('stage-num').innerText = `${currentStage + 1} / 30`;
+      document.getElementById('player-hp-fill').style.width = `${playerHp}%`;
+      document.getElementById('boss-hp-fill').style.width = `${bossHp}%`;
+    }
+
+    window.onload = () => {
+      init3DEngine();
+      loadStage(0);
+    };
+  </script>
+</body>
+</html>
