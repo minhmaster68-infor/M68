@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review 16: Technical Review - Hull 402</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #e67e22; --dark: #d35400; --bg: #fffaf0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 15px; margin: 0; }
+        .container { max-width: 900px; margin: 20px auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin: 20px 0; border: 4px solid var(--primary); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; font-size: 1.8rem; }
+        h2 { color: #2c3e50; margin-top: 30px; background: #fef5e7; padding: 10px; border-radius: 8px; font-size: 1.3rem; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
+        .vocab-card { background: #f9f9f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .vocab-card b { color: #2c3e50; }
+        .dialogue-area { background: #f8f9fa; padding: 20px; border-radius: 15px; }
+        .line { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; }
+        .line-content { flex: 1; }
+        .speaker { font-weight: 800; color: var(--dark); text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 5px; }
+        .en { font-weight: 600; color: #1a1a1a; display: block; margin: 5px 0; font-size: 1.05rem; }
+        .vi { color: #555; font-style: italic; font-size: 0.95rem; display: block; margin-top: 5px; }
+        .btn-audio { background: var(--primary); color: white; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+        .btn-audio:hover { background: var(--dark); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index1.html" style="text-decoration:none; color:#64748b; font-weight:600;"><i class="fa-solid fa-arrow-left"></i> Quay lại Trang chủ</a>
+        
+        <!-- Video nhúng bài học với mã giả định abcdef -->
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/7gK2v1EHUDQ" title="Hull 402 Technical Review" allowfullscreen></iframe>
+        </div>
+
+        <h1>Lesson 16: Technical Review - Hull 402</h1>
+
+        <h2>1. Key Vocabulary (Từ vựng chuyên ngành)</h2>
+        <div class="vocab-grid">
+            <div class="vocab-card">
+                <div><b>DWT (Deadweight Tonnage)</b><br>Trọng tải toàn phần của tàu</div>
+                <button class="btn-audio" onclick="speak('Deadweight Tonnage')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Block Fabrication</b><br>Chế tạo tổng đoạn / phân đoạn</div>
+                <button class="btn-audio" onclick="speak('Block Fabrication')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>NDT (Non-Destructive Testing)</b><br>Kiểm tra không phá hủy</div>
+                <button class="btn-audio" onclick="speak('Non-Destructive Testing')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>AH36 High-yield Steel</b><br>Thép cường độ cao đóng tàu</div>
+                <button class="btn-audio" onclick="speak('AH36 High-yield Steel')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Hydrogen-induced Cracking</b><br>Nứt do nhiễm Hydro khi hàn</div>
+                <button class="btn-audio" onclick="speak('Hydrogen-induced Cracking')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Shaft Line Alignment</b><br>Căn chỉnh đường trục chân vịt</div>
+                <button class="btn-audio" onclick="speak('Shaft Line Alignment')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>FEA (Finite Element Analysis)</b><br>Phân tích phần tử hữu hạn</div>
+                <button class="btn-audio" onclick="speak('Finite Element Analysis')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>PSPC</b><br>Tiêu chuẩn sơn két nước dằn IMO</div>
+                <button class="btn-audio" onclick="speak('Performance Standard for Protective Coatings')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>DFT (Dry Film Thickness)</b><br>Độ dày màng sơn khô</div>
+                <button class="btn-audio" onclick="speak('Dry Film Thickness')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="vocab-card">
+                <div><b>Bresle Patch Method</b><br>Phương pháp Bresle đo độ sạch muối</div>
+                <button class="btn-audio" onclick="speak('Bresle Patch Method')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+        </div>
+
+        <h2>2. Technical Conversation (Hội thoại kỹ thuật)</h2>
+        <div class="dialogue-area">
+            
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Mr. Alex (Director):</span>
+                    <span class="en">"Good morning, everyone. Thank you for joining this review session on Hull 402—our new 50,000 DWT chemical tanker. Dr. Martin, Sarah, as you know, we are approaching the keel-laying milestone, but I want to ensure we’ve mitigated all structural and stability risks before moving forward. Sarah, could you start with an update on the production status?"</span>
+                    <span class="vi">"Chào buổi sáng mọi người. Cảm ơn đã tham gia phiên họp đánh giá về Tàu Hull 402—tàu chở hóa chất 50.000 DWT mới của chúng ta. Tiến sĩ Martin, Sarah, như mọi người đã biết, chúng ta đang tiến gần đến cột mốc đặt sống sọc, nhưng tôi muốn đảm bảo chúng ta đã giảm thiểu mọi rủi ro về cấu trúc và tính ổn định trước khi tiến hành. Sarah, cô có thể bắt đầu với việc cập nhật tình hình sản xuất không?"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Good morning, everyone. Thank you for joining this review session on Hull 402, our new 50,000 DWT chemical tanker. Dr. Martin, Sarah, as you know, we are approaching the keel-laying milestone, but I want to ensure we’ve mitigated all structural and stability risks before moving forward. Sarah, could you start with an update on the production status?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"Good morning, Mr. Alex, Dr. Martin. Currently, 60% of the block fabrication is complete in the assembly shop. We’re applying shielded metal arc welding (SMAW) and flux-cored arc welding (FCAW) for the main structural joints. However, during non-destructive testing (NDT), specifically ultrasonic testing on Block 102’s bottom plating, we detected some minor porosity near the longitudinal stiffeners."</span>
+                    <span class="vi">"Chào buổi sáng ông Alex, Tiến sĩ Martin. Hiện tại, 60% công đoạn chế tạo phân đoạn đã hoàn thành trong xưởng lắp ráp. Chúng tôi đang áp dụng phương pháp hàn hồ quang tay (SMAW) và hàn dây lõi thuốc (FCAW) cho các mối nối cấu trúc chính. Tuy nhiên, trong quá trình kiểm tra không phá hủy (NDT), cụ thể là kiểm tra siêu âm trên tôn đáy của Phân đoạn 102, chúng tôi đã phát hiện một số vết rỗ khí nhỏ gần các nẹp dọc."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Good morning, Mr. Alex, Dr. Martin. Currently, 60% of the block fabrication is complete in the assembly shop. We’re applying shielded metal arc welding and flux-cored arc welding for the main structural joints. However, during non-destructive testing, specifically ultrasonic testing on Block 102’s bottom plating, we detected some minor porosity near the longitudinal stiffeners.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Dr. Martin (Expert):</span>
+                    <span class="en">"Porosity at the longitudinal stiffeners can be a precursor to fatigue cracking under cyclic wave loading, Sarah. What class steel are you using for those bottom panels? High-tensile steel, I presume?"</span>
+                    <span class="vi">"Rỗ khí tại vị trí nẹp dọc có thể là tiền đề dẫn đến nứt mỏi dưới tác động của tải trọng sóng tuần hoàn đấy Sarah. Cô đang sử dụng loại thép cấp nào cho các tấm đáy đó? Tôi đoán là thép cường độ cao phải không?"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Porosity at the longitudinal stiffeners can be a precursor to fatigue cracking under cyclic wave loading, Sarah. What class steel are you using for those bottom panels? High-tensile steel, I presume?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"Yes, Dr. Martin. It’s AH36 high-yield structural steel. We checked the welding parameters, and the issue was traced to improper pre-heating temperatures and high ambient humidity during the night shift. We’ve already recalibrated the pre-heating procedure to 100°C and increased post-weld inspection intervals."</span>
+                    <span class="vi">"Vâng, thưa Tiến sĩ Martin. Đó là thép cấu trúc cường độ cao AH36. Chúng tôi đã kiểm tra các thông số hàn và xác định nguyên nhân là do nhiệt độ sấy nóng trước khi hàn không phù hợp và độ ẩm môi trường cao trong ca đêm. Chúng tôi đã hiệu chuẩn lại quy trình sấy nóng lên 100 độ C và tăng khoảng thời gian kiểm tra sau khi hàn."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Yes, Dr. Martin. It’s AH36 high-yield structural steel. We checked the welding parameters, and the issue was traced to improper pre-heating temperatures and high ambient humidity during the night shift. We’ve already recalibrated the pre-heating procedure to 100°C and increased post-weld inspection intervals.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Dr. Martin (Expert):</span>
+                    <span class="en">"Excellent corrective action. High-yield steels like AH36 are sensitive to hydrogen-induced cracking, especially in thick sections. Make sure your welders maintain strict climate control in the assembly hall and use low-hydrogen consumables stored in drying ovens."</span>
+                    <span class="vi">"Hành động khắc phục rất tốt. Thép cường độ cao như AH36 rất nhạy cảm với vết nứt do nhiễm hydro, đặc biệt là ở các tấm dày. Hãy đảm bảo thợ hàn duy trì kiểm soát khí hậu nghiêm ngặt trong nhà xưởng lắp ráp và sử dụng que hàn/dây hàn hydro thấp được bảo quản trong lò sấy."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Excellent corrective action. High-yield steels like AH36 are sensitive to hydrogen-induced cracking, especially in thick sections. Make sure your welders maintain strict climate control in the assembly hall and use low-hydrogen consumables stored in drying ovens.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Mr. Alex (Director):</span>
+                    <span class="en">"Good catch, Dr. Martin. Safety and structural integrity are non-negotiable. Now, regarding the propulsion and alignment—how are we progressing with the stern frame integration and the shaft line alignment?"</span>
+                    <span class="vi">"Nhận định rất hay, Tiến sĩ Martin. An toàn và tính toàn vẹn cấu trúc là điều không thể thương lượng. Bây giờ, liên quan đến hệ thống đẩy và căn chỉnh trục—chúng ta đang tiến triển thế nào với việc lắp ráp khung đuôi và căn chỉnh đường trục chân vịt?"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Good catch, Dr. Martin. Safety and structural integrity are non-negotiable. Now, regarding the propulsion and alignment—how are we progressing with the stern frame integration and the shaft line alignment?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"We are setting up the optical alignment tools and laser trackers for the stern tube bored hole. The main engine bedplate installation is scheduled for next Thursday. We plan to perform the final alignment check in both cold-static and simulated hot-running conditions to account for thermal expansion."</span>
+                    <span class="vi">"Chúng tôi đang thiết lập các công cụ căn chỉnh quang học và máy theo dõi laser cho lỗ khoét ống bao trục đuôi. Việc lắp đặt bệ máy chính dự kiến vào thứ Năm tới. Chúng tôi dự kiến thực hiện kiểm tra căn chỉnh cuối cùng ở cả trạng thái nguội-tĩnh và trạng thái giả lập nóng-hoạt động để tính đến sự giãn nở nhiệt."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('We are setting up the optical alignment tools and laser trackers for the stern tube bored hole. The main engine bedplate installation is scheduled for next Thursday. We plan to perform the final alignment check in both cold-static and simulated hot-running conditions to account for thermal expansion.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Dr. Martin (Expert):</span>
+                    <span class="en">"That’s standard practice, but remember to factor in the hull deflection that occurs after launching and during lightship loading conditions. Have you run the finite element analysis (FEA) model to predict global bending moments on the shaft bearings?"</span>
+                    <span class="vi">"Đó là quy trình tiêu chuẩn, nhưng hãy nhớ tính đến độ biến dạng võng của thân tàu xảy ra sau khi hạ thủy và trong các điều kiện tải trọng tàu không tải. Cô đã chạy mô hình phân tích phần tử hữu hạn (FEA) để dự đoán mô-men uốn toàn cục lên các gối đỡ trục chưa?"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('That’s standard practice, but remember to factor in the hull deflection that occurs after launching and during lightship loading conditions. Have you run the finite element analysis model to predict global bending moments on the shaft bearings?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"Yes, Dr. Martin. The FEA model indicates maximum vertical deflection at midship under full ballast condition. We’ve calculated the offset for the intermediate shaft bearings accordingly to prevent localized edge loading on the stern tube bearing bushes."</span>
+                    <span class="vi">"Vâng, Tiến sĩ Martin. Mô hình FEA chỉ ra độ võng dọc lớn nhất ở giữa tàu dưới điều kiện đầy nước dằn (ballast). Theo đó, chúng tôi đã tính toán độ lệch (offset) cho các gối đỡ trục trung gian để ngăn ngừa lực tỳ cục bộ lên các ống lót bạc đỡ trục đuôi."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Yes, Dr. Martin. The FEA model indicates maximum vertical deflection at midship under full ballast condition. We’ve calculated the offset for the intermediate shaft bearings accordingly to prevent localized edge loading on the stern tube bearing bushes.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Mr. Alex (Director):</span>
+                    <span class="en">"Perfect. What about the outfitting and coating phase? Are the ballast tanks on schedule for the protective coating application?"</span>
+                    <span class="vi">"Tuyệt vời. Còn về giai đoạn lắp ráp thiết bị và sơn phủ thì sao? Các két nước dằn có đúng tiến độ để tiến hành sơn bảo vệ không?"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Perfect. What about the outfitting and coating phase? Are the ballast tanks on schedule for the protective coating application?')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"Yes, sir. We are preparing the internal surfaces of the dedicated seawater ballast tanks to Sa 2.5 blast standard, following PSPC (IMO Performance Standard for Protective Coatings). We’ll apply a two-coat epoxy system with a target Dry Film Thickness (DFT) of 320 microns."</span>
+                    <span class="vi">"Vâng, thưa ông. Chúng tôi đang chuẩn bị bề mặt bên trong của các két nước dằn chuyên dụng theo tiêu chuẩn phun sạch Sa 2.5, tuân thủ tiêu chuẩn PSPC (Tiêu chuẩn hiệu dụng cho sơn phủ bảo vệ của IMO). Chúng tôi sẽ sơn hệ sơn epoxy hai lớp với độ dày màng sơn khô (DFT) mục tiêu là 320 micron."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Yes, sir. We are preparing the internal surfaces of the dedicated seawater ballast tanks to Sa 2.5 blast standard, following PSPC. We’ll apply a two-coat epoxy system with a target Dry Film Thickness of 320 microns.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Dr. Martin (Expert):</span>
+                    <span class="en">"Ensure that solvent entrapment is avoided by maintaining continuous ventilation during curing, especially in double-bottom spaces. Also, perform soluble salt tests on the blasted steel before priming—chloride contamination above 50 milligrams per square meter will lead to premature blistering."</span>
+                    <span class="vi">"Đảm bảo tránh hiện tượng kẹt dung môi bằng cách duy trì thông gió liên tục trong quá trình đóng rắn, đặc biệt là ở các không gian đáy đôi. Ngoài ra, hãy thực hiện kiểm tra muối hòa tan trên thép đã phun cát trước khi sơn lót—sự nhiễm bẩn chloride trên 50 mg/m² sẽ dẫn đến việc bong rộp sơn sớm."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Ensure that solvent entrapment is avoided by maintaining continuous ventilation during curing, especially in double-bottom spaces. Also, perform soluble salt tests on the blasted steel before priming—chloride contamination above 50 milligrams per square meter will lead to premature blistering.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Ms. Sarah (Chief Engineer):</span>
+                    <span class="en">"Understood. Our QA/QC team measures soluble salts using the Bresle patch method before applying any primer, and we enforce strict humidity limits below 85% during application."</span>
+                    <span class="vi">"Đã rõ thưa ông. Đội ngũ QA/QC của chúng tôi luôn đo lượng muối hòa tan bằng phương pháp dán Bresle trước khi phun bất kỳ lớp sơn lót nào, và chúng tôi áp dụng giới hạn độ ẩm nghiêm ngặt dưới 85% trong suốt quá trình sơn."</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Understood. Our QA/QC team measures soluble salts using the Bresle patch method before applying any primer, and we enforce strict humidity limits below 85% during application.')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+            <div class="line">
+                <div class="line-content">
+                    <span class="speaker">Mr. Alex (Director):</span>
+                    <span class="en">"Outstanding team efforts. To summarize: address the block pre-heating control, re-verify the shafting offset against FEA hull deflections, and strictly monitor the PSPC coating conditions. Let's aim for a flawless keel-laying next week. Thank you both!"</span>
+                    <span class="vi">"Sự nỗ lực tuyệt vời của cả đội. Tóm lại: giải quyết việc kiểm soát sấy trước phân đoạn, xác minh lại độ lệch trục chân vịt dựa trên biến dạng vỏ tàu FEA, và giám sát chặt chẽ các điều kiện sơn phủ PSPC. Hãy hướng tới một lễ đặt sống sọc suôn sẻ vào tuần tới. Cảm ơn cả hai!"</span>
+                </div>
+                <button class="btn-audio" onclick="speak('Outstanding team efforts. To summarize: address the block pre-heating control, re-verify the shafting offset against FEA hull deflections, and strictly monitor the PSPC coating conditions. Let is aim for a flawless keel-laying next week. Thank you both!')"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

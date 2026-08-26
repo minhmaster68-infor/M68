@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Game: Technical Review - Hull 402</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #e67e22; --accent: #27ae60; --error: #e74c3c; }
+        body { font-family: 'Inter', sans-serif; background: #1a1a1a; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        .setup-screen { position: fixed; inset: 0; background: #2c3e50; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .video-box { width: 100%; max-width: 500px; margin-bottom: 20px; border: 3px solid var(--primary); border-radius: 12px; overflow: hidden; }
+        .role-btn { background: var(--primary); color: white; padding: 12px 24px; border-radius: 30px; border: none; font-size: 1rem; cursor: pointer; margin: 8px; font-weight: bold; transition: background 0.2s; }
+        .role-btn:hover { background: #d35400; }
+        .game-container { flex: 1; display: flex; flex-direction: column; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; justify-content: space-between; }
+        .dialogue-bubble { background: #2d3436; border-radius: 20px; padding: 25px; border: 2px solid #636e72; min-height: 180px; margin: 20px 0; display: flex; flex-direction: column; justify-content: space-between; }
+        .text-en { font-size: 1.15rem; line-height: 1.6; color: #dfe6e9; }
+        .text-en.hidden { filter: blur(8px); }
+        .controls { height: 160px; background: #2d3436; display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 3px solid var(--primary); }
+        #mic-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--primary); color: white; font-size: 1.8rem; cursor: pointer; transition: transform 0.2s; }
+        #mic-btn:disabled { background: #555; cursor: not-allowed; }
+        #mic-btn.listening { background: var(--error); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        #feedback { font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+        #status { font-weight: bold; margin-bottom: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <!-- Màn hình cài đặt chọn vai -->
+    <div id="setup" class="setup-screen">
+        <h2 style="color: var(--primary);">LESSON 16: HULL 402 TECHNICAL REVIEW</h2>
+        <div class="video-box">
+            <iframe width="100%" height="250" src="https://www.youtube.com/embed/7gK2v1EHUDQ" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p>Chọn vai trò của bạn để bắt đầu luyện hội thoại (3 vai):</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <button class="role-btn" onclick="start('AL')">Mr. Alex (Director)</button>
+            <button class="role-btn" onclick="start('MT')">Dr. Martin (Expert)</button>
+            <button class="role-btn" onclick="start('SR')">Ms. Sarah (Chief Eng.)</button>
+        </div>
+    </div>
+
+    <!-- Container chơi game -->
+    <div class="game-container">
+        <div id="role-label" style="color: var(--primary); font-weight: bold; text-align: center; font-size: 1.2rem; margin-top: 10px;"></div>
+        
+        <div class="dialogue-bubble">
+            <div id="text-en" class="text-en hidden">Nội dung hội thoại...</div>
+            <button onclick="document.getElementById('text-en').classList.toggle('hidden')" style="margin-top:15px; align-self: flex-start; background:none; border:1px solid #777; color:#aaa; cursor:pointer; padding: 5px 10px; border-radius: 5px;">Ẩn/Hiện Chữ (Show/Hide Text)</button>
+        </div>
+
+        <div>
+            <div id="feedback" style="text-align: center;"></div>
+            <div id="transcript" style="font-style: italic; color: #999; text-align: center; margin-top: 10px; min-height: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- Thanh công cụ điều khiển Micro -->
+    <div class="controls">
+        <div id="status">Chọn vai để bắt đầu</div>
+        <button id="mic-btn" disabled><i class="fa-solid fa-microphone"></i></button>
+    </div>
+
+    <script>
+        // Kịch bản hội thoại chuẩn, các dòng hội thoại được tinh gọn để Web Speech API hoạt động tốt hơn
+        const script = [
+            { role: 'AL', label: 'MR. ALEX', en: "Good morning, everyone. Thank you for joining this review session on Hull 402, our new 50,000 DWT chemical tanker." },
+            { role: 'AL', label: 'MR. ALEX', en: "Dr. Martin, Sarah, we are approaching the keel-laying milestone, but I want to ensure we have mitigated all structural and stability risks. Sarah, could you start with an update?" },
+            { role: 'SR', label: 'MS. SARAH', en: "Currently, 60% of the block fabrication is complete in the assembly shop. We are applying shielded metal arc welding and flux-cored arc welding for the main structural joints." },
+            { role: 'SR', label: 'MS. SARAH', en: "However, during non-destructive testing on Block 102’s bottom plating, we detected some minor porosity near the longitudinal stiffeners." },
+            { role: 'MT', label: 'DR. MARTIN', en: "Porosity at the longitudinal stiffeners can be a precursor to fatigue cracking under cyclic wave loading, Sarah. What class steel are you using for those bottom panels?" },
+            { role: 'SR', label: 'MS. SARAH', en: "It is AH36 high-yield structural steel. We checked the welding parameters, and the issue was traced to improper pre-heating temperatures and high ambient humidity." },
+            { role: 'SR', label: 'MS. SARAH', en: "We have already recalibrated the pre-heating procedure to 100 degrees Celsius and increased post-weld inspection intervals." },
+            { role: 'MT', label: 'DR. MARTIN', en: "Excellent corrective action. High-yield steels like AH36 are sensitive to hydrogen-induced cracking, especially in thick sections. Make sure your welders maintain strict climate control." },
+            { role: 'AL', label: 'MR. ALEX', en: "Good catch, Dr. Martin. Safety and structural integrity are non-negotiable. Now, how are we progressing with the stern frame integration and the shaft line alignment?" },
+            { role: 'SR', label: 'MS. SARAH', en: "We are setting up the optical alignment tools and laser trackers. We plan to perform the final alignment check in cold-static and simulated hot-running conditions." },
+            { role: 'MT', label: 'DR. MARTIN', en: "That is standard practice, but remember to factor in the hull deflection that occurs after launching. Have you run the finite element analysis model?" },
+            { role: 'SR', label: 'MS. SARAH', en: "Yes, the FEA model indicates maximum vertical deflection at midship. We have calculated the offset for the intermediate shaft bearings accordingly." },
+            { role: 'AL', label: 'MR. ALEX', en: "Perfect. What about the outfitting and coating phase? Are the ballast tanks on schedule for the protective coating application?" },
+            { role: 'SR', label: 'MS. SARAH', en: "Yes, sir. We are preparing the internal surfaces of the dedicated seawater ballast tanks to Sa 2.5 blast standard, following PSPC rules." },
+            { role: 'MT', label: 'DR. MARTIN', en: "Ensure that solvent entrapment is avoided by maintaining continuous ventilation. Also, perform soluble salt tests on the blasted steel before priming." },
+            { role: 'SR', label: 'MS. SARAH', en: "Understood. Our QA team measures soluble salts using the Bresle patch method, and we enforce strict humidity limits below 85% during application." },
+            { role: 'AL', label: 'MR. ALEX', en: "Outstanding team efforts. Address the block pre-heating control, re-verify the shafting offset, and monitor the coating conditions. Thank you both!" }
+        ];
+
+        let userRole = '';
+        let currentIdx = 0;
+        
+        // Khởi tạo Speech Recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        } else {
+            alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói (Speech Recognition). Vui lòng dùng Google Chrome.");
+        }
+
+        function start(role) {
+            userRole = role;
+            document.getElementById('setup').style.display = 'none';
+            playRound();
+        }
+
+        function playRound() {
+            if (currentIdx >= script.length) {
+                alert("Chúc mừng! Bạn đã hoàn thành xuất sắc buổi họp kỹ thuật Hull 402.");
+                location.reload();
+                return;
+            }
+
+            const line = script[currentIdx];
+            document.getElementById('role-label').innerText = "SPEAKER: " + line.label;
+            document.getElementById('text-en').innerText = line.en;
+            document.getElementById('text-en').classList.add('hidden');
+            document.getElementById('transcript').innerText = "";
+            document.getElementById('feedback').innerText = "";
+
+            if (line.role === userRole) {
+                document.getElementById('status').innerText = "ĐẾN LƯỢT BẠN - Hãy bấm Mic và đọc câu trên";
+                document.getElementById('mic-btn').disabled = false;
+            } else {
+                document.getElementById('status').innerText = "AI ĐANG PHÁT BIỂU...";
+                document.getElementById('mic-btn').disabled = true;
+                speakAI(line.en);
+            }
+        }
+
+        function speakAI(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = 0.95; // Đọc ở tốc độ vừa phải cho học viên dễ nghe
+            u.onend = () => { 
+                currentIdx++; 
+                setTimeout(playRound, 1200); 
+            };
+            window.speechSynthesis.speak(u);
+        }
+
+        if (recognition) {
+            document.getElementById('mic-btn').onclick = () => {
+                recognition.start();
+                document.getElementById('mic-btn').classList.add('listening');
+                document.getElementById('status').innerText = "Đang nghe...";
+            };
+
+            recognition.onresult = (event) => {
+                document.getElementById('mic-btn').classList.remove('listening');
+                const result = event.results[0][0].transcript.toLowerCase();
+                document.getElementById('transcript').innerText = "Bạn đã nói: \"" + result + "\"";
+                
+                // Chuẩn hóa chuỗi mục tiêu (loại bỏ dấu câu) để so khớp độ chính xác
+                const target = script[currentIdx].en.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                const accuracy = calculateAccuracy(result, target);
+
+                if (accuracy > 40) { // Điểm tối thiểu chấp nhận được là 40%
+                    document.getElementById('feedback').innerText = "Chính xác (" + Math.round(accuracy) + "%). Đang chuyển tiếp...";
+                    document.getElementById('feedback').style.color = "var(--accent)";
+                    setTimeout(() => { 
+                        currentIdx++; 
+                        playRound(); 
+                    }, 2000);
+                } else {
+                    document.getElementById('feedback').innerText = "Độ chính xác thấp (" + Math.round(accuracy) + "%), hãy thử lại!";
+                    document.getElementById('feedback').style.color = "var(--error)";
+                    document.getElementById('status').innerText = "HÃY THỬ LẠI - Bấm nút Mic";
+                }
+            };
+
+            recognition.onerror = (event) => {
+                document.getElementById('mic-btn').classList.remove('listening');
+                document.getElementById('status').innerText = "Lỗi nhận diện. Hãy bấm thử lại!";
+                console.error(event.error);
+            };
+        }
+
+        // Hàm so khớp tương đối dựa trên số từ trùng khớp
+        function calculateAccuracy(s1, s2) {
+            const words1 = s1.split(' ');
+            const words2 = s2.split(' ');
+            let matches = 0;
+            words2.forEach(w => { 
+                if (s1.includes(w)) matches++; 
+            });
+            return (matches / words2.length) * 100;
+        }
+    </script>
+</body>
+</html>
