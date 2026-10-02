@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Phonetics Mastery - Stress & Pronunciation Assessment</title>
+    <style>
+        :root {
+            --bg: #0b132b;
+            --card: #1c2541;
+            --card-subtle: #151d33;
+            --border: #3a506b;
+            --accent: #64dfdf;
+            --accent-hover: #72efdd;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px 15px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid var(--border);
+        }
+
+        .header-title {
+            color: var(--accent);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .tab-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--bg);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: none;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 4px 12px rgba(100, 223, 223, 0.25);
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-item {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--bg);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-subtle);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .question-card.answered {
+            border-color: rgba(100, 223, 223, 0.5);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .question-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .question-instruction {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+
+        .option-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent);
+            background: rgba(100, 223, 223, 0.05);
+        }
+
+        .option-btn.selected {
+            border-color: var(--accent);
+            background: rgba(100, 223, 223, 0.15);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .option-prefix {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--card);
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .option-btn.selected .option-prefix {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .underlined {
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-decoration-thickness: 2.5px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .main-btn {
+            background-color: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 14px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(100, 223, 223, 0.2);
+        }
+
+        .main-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(100, 223, 223, 0.35);
+        }
+
+        .reset-btn {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .reset-btn:hover {
+            background-color: var(--bg);
+            color: var(--text);
+            border-color: var(--text-muted);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Review Mode Styling */
+        .explanation-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .explanation-box strong {
+            color: var(--accent);
+        }
+
+        .option-btn.correct-choice {
+            border-color: var(--success) !important;
+            background-color: var(--success-bg) !important;
+            color: var(--success) !important;
+            font-weight: bold;
+        }
+
+        .option-btn.correct-choice .option-prefix {
+            background-color: var(--success);
+            color: #fff;
+        }
+
+        .option-btn.wrong-choice {
+            border-color: var(--danger) !important;
+            background-color: var(--danger-bg) !important;
+            color: var(--danger) !important;
+        }
+
+        .option-btn.wrong-choice .option-prefix {
+            background-color: var(--danger);
+            color: #fff;
+        }
+
+        .score-banner {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .score-banner.show {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-title {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .score-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 10px 0;
+        }
+
+        .score-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .ipa-badge {
+            font-family: 'Georgia', serif;
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="header-title">English Phonetics Mastery</h1>
+    <p class="subtitle">Kiểm tra & Nâng cao kỹ năng nhận biết Trọng âm và Phát âm Tiếng Anh chuẩn Quốc tế</p>
+
+    <!-- Navigation Module Selector -->
+    <div class="tab-selector">
+        <button id="tabStress" class="tab-btn active" onclick="switchModule('stress')">Module 1: Trọng Âm (20 Câu)</button>
+        <button id="tabPronunciation" class="tab-btn" onclick="switchModule('pronunciation')">Module 2: Phát Âm (20 Câu)</button>
+    </div>
+
+    <!-- Progress & Stats Bar -->
+    <div class="stats-panel">
+        <div class="stat-item">Đã trả lời<span id="statAnswered" class="stat-value">0/20</span></div>
+        <div class="stat-item">Thời gian<span id="statTimer" class="stat-value">00:00</span></div>
+        <div class="stat-item">Trạng thái<span id="statStatus" class="stat-value" style="color: var(--warning);">Đang làm</span></div>
+        <div class="stat-item">Điểm số<span id="statScore" class="stat-value">--/100</span></div>
+    </div>
+
+    <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <!-- Result Score Banner -->
+    <div id="scoreBanner" class="score-banner">
+        <div class="score-title">Kết Quả Bài Đánh Giá</div>
+        <div id="scoreDisplay" class="score-number">0/100</div>
+        <div id="scoreFeedback" class="score-desc">Hãy xem phần giải thích chi tiết phía dưới để khắc phục các câu chưa đúng.</div>
+    </div>
+
+    <!-- Question Render Container -->
+    <div id="questionsContainer"></div>
+
+    <!-- Action Buttons -->
+    <div class="action-container">
+        <button id="submitBtn" class="main-btn" onclick="submitTest()">Nộp Bài & Chấm Điểm</button>
+        <button id="resetBtn" class="main-btn reset-btn" onclick="resetCurrentTest()">Làm Lại Bài Test</button>
+    </div>
+</div>
+
+<script>
+    const stressQuestions = [
+        {
+            id: 1,
+            options: ["teacher", "doctor", "student", "advice"],
+            correct: 3,
+            ipas: ["/'tiːtʃə(r)/", "/'dɒktə(r)/", "/'stjuːdnt/", "/əd'vaɪs/"],
+            stresses: [1, 1, 1, 2],
+            explanation: "<b>advice</b> có trọng âm rơi vào âm tiết thứ 2 (động từ/danh từ gốc ngoại lệ), trong khi các danh từ còn lại (teacher, doctor, student) có trọng âm ở âm tiết 1."
+        },
+        {
+            id: 2,
+            options: ["attend", "cancel", "manage", "offer"],
+            correct: 0,
+            ipas: ["/ə'tend/", "/'kænsl/", "/'mænɪdʒ/", "/'ɒfə(r)/"],
+            stresses: [2, 1, 1, 1],
+            explanation: "<b>attend</b> có trọng âm rơi vào âm tiết thứ 2 (động từ 2 âm tiết). Các động từ còn lại (cancel, manage, offer) có trọng âm rơi vào âm tiết thứ 1."
+        },
+        {
+            id: 3,
+            options: ["important", "dangerous", "excellent", "beautiful"],
+            correct: 0,
+            ipas: ["/ɪm'pɔːtnt/", "/'deɪndʒərəs/", "/'eksələnt/", "/'bjuːtɪfl/"],
+            stresses: [2, 1, 1, 1],
+            explanation: "<b>important</b> có trọng âm rơi vào âm tiết thứ 2. Các tính từ 3 âm tiết còn lại (dangerous, excellent, beautiful) đều có trọng âm rơi vào âm tiết thứ 1."
+        },
+        {
+            id: 4,
+            options: ["economy", "photography", "biography", "academic"],
+            correct: 3,
+            ipas: ["/ɪ'kɒnəmi/", "/fə'tɒɡrəfi/", "/baɪ'ɒɡrəfi/", "/ˌækə'demɪk/"],
+            stresses: [2, 2, 2, 3],
+            explanation: "<b>academic</b> có hậu tố <i>-ic</i> nên trọng âm rơi vào ngay trước nó (âm tiết 3). Các từ còn lại có hậu tố <i>-y</i> khiến trọng âm dịch 3 âm tiết từ dưới lên (âm tiết 2)."
+        },
+        {
+            id: 5,
+            options: ["decision", "pension", "permission", "expansion"],
+            correct: 1,
+            ipas: ["/dɪ'sɪʒn/", "/'penʃn/", "/pə'mɪʃn/", "/ɪk'spænʃn/"],
+            stresses: [2, 1, 2, 2],
+            explanation: "<b>pension</b> là từ có 2 âm tiết, trọng âm rơi vào âm tiết thứ 1. Các từ còn lại đều có 3 âm tiết với đuôi <i>-sion</i> có trọng âm rơi vào âm tiết ngay trước nó (âm tiết 2)."
+        },
+        {
+            id: 6,
+            options: ["polite", "quiet", "formal", "active"],
+            correct: 0,
+            ipas: ["/pə'laɪt/", "/'kwaɪət/", "/'fɔːml/", "/'æktɪv/"],
+            stresses: [2, 1, 1, 1],
+            explanation: "<b>polite</b> có trọng âm rơi vào âm tiết thứ 2. Các tính từ còn lại (quiet, formal, active) có trọng âm rơi vào âm tiết thứ 1."
+        },
+        {
+            id: 7,
+            options: ["entertain", "recommend", "understand", "develop"],
+            correct: 3,
+            ipas: ["/ˌentə'teɪn/", "/ˌrekə'mend/", "/ˌʌndə'stænd/", "/dɪ'veləp/"],
+            stresses: [3, 3, 3, 2],
+            explanation: "<b>develop</b> có trọng âm rơi vào âm tiết thứ 2. Các động từ 3 âm tiết còn lại (entertain, recommend, understand) đều nhấn âm tiết thứ 3."
+        },
+        {
+            id: 8,
+            options: ["solution", "pollution", "population", "tradition"],
+            correct: 2,
+            ipas: ["/sə'luːʃn/", "/pə'luːʃn/", "/ˌpɒpju'leɪʃn/", "/trə'dɪʃn/"],
+            stresses: [2, 2, 3, 2],
+            explanation: "<b>population</b> có 4 âm tiết với hậu tố <i>-tion</i> nên trọng âm rơi vào âm tiết thứ 3. Các từ còn lại có 3 âm tiết với hậu tố <i>-tion</i> nên trọng âm rơi vào âm tiết thứ 2."
+        },
+        {
+            id: 9,
+            options: ["refuse", "relax", "reduce", "refuse (n)"],
+            correct: 3,
+            ipas: ["/rɪ'fjuːz/", "/rɪ'læks/", "/rɪ'djuːs/", "/'refjuːs/"],
+            stresses: [2, 2, 2, 1],
+            explanation: "<b>refuse (danh từ: rác thải)</b> có trọng âm nhấn ở âm tiết thứ 1. Ngược lại, các động từ còn lại (bao gồm cả refuse dạng động từ: từ chối) nhấn ở âm tiết 2."
+        },
+        {
+            id: 10,
+            options: ["historic", "electric", "scientific", "specific"],
+            correct: 2,
+            ipas: ["/hɪ'stɒrɪk/", "/ɪ'lektrɪk/", "/ˌsaɪən'tɪfɪk/", "/spə'sɪfɪk/"],
+            stresses: [2, 2, 3, 2],
+            explanation: "Tất cả các từ đều chứa đuôi <i>-ic</i>. <b>scientific</b> có 4 âm tiết nên trọng âm rơi vào âm tiết thứ 3. Ba từ còn lại có 3 âm tiết nên trọng âm ở âm tiết thứ 2."
+        },
+        {
+            id: 11,
+            options: ["father", "mother", "sister", "hotel"],
+            correct: 3,
+            ipas: ["/'fɑːðə(r)/", "/'mʌðə(r)/", "/'sɪstə(r)/", "/həʊ'tel/"],
+            stresses: [1, 1, 1, 2],
+            explanation: "<b>hotel</b> là danh từ có trọng âm đặc biệt rơi vào âm tiết thứ 2. Các danh từ chỉ người thân (father, mother, sister) đều nhấn âm tiết 1."
+        },
+        {
+            id: 12,
+            options: ["geography", "national", "musical", "natural"],
+            correct: 0,
+            ipas: ["/dʒi'ɒɡrəfi/", "/'næʃnəl/", "/'mjuːzɪkl/", "/'nætʃrəl/"],
+            stresses: [2, 1, 1, 1],
+            explanation: "<b>geography</b> có đuôi <i>-phy</i> nên trọng âm ở âm tiết thứ 2 từ dưới lên (âm tiết 2). Các tính từ còn lại đều có trọng âm rơi vào âm tiết thứ 1."
+        },
+        {
+            id: 13,
+            options: ["preserve", "protect", "provide", "practice"],
+            correct: 3,
+            ipas: ["/prɪ'zɜːv/", "/prə'tekt/", "/prə'vaɪd/", "/'præktɪs/"],
+            stresses: [2, 2, 2, 1],
+            explanation: "<b>practice</b> có trọng âm rơi vào âm tiết 1. Ba động từ còn lại bắt đầu bằng tiền tố <i>pre-/pro-</i> có trọng âm rơi vào âm tiết 2."
+        },
+        {
+            id: 14,
+            options: ["reliability", "responsibility", "possibility", "curiosity"],
+            correct: 3,
+            ipas: ["/rɪˌlaɪə'bɪləti/", "/rɪˌspɒnsə'bɪləti/", "/ˌpɒsə'bɪləti/", "/ˌkjʊəri'ɒsəti/"],
+            stresses: [4, 4, 4, 3],
+            explanation: "Hậu tố <i>-ity</i> làm trọng âm rơi vào âm tiết ngay trước nó. <b>curiosity</b> có trọng âm ở âm tiết 3 (os). Các từ còn lại có trọng âm rơi vào âm tiết thứ 4 (bil)."
+        },
+        {
+            id: 15,
+            options: ["forget", "regret", "forgive", "forest"],
+            correct: 3,
+            ipas: ["/fə'ɡet/", "/rɪ'ɡret/", "/fə'ɡɪv/", "/'fɒrɪst/"],
+            stresses: [2, 2, 2, 1],
+            explanation: "<b>forest</b> là danh từ nhấn ở âm tiết 1. Ba từ còn lại là động từ 2 âm tiết có trọng âm nhấn ở âm tiết 2."
+        },
+        {
+            id: 16,
+            options: ["comfortable", "agreeable", "suitable", "miserable"],
+            correct: 1,
+            ipas: ["/'kʌmftəbl/", "/ə'ɡriːəbl/", "/'suːtəbl/", "/'mɪzrəbl/"],
+            stresses: [1, 2, 1, 1],
+            explanation: "<b>agreeable</b> xuất phát từ động từ <i>agree</i> (nhấn âm 2) nên khi thêm đuôi -able giữ nguyên trọng âm ở âm 2. Các từ còn lại có trọng âm ở âm tiết 1."
+        },
+        {
+            id: 17,
+            options: ["engineer", "pioneer", "volunteer", "passenger"],
+            correct: 3,
+            ipas: ["/ˌendʒɪ'nɪə(r)/", "/ˌpaɪə'nɪə(r)/", "/ˌvɒlən'tɪə(r)/", "/'pæsɪndʒə(r)/"],
+            stresses: [3, 3, 3, 1],
+            explanation: "<b>passenger</b> là danh từ có trọng âm rơi vào âm tiết 1. Các từ kết thúc bằng đuôi <i>-eer</i> (engineer, pioneer, volunteer) luôn nhận trọng âm chính ở chính đuôi này (âm tiết 3)."
+        },
+        {
+            id: 18,
+            options: ["deny", "delay", "decay", "damage"],
+            correct: 3,
+            ipas: ["/dɪ'naɪ/", "/dɪ'leɪ/", "/dɪ'keɪ/", "/'dæmɪdʒ/"],
+            stresses: [2, 2, 2, 1],
+            explanation: "<b>damage</b> có trọng âm rơi vào âm tiết 1. Ba động từ 2 âm tiết còn lại (deny, delay, decay) đều có trọng âm rơi vào âm tiết 2."
+        },
+        {
+            id: 19,
+            options: ["politic", "politeness", "policeman", "politician"],
+            correct: 3,
+            ipas: ["/'pɒlətɪk/", "/pə'laɪtnəs/", "/pə'liːsmən/", "/ˌpɒlə'tɪʃn/"],
+            stresses: [1, 2, 2, 3],
+            explanation: "<b>politician</b> có đuôi <i>-cian</i> nên trọng âm chính rơi vào âm tiết thứ 3. (Ghi chú: politic âm 1, politeness âm 2, policeman âm 2)."
+        },
+        {
+            id: 20,
+            options: ["expensive", "friendly", "active", "careful"],
+            correct: 0,
+            ipas: ["/ɪk'spensɪv/", "/'frendli/", "/'æktɪv/", "/'keəfl/"],
+            stresses: [2, 1, 1, 1],
+            explanation: "<b>expensive</b> là tính từ 3 âm tiết có trọng âm rơi vào âm tiết 2. Các tính từ 2 âm tiết còn lại đều có trọng âm ở âm tiết 1."
+        }
+    ];
+
+    const pronunciationQuestions = [
+        {
+            id: 1,
+            options: ["cat", "hat", "fat", "car"],
+            correct: 3,
+            targetChar: "a",
+            displayOptions: ["c<span class='underlined'>a</span>t", "h<span class='underlined'>a</span>t", "f<span class='underlined'>a</span>t", "c<span class='underlined'>a</span>r"],
+            ipas: ["/kæt/", "/hæt/", "/fæt/", "/kɑː(r)/"],
+            explanation: "Chữ 'a' trong <b>car</b> được phát âm là /ɑː/ (nguyên âm dài). Trong 3 từ còn lại, 'a' được phát âm là /æ/ (nguyên âm ngắn)."
+        },
+        {
+            id: 2,
+            options: ["head", "bread", "read (v1)", "beach"],
+            correct: 3,
+            targetChar: "ea",
+            displayOptions: ["h<span class='underlined'>ea</span>d", "br<span class='underlined'>ea</span>d", "r<span class='underlined'>ea</span>d", "b<span class='underlined'>ea</span>ch"],
+            ipas: ["/hed/", "/bred/", "/red/", "/biːtʃ/"],
+            explanation: "Cụm 'ea' trong <b>beach</b> được phát âm là /iː/. Trong khi đó ở head, bread, read (hiện tại/quá khứ tùy ngữ cảnh nhưng thường ở bài test thuộc nhóm âm /e/) 'ea' đọc là /e/."
+        },
+        {
+            id: 3,
+            options: ["chemistry", "character", "ache", "church"],
+            correct: 3,
+            targetChar: "ch",
+            displayOptions: ["<span class='underlined'>ch</span>emistry", "<span class='underlined'>ch</span>aracter", "a<span class='underlined'>ch</span>e", "<span class='underlined'>ch</span>urch"],
+            ipas: ["/'kemɪstri/", "/'kærəktə(r)/", "/eɪk/", "/tʃɜːtʃ/"],
+            explanation: "Cụm 'ch' trong <b>church</b> được phát âm là /tʃ/. Trong chemistry, character, ache, cụm 'ch' được phát âm là /k/."
+        },
+        {
+            id: 4,
+            options: ["worked", "stopped", "washed", "played"],
+            correct: 3,
+            targetChar: "ed",
+            displayOptions: ["work<span class='underlined'>ed</span>", "stopp<span class='underlined'>ed</span>", "wash<span class='underlined'>ed</span>", "play<span class='underlined'>ed</span>"],
+            ipas: ["/wɜːkt/", "/stɒpt/", "/wɒʃt/", "/pleɪd/"],
+            explanation: "Đuôi '-ed' trong <b>played</b> được phát âm là /d/ (sau âm hữu thanh /eɪ/). Trong worked, stopped, washed, đuôi '-ed' phát âm là /t/ (sau âm vô thanh /k/, /p/, /ʃ/)."
+        },
+        {
+            id: 5,
+            options: ["rough", "tough", "laugh", "though"],
+            correct: 3,
+            targetChar: "ough/augh",
+            displayOptions: ["r<span class='underlined'>ough</span>", "t<span class='underlined'>ough</span>", "l<span class='underlined'>augh</span>", "th<span class='underlined'>ough</span>"],
+            ipas: ["/rʌf/", "/tʌf/", "/lɑːf/", "/ðəʊ/"],
+            explanation: "Cụm đuôi trong <b>though</b> được phát âm là /əʊ/ (âm 'gh' câm). Trong rough, tough, laugh, đuôi 'gh' được phát âm là âm /f/."
+        },
+        {
+            id: 6,
+            options: ["think", "thank", "thin", "this"],
+            correct: 3,
+            targetChar: "th",
+            displayOptions: ["<span class='underlined'>th</span>ink", "<span class='underlined'>th</span>ank", "<span class='underlined'>th</span>in", "<span class='underlined'>th</span>is"],
+            ipas: ["/θɪŋk/", "/θæŋk/", "/θɪn/", "/ðɪs/"],
+            explanation: "Cụm 'th' trong <b>this</b> là âm hữu thanh /ð/. Trong think, thank, thin, 'th' là âm vô thanh /θ/."
+        },
+        {
+            id: 7,
+            options: ["cats", "dogs", "maps", "books"],
+            correct: 1,
+            targetChar: "s",
+            displayOptions: ["cat<span class='underlined'>s</span>", "dog<span class='underlined'>s</span>", "map<span class='underlined'>s</span>", "book<span class='underlined'>s</span>"],
+            ipas: ["/kæts/", "/dɒɡz/", "/mæps/", "/bʊks/"],
+            explanation: "Đuôi '-s' trong <b>dogs</b> được phát âm là /z/ (sau âm hữu thanh /ɡ/). Trong cats, maps, books, đuôi '-s' đọc là /s/ (sau âm vô thanh /t/, /p/, /k/)."
+        },
+        {
+            id: 8,
+            options: ["city", "center", "circle", "cat"],
+            correct: 3,
+            targetChar: "c",
+            displayOptions: ["<span class='underlined'>c</span>ity", "<span class='underlined'>c</span>enter", "<span class='underlined'>c</span>ircle", "<span class='underlined'>c</span>at"],
+            ipas: ["/'sɪti/", "/'sentə(r)/", "/'sɜːkl/", "/kæt/"],
+            explanation: "Chữ 'c' trong <b>cat</b> được phát âm là /k/ (c đứng trước a, o, u). Trong city, center, circle, chữ 'c' đứng trước i, e, y nên phát âm là /s/."
+        },
+        {
+            id: 9,
+            options: ["game", "give", "go", "gem"],
+            correct: 3,
+            targetChar: "g",
+            displayOptions: ["<span class='underlined'>g</span>ame", "<span class='underlined'>g</span>ive", "<span class='underlined'>g</span>o", "<span class='underlined'>g</span>em"],
+            ipas: ["/ɡeɪm/", "/ɡɪv/", "/ɡəʊ/", "/dʒem/"],
+            explanation: "Chữ 'g' trong <b>gem</b> phát âm là /dʒ/. Trong game, give, go, chữ 'g' được phát âm là /ɡ/."
+        },
+        {
+            id: 10,
+            options: ["machine", "chef", "chute", "chair"],
+            correct: 3,
+            targetChar: "ch",
+            displayOptions: ["ma<span class='underlined'>ch</span>ine", "<span class='underlined'>ch</span>ef", "<span class='underlined'>ch</span>ute", "<span class='underlined'>ch</span>air"],
+            ipas: ["/mə'ʃiːn/", "/ʃef/", "/ʃuːt/", "/tʃeə(r)/"],
+            explanation: "Cụm 'ch' trong <b>chair</b> đọc là /tʃ/. Trong machine, chef, chute (những từ mượn tiếng Pháp), cụm 'ch' được đọc là /ʃ/."
+        },
+        {
+            id: 11,
+            options: ["blood", "flood", "food", "foot"],
+            correct: 2,
+            targetChar: "oo",
+            displayOptions: ["bl<span class='underlined'>oo</span>d", "fl<span class='underlined'>oo</span>d", "f<span class='underlined'>oo</span>d", "f<span class='underlined'>oo</span>t"],
+            ipas: ["/blʌd/", "/flʌd/", "/fuːd/", "/fʊt/"],
+            explanation: "Cụm 'oo' trong <b>food</b> phát âm là /uː/ (nguyên âm u dài). (blood/flood đọc là /ʌ/, foot đọc là /ʊ/ ngắn)."
+        },
+        {
+            id: 12,
+            options: ["sugar", "sure", "species", "song"],
+            correct: 3,
+            targetChar: "s",
+            displayOptions: ["<span class='underlined'>s</span>ugar", "<span class='underlined'>s</span>ure", "<span class='underlined'>s</span>pecies", "<span class='underlined'>s</span>ong"],
+            ipas: ["/'ʃʊɡə(r)/", "/ʃɔː(r)/", "/'spiːʃiːz/", "/sɒŋ/"],
+            explanation: "Chữ 's' trong <b>song</b> phát âm là /s/. Trong sugar, sure, species, chữ 's' được phát âm thành âm uốn lưỡi /ʃ/."
+        },
+        {
+            id: 13,
+            options: ["wanted", "needed", "decided", "stopped"],
+            correct: 3,
+            targetChar: "ed",
+            displayOptions: ["want<span class='underlined'>ed</span>", "need<span class='underlined'>ed</span>", "decid<span class='underlined'>ed</span>", "stopp<span class='underlined'>ed</span>"],
+            ipas: ["/'wɒntɪd/", "/'niːdɪd/", "/dɪ'saɪdɪd/", "/stɒpt/"],
+            explanation: "Đuôi '-ed' trong <b>stopped</b> phát âm là /t/. Trong khi ở wanted, needed, decided, đuôi '-ed' đứng sau 't' hoặc 'd' nên phát âm là /ɪd/."
+        },
+        {
+            id: 14,
+            options: ["hour", "honest", "honor", "house"],
+            correct: 3,
+            targetChar: "h",
+            displayOptions: ["<span class='underlined'>h</span>our", "<span class='underlined'>h</span>onest", "<span class='underlined'>h</span>onor", "<span class='underlined'>h</span>ouse"],
+            ipas: ["/'aʊə(r)/", "/'ɒnɪst/", "/'ɒnə(r)/", "/haʊs/"],
+            explanation: "Chữ 'h' trong <b>house</b> là h-mạnh (được phát âm /h/). Trong hour, honest, honor, chữ 'h' là âm câm."
+        },
+        {
+            id: 15,
+            options: ["sing", "ring", "bank", "english"],
+            correct: 2,
+            targetChar: "n/ng",
+            displayOptions: ["si<span class='underlined'>ng</span>", "ri<span class='underlined'>ng</span>", "ba<span class='underlined'>n</span>k", "e<span class='underlined'>ng</span>lish"],
+            ipas: ["/sɪŋ/", "/rɪŋ/", "/bæŋk/", "/'ɪŋɡlɪʃ/"],
+            explanation: "Chữ 'n' trong <b>bank</b> được theo sau bởi /k/ tạo thành âm /ŋk/. Trong sing, ring, 'ng' chỉ đọc đơn thuần là /ŋ/."
+        },
+        {
+            id: 16,
+            options: ["which", "where", "when", "who"],
+            correct: 3,
+            targetChar: "wh",
+            displayOptions: ["<span class='underlined'>wh</span>ich", "<span class='underlined'>wh</span>ere", "<span class='underlined'>wh</span>en", "<span class='underlined'>wh</span>o"],
+            ipas: ["/wɪtʃ/", "/weə(r)/", "/wen/", "/huː/"],
+            explanation: "Cụm 'wh' trong <b>who</b> phát âm là /h/ ('w' câm). Trong which, where, when, 'wh' được phát âm là /w/ ('h' câm)."
+        },
+        {
+            id: 17,
+            options: ["plumber", "climb", "tomb", "combine"],
+            correct: 3,
+            targetChar: "b",
+            displayOptions: ["plum<span class='underlined'>b</span>er", "clim<span class='underlined'>b</span>", "tom<span class='underlined'>b</span>", "com<span class='underlined'>b</span>ine"],
+            ipas: ["/'plʌmə(r)/", "/klaɪm/", "/tuːm/", "/kəm'baɪn/"],
+            explanation: "Chữ 'b' trong <b>combine</b> được phát âm /b/. Trong plumber, climb, tomb, đuôi 'mb' đứng cuối/gốc từ làm âm 'b' trở thành âm câm."
+        },
+        {
+            id: 18,
+            options: ["great", "break", "steak", "heart"],
+            correct: 3,
+            targetChar: "ea",
+            displayOptions: ["gr<span class='underlined'>ea</span>t", "br<span class='underlined'>ea</span>k", "st<span class='underlined'>ea</span>k", "h<span class='underlined'>ea</span>rt"],
+            ipas: ["/ɡreɪt/", "/breɪk/", "/steɪk/", "/hɑːt/"],
+            explanation: "Cụm 'ea' trong <b>heart</b> phát âm là /ɑː/. Trong great, break, steak, cụm 'ea' ngoại lệ được phát âm là nguyên âm đôi /eɪ/."
+        },
+        {
+            id: 19,
+            options: ["cough", "enough", "rough", "plough"],
+            correct: 3,
+            targetChar: "ough",
+            displayOptions: ["c<span class='underlined'>ough</span>", "en<span class='underlined'>ough</span>", "r<span class='underlined'>ough</span>", "pl<span class='underlined'>ough</span>"],
+            ipas: ["/kɒf/", "/ɪ'nʌf/", "/rʌf/", "/plaʊ/"],
+            explanation: "Cụm 'ough' trong <b>plough</b> phát âm là /aʊ/ (không có âm /f/). Ba từ còn lại đều kết thúc bằng âm /f/."
+        },
+        {
+            id: 20,
+            options: ["island", "aisle", "debris", "silver"],
+            correct: 3,
+            targetChar: "s",
+            displayOptions: ["i<span class='underlined'>s</span>land", "ai<span class='underlined'>s</span>le", "debri<span class='underlined'>s</span>", "<span class='underlined'>s</span>ilver"],
+            ipas: ["/'aɪlənd/", "/aɪl/", "/'debriː/", "/'sɪlvə(r)/"],
+            explanation: "Chữ 's' trong <b>silver</b> phát âm là /s/. Trong island, aisle, debris, chữ 's' là âm câm không đọc."
+        }
+    ];
+
+    let currentModule = 'stress'; // 'stress' | 'pronunciation'
+    let userAnswers = {
+        stress: {},
+        pronunciation: {}
+    };
+    let isSubmitted = {
+        stress: false,
+        pronunciation: false
+    };
+    let timers = {
+        stress: 0,
+        pronunciation: 0
+    };
+    let timerInterval = null;
+
+    window.onload = function() {
+        startTimer();
+        renderQuestions();
+    };
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!isSubmitted[currentModule]) {
+                timers[currentModule]++;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const seconds = timers[currentModule];
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        document.getElementById('statTimer').innerText = `${mins}:${secs}`;
+    }
+
+    function switchModule(moduleName) {
+        if (currentModule === moduleName) return;
+        
+        currentModule = moduleName;
+        document.getElementById('tabStress').classList.toggle('active', moduleName === 'stress');
+        document.getElementById('tabPronunciation').classList.toggle('active', moduleName === 'pronunciation');
+        
+        updateTimerDisplay();
+        renderQuestions();
+        updateStats();
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('questionsContainer');
+        const questions = currentModule === 'stress' ? stressQuestions : pronunciationQuestions;
+        const submitted = isSubmitted[currentModule];
+        const answers = userAnswers[currentModule];
+
+        container.innerHTML = '';
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            const isAnswered = answers[q.id] !== undefined;
+            card.className = `question-card ${isAnswered ? 'answered' : ''}`;
+
+            let questionText = currentModule === 'stress' 
+                ? 'Chọn từ có vị trí trọng âm khác với các từ còn lại:' 
+                : 'Chọn từ có phần gạch chân phát âm khác với các từ còn lại:';
+
+            let optionsHtml = '';
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, optIndex) => {
+                const isSelected = answers[q.id] === optIndex;
+                let extraClass = '';
+
+                if (submitted) {
+                    if (optIndex === q.correct) {
+                        extraClass = 'correct-choice';
+                    } else if (isSelected && optIndex !== q.correct) {
+                        extraClass = 'wrong-choice';
+                    }
+                } else if (isSelected) {
+                    extraClass = 'selected';
+                }
+
+                const displayText = currentModule === 'pronunciation' && q.displayOptions 
+                    ? q.displayOptions[optIndex] 
+                    : opt;
+
+                const ipaText = submitted && q.ipas ? `<span class="ipa-badge">${q.ipas[optIndex]}</span>` : '';
+
+                optionsHtml += `
+                    <button class="option-btn ${extraClass}" 
+                            ${submitted ? 'disabled' : ''} 
+                            onclick="selectOption(${q.id}, ${optIndex})">
+                        <span class="option-prefix">${optionLabels[optIndex]}</span>
+                        <span style="flex:1;">${displayText} ${ipaText}</span>
+                    </button>
+                `;
+            });
+
+            let explanationHtml = '';
+            if (submitted) {
+                explanationHtml = `
+                    <div class="explanation-box">
+                        <strong>💡 Giải thích chi tiết:</strong><br>
+                        ${q.explanation}
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="question-title">Câu ${index + 1} / ${questions.length}</span>
+                </div>
+                <div class="question-instruction">${questionText}</div>
+                <div class="options-grid">
+                    ${optionsHtml}
+                </div>
+                ${explanationHtml}
+            `;
+
+            container.appendChild(card);
+        });
+
+        // Toggle UI states
+        const banner = document.getElementById('scoreBanner');
+        if (submitted) {
+            banner.classList.add('show');
+            calculateAndDisplayScore();
+        } else {
+            banner.classList.remove('show');
+        }
+
+        updateStats();
+    }
+
+    function selectOption(questionId, optionIndex) {
+        if (isSubmitted[currentModule]) return;
+        
+        userAnswers[currentModule][questionId] = optionIndex;
+        renderQuestions();
+    }
+
+    function updateStats() {
+        const questions = currentModule === 'stress' ? stressQuestions : pronunciationQuestions;
+        const answers = userAnswers[currentModule];
+        const count = Object.keys(answers).length;
+        
+        document.getElementById('statAnswered').innerText = `${count}/${questions.length}`;
+
+        const statusElem = document.getElementById('statStatus');
+        if (isSubmitted[currentModule]) {
+            statusElem.innerText = 'Đã nộp';
+            statusElem.style.color = 'var(--success)';
+        } else {
+            statusElem.innerText = 'Đang làm';
+            statusElem.style.color = 'var(--warning)';
+        }
+    }
+
+    function calculateAndDisplayScore() {
+        const questions = currentModule === 'stress' ? stressQuestions : pronunciationQuestions;
+        const answers = userAnswers[currentModule];
+        let correctCount = 0;
+
+        questions.forEach(q => {
+            if (answers[q.id] === q.correct) {
+                correctCount++;
+            }
+        });
+
+        const score = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('statScore').innerText = `${score}/100`;
+        document.getElementById('scoreDisplay').innerText = `${score}/100 (${correctCount}/${questions.length} câu đúng)`;
+        
+        const feedback = document.getElementById('scoreFeedback');
+        if (score >= 80) {
+            feedback.innerText = "🎉 Xuất sắc! Bạn nắm rất vững kiến thức trọng âm và phát âm!";
+        } else if (score >= 50) {
+            feedback.innerText = "👍 Khá tốt! Hãy đọc kỹ giải thích các câu làm sai để hoàn thiện kỹ năng.";
+        } else {
+            feedback.innerText = "💪 Đừng nản lòng! Hãy ôn lại các quy tắc IPA và trọng âm ở phần giải thích phía dưới.";
+        }
+
+        document.getElementById('progressBar').style.width = `${score}%`;
+    }
+
+    function submitTest() {
+        const questions = currentModule === 'stress' ? stressQuestions : pronunciationQuestions;
+        const answers = userAnswers[currentModule];
+        const count = Object.keys(answers).length;
+
+        if (count < questions.length && !isSubmitted[currentModule]) {
+            const confirmSubmit = window.confirm(`Bạn mới trả lời ${count}/${questions.length} câu. Bạn có chắc chắn muốn nộp bài không?`);
+            if (!confirmSubmit) return;
+        }
+
+        isSubmitted[currentModule] = true;
+        renderQuestions();
+    }
+
+    function resetCurrentTest() {
+        userAnswers[currentModule] = {};
+        isSubmitted[currentModule] = false;
+        timers[currentModule] = 0;
+        document.getElementById('statScore').innerText = '--/100';
+        document.getElementById('progressBar').style.width = '0%';
+        updateTimerDisplay();
+        renderQuestions();
+    }
+</script>
+</body>
+</html>
