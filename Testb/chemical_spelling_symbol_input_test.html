@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm Tra Tự Luận: Ký Hiệu & Tên Gọi Hóa Học</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --card-subtle: #21262d;
+            --border-color: #30363d;
+            --accent-color: #58a6ff;
+            --accent-hover: #79c0ff;
+            --text-main: #c9d1d9;
+            --text-heading: #f0f6fc;
+            --text-muted: #8b949e;
+            --success-color: #2ea043;
+            --success-bg: rgba(46, 160, 67, 0.15);
+            --danger-color: #f85149;
+            --danger-bg: rgba(248, 81, 73, 0.15);
+            --warning-color: #d29922;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-title {
+            color: var(--text-heading);
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            background: var(--bg-color);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .mode-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .mode-tab.active {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            background: var(--bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stat-card-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--text-heading);
+            margin-top: 4px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: var(--card-subtle);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background-color: var(--card-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .question-card.answered {
+            border-color: rgba(88, 166, 255, 0.4);
+        }
+
+        .question-card.correct-card {
+            border-color: var(--success-color);
+            background-color: var(--success-bg);
+        }
+
+        .question-card.wrong-card {
+            border-color: var(--danger-color);
+            background-color: var(--danger-bg);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .question-number {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .prompt-box {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-heading);
+            font-size: 1.05rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .answer-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+        }
+
+        .answer-input:disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            background: var(--bg-color);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .feedback-box.correct {
+            border-left-color: var(--success-color);
+            color: #7ee787;
+        }
+
+        .feedback-box.wrong {
+            border-left-color: var(--danger-color);
+            color: #ff7b72;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #0d1117;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--card-subtle);
+            border-color: var(--text-muted);
+        }
+
+        .result-banner {
+            display: none;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .result-banner.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-title {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .score-big {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin: 6px 0;
+        }
+
+        .score-sub {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .app-container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1 class="header-title">Chemical Spelling & Symbol Test</h1>
+    <p class="header-subtitle">Bài kiểm tra Tự Luận gõ câu trả lời trực tiếp (Chống đoán mò) cho 33 Nguyên tố Hóa học phổ biến</p>
+
+    <!-- Mode Selector Tabs -->
+    <div class="mode-selector">
+        <button id="tabSymbolToName" class="mode-tab active" onclick="setMode('symbolToName')">Ký Hiệu ➔ Gõ Tên Chất</button>
+        <button id="tabNameToSymbol" class="mode-tab" onclick="setMode('nameToSymbol')">Tên Chất ➔ Gõ Ký Hiệu</button>
+        <button id="tabMixed" class="mode-tab" onclick="setMode('mixed')">🔀 Chế Độ Hỗn Hợp</button>
+    </div>
+
+    <!-- Live Statistics Dashboard -->
+    <div class="stats-grid">
+        <div>
+            <div class="stat-card-title">Đã Điền</div>
+            <div id="statAnswered" class="stat-card-value">0/33</div>
+        </div>
+        <div>
+            <div class="stat-card-title">Thời Gian</div>
+            <div id="statTimer" class="stat-card-value">00:00</div>
+        </div>
+        <div>
+            <div class="stat-card-title">Trạng Thái</div>
+            <div id="statStatus" class="stat-card-value" style="color: var(--warning-color);">Đang làm</div>
+        </div>
+        <div>
+            <div class="stat-card-title">Điểm Số</div>
+            <div id="statScore" class="stat-card-value">--/100</div>
+        </div>
+    </div>
+
+    <div class="progress-bar-bg">
+        <div id="progressBar" class="progress-bar-fill"></div>
+    </div>
+
+    <!-- Final Score Banner -->
+    <div id="resultBanner" class="result-banner">
+        <div class="score-title">Kết Quả Bài Kiểm Tra Tự Luận</div>
+        <div id="scoreValue" class="score-big">0/100</div>
+        <div id="scoreFeedback" class="score-sub">Nộp bài thành công! Xem kết quả chi tiết bên dưới.</div>
+    </div>
+
+    <!-- Questions List Container -->
+    <div id="questionsContainer"></div>
+
+    <!-- Control Actions -->
+    <div class="actions-bar">
+        <button id="submitBtn" class="btn btn-primary" onclick="submitTest()">Nộp Bài & Chấm Điểm</button>
+        <button id="resetBtn" class="btn btn-secondary" onclick="restartAndShuffle()">🔀 Làm Lại & Xáo Trộn Đề Mới</button>
+    </div>
+</div>
+
+<script>
+    // Full 33 Essential Elements Database
+    const chemicalDatabase = [
+        { symbol: "H", nameVi: ["Hydro", "Hidro", "Hiđrô", "Hjdro"], nameEn: "Hydrogen", z: 1, atomicMass: 1 },
+        { symbol: "He", nameVi: ["Heli"], nameEn: "Helium", z: 2, atomicMass: 4 },
+        { symbol: "Li", nameVi: ["Liti"], nameEn: "Lithium", z: 3, atomicMass: 7 },
+        { symbol: "Be", nameVi: ["Beri"], nameEn: "Beryllium", z: 4, atomicMass: 9 },
+        { symbol: "B", nameVi: ["Bo"], nameEn: "Boron", z: 5, atomicMass: 11 },
+        { symbol: "C", nameVi: ["Cacbon", "Cac bon"], nameEn: "Carbon", z: 6, atomicMass: 12 },
+        { symbol: "N", nameVi: ["Nito", "Nitơ"], nameEn: "Nitrogen", z: 7, atomicMass: 14 },
+        { symbol: "O", nameVi: ["Oxi", "Oxi ", "Oxy", "Ôxi"], nameEn: "Oxygen", z: 8, atomicMass: 16 },
+        { symbol: "F", nameVi: ["Flo"], nameEn: "Fluorine", z: 9, atomicMass: 19 },
+        { symbol: "Ne", nameVi: ["Neon"], nameEn: "Neon", z: 10, atomicMass: 20 },
+        { symbol: "Na", nameVi: ["Natri"], nameEn: "Sodium", z: 11, atomicMass: 23 },
+        { symbol: "Mg", nameVi: ["Magie", "Ma-gie"], nameEn: "Magnesium", z: 12, atomicMass: 24 },
+        { symbol: "Al", nameVi: ["Nhom", "Nhôm"], nameEn: "Aluminium", z: 13, atomicMass: 27 },
+        { symbol: "Si", nameVi: ["Silic"], nameEn: "Silicon", z: 14, atomicMass: 28 },
+        { symbol: "P", nameVi: ["Photpho", "Phốt pho", "Phot pho"], nameEn: "Phosphorus", z: 15, atomicMass: 31 },
+        { symbol: "S", nameVi: ["Luu huynh", "Lưu huỳnh"], nameEn: "Sulfur", z: 16, atomicMass: 32 },
+        { symbol: "Cl", nameVi: ["Clo"], nameEn: "Chlorine", z: 17, atomicMass: 35.5 },
+        { symbol: "Ar", nameVi: ["Argon"], nameEn: "Argon", z: 18, atomicMass: 40 },
+        { symbol: "K", nameVi: ["Kali"], nameEn: "Potassium", z: 19, atomicMass: 39 },
+        { symbol: "Ca", nameVi: ["Canxi"], nameEn: "Calcium", z: 20, atomicMass: 40 },
+        { symbol: "Cr", nameVi: ["Crom"], nameEn: "Chromium", z: 24, atomicMass: 52 },
+        { symbol: "Mn", nameVi: ["Mangan"], nameEn: "Manganese", z: 25, atomicMass: 55 },
+        { symbol: "Fe", nameVi: ["Sat", "Sắt"], nameEn: "Iron", z: 26, atomicMass: 56 },
+        { symbol: "Cu", nameVi: ["Dong", "Đồng"], nameEn: "Copper", z: 29, atomicMass: 64 },
+        { symbol: "Zn", nameVi: ["Kem", "Kẽm"], nameEn: "Zinc", z: 30, atomicMass: 65 },
+        { symbol: "Br", nameVi: ["Brom"], nameEn: "Bromine", z: 35, atomicMass: 80 },
+        { symbol: "Ag", nameVi: ["Bac", "Bạc"], nameEn: "Silver", z: 47, atomicMass: 108 },
+        { symbol: "Ba", nameVi: ["Bari"], nameEn: "Barium", z: 56, atomicMass: 137 },
+        { symbol: "Pt", nameVi: ["Bach kim", "Bạch kim", "Platin"], nameEn: "Platinum", z: 78, atomicMass: 195 },
+        { symbol: "Au", nameVi: ["Vang", "Vàng"], nameEn: "Gold", z: 79, atomicMass: 197 },
+        { symbol: "Hg", nameVi: ["Thuy ngan", "Thủy ngân"], nameEn: "Mercury", z: 80, atomicMass: 201 },
+        { symbol: "Pb", nameVi: ["Chi", "Chì"], nameEn: "Lead", z: 82, atomicMass: 207 },
+        { symbol: "I", nameVi: ["Iot", "Iốt", "I-ốt"], nameEn: "Iodine", z: 53, atomicMass: 127 }
+    ];
+
+    let currentMode = 'symbolToName'; // 'symbolToName' | 'nameToSymbol' | 'mixed'
+    let questions = [];
+    let userInputs = {};
+    let isSubmitted = false;
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    // Normalize text helper: Strip extra whitespace, convert lower case
+    function normalizeText(str) {
+        if (!str) return '';
+        return str
+            .toString()
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, ' ');
+    }
+
+    // Shuffle array function
+    function shuffle(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    window.onload = function() {
+        restartAndShuffle();
+    };
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerSeconds = 0;
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            if (!isSubmitted) {
+                timerSeconds++;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const secs = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('statTimer').innerText = `${mins}:${secs}`;
+    }
+
+    function setMode(mode) {
+        if (currentMode === mode && !isSubmitted) return;
+        currentMode = mode;
+        
+        document.getElementById('tabSymbolToName').classList.toggle('active', mode === 'symbolToName');
+        document.getElementById('tabNameToSymbol').classList.toggle('active', mode === 'nameToSymbol');
+        document.getElementById('tabMixed').classList.toggle('active', mode === 'mixed');
+        
+        restartAndShuffle();
+    }
+
+    function generateQuestions() {
+        const shuffledList = shuffle(chemicalDatabase);
+        
+        questions = shuffledList.map((elem, idx) => {
+            let qType = currentMode;
+            if (currentMode === 'mixed') {
+                qType = Math.random() > 0.5 ? 'symbolToName' : 'nameToSymbol';
+            }
+
+            return {
+                id: idx + 1,
+                type: qType,
+                element: elem
+            };
+        });
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            const val = userInputs[q.id] || '';
+            const hasInput = val.trim() !== '';
+
+            let cardStateClass = '';
+            if (isSubmitted) {
+                const isCorrect = checkAnswer(q, val);
+                cardStateClass = isCorrect ? 'correct-card' : 'wrong-card';
+            } else if (hasInput) {
+                cardStateClass = 'answered';
+            }
+
+            card.className = `question-card ${cardStateClass}`;
+
+            let instructionText = q.type === 'symbolToName'
+                ? 'Nhập TÊN CHẤT (Chấp nhận tên Tiếng Việt hoặc tên IUPAC Tiếng Anh):'
+                : 'Nhập KÝ HIỆU HÓA HỌC của chất sau:';
+
+            let promptText = q.type === 'symbolToName'
+                ? `Ký Hiệu: ${q.element.symbol}`
+                : `Tên Chất: ${q.element.nameVi[0]} (${q.element.nameEn})`;
+
+            let placeholder = q.type === 'symbolToName' ? 'Ví dụ: Sắt / Iron' : 'Ví dụ: Fe';
+
+            let feedbackHtml = '';
+            if (isSubmitted) {
+                const isCorrect = checkAnswer(q, val);
+                const acceptableNames = [q.element.nameVi[0], q.element.nameEn].join(' / ');
+                
+                if (isCorrect) {
+                    feedbackHtml = `
+                        <div class="feedback-box correct">
+                            <b>✓ ĐÚNG!</b> Bài làm: <i>"${val}"</i><br>
+                            • Thông tin: <b>Z = ${q.element.z}</b> | <b>A ≈ ${q.element.atomicMass}</b> đvC | Ký hiệu: <b>${q.element.symbol}</b> | Tên chuẩn: <b>${acceptableNames}</b>
+                        </div>
+                    `;
+                } else {
+                    const expectedStr = q.type === 'symbolToName' 
+                        ? `${acceptableNames}` 
+                        : `${q.element.symbol}`;
+                        
+                    feedbackHtml = `
+                        <div class="feedback-box wrong">
+                            <b>✗ CHƯA CHÍNH XÁC!</b> Bài làm của bạn: <i>"${val || '(Để trống)'}"</i><br>
+                            • <b>Đáp án đúng:</b> <span style="font-weight:bold; text-decoration:underline;">${expectedStr}</span><br>
+                            • Thông tin thêm: <b>Z = ${q.element.z}</b> | <b>A ≈ ${q.element.atomicMass}</b> đvC | IUPAC: <b>${q.element.nameEn}</b>
+                        </div>
+                    `;
+                }
+            }
+
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="question-number">Câu ${index + 1} / ${questions.length}</span>
+                </div>
+                <div class="prompt-box">${promptText}</div>
+                <div class="input-group">
+                    <label class="input-label" for="input_${q.id}">${instructionText}</label>
+                    <input type="text" 
+                           id="input_${q.id}" 
+                           class="answer-input" 
+                           placeholder="${placeholder}"
+                           value="${val}" 
+                           ${isSubmitted ? 'disabled' : ''}
+                           oninput="handleInput(${q.id}, this.value)"
+                           autocomplete="off"
+                           spellcheck="false">
+                </div>
+                ${feedbackHtml}
+            `;
+
+            container.appendChild(card);
+        });
+
+        // Update statistics displays
+        updateStats();
+
+        // Banner state
+        const banner = document.getElementById('resultBanner');
+        if (isSubmitted) {
+            banner.classList.add('active');
+            calculateScore();
+        } else {
+            banner.classList.remove('active');
+        }
+    }
+
+    function handleInput(qId, value) {
+        userInputs[qId] = value;
+        updateStats();
+        
+        // Dynamic border highlight on input change
+        const inputElem = document.getElementById(`input_${qId}`);
+        if (inputElem) {
+            const cardElem = inputElem.closest('.question-card');
+            if (cardElem && !isSubmitted) {
+                if (value.trim() !== '') {
+                    cardElem.classList.add('answered');
+                } else {
+                    cardElem.classList.remove('answered');
+                }
+            }
+        }
+    }
+
+    function checkAnswer(question, userInput) {
+        const cleanInput = normalizeText(userInput);
+        if (!cleanInput) return false;
+
+        if (question.type === 'symbolToName') {
+            // Check symbolToName: Accept any vietnamese variation OR english name
+            const viMatches = question.element.nameVi.map(n => normalizeText(n));
+            const enMatch = normalizeText(question.element.nameEn);
+
+            return viMatches.includes(cleanInput) || cleanInput === enMatch;
+        } else {
+            // Check nameToSymbol: Exact symbol comparison
+            return cleanInput === normalizeText(question.element.symbol);
+        }
+    }
+
+    function updateStats() {
+        const answeredCount = Object.values(userInputs).filter(v => v && v.trim() !== '').length;
+        document.getElementById('statAnswered').innerText = `${answeredCount}/${questions.length}`;
+
+        const statusElem = document.getElementById('statStatus');
+        if (isSubmitted) {
+            statusElem.innerText = 'Đã nộp bài';
+            statusElem.style.color = 'var(--success-color)';
+        } else {
+            statusElem.innerText = 'Đang làm';
+            statusElem.style.color = 'var(--warning-color)';
+        }
+    }
+
+    function calculateScore() {
+        let correctCount = 0;
+
+        questions.forEach(q => {
+            const val = userInputs[q.id] || '';
+            if (checkAnswer(q, val)) {
+                correctCount++;
+            }
+        });
+
+        const percentage = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('statScore').innerText = `${percentage}/100`;
+        document.getElementById('scoreValue').innerText = `${percentage}/100`;
+        
+        const feedback = document.getElementById('scoreFeedback');
+        feedback.innerText = `Bạn trả lời đúng ${correctCount}/${questions.length} câu. (Thời gian: ${document.getElementById('statTimer').innerText})`;
+
+        document.getElementById('progressBar').style.width = `${percentage}%`;
+    }
+
+    function submitTest() {
+        if (isSubmitted) return;
+
+        const answeredCount = Object.values(userInputs).filter(v => v && v.trim() !== '').length;
+        if (answeredCount < questions.length) {
+            const confirmVal = confirm(`Bạn còn ${questions.length - answeredCount} câu chưa điền câu trả lời. Bạn có chắc chắn muốn nộp bài không?`);
+            if (!confirmVal) return;
+        }
+
+        isSubmitted = true;
+        renderQuestions();
+    }
+
+    function restartAndShuffle() {
+        userInputs = {};
+        isSubmitted = false;
+        document.getElementById('statScore').innerText = '--/100';
+        document.getElementById('progressBar').style.width = '0%';
+        generateQuestions();
+        startTimer();
+        renderQuestions();
+    }
+</script>
+</body>
+</html>
