@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Memory Master - 20 Elements Challenge</title>
+    <style>
+        :root {
+            --bg: #0b132b;
+            --card: #1c2541;
+            --accent: #64dfdf;
+            --accent-hover: #72efdd;
+            --text: #f8fafc;
+            --success: #10b981;
+            --warning: #ef4444;
+            --highlight: #f59e0b;
+            --purple: #a855f7;
+            --border: #3a506b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        h1 { 
+            color: var(--accent); 
+            margin-bottom: 8px; 
+            font-size: 2.2rem; 
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 12px rgba(100, 223, 223, 0.3);
+        }
+        
+        p.subtitle { 
+            color: #94a3b8; 
+            font-size: 0.95rem; 
+            margin-bottom: 25px; 
+            line-height: 1.5;
+        }
+
+        .level-selector {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .level-selector label {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        select {
+            background-color: #0b132b;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #0b132b;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--card);
+        }
+
+        .stat-item { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.3rem; font-weight: bold; color: var(--text); display: block; margin-top: 4px; }
+        .stat-value.highlight { color: var(--highlight); }
+        .stat-value.accent { color: var(--accent); }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #0b132b;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #070a13;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            text-align: left;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            min-height: 110px;
+        }
+
+        .question-category {
+            display: inline-block;
+            background: rgba(100, 223, 223, 0.15);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .option-btn {
+            background-color: #0b132b;
+            color: #e2e8f0;
+            border: 1px solid var(--border);
+            padding: 16px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            background-color: #132247;
+            transform: translateY(-2px);
+        }
+
+        .option-btn .opt-prefix {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            background-color: rgba(16, 185, 129, 0.25) !important;
+            border-color: var(--success) !important;
+            color: #ecfdf5 !important;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.25) !important;
+            border-color: var(--warning) !important;
+            color: #fef2f2 !important;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .explanation-box {
+            background: #0b132b;
+            border: 1px solid #3a506b;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-box strong {
+            color: var(--highlight);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .explanation-box p {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background-color: var(--accent);
+            color: #0b132b;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(100, 223, 223, 0.2);
+        }
+
+        button.action-btn:hover { 
+            background-color: var(--accent-hover);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(100, 223, 223, 0.3);
+        }
+
+        button.action-btn:disabled { 
+            background-color: #334155; 
+            color: #64748b;
+            cursor: not-allowed; 
+            transform: none; 
+            box-shadow: none;
+        }
+
+        .modal-report {
+            display: none;
+            background: #0b132b;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
+            text-align: center;
+        }
+
+        .badge-score {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 15px 0;
+            background: rgba(100, 223, 223, 0.15);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .periodic-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin: 20px 0;
+        }
+
+        .mini-elem {
+            background: #1c2541;
+            padding: 8px 4px;
+            border-radius: 6px;
+            border: 1px solid #3a506b;
+            font-size: 0.75rem;
+        }
+
+        .mini-elem .sym {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .mini-elem .num {
+            color: #94a3b8;
+            font-size: 0.65rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🧪 Chemistry Memory Master</h1>
+    <p class="subtitle">Master Elements Z=1 to Z=20 (Hydrogen to Calcium) through riddles, puns, atomic puzzles, and symbols!</p>
+
+    <div class="level-selector" id="quizControls">
+        <label for="categorySelect">Select Challenge Mode:</label>
+        <select id="categorySelect" onchange="changeCategory()">
+            <option value="all">🌟 All Elements Master Challenge (50 Questions)</option>
+            <option value="riddles">💡 Riddles & Wordplay Puns (15 Questions)</option>
+            <option value="symbols">🔤 Symbols & IUPAC Names (15 Questions)</option>
+            <option value="puzzles">🔢 Atomic Number & Mass Puzzles (20 Questions)</option>
+        </select>
+    </div>
+
+    <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div class="stats-panel" id="statsPanel">
+        <div class="stat-item">Question<span id="questionNum" class="stat-value">0/0</span></div>
+        <div class="stat-item">Score / Accuracy<span id="accuracy" class="stat-value accent">0%</span></div>
+        <div class="stat-item">Timer<span id="timer" class="stat-value">0s</span></div>
+        <div class="stat-item">Streak 🔥<span id="streak" class="stat-value highlight">0</span></div>
+    </div>
+
+    <!-- Main Game Area -->
+    <div id="gameBox">
+        <div class="question-card" id="questionCard">
+            <span class="question-category" id="qCategory">General Science</span>
+            <div class="question-text" id="qText">Click "Start Challenge" below to begin testing your memory!</div>
+        </div>
+
+        <div class="options-grid" id="optionsGrid">
+            <!-- Options dynamically generated here -->
+        </div>
+
+        <div class="explanation-box" id="explanationBox">
+            <strong id="expTitle">💡 Memory Mnemonic / Explanation:</strong>
+            <p id="expText">Explanation text goes here.</p>
+        </div>
+
+        <div class="btn-group">
+            <button id="startBtn" class="action-btn" onclick="startQuiz()">Start Challenge 🚀</button>
+            <button id="nextBtn" class="action-btn" onclick="nextQuestion()" disabled style="display:none;">Next Question ➔</button>
+        </div>
+    </div>
+
+    <!-- End of Quiz Report Card -->
+    <div class="modal-report" id="reportCard">
+        <h2>🎉 Challenge Completed!</h2>
+        <div class="badge-score" id="reportGrade">Rank: Master Chemist</div>
+        <p id="reportSummary" style="color: #cbd5e1; margin-bottom: 15px;">You scored 50/50 in 120 seconds.</p>
+        
+        <div style="text-align: left; margin-bottom: 15px; color: #94a3b8; font-size: 0.85rem;">
+            Quick Reference Sheet (Z = 1 to 20):
+        </div>
+        <div class="periodic-mini-grid" id="miniTable"></div>
+
+        <div class="btn-group" style="margin-top: 20px;">
+            <button class="action-btn" onclick="restartQuiz()">Try Again 🔄</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const elementData = [
+        { z: 1, name: "hydrogen", sym: "H", mass: 1 },
+        { z: 2, name: "helium", sym: "He", mass: 4 },
+        { z: 3, name: "lithium", sym: "Li", mass: 7 },
+        { z: 4, name: "beryllium", sym: "Be", mass: 9 },
+        { z: 5, name: "boron", sym: "B", mass: 11 },
+        { z: 6, name: "carbon", sym: "C", mass: 12 },
+        { z: 7, name: "nitrogen", sym: "N", mass: 14 },
+        { z: 8, name: "oxygen", sym: "O", mass: 16 },
+        { z: 9, name: "fluorine", sym: "F", mass: 19 },
+        { z: 10, name: "neon", sym: "Ne", mass: 20 },
+        { z: 11, name: "sodium", sym: "Na", mass: 23 },
+        { z: 12, name: "magnesium", sym: "Mg", mass: 24 },
+        { z: 13, name: "aluminium", sym: "Al", mass: 27 },
+        { z: 14, name: "silicon", sym: "Si", mass: 28 },
+        { z: 15, name: "phosphorus", sym: "P", mass: 31 },
+        { z: 16, name: "sulfur", sym: "S", mass: 32 },
+        { z: 17, name: "chlorine", sym: "Cl", mass: 35.5 },
+        { z: 18, name: "argon", sym: "Ar", mass: 40 },
+        { z: 19, name: "potassium", sym: "K", mass: 39 },
+        { z: 20, name: "calcium", sym: "Ca", mass: 40 }
+    ];
+
+    const questionPool = [
+        // --- RIDDLES & PUNS (15 Questions) ---
+        {
+            cat: "riddles",
+            q: "What do you do with a dead chemist? (Hint: Element Z=18)",
+            options: ["Barium", "Argon", "Helium", "Curium"],
+            ans: 1,
+            exp: "You 'Argon' (are gone)! Argon has symbol 'Ar' with Atomic Number Z=18 and Mass=40."
+        },
+        {
+            cat: "riddles",
+            q: "Why do sun lovers love element Z=10 so much?",
+            options: ["It glows in the dark", "It makes sunny signs (Neon signs)", "It tans skin", "It heats up"],
+            ans: 1,
+            exp: "Neon (Ne, Z=10, Mass=20) is famous for bright glowing gas light signs!"
+        },
+        {
+            cat: "riddles",
+            q: "I am light as air, make your voice squeaky high, and my symbol sounds like a greeting when saying 'Hi!' to a friend named 'He'. Who am I?",
+            options: ["Hydrogen", "Helium", "Lithium", "Neon"],
+            ans: 1,
+            exp: "Helium (He, Z=2, Mass=4) makes high voice pitches and is symbol 'He'!"
+        },
+        {
+            cat: "riddles",
+            q: "What element is a doctor's favorite advice for someone with weak bones? 'Drink milk for...'",
+            options: ["Potassium", "Sodium", "Calcium", "Magnesium"],
+            ans: 2,
+            exp: "Calcium (Ca, Z=20, Mass=40) builds strong bones and teeth."
+        },
+        {
+            cat: "riddles",
+            q: "I am the basis of all organic life, diamonds, and pencil graphite. I have Z=6. Who am I?",
+            options: ["Silicon", "Carbon", "Boron", "Nitrogen"],
+            ans: 1,
+            exp: "Carbon (C, Z=6, Mass=12) forms diamonds, charcoal, and organic life!"
+        },
+        {
+            cat: "riddles",
+            q: "If 'Na' stands for 'NAtrium', what common kitchen salt element am I when combined with Chlorine?",
+            options: ["Potassium", "Sodium", "Magnesium", "Lithium"],
+            ans: 1,
+            exp: "Sodium (Na, Z=11, Mass=23) comes from Latin 'Natrium'."
+        },
+        {
+            cat: "riddles",
+            q: "I make up ~78% of Earth's atmosphere, but I am clean, colorless, and odorless with Atomic Number 7. Who am I?",
+            options: ["Oxygen", "Nitrogen", "Argon", "Hydrogen"],
+            ans: 1,
+            exp: "Nitrogen (N, Z=7, Mass=14) is the most abundant gas in Earth's atmosphere."
+        },
+        {
+            cat: "riddles",
+            q: "I am essential for breathing and combustion! My atomic weight is 16 amu (Z=8). Who am I?",
+            options: ["Oxygen", "Fluorine", "Chlorine", "Hydrogen"],
+            ans: 0,
+            exp: "Oxygen (O, Z=8, Mass=16) is needed for cellular respiration!"
+        },
+        {
+            cat: "riddles",
+            q: "I am super reactive in toothpaste to prevent tooth cavities! My atomic number is 9. Who am I?",
+            options: ["Chlorine", "Fluorine", "Phosphorus", "Boron"],
+            ans: 1,
+            exp: "Fluorine (F, Z=9, Mass=19) is used in fluoride toothpaste to protect teeth!"
+        },
+        {
+            cat: "riddles",
+            q: "I am yellow, stink like rotten eggs in volcanic hot springs, and have Z=16. Who am I?",
+            options: ["Phosphorus", "Sulfur", "Silicon", "Chlorine"],
+            ans: 1,
+            exp: "Sulfur (S, Z=16, Mass=32) is a yellow solid element!"
+        },
+        {
+            cat: "riddles",
+            q: "I am used in swimming pools to disinfect water and kill bacteria! (Z=17)",
+            options: ["Chlorine", "Fluorine", "Argon", "Sodium"],
+            ans: 0,
+            exp: "Chlorine (Cl, Z=17, Mass=35.5) keeps pool water clean!"
+        },
+        {
+            cat: "riddles",
+            q: "I am rich in bananas, have symbol 'K' (from Latin Kalium), and Z=19. Who am I?",
+            options: ["Calcium", "Potassium", "Phosphorus", "Sodium"],
+            ans: 1,
+            exp: "Potassium (K, Z=19, Mass=39) comes from Kalium and keeps muscles healthy!"
+        },
+        {
+            cat: "riddles",
+            q: "Computers, microchips, and Silicon Valley are named after which element with Z=14?",
+            options: ["Silicon", "Aluminium", "Sulfur", "Carbon"],
+            ans: 0,
+            exp: "Silicon (Si, Z=14, Mass=28) is the primary semiconductor material in electronics!"
+        },
+        {
+            cat: "riddles",
+            q: "I am a lightweight silvery metal used to make soda cans and airplane bodies (Z=13).",
+            options: ["Magnesium", "Aluminium", "Calcium", "Sodium"],
+            ans: 1,
+            exp: "Aluminium (Al, Z=13, Mass=27) is lightweight and corrosion resistant!"
+        },
+        {
+            cat: "riddles",
+            q: "I glow red/white in matchsticks, fireworks, and DNA backbones (Z=15). Who am I?",
+            options: ["Phosphorus", "Sulfur", "Silicon", "Nitrogen"],
+            ans: 0,
+            exp: "Phosphorus (P, Z=15, Mass=31) is essential for energy (ATP) and matches!"
+        },
+
+        // --- SYMBOLS & NAMES MATCH (15 Questions) ---
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Sodium (Latin: Natrium, Z=11)?",
+            options: ["So", "Na", "Sd", "S"],
+            ans: 1,
+            exp: "Sodium = Na (Z=11, Mass=23)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the IUPAC chemical symbol for Potassium (Latin: Kalium, Z=19)?",
+            options: ["Po", "Pt", "K", "Ka"],
+            ans: 2,
+            exp: "Potassium = K (Z=19, Mass=39)."
+        },
+        {
+            cat: "symbols",
+            q: "Which element corresponds to the chemical symbol 'Mg' (Z=12)?",
+            options: ["Manganese", "Magnesium", "Sodium", "Mercury"],
+            ans: 1,
+            exp: "Mg = Magnesium (Atomic Number 12, Mass 24)."
+        },
+        {
+            cat: "symbols",
+            q: "Which element corresponds to the chemical symbol 'Al' (Z=13)?",
+            options: ["Argon", "Aluminium", "Arsenic", "Silver"],
+            ans: 1,
+            exp: "Al = Aluminium (Atomic Number 13, Mass 27)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Fluorine (Z=9)?",
+            options: ["Fl", "F", "Fe", "Fo"],
+            ans: 1,
+            exp: "Fluorine = F (Atomic Number 9, Mass 19)."
+        },
+        {
+            cat: "symbols",
+            q: "What element has the chemical symbol 'Cl' (Z=17)?",
+            options: ["Carbon", "Calcium", "Chlorine", "Copper"],
+            ans: 2,
+            exp: "Cl = Chlorine (Atomic Number 17, Mass 35.5)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Silicon (Z=14)?",
+            options: ["S", "Sc", "Si", "Sl"],
+            ans: 2,
+            exp: "Silicon = Si (Atomic Number 14, Mass 28)."
+        },
+        {
+            cat: "symbols",
+            q: "Which element is represented by the single letter symbol 'B' (Z=5)?",
+            options: ["Beryllium", "Boron", "Barium", "Bismuth"],
+            ans: 1,
+            exp: "B = Boron (Atomic Number 5, Mass 11). Beryllium is 'Be'!"
+        },
+        {
+            cat: "symbols",
+            q: "Which element is represented by symbol 'Be' (Z=4)?",
+            options: ["Boron", "Beryllium", "Barium", "Bromine"],
+            ans: 1,
+            exp: "Be = Beryllium (Atomic Number 4, Mass 9)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Lithium (Z=3)?",
+            options: ["L", "Li", "Lt", "Lm"],
+            ans: 1,
+            exp: "Lithium = Li (Atomic Number 3, Mass 7)."
+        },
+        {
+            cat: "symbols",
+            q: "Which element has chemical symbol 'Ar' (Z=18)?",
+            options: ["Arsenic", "Argon", "Silver", "Gold"],
+            ans: 1,
+            exp: "Ar = Argon (Atomic Number 18, Mass 40)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Phosphorus (Z=15)?",
+            options: ["Ph", "Po", "P", "K"],
+            ans: 2,
+            exp: "Phosphorus = P (Atomic Number 15, Mass 31)."
+        },
+        {
+            cat: "symbols",
+            q: "What is the chemical symbol for Calcium (Z=20)?",
+            options: ["C", "Ca", "Cl", "Co"],
+            ans: 1,
+            exp: "Calcium = Ca (Atomic Number 20, Mass 40)."
+        },
+        {
+            cat: "symbols",
+            q: "Which single-letter symbol 'N' stands for which gas (Z=7)?",
+            options: ["Neon", "Nitrogen", "Sodium", "Nickel"],
+            ans: 1,
+            exp: "N = Nitrogen (Z=7). Neon is 'Ne'."
+        },
+        {
+            cat: "symbols",
+            q: "What is the symbol for Hydrogen, the lightest element (Z=1)?",
+            options: ["H", "He", "Hy", "Hg"],
+            ans: 0,
+            exp: "Hydrogen = H (Atomic Number 1, Mass 1)."
+        },
+
+        // --- ATOMIC NUMBER & MASS PUZZLES (20 Questions) ---
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Chlorine (Cl, Z=17) in Bảng 3.1?",
+            options: ["35.5 amu", "32 amu", "40 amu", "31 amu"],
+            ans: 0,
+            exp: "Chlorine has an atomic mass of 35.5 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "Which two elements among Z=1 to 20 BOTH have an Atomic Mass of 40 amu?",
+            options: ["Argon & Calcium", "Potassium & Calcium", "Chlorine & Argon", "Neon & Argon"],
+            ans: 0,
+            exp: "Argon (Ar, Z=18) and Calcium (Ca, Z=20) both have atomic mass = 40 amu!"
+        },
+        {
+            cat: "puzzles",
+            q: "Element Z=19 (Potassium / Kali) has what atomic mass?",
+            options: ["39 amu", "40 amu", "23 amu", "31 amu"],
+            ans: 0,
+            exp: "Potassium (K) has Atomic Number 19 and Atomic Mass 39 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Number (Z) of Carbon?",
+            options: ["5", "6", "7", "12"],
+            ans: 1,
+            exp: "Carbon (C) has Atomic Number Z=6 and Mass=12 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "An element has Z=11 and Mass=23. What is its IUPAC name?",
+            options: ["Sodium (natri)", "Magnesium", "Aluminium (nhôm)", "Potassium (kali)"],
+            ans: 0,
+            exp: "Z=11 is Sodium (Na) with mass 23 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Magnesium (Mg, Z=12)?",
+            options: ["23 amu", "24 amu", "27 amu", "28 amu"],
+            ans: 1,
+            exp: "Magnesium (Mg) has Z=12 and Atomic Mass 24 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Aluminium (Al, Z=13)?",
+            options: ["24 amu", "27 amu", "28 amu", "31 amu"],
+            ans: 1,
+            exp: "Aluminium (Al) has Z=13 and Atomic Mass 27 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "Which element has Atomic Number Z=15 and Atomic Mass = 31 amu?",
+            options: ["Silicon", "Phosphorus", "Sulfur", "Chlorine"],
+            ans: 1,
+            exp: "Phosphorus (P) has Z=15 and Atomic Mass 31 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Sulfur (S, Z=16)?",
+            options: ["31 amu", "32 amu", "35.5 amu", "40 amu"],
+            ans: 1,
+            exp: "Sulfur (S) has Z=16 and Atomic Mass 32 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Number (Z) of Fluorine (F, mass=19)?",
+            options: ["8", "9", "10", "11"],
+            ans: 1,
+            exp: "Fluorine (F) has Z=9 and Atomic Mass 19 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Neon (Ne, Z=10)?",
+            options: ["19 amu", "20 amu", "23 amu", "16 amu"],
+            ans: 1,
+            exp: "Neon (Ne) has Z=10 and Atomic Mass 20 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Lithium (Li, Z=3)?",
+            options: ["4 amu", "7 amu", "9 amu", "11 amu"],
+            ans: 1,
+            exp: "Lithium (Li) has Z=3 and Atomic Mass 7 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "Which element has Z=4 and Atomic Mass = 9 amu?",
+            options: ["Lithium", "Beryllium", "Boron", "Carbon"],
+            ans: 1,
+            exp: "Beryllium (Be) has Z=4 and Atomic Mass 9 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "Which element has Z=5 and Atomic Mass = 11 amu?",
+            options: ["Boron", "Beryllium", "Carbon", "Nitrogen"],
+            ans: 0,
+            exp: "Boron (B) has Z=5 and Atomic Mass 11 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Hydrogen (H, Z=1)?",
+            options: ["1 amu", "2 amu", "4 amu", "0 amu"],
+            ans: 0,
+            exp: "Hydrogen (H) is the lightest element with Mass = 1 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Helium (He, Z=2)?",
+            options: ["2 amu", "4 amu", "7 amu", "1 amu"],
+            ans: 1,
+            exp: "Helium (He) has Z=2 and Atomic Mass 4 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Oxygen (O, Z=8)?",
+            options: ["14 amu", "16 amu", "19 amu", "20 amu"],
+            ans: 1,
+            exp: "Oxygen (O) has Z=8 and Atomic Mass 16 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "What is the Atomic Mass of Nitrogen (N, Z=7)?",
+            options: ["12 amu", "14 amu", "16 amu", "19 amu"],
+            ans: 1,
+            exp: "Nitrogen (N) has Z=7 and Atomic Mass 14 amu."
+        },
+        {
+            cat: "puzzles",
+            q: "If you add the Atomic Number of Hydrogen (1) and Fluorine (9), which element's Atomic Number do you get?",
+            options: ["Neon (Z=10)", "Sodium (Z=11)", "Oxygen (Z=8)", "Helium (Z=2)"],
+            ans: 0,
+            exp: "1 + 9 = 10, which corresponds to Neon (Ne, Z=10)!"
+        },
+        {
+            cat: "puzzles",
+            q: "Subtract the Atomic Number of Carbon (6) from Silicon (14). What element has this Atomic Number?",
+            options: ["Oxygen (Z=8)", "Nitrogen (Z=7)", "Carbon (Z=6)", "Boron (Z=5)"],
+            ans: 0,
+            exp: "14 - 6 = 8, which is Oxygen (O, Z=8)!"
+        }
+    ];
+
+    let activeQueue = [];
+    let curIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let timerVal = 0;
+    let timerInterval = null;
+    let answered = false;
+
+    function changeCategory() {
+        if (document.getElementById('startBtn').disabled) {
+            restartQuiz();
+        }
+    }
+
+    function filterQuestions() {
+        const cat = document.getElementById('categorySelect').value;
+        if (cat === 'all') return [...questionPool];
+        return questionPool.filter(q => q.cat === cat);
+    }
+
+    function startQuiz() {
+        activeQueue = filterQuestions();
+        // Shuffle questions
+        activeQueue.sort(() => Math.random() - 0.5);
+        
+        curIndex = 0;
+        score = 0;
+        streak = 0;
+        timerVal = 0;
+        
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('categorySelect').disabled = true;
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timerVal++;
+            document.getElementById('timer').innerText = timerVal + "s";
+        }, 1000);
+
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        answered = false;
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('explanationBox').style.display = 'none';
+
+        const q = activeQueue[curIndex];
+        
+        // Progress Updates
+        document.getElementById('questionNum').innerText = `${curIndex + 1}/${activeQueue.length}`;
+        const pct = ((curIndex) / activeQueue.length) * 100;
+        document.getElementById('progressBar').style.width = `${pct}%`;
+
+        document.getElementById('qCategory').innerText = q.cat.toUpperCase();
+        document.getElementById('qText').innerText = q.q;
+
+        const optionsGrid = document.getElementById('optionsGrid');
+        optionsGrid.innerHTML = '';
+
+        const prefixes = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span class="opt-prefix">${prefixes[idx]}</span> <span>${opt}</span>`;
+            btn.onclick = () => selectOption(idx);
+            optionsGrid.appendChild(btn);
+        });
+
+        updateStats();
+    }
+
+    function selectOption(idx) {
+        if (answered) return;
+        answered = true;
+
+        const q = activeQueue[curIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+
+        if (idx === q.ans) {
+            buttons[idx].classList.add('correct');
+            score++;
+            streak++;
+        } else {
+            buttons[idx].classList.add('wrong');
+            buttons[q.ans].classList.add('correct');
+            streak = 0;
+        }
+
+        buttons.forEach(b => b.disabled = true);
+
+        // Show Explanation Box
+        document.getElementById('expText').innerText = q.exp;
+        document.getElementById('explanationBox').style.display = 'block';
+
+        updateStats();
+
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function updateStats() {
+        const accuracy = curIndex > 0 ? Math.round((score / (curIndex + (answered ? 1 : 0))) * 100) : (answered ? (score > 0 ? 100 : 0) : 0);
+        document.getElementById('accuracy').innerText = accuracy + "%";
+        document.getElementById('streak').innerText = streak;
+    }
+
+    function nextQuestion() {
+        curIndex++;
+        if (curIndex < activeQueue.length) {
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('gameBox').style.display = 'none';
+        document.getElementById('reportCard').style.display = 'block';
+
+        const finalAccuracy = Math.round((score / activeQueue.length) * 100);
+        let grade = "Novice Chemist 🧪";
+        if (finalAccuracy >= 90) grade = "Master Alchemist 👑";
+        else if (finalAccuracy >= 75) grade = "Senior Lab Researcher 🥼";
+        else if (finalAccuracy >= 50) grade = "Chemistry Apprentice 📚";
+
+        document.getElementById('reportGrade').innerText = `${grade} (${finalAccuracy}%)`;
+        document.getElementById('reportSummary').innerText = `You correctly answered ${score} out of ${activeQueue.length} questions in ${timerVal} seconds.`;
+
+        // Render mini periodic table reference
+        const miniTable = document.getElementById('miniTable');
+        miniTable.innerHTML = '';
+        elementData.forEach(e => {
+            const div = document.createElement('div');
+            div.className = 'mini-elem';
+            div.innerHTML = `<div class="num">Z=${e.z}</div><div class="sym">${e.sym}</div><div>${e.name}</div><div style="color:#64dfdf;font-size:0.65rem;">${e.mass} amu</div>`;
+            miniTable.appendChild(div);
+        });
+    }
+
+    function restartQuiz() {
+        document.getElementById('reportCard').style.display = 'none';
+        document.getElementById('gameBox').style.display = 'block';
+        document.getElementById('startBtn').style.display = 'inline-block';
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('categorySelect').disabled = false;
+        document.getElementById('progressBar').style.width = '0%';
+        document.getElementById('qText').innerText = "Click 'Start Challenge' below to begin testing your memory!";
+        document.getElementById('optionsGrid').innerHTML = '';
+        document.getElementById('explanationBox').style.display = 'none';
+        document.getElementById('questionNum').innerText = "0/0";
+        document.getElementById('accuracy').innerText = "0%";
+        document.getElementById('timer').innerText = "0s";
+        document.getElementById('streak').innerText = "0";
+    }
+</script>
+</body>
+</html>
