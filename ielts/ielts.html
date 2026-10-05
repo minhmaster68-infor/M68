@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Task 1: Comprehensive Paraphrasing & Error Analysis Practice (50 Questions)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0A2540;
+            --accent-blue: #0073E6;
+            --accent-cyan: #00D4B2;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; padding-bottom: 50px; }
+
+        header { background: var(--primary-blue); color: var(--white); padding: 1.25rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--accent-cyan); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .hero-banner { background: white; padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .hero-banner h1 { color: var(--primary-blue); font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .hero-banner p { color: var(--text-muted); font-size: 1rem; }
+
+        .key-takeaways { background: #EFF6FF; border-left: 5px solid var(--accent-blue); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+        .key-takeaways h3 { color: var(--primary-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .key-takeaways ul { margin-left: 1.2rem; color: var(--text-dark); }
+        .key-takeaways li { margin-bottom: 0.4rem; }
+
+        .section-card { background: var(--white); padding: 1.8rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .section-card h2 { color: var(--primary-blue); font-size: 1.3rem; margin-bottom: 1rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 0.5rem; }
+        
+        .prompt-box { background: #F1F5F9; padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1.25rem; font-weight: 500; border-left: 4px solid var(--primary-blue); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; margin-bottom: 1rem; font-size: 0.92rem; }
+        th, td { border: 1px solid var(--border-color); padding: 0.85rem; text-align: left; }
+        th { background: var(--primary-blue); color: var(--white); font-weight: 600; }
+        tr:nth-child(even) { background-color: #F8FAFC; }
+
+        .checkbox-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .checkbox-group label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.85rem; }
+
+        .btn-submit { background-color: var(--accent-blue); color: white; border: none; padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+        .btn-submit:hover { background-color: #005bb5; }
+
+        .explanation-box { display: none; margin-top: 1rem; background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; padding: 1.25rem; border-radius: 8px; font-size: 0.9rem; }
+        .explanation-box h4 { margin-bottom: 0.5rem; color: #15803D; }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid var(--border-color); margin-bottom: 1rem; border-radius: 8px; background: white; padding: 0.5rem; }
+            td { border: none; position: relative; padding-left: 45%; text-align: right; border-bottom: 1px solid #F1F5F9; }
+            td:before { position: absolute; top: 0.85rem; left: 0.85rem; width: 40%; padding-right: 10px; white-space: nowrap; text-align: left; font-weight: 600; color: var(--primary-blue); }
+            td:nth-of-type(1):before { content: "STT"; }
+            td:nth-of-type(2):before { content: "Câu Paraphrase"; text-align: left; }
+            td:nth-of-type(3):before { content: "Lỗi Ngữ Pháp"; }
+            td:nth-of-type(4):before { content: "Lỗi Từ Vựng"; }
+            td:nth-of-type(5):before { content: "Sai Thông Tin"; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="back-link"><i class="fa-solid fa-house"></i> Trang Chủ Index</a>
+            <span style="font-weight: 600; color: var(--accent-cyan);"><i class="fa-solid fa-graduation-cap"></i> IELTS Mastery Center</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Banner tổng quan -->
+        <div class="hero-banner">
+            <h1>IELTS Writing Task 1: Kỹ Thuật Paraphrasing & Phân Tích Lỗi (50 Câu)</h1>
+            <p>Khóa đào tạo chuyên sâu giúp nhận diện chính xác các lỗi sai về Ngữ pháp (Grammar), Từ vựng (Vocabulary) và Độ chính xác của Thông tin (Information) khi viết lại mở bài (Introduction)[cite: 3].</p>
+        </div>
+
+        <!-- Key Takeaways Section -->
+        <div class="key-takeaways">
+            <h3><i class="fa-solid fa-lightbulb"></i> Quy Tắc Cốt Lõi Khi Paraphrase Đề Bài (Key Takeaways)[cite: 3]:</h3>
+            <ul>
+                <li><strong>Tránh sao chép nguyên văn:</strong> Không chép lại toàn bộ từ ngữ của đề bài[cite: 3]. Tập trung biến đổi từ vựng đồng nghĩa và cấu trúc ngữ pháp một cách linh hoạt[cite: 3].</li>
+                <li><strong>Áp dụng đa dạng phương pháp:</strong> Sử dụng Synonyms (từ đồng nghĩa) thích hợp hoặc chuyển đổi giữa các dạng câu (ví dụ: mệnh đề quan hệ $\rightarrow$ cụm danh từ)[cite: 3].</li>
+                <li><strong>Kiểm soát phạm vi từ ngữ:</strong> Từ vựng được chọn không được quá hẹp (too narrow) cũng như không được quá rộng (too broad) làm thay đổi bản chất của số liệu/biểu đồ[cite: 3].</li>
+            </ul>
+        </div>
+
+        <!-- ================= BÀI TẬP PHẦN 1 ================= -->
+        <div class="section-card">
+            <h2>Phần 1: Chủ Đề Physical Activity & Sports (Câu 1 - 10)</h2>
+            <div class="prompt-box">
+                <strong>Đề bài gốc (Original Prompt):</strong> "The bar chart below illustrates how the percentage of men and women who engaged in regular physical activity in Australia in 2010."[cite: 3]
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">STT</th>
+                        <th style="width: 50%;">Các Câu Paraphrase Được Đưa Ra</th>
+                        <th style="width: 15%;">Grammar Issues</th>
+                        <th style="width: 15%;">Vocabulary Issues</th>
+                        <th style="width: 15%;">Wrong Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>The percentage of men and women participating in regular physical activity in Australia in 2010 is highlighted in the bar chart below.[cite: 3]</td>
+                        <td><input type="checkbox" id="g1"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v1"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w1"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>The bar chart provided information about the proportion of man and woman were involved in regular physical activity in Australia during the year 2010.[cite: 3]</td>
+                        <td><input type="checkbox" id="g2" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v2"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w2"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>The bar chart shows the number of men and women who regularly did things that would help their cardio-vascular systems in Australia in 2010.[cite: 3]</td>
+                        <td><input type="checkbox" id="g3"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v3" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w3" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>The bar chart illustrates the percentage of Australian men and women who loved sports in 2010.[cite: 3]</td>
+                        <td><input type="checkbox" id="g4"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v4"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w4" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>The chart depicts how many Australian males and females did exercise regularly in 2010.</td>
+                        <td><input type="checkbox" id="g5"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v5"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w5" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>The given bar chart compares the proportion of Australian adult taking part in routine physical activities in 2010.</td>
+                        <td><input type="checkbox" id="g6" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v6"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w6"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>In 2010, the rate of Australian men and women engaged in daily workouts is illustrated in the chart.</td>
+                        <td><input type="checkbox" id="g7"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v7" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w7"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>The bar chart gives information regarding the percentage of men and women who were physically active in Australia in 2010.</td>
+                        <td><input type="checkbox" id="g8"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v8"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w8"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>How the percentage of male and female Australian residents exercising regularly changed in 2010 is shown in the graph.</td>
+                        <td><input type="checkbox" id="g9"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v9"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w9" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>The bar chart illustrates the proportion of Australian citizens who worked out on a regular basis throughout 2010.</td>
+                        <td><input type="checkbox" id="g10"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" id="v10"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" id="w10"> Sai Thông Tin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-submit" onclick="toggleExplanation('exp1')"><i class="fa-solid fa-magnifying-glass"></i> Xem Giải Thích Chi Tiết (Câu 1 - 10)</button>
+            
+            <div class="explanation-box" id="exp1">
+                <h4><i class="fa-solid fa-circle-check"></i> ĐÁP ÁN & GIẢI THÍCH CHI TIẾT (CÂU 1 - 10):</h4>
+                <ul>
+                    <li><strong>Câu 1:</strong> <em>Hoàn hảo (No Issue).</em> Sử dụng cấu trúc bị động và thay thế "engaged in" bằng "participating in" chính xác[cite: 3].</li>
+                    <li><strong>Câu 2:</strong> <em>Lỗi Ngữ Pháp.</em> Dùng "man and woman" (danh từ số ít) và thừa động từ "were involved" gây lỗi mềnh đề[cite: 3].</li>
+                    <li><strong>Câu 3:</strong> <em>Lỗi Từ Vựng & Sai Thông Tin.</em> Thay "percentage" thành "number" (sai bản chất số liệu) và cụm từ "help cardio-vascular systems" diễn giải quá dài/rộng[cite: 3].</li>
+                    <li><strong>Câu 4:</strong> <em>Sai Thông Tin.</em> "Loved sports" (yêu thích thể thao) không đồng nghĩa với "engaged in physical activity" (thực sự tập luyện)[cite: 3].</li>
+                    <li><strong>Câu 5:</strong> <em>Sai Thông Tin.</em> "How many" dùng cho số lượng đếm được, trong khi bài đo lường phần trăm (percentage).</li>
+                    <li><strong>Câu 6:</strong> <em>Lỗi Ngữ Pháp.</em> Thiếu số nhiều ở từ "adult" ("adults") và thiếu từ chỉ cả hai giới.</li>
+                    <li><strong>Câu 7:</strong> <em>Lỗi Từ Vựng.</em> "Daily" (hàng ngày) quá hẹp so với "regular" (thường xuyên, có thể là 3 lần/tuần). "Rate" không thay thế hoàn hảo cho "percentage".</li>
+                    <li><strong>Câu 8:</strong> <em>Chính xác (Chuẩn Band 8.0+).</em> Thay thế "physically active" rất tự nhiên.</li>
+                    <li><strong>Câu 9:</strong> <em>Sai Thông Tin.</em> Dùng từ "changed" ngụ ý có sự thay đổi theo thời gian, nhưng đề chỉ cho dữ liệu của 1 năm duy nhất (2010).</li>
+                    <li><strong>Câu 10:</strong> <em>Chính xác.</em> "Worked out on a regular basis" là cụm Paraphrase mượt mà.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= BÀI TẬP PHẦN 2 ================= -->
+        <div class="section-card">
+            <h2>Phần 2: Chủ Đề International Tourism (Câu 11 - 20)</h2>
+            <div class="prompt-box">
+                <strong>Đ đề bài gốc (Original Prompt):</strong> "The line graph demonstrates the number of international tourists visiting three different European countries between 2000 and 2015."
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">STT</th>
+                        <th style="width: 50%;">Các Câu Paraphrase Được Đưa Ra</th>
+                        <th style="width: 15%;">Grammar Issues</th>
+                        <th style="width: 15%;">Vocabulary Issues</th>
+                        <th style="width: 15%;">Wrong Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>11</td>
+                        <td>The line graph compares the amount of foreign visitors traveling to three European nations from 2000 to 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>How many international travellers visited three countries in Europe over a 15-year period starting in 2000 is illustrated in the line graph.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>The provided graph details the proportion of tourists from abroad who traveled to three European countries between 2000 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>The chart illustrates changes in the number of overseas travelers visiting three European countries over a 15-year timeframe.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>The line graph shows how many tourists from other continents visited three nations in Europe between 2000 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>The line chart illustrates the total visitor arrivals from foreign countries to three European locations in 2000 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>Information about the number of international tourists choosing three European destinations was presented in the line graph.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>The graph compares three countries in Europe in terms of the number of foreign travelers they received over a period of 15 years from 2000.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td>The line graph highlights how the quantity of international tourists to three European nations fluctuates between 2000 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>The chart depicts the number of people who was traveling abroad to three European nations between 2000 and 2015.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-submit" onclick="toggleExplanation('exp2')"><i class="fa-solid fa-magnifying-glass"></i> Xem Giải Thích Chi Tiết (Câu 11 - 20)</button>
+            
+            <div class="explanation-box" id="exp2">
+                <h4><i class="fa-solid fa-circle-check"></i> ĐÁP ÁN & GIẢI THÍCH CHI TIẾT (CÂU 11 - 20):</h4>
+                <ul>
+                    <li><strong>Câu 11:</strong> <em>Lỗi Từ Vựng.</em> "Amount of" dùng cho danh từ không đếm được. Khách du lịch (visitors) là danh từ đếm được, phải dùng "number of".</li>
+                    <li><strong>Câu 12:</strong> <em>Chính xác.</em> Cấu trúc Mệnh đề danh ngữ (Noun Clause) biến đổi rất tốt.</li>
+                    <li><strong>Câu 13:</strong> <em>Sai Thông Tin.</em> Dùng "proportion" (tỷ lệ %) thay cho "number" (số lượng người).</li>
+                    <li><strong>Câu 14:</strong> <em>Chính xác.</em> "Overseas travelers" và "15-year timeframe" dùng từ đồng nghĩa chuẩn xác.</li>
+                    <li><strong>Câu 15:</strong> <em>Sai Thông Tin.</em> "Tourists from other continents" (từ đại lục khác) quá hẹp so với "international tourists" (khách quốc tế - có thể từ nước châu Âu khác đến).</li>
+                    <li><strong>Câu 16:</strong> <em>Sai Thông Tin.</em> Dùng "in 2000 and 2015" khiến người đọc hiểu là chỉ có dữ liệu của 2 năm riêng biệt, bỏ qua giai đoạn liên tục 2000–2015.</li>
+                    <li><strong>Câu 17:</strong> <em>Lỗi Ngữ Pháp.</em> Dùng thì quá khứ đơn "was presented" để giới thiệu đồ thị (luôn dùng thì hiện tại đơn cho động từ tả biểu đồ: "is presented").</li>
+                    <li><strong>Câu 18:</strong> <em>Chính xác (Band High).</em> Cấu trúc "in terms of..." đạt chuẩn đánh giá cao.</li>
+                    <li><strong>Câu 19:</strong> <em>Lỗi Từ Vựng.</em> "Quantity" hiếm khi dùng cho người. Nên dùng "number".</li>
+                    <li><strong>Câu 20:</strong> <em>Lỗi Ngữ Pháp.</em> Sai hòa hợp chủ ngữ - động từ: "people who WAS" $\rightarrow$ phải là "were".</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= BÀI TẬP PHẦN 3 ================= -->
+        <div class="section-card">
+            <h2>Phần 3: Chủ Đề Household Expenditure (Câu 21 - 30)</h2>
+            <div class="prompt-box">
+                <strong>Đề bài gốc (Original Prompt):</strong> "The pie charts show the proportion of household spending on five categories in the UK in 2005 and 2015."
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">STT</th>
+                        <th style="width: 50%;">Các Câu Paraphrase Được Đưa Ra</th>
+                        <th style="width: 15%;">Grammar Issues</th>
+                        <th style="width: 15%;">Vocabulary Issues</th>
+                        <th style="width: 15%;">Wrong Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>21</td>
+                        <td>The pie charts compare how UK families spent their income on five different items in two selected years, 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>22</td>
+                        <td>The pie chart illustrates the percentage of money spent by British households on 5 sectors in 2005 and 2015.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td>The proportion of household expenditure for five categories in the UK in 2005 and 2015 are shown in the charts.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>24</td>
+                        <td>The charts depict the distribution of domestic spending across five distinct categories in the United Kingdom over a ten-year period.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>25</td>
+                        <td>The pie charts illustrate how much money UK families invested in five different areas in 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>26</td>
+                        <td>The charts give a breakdown of UK domestic expenditure in five categories during 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>27</td>
+                        <td>How British people allocated their budget for five main living costs in 2005 and 2015 is illustrated in the pie charts.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>28</td>
+                        <td>The pie charts provide a comparison of the amount of money spent on five household needs by UK citizens in 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>29</td>
+                        <td>The charts show the proportion of income that British households wasted on five categories in 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>The pie charts compare the changes in the proportion of domestic spending in the UK in five categories between 2005 and 2015.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-submit" onclick="toggleExplanation('exp3')"><i class="fa-solid fa-magnifying-glass"></i> Xem Giải Thích Chi Tiết (Câu 21 - 30)</button>
+            
+            <div class="explanation-box" id="exp3">
+                <h4><i class="fa-solid fa-circle-check"></i> ĐÁP ÁN & GIẢI THÍCH CHI TIẾT (CÂU 21 - 30):</h4>
+                <ul>
+                    <li><strong>Câu 21:</strong> <em>Chính xác.</em> "Spent their income", "two selected years" diễn đạt rất xuất sắc.</li>
+                    <li><strong>Câu 22:</strong> <em>Lỗi Ngữ Pháp.</em> Đề bài ghi hai biểu đồ tròn ("pie charts") nhưng viết lại thành số ít "pie chart".</li>
+                    <li><strong>Câu 23:</strong> <em>Lỗi Ngữ Pháp.</em> Chủ ngữ chính là "The proportion" (số ít) nhưng động từ lại chia "are shown" (số nhiều).</li>
+                    <li><strong>Câu 24:</strong> <em>Sai Thông Tin.</em> "Over a ten-year period" ngụ ý biến động xuyên suốt 10 năm, nhưng pie chart chỉ so sánh 2 mốc thời gian độc lập.</li>
+                    <li><strong>Câu 25:</strong> <em>Lỗi Từ Vựng.</em> "Invested" (đầu tư) không chính xác cho chi tiêu sinh hoạt hàng ngày (spending/expenditure).</li>
+                    <li><strong>Câu 26:</strong> <em>Chính xác.</em> Cụm "give a breakdown of..." là thuật ngữ đắt giá trong Writing Task 1.</li>
+                    <li><strong>Câu 27:</strong> <em>Chính xác.</em> "Allocated their budget" là cụm Paraphrase chuẩn academic.</li>
+                    <li><strong>Câu 28:</strong> <em>Chính xác.</em> "Amount of money spent" thay thế linh hoạt cho tỷ lệ spending.</li>
+                    <li><strong>Câu 29:</strong> <em>Lỗi Từ Vựng.</em> Từ "wasted" (lãng phí) mang sắc thái tiêu cực, không trung lập như "spent" trong bài báo cáo học thuật.</li>
+                    <li><strong>Câu 30:</strong> <em>Chính xác.</em> "Changes in the proportion" làm nổi bật sự so sánh giữa 2 năm.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= BÀI TẬP PHẦN 4 ================= -->
+        <div class="section-card">
+            <h2>Phần 4: Chủ Đề Education & Energy Production (Câu 31 - 40)</h2>
+            <div class="prompt-box">
+                <strong>Đề bài gốc (Original Prompt):</strong> "The table compares the percentage of university graduates in five subjects in a European city in 2020."
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">STT</th>
+                        <th style="width: 50%;">Các Câu Paraphrase Được Đưa Ra</th>
+                        <th style="width: 15%;">Grammar Issues</th>
+                        <th style="width: 15%;">Vocabulary Issues</th>
+                        <th style="width: 15%;">Wrong Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>31</td>
+                        <td>The table illustrates the proportion of students who graduated from university across five academic disciplines in a city in Europe in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>32</td>
+                        <td>The table compares how many students graduated in five subjects in a European city during 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>33</td>
+                        <td>Information regarding the percentage of tertiary graduates in 5 subjects in one city in Europe in 2020 are detailed in the table.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>34</td>
+                        <td>The table shows the distribution of university degrees awarded in five majors in a European city in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>35</td>
+                        <td>The table highlights the proportion of European university students who passed their final exams in five subjects in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>36</td>
+                        <td>The given table provides data on the percentage of university graduates in five fields of study in a specific European city in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>37</td>
+                        <td>How the percentage of university graduates in five subjects changed in a European city in 2020 is presented in the table.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>38</td>
+                        <td>The chart demonstrates the rate of college graduates in five faculties in a city located in Europe in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>39</td>
+                        <td>The table compares five subjects in terms of the proportion of university graduates they produced in a European city in 2020.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>40</td>
+                        <td>The table shows the proportion of university graduates in five different subjects, which was measured in a European city in 2020.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-submit" onclick="toggleExplanation('exp4')"><i class="fa-solid fa-magnifying-glass"></i> Xem Giải Thích Chi Tiết (Câu 31 - 40)</button>
+            
+            <div class="explanation-box" id="exp4">
+                <h4><i class="fa-solid fa-circle-check"></i> ĐÁP ÁN & GIẢI THÍCH CHI TIẾT (CÂU 31 - 40):</h4>
+                <ul>
+                    <li><strong>Câu 31:</strong> <em>Chính xác.</em> "Academic disciplines" thay cho "subjects" rất chuẩn xác.</li>
+                    <li><strong>Câu 32:</strong> <em>Sai Thông Tin.</em> "How many" ngụ ý đếm số lượng người cụ thể, trong khi bài cho phần trăm (%).</li>
+                    <li><strong>Câu 33:</strong> <em>Lỗi Ngữ Pháp.</em> Danh từ không đếm được "Information" đi với động từ số ít ("is detailed", không dùng "are").</li>
+                    <li><strong>Câu 34:</strong> <em>Chính xác.</em> "University degrees awarded in five majors" là cách diễn đạt sinh động.</li>
+                    <li><strong>Câu 35:</strong> <em>Sai Thông Tin.</em> "Passed their final exams" (đỗ kỳ thi) chưa đủ nghĩa để khẳng định đã tốt nghiệp đại học (graduated).</li>
+                    <li><strong>Câu 36:</strong> <em>Chính xác.</em> "Fields of study" và "specific European city" dùng từ nối mượt mượt.</li>
+                    <li><strong>Câu 37:</strong> <em>Sai Thông Tin.</em> Thừa từ "changed" vì dữ liệu chỉ nằm trong 1 năm đơn lẻ (2020).</li>
+                    <li><strong>Câu 38:</strong> <em>Lỗi Từ Vựng.</em> Từ "rate" (tốc độ/tỷ lệ phát triển) dùng không hợp lý cho phần trăm tốt nghiệp (% / proportion). Dùng "Chart" cho bài "Table" cũng chưa tối ưu.</li>
+                    <li><strong>Câu 39:</strong> <em>Chính xác.</em> Cấu trúc linh hoạt, tự nhiên.</li>
+                    <li><strong>Câu 40:</strong> <em>Lỗi Ngữ Pháp.</em> Sai đại từ quan hệ và hòa hợp: "which WERE measured" (vì bổ nghĩa cho proportion/graduates trong bối cảnh nhiều số liệu).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= BÀI TẬP PHẦN 5 ================= -->
+        <div class="section-card">
+            <h2>Phần 5: Chủ Đề Employment & Transportation (Câu 41 - 50)</h2>
+            <div class="prompt-box">
+                <strong>Đề bài gốc (Original Prompt):</strong> "The process diagram shows how recycled paper is produced in a factory."
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">STT</th>
+                        <th style="width: 50%;">Các Câu Paraphrase Được Đưa Ra</th>
+                        <th style="width: 15%;">Grammar Issues</th>
+                        <th style="width: 15%;">Vocabulary Issues</th>
+                        <th style="width: 15%;">Wrong Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>41</td>
+                        <td>The flow chart illustrates the various stages involved in the manufacturing of recycled paper in a plant.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>42</td>
+                        <td>How to make recycled paper in a factory is depicted in the process diagram.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>43</td>
+                        <td>The diagram details the step-by-step process of producing paper from recycled materials in an industrial setting.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>44</td>
+                        <td>The process diagram shows how much recycled paper is produced in a factory every year.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>45</td>
+                        <td>The illustration demonstrates how waste paper was converted into recycled paper in a factory.</td>
+                        <td><input type="checkbox" checked> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>46</td>
+                        <td>The diagram outlines the main steps in the recycling of paper products in a manufacturing facility.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>47</td>
+                        <td>How recycled paper is created by workers in a factory is illustrated in the diagram.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox" checked> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>48</td>
+                        <td>The process diagram displays how machines reproduce paper from old newspapers in a factory.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox" checked> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>49</td>
+                        <td>The diagram provides an overview of the stages in making recycled paper inside a production plant.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>The flow chart illustrates how paper is recycled in a factory through different mechanical operations.</td>
+                        <td><input type="checkbox"> Lỗi Ngữ Pháp</td>
+                        <td><input type="checkbox"> Lỗi Từ Vựng</td>
+                        <td><input type="checkbox"> Sai Thông Tin</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-submit" onclick="toggleExplanation('exp5')"><i class="fa-solid fa-magnifying-glass"></i> Xem Giải Thích Chi Tiết (Câu 41 - 50)</button>
+            
+            <div class="explanation-box" id="exp5">
+                <h4><i class="fa-solid fa-circle-check"></i> ĐÁP ÁN & GIẢI THÍCH CHI TIẾT (CÂU 41 - 50):</h4>
+                <ul>
+                    <li><strong>Câu 41:</strong> <em>Chính xác.</em> "Various stages involved in..." là mẫu câu chuẩn cho bài Process.</li>
+                    <li><strong>Câu 42:</strong> <em>Chính xác.</em> Sử dụng cấu trúc "How to..." ngắn gọn, chính xác.</li>
+                    <li><strong>Câu 43:</strong> <em>Chính xác.</em> "Step-by-step process" và "industrial setting" rất hay.</li>
+                    <li><strong>Câu 44:</strong> <em>Sai Thông Tin.</em> Chuyển dạng Process (quy trình) thành bài đo lường khối lượng sản lượng ("how much... every year").</li>
+                    <li><strong>Câu 45:</strong> <em>Lỗi Ngữ Pháp.</em> Quy trình công nghệ chung (Process) luôn dùng thì hiện tại đơn (is converted), không dùng quá khứ đơn (was converted).</li>
+                    <li><strong>Câu 46:</strong> <em>Chính xác.</em> Dùng từ "outlines" và "manufacturing facility" thay thế mượt mượt.</li>
+                    <li><strong>Câu 47:</strong> <em>Lỗi Từ Vựng.</em> Quy trình nhà máy đa phần do máy móc vận hành tự động, nhấn mạnh "by workers" là không tự nhiên.</li>
+                    <li><strong>Câu 48:</strong> <em>Sai Thông Tin.</em> "Old newspapers" (báo cũ) quá hẹp so với "recycled paper" (giấy tái chế nói chung bao gồm bìa, sách, tài liệu...).</li>
+                    <li><strong>Câu 49:</strong> <em>Chính xác.</em> Cụm "provides an overview of..." đạt tiêu chuẩn cao.</li>
+                    <li><strong>Câu 50:</strong> <em>Chính xác.</em> "Mechanical operations" nhấn mạnh tính kỹ thuật của quy trình.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script điều khiển ẩn hiện đáp án -->
+    <script>
+        function toggleExplanation(id) {
+            const el = document.getElementById(id);
+            if (el.style.display === "block") {
+                el.style.display = "none";
+            } else {
+                el.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
