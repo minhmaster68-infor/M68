@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 7 Science: Chemical Elements Mastery Test (50 Questions)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0A2540;
+            --accent-cyan: #00D4B2;
+            --accent-blue: #0073E6;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border-color: #CBD5E1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; padding-bottom: 50px; }
+
+        header { background: var(--primary-dark); color: var(--white); padding: 1.25rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--accent-cyan); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .hero-banner { background: white; padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .hero-banner h1 { color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+        .theory-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .theory-card h2 { color: var(--primary-dark); font-size: 1.3rem; margin-bottom: 1rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 0.5rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { border: 1px solid var(--border-color); padding: 0.65rem; text-align: center; }
+        th { background: var(--accent-cyan); color: var(--primary-dark); font-weight: 700; }
+        tr:nth-child(even) { background-color: #F1F5F9; }
+
+        .quiz-card { background: white; padding: 1.8rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .question-block { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border-color); }
+        .question-title { font-weight: 600; color: var(--primary-dark); margin-bottom: 0.5rem; }
+
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; }
+        .quiz-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: 0.2s; background: var(--white); font-size: 0.9rem; }
+        .quiz-option:hover { background: #EFF6FF; border-color: var(--accent-blue); }
+        .text-input { width: 100%; max-width: 350px; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .text-input:focus { border-color: var(--accent-blue); }
+
+        .btn-submit { background-color: var(--primary-dark); color: var(--accent-cyan); border: none; padding: 1rem 2rem; font-weight: 700; font-size: 1rem; border-radius: 10px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-submit:hover { background-color: #0d3b66; }
+
+        #score-board { display: none; background: #ECFDF5; border: 2px solid #10B981; color: #065F46; padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; font-size: 1.1rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="back-link"><i class="fa-solid fa-house"></i> Trang Chủ Index</a>
+            <span style="font-weight: 600; color: var(--white);"><i class="fa-solid fa-flask"></i> K12 Science - Grade 7 Chemistry</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-banner">
+            <h1>Khoa Học Tự Nhiên Lớp 7: Ôn Tập Nguyên Tố Hóa Học (50 Câu)</h1>
+            <p>Kiểm tra toàn diện khả năng ghi nhớ tên Tiếng Anh (chuẩn IUPAC), Kí hiệu hóa học và Khối lượng nguyên tử (amu) của các nguyên tố thông thường[cite: 2].</p>
+        </div>
+
+        <!-- PHẦN LÝ THUYẾT ÔN TẬP -->
+        <div class="theory-card">
+            <h2><i class="fa-solid fa-book-open"></i> Lý Thuyết Cốt Lõi: Bảng Nguyên Tố Hóa Học IUPAC</h2>
+            <p>Lưu ý: Một số nguyên tố có kí hiệu xuất phát từ tên Latin chứ không xuất phát từ tên IUPAC (ví dụ: Sodium → Natrium → <strong>Na</strong>; Potassium → Kalium → <strong>K</strong>).</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Số hiệu Z</th>
+                        <th>Tên IUPAC</th>
+                        <th>Kí hiệu</th>
+                        <th>Khối lượng (amu)</th>
+                        <th>Số hiệu Z</th>
+                        <th>Tên IUPAC</th>
+                        <th>Kí hiệu</th>
+                        <th>Khối lượng (amu)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Hydrogen</td><td>H</td><td>1</td><td>11</td><td>Sodium (Natri)</td><td>Na</td><td>23</td></tr>
+                    <tr><td>2</td><td>Helium</td><td>He</td><td>4</td><td>12</td><td>Magnesium</td><td>Mg</td><td>24</td></tr>
+                    <tr><td>3</td><td>Lithium</td><td>Li</td><td>7</td><td>13</td><td>Aluminium (Nhôm)</td><td>Al</td><td>27</td></tr>
+                    <tr><td>4</td><td>Beryllium</td><td>Be</td><td>9</td><td>14</td><td>Silicon</td><td>Si</td><td>28</td></tr>
+                    <tr><td>5</td><td>Boron</td><td>B</td><td>11</td><td>15</td><td>Phosphorus</td><td>P</td><td>31</td></tr>
+                    <tr><td>6</td><td>Carbon</td><td>C</td><td>12</td><td>16</td><td>Sulfur (Lưu huỳnh)</td><td>S</td><td>32</td></tr>
+                    <tr><td>7</td><td>Nitrogen</td><td>N</td><td>14</td><td>17</td><td>Chlorine</td><td>Cl</td><td>35.5</td></tr>
+                    <tr><td>8</td><td>Oxygen</td><td>O</td><td>16</td><td>18</td><td>Argon</td><td>Ar</td><td>40</td></tr>
+                    <tr><td>9</td><td>Fluorine</td><td>F</td><td>19</td><td>19</td><td>Potassium (Kali)</td><td>K</td><td>39</td></tr>
+                    <tr><td>10</td><td>Neon</td><td>Ne</td><td>20</td><td>20</td><td>Calcium</td><td>Ca</td><td>40</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- BÀI TẬP 50 CÂU -->
+        <div class="quiz-card">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Bài Kiểm Tra 50 Câu Trắc Nghiệm & Ghi Nhớ</h2>
+            
+            <form id="scienceQuiz">
+                <!-- VÒNG 1: KÍ HIỆU HÓA HỌC (CÂU 1 - 15) -->
+                <h3 style="color: var(--accent-blue); margin: 1.5rem 0 1rem;">Phần 1: Nhận Biết Kí Hiệu Hóa Học (Chemical Symbols)[cite: 2]</h3>
+                
+                <div class="question-block">
+                    <p class="question-title">Câu 1: What is the chemical symbol for Hydrogen (Z=1)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q1" value="H"> A. H</label>
+                        <label class="quiz-option"><input type="radio" name="q1" value="He"> B. He</label>
+                        <label class="quiz-option"><input type="radio" name="q1" value="Hy"> C. Hy</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 2: What is the chemical symbol for Helium (Z=2)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q2" value="H"> A. H</label>
+                        <label class="quiz-option"><input type="radio" name="q2" value="He"> B. He</label>
+                        <label class="quiz-option"><input type="radio" name="q2" value="Hl"> C. Hl</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 3: What is the chemical symbol for Lithium (Z=3)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q3" value="Li"> A. Li</label>
+                        <label class="quiz-option"><input type="radio" name="q3" value="L"> B. L</label>
+                        <label class="quiz-option"><input type="radio" name="q3" value="Lt"> C. Lt</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 4: What is the chemical symbol for Beryllium (Z=4)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q4" value="B"> A. B</label>
+                        <label class="quiz-option"><input type="radio" name="q4" value="Be"> B. Be</label>
+                        <label class="quiz-option"><input type="radio" name="q4" value="Br"> C. Br</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 5: What is the chemical symbol for Boron (Z=5)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q5" value="B"> A. B</label>
+                        <label class="quiz-option"><input type="radio" name="q5" value="Bo"> B. Bo</label>
+                        <label class="quiz-option"><input type="radio" name="q5" value="Be"> C. Be</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 6: What is the chemical symbol for Carbon (Z=6)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q6" value="C"> A. C</label>
+                        <label class="quiz-option"><input type="radio" name="q6" value="Ca"> B. Ca</label>
+                        <label class="quiz-option"><input type="radio" name="q6" value="Cr"> C. Cr</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 7: What is the chemical symbol for Nitrogen (Z=7)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q7" value="Ni"> A. Ni</label>
+                        <label class="quiz-option"><input type="radio" name="q7" value="N"> B. N</label>
+                        <label class="quiz-option"><input type="radio" name="q7" value="Na"> C. Na</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 8: What is the chemical symbol for Oxygen (Z=8)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q8" value="O"> A. O</label>
+                        <label class="quiz-option"><input type="radio" name="q8" value="Ox"> B. Ox</label>
+                        <label class="quiz-option"><input type="radio" name="q8" value="Og"> C. Og</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 9: What is the chemical symbol for Fluorine (Z=9)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q9" value="F"> A. F</label>
+                        <label class="quiz-option"><input type="radio" name="q9" value="Fl"> B. Fl</label>
+                        <label class="quiz-option"><input type="radio" name="q9" value="Fe"> C. Fe</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 10: What is the chemical symbol for Neon (Z=10)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q10" value="Ne"> A. Ne</label>
+                        <label class="quiz-option"><input type="radio" name="q10" value="N"> B. N</label>
+                        <label class="quiz-option"><input type="radio" name="q10" value="Na"> C. Na</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 11: What is the chemical symbol for Sodium (Natri, Z=11)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q11" value="So"> A. So</label>
+                        <label class="quiz-option"><input type="radio" name="q11" value="Na"> B. Na</label>
+                        <label class="quiz-option"><input type="radio" name="q11" value="Sd"> C. Sd</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 12: What is the chemical symbol for Magnesium (Z=12)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q12" value="Mg"> A. Mg</label>
+                        <label class="quiz-option"><input type="radio" name="q12" value="Ma"> B. Ma</label>
+                        <label class="quiz-option"><input type="radio" name="q12" value="Mn"> C. Mn</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 13: What is the chemical symbol for Aluminium (Nhôm, Z=13)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q13" value="Al"> A. Al</label>
+                        <label class="quiz-option"><input type="radio" name="q13" value="Am"> B. Am</label>
+                        <label class="quiz-option"><input type="radio" name="q13" value="A"> C. A</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 14: What is the chemical symbol for Silicon (Z=14)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q14" value="Si"> A. Si</label>
+                        <label class="quiz-option"><input type="radio" name="q14" value="S"> B. S</label>
+                        <label class="quiz-option"><input type="radio" name="q14" value="Sl"> C. Sl</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 15: What is the chemical symbol for Phosphorus (Z=15)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q15" value="P"> A. P</label>
+                        <label class="quiz-option"><input type="radio" name="q15" value="Ph"> B. Ph</label>
+                        <label class="quiz-option"><input type="radio" name="q15" value="Po"> C. Po</label>
+                    </div>
+                </div>
+
+                <!-- VÒNG 2: TÊN NGUYÊN TỐ IUPAC & LATIN (CÂU 16 - 30) -->
+                <h3 style="color: var(--accent-blue); margin: 2rem 0 1rem;">Phần 2: Tên Gọi IUPAC & Nguồn Gốc Latin (Names & Origin)[cite: 2]</h3>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 16: The symbol "S" represents which element?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q16" value="Sulfur"> A. Sulfur</label>
+                        <label class="quiz-option"><input type="radio" name="q16" value="Silicon"> B. Silicon</label>
+                        <label class="quiz-option"><input type="radio" name="q16" value="Sodium"> C. Sodium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 17: The symbol "Cl" represents which element?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q17" value="Chlorine"> A. Chlorine</label>
+                        <label class="quiz-option"><input type="radio" name="q17" value="Calcium"> B. Calcium</label>
+                        <label class="quiz-option"><input type="radio" name="q17" value="Carbon"> C. Carbon</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 18: The symbol "Ar" represents which element?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q18" value="Argon"> A. Argon</label>
+                        <label class="quiz-option"><input type="radio" name="q18" value="Arsenic"> B. Arsenic</label>
+                        <label class="quiz-option"><input type="radio" name="q18" value="Aluminium"> C. Aluminium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 19: The symbol "K" comes from which Latin name?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q19" value="Kalium"> A. Kalium</label>
+                        <label class="quiz-option"><input type="radio" name="q19" value="Natrium"> B. Natrium</label>
+                        <label class="quiz-option"><input type="radio" name="q19" value="Krypton"> C. Krypton</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 20: What is the IUPAC English name for the element with symbol "K"?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q20" value="Potassium"> A. Potassium</label>
+                        <label class="quiz-option"><input type="radio" name="q20" value="Phosphorus"> B. Phosphorus</label>
+                        <label class="quiz-option"><input type="radio" name="q20" value="Calcium"> C. Calcium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 21: The symbol "Ca" represents which element (Z=20)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q21" value="Calcium"> A. Calcium</label>
+                        <label class="quiz-option"><input type="radio" name="q21" value="Carbon"> B. Carbon</label>
+                        <label class="quiz-option"><input type="radio" name="q21" value="Chlorine"> C. Chlorine</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 22: The Latin name "natrium" is the origin of the symbol for which element?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q22" value="Sodium"> A. Sodium</label>
+                        <label class="quiz-option"><input type="radio" name="q22" value="Nitrogen"> B. Nitrogen</label>
+                        <label class="quiz-option"><input type="radio" name="q22" value="Neon"> C. Neon</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 23: Which element is commonly known as "Lưu huỳnh" in Vietnamese?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q23" value="Sulfur"> A. Sulfur</label>
+                        <label class="quiz-option"><input type="radio" name="q23" value="Silicon"> B. Silicon</label>
+                        <label class="quiz-option"><input type="radio" name="q23" value="Phosphorus"> C. Phosphorus</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 24: Which element is commonly known as "Nhôm" in Vietnamese?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q24" value="Aluminium"> A. Aluminium</label>
+                        <label class="quiz-option"><input type="radio" name="q24" value="Argon"> B. Argon</label>
+                        <label class="quiz-option"><input type="radio" name="q24" value="Beryllium"> C. Beryllium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 25: Iron has the chemical symbol "Fe". What is its Latin name?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q25" value="Ferrum"> A. Ferrum</label>
+                        <label class="quiz-option"><input type="radio" name="q25" value="Fluorum"> B. Fluorum</label>
+                        <label class="quiz-option"><input type="radio" name="q25" value="Plumbum"> C. Plumbum</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 26: Copper has the chemical symbol "Cu". What is its Latin name?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q26" value="Cuprum"> A. Cuprum</label>
+                        <label class="quiz-option"><input type="radio" name="q26" value="Cobaltum"> B. Cobaltum</label>
+                        <label class="quiz-option"><input type="radio" name="q26" value="Calcium"> C. Calcium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 27: Silver has the chemical symbol "Ag". What is its Latin name?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q27" value="Argentum"> A. Argentum</label>
+                        <label class="quiz-option"><input type="radio" name="q27" value="Aurum"> A. Aurum</label>
+                        <label class="quiz-option"><input type="radio" name="q27" value="Argon"> C. Argon</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 28: Gold has the chemical symbol "Au". What is its Latin name?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q28" value="Aurum"> A. Aurum</label>
+                        <label class="quiz-option"><input type="radio" name="q28" value="Argentum"> B. Argentum</label>
+                        <label class="quiz-option"><input type="radio" name="q28" value="Aluminium"> C. Aluminium</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 29: What is the chemical symbol for Zinc (Kẽm)?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q29" value="Zn"> A. Zn</label>
+                        <label class="quiz-option"><input type="radio" name="q29" value="Zi"> B. Zi</label>
+                        <label class="quiz-option"><input type="radio" name="q29" value="Z"> C. Z</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 30: What is the chemical symbol for Lead (Chì)?</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q30" value="Pb"> A. Pb</label>
+                        <label class="quiz-option"><input type="radio" name="q30" value="Ld"> B. Ld</label>
+                        <label class="quiz-option"><input type="radio" name="q30" value="Pd"> C. Pd</label>
+                    </div>
+                </div>
+
+                <!-- VÒNG 3: KHỐI LƯỢNG NGUYÊN TỬ & SỐ HIỆU (CÂU 31 - 40) -->
+                <h3 style="color: var(--accent-blue); margin: 2rem 0 1rem;">Phần 3: Khối Lượng Nguyên Tử (Atomic Mass - amu)[cite: 2]</h3>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 31: What is the rounded atomic mass of Hydrogen (H)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q31" value="1"> A. 1 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q31" value="2"> B. 2 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q31" value="4"> C. 4 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 32: What is the atomic mass of Carbon (C)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q32" value="12"> A. 12 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q32" value="14"> B. 14 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q32" value="16"> C. 16 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 33: What is the atomic mass of Nitrogen (N)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q33" value="14"> A. 14 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q33" value="12"> B. 12 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q33" value="16"> C. 16 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 34: What is the atomic mass of Oxygen (O)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q34" value="16"> A. 16 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q34" value="18"> B. 18 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q34" value="32"> C. 32 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 35: What is the atomic mass of Sodium (Na)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q35" value="23"> A. 23 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q35" value="24"> B. 24 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q35" value="11"> C. 11 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 36: What is the atomic mass of Magnesium (Mg)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q36" value="24"> A. 24 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q36" value="23"> B. 23 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q36" value="27"> C. 27 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 37: What is the atomic mass of Aluminium (Al)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q37" value="27"> A. 27 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q37" value="28"> B. 28 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q37" value="31"> C. 31 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 38: What is the atomic mass of Sulfur (S)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q38" value="32"> A. 32 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q38" value="16"> B. 16 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q38" value="35.5"> C. 35.5 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 39: What is the atomic mass of Chlorine (Cl)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q39" value="35.5"> A. 35.5 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q39" value="35"> B. 35 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q39" value="40"> C. 40 amu</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 40: What is the atomic mass of Calcium (Ca)?[cite: 2]</p>
+                    <div class="options-grid">
+                        <label class="quiz-option"><input type="radio" name="q40" value="40"> A. 40 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q40" value="39"> B. 39 amu</label>
+                        <label class="quiz-option"><input type="radio" name="q40" value="20"> C. 20 amu</label>
+                    </div>
+                </div>
+
+                <!-- VÒNG 4: BÀI TẬP ĐIỀN TỪ TRỰC TIẾP (CÂU 41 - 50) -->
+                <h3 style="color: var(--accent-blue); margin: 2rem 0 1rem;">Phần 4: Viết Tên & Kí Hiệu Tiếng Anh (Fill in the Blanks)[cite: 2]</h3>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 41: Write the English IUPAC name for the element with Z=2 (Symbol: He)[cite: 2]:</p>
+                    <input type="text" id="q41" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 42: Write the English IUPAC name for the element with Z=3 (Symbol: Li)[cite: 2]:</p>
+                    <input type="text" id="q42" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 43: Write the English IUPAC name for the element with Z=9 (Symbol: F)[cite: 2]:</p>
+                    <input type="text" id="q43" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 44: Write the English IUPAC name for the element with Z=10 (Symbol: Ne)[cite: 2]:</p>
+                    <input type="text" id="q44" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 45: Write the chemical symbol for Silicon (Z=14)[cite: 2]:</p>
+                    <input type="text" id="q45" class="text-input" placeholder="Type chemical symbol...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 46: Write the chemical symbol for Phosphorus (Z=15)[cite: 2]:</p>
+                    <input type="text" id="q46" class="text-input" placeholder="Type chemical symbol...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 47: Write the English IUPAC name for the element with Z=18 (Symbol: Ar)[cite: 2]:</p>
+                    <input type="text" id="q47" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 48: Write the chemical symbol for Potassium (Z=19)[cite: 2]:</p>
+                    <input type="text" id="q48" class="text-input" placeholder="Type chemical symbol...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 49: Write the chemical symbol for Calcium (Z=20)[cite: 2]:</p>
+                    <input type="text" id="q49" class="text-input" placeholder="Type chemical symbol...">
+                </div>
+
+                <div class="question-block">
+                    <p class="question-title">Câu 50: Write the English name for the element with symbol "Fe":</p>
+                    <input type="text" id="q50" class="text-input" placeholder="Type answer in English...">
+                </div>
+
+                <button type="button" class="btn-submit" onclick="evaluateQuiz()">
+                    <i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Kết Quả (Submit Test)
+                </button>
+            </form>
+
+            <div id="score-board"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPT TỰ ĐỘNG CHẤM ĐIỂM -->
+    <script>
+        function evaluateQuiz() {
+            let correctCount = 0;
+            const answers = {
+                q1: "H", q2: "He", q3: "Li", q4: "Be", q5: "B",
+                q6: "C", q7: "N", q8: "O", q9: "F", q10: "Ne",
+                q11: "Na", q12: "Mg", q13: "Al", q14: "Si", q15: "P",
+                q16: "Sulfur", q17: "Chlorine", q18: "Argon", q19: "Kalium", q20: "Potassium",
+                q21: "Calcium", q22: "Sodium", q23: "Sulfur", q24: "Aluminium", q25: "Ferrum",
+                q26: "Cuprum", q27: "Argentum", q28: "Aurum", q29: "Zn", q30: "Pb",
+                q31: "1", q32: "12", q33: "14", q34: "16", q35: "23",
+                q36: "24", q37: "27", q38: "32", q39: "35.5", q40: "40"
+            };
+
+            // Kiểm tra 40 câu trắc nghiệm
+            for (let i = 1; i <= 40; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+                if (selected === answers[`q${i}`]) {
+                    correctCount++;
+                }
+            }
+
+            // Kiểm tra 10 câu điền từ
+            const textAnswers = {
+                q41: "helium", q42: "lithium", q43: "fluorine", q44: "neon",
+                q45: "si", q46: "p", q47: "argon", q48: "k", q49: "ca", q50: "iron"
+            };
+
+            for (let i = 41; i <= 50; i++) {
+                const val = document.getElementById(`q${i}`).value.trim().toLowerCase();
+                if (val === textAnswers[`q${i}`]) {
+                    correctCount++;
+                }
+            }
+
+            // Hiển thị bảng điểm
+            const scorePercent = (correctCount / 50) * 100;
+            const scoreBoard = document.getElementById("score-board");
+            scoreBoard.style.display = "block";
+            scoreBoard.innerHTML = `
+                <h3><i class="fa-solid fa-trophy"></i> Kết Quả Bài Kiểm Tra Của Bạn:</h3>
+                <p style="font-size: 1.5rem; font-weight: bold; margin: 10px 0;">${correctCount} / 50 Câu Đúng (${scorePercent}%)</p>
+                <p>${scorePercent >= 80 ? '🎉 Tuyệt vời! Bạn đã nắm rất vững kiến thức các nguyên tố hóa học bằng Tiếng Anh.' : '💪 Hãy ôn tập lại Bảng nguyên tố ở trên và thử lại nhé!'}</p>
+            `;
+            
+            scoreBoard.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
