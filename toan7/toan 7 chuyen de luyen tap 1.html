@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyên Đề Luyện Tập Toán 7 - Khắc Tinh Bẫy Dấu & Đường Phụ Hình Học</title>
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
+            --accent-pink: #ec4899;
+            --accent-yellow: #f59e0b;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --dark: #0f172a;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #faf5ff 100%); color: var(--dark); line-height: 1.65; padding: 20px; }
+        .container { max-width: 960px; margin: 0 auto; }
+
+        /* Header phong cách Hologram trẻ trung */
+        header {
+            background: linear-gradient(135deg, #312e81, #4f46e5 50%, #06b6d4);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 12px 25px -5px rgba(79, 70, 229, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        header::after {
+            content: "📐 ⚡ ✏️";
+            position: absolute;
+            right: 15px;
+            bottom: 8px;
+            font-size: 2.2rem;
+            opacity: 0.25;
+        }
+        header h1 { font-size: 1.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        header p { font-size: 1.05rem; opacity: 0.95; font-weight: 500; }
+
+        /* Thẻ Card */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 2px solid transparent;
+            box-shadow: 0 6px 15px -3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .card:hover { border-color: var(--primary-light); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.08); }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+        .card-title { font-size: 1.3rem; font-weight: 800; color: #1e1b4b; }
+
+        /* Huy hiệu rực rỡ */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-purple { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .badge-red { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+        .badge-amber { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-emerald { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+        .badge-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+        /* Định dạng công thức Toán học chuẩn */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.15rem;
+            color: #1e3a8a;
+            font-weight: 600;
+            background: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .var {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: 700;
+            color: #0f172a;
+            padding: 0 2px;
+        }
+        sup, sub { font-size: 0.72em; font-weight: bold; line-height: 0; }
+        sup { vertical-align: super; }
+        sub { vertical-align: sub; }
+
+        /* Khung từng bài tập */
+        .exercise-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--primary);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .exercise-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+        .exercise-item.hard { border-left-color: var(--accent-pink); background: #fffcfd; }
+        .exercise-item.geo { border-left-color: var(--accent-green); background: #fbfdfc; }
+        .exercise-item.real { border-left-color: var(--accent-yellow); background: #fffdfa; }
+
+        .exercise-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .exercise-label {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkbox-done {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent-green);
+        }
+        .exercise-content {
+            font-size: 1.02rem;
+            color: #334155;
+            line-height: 1.75;
+        }
+        .tip-box {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.88rem;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        /* KHU VỰC GAME HOẠT HÌNH: DIỆT QUÁI DẤU ÂM */
+        .game-card {
+            background: linear-gradient(145deg, #1e1b4b, #2e1065);
+            color: white;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(46, 16, 101, 0.3);
+            border: 2px solid #8b5cf6;
+        }
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .game-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .stat-badge {
+            background: rgba(255,255,255,0.12);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .game-arena {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 20px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #334155;
+            text-align: center;
+            position: relative;
+        }
+        .monster-box {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            animation: bounce 1.2s infinite alternate ease-in-out;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-12px) scale(1.08); }
+        }
+        .question-box {
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            font-weight: 700;
+            color: #fde047;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 550px;
+        }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .game-btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .game-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #6366f1, #9333ea);
+        }
+        .game-msg {
+            margin-top: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            min-height: 28px;
+        }
+
+        /* Hộp động viên cuối bài */
+        .footer-banner {
+            background: linear-gradient(135deg, #ec4899, #f59e0b);
+            color: white;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(236, 72, 153, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header>
+        <span class="badge" style="background: rgba(255,255,255,0.25); color: #fff; margin-bottom: 8px;">Toán 7 • Chương Trình Kết Nối Tri Thức</span>
+        <h1>PHIẾU BÀI TẬP RÈN LUYỆN TOÁN 7 - ĐỀ SỐ 02</h1>
+        <p>Học sinh: <strong>Ngô Khánh Huy</strong> • Mục tiêu: Đột phá điểm 9.0+ Giữa Kỳ I</p>
+    </header>
+
+    <!-- MINI GAME HOẠT HÌNH: DIỆT QUÁI DẤU ÂM -->
+    <div class="game-card">
+        <div class="game-header">
+            <div style="font-weight: 800; font-size: 1.15rem; color: #a78bfa; display: flex; align-items: center; gap: 8px;">
+                🎮 <span>MINI-GAME: DŨNG SĨ DIỆT QUÁI DẤU ÂM</span>
+            </div>
+            <div class="game-stats">
+                <span class="stat-badge">Điểm: <strong id="game-score" style="color:#4ade80;">0</strong></span>
+                <span class="stat-badge">Hạ quái: <strong id="game-streak" style="color:#f472b6;">0</strong> con</span>
+            </div>
+        </div>
+
+        <div class="game-arena">
+            <div class="monster-box" id="monster-icon">👾</div>
+            <div class="question-box" id="game-question">Đang tải thử thách...</div>
+            <div class="options-grid" id="game-options">
+                <!-- Nút đáp án sinh ra bằng JS -->
+            </div>
+            <div class="game-msg" id="game-msg"></div>
+        </div>
+        <p style="text-align: center; font-size: 0.85rem; color: #cbd5e1; margin-top: 10px;">
+            <em>💡 Chơi 2 phút khởi động phản xạ đổi dấu cực nhanh trước khi cầm bút làm bài tập bên dưới nhé Khánh Huy!</em>
+        </p>
+    </div>
+
+    <!-- PHẦN 1: ĐẠI SỐ - TÍNH NHANH & DÃY SỐ QUY LUẬT (BÀI 1 -> BÀI 5) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-purple">Chủ Đề 1</span>
+            <h2 class="card-title">I. Phép Tính Số Hữu Tỉ, Quy Tắc Dấu Ngoặc & Dãy Số Quy Luật</h2>
+        </div>
+
+        <!-- BÀI 1 -->
+        <div class="exercise-item">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 1: Tính giá trị biểu thức hợp lý (Phân phối phép nhân/chia)</span>
+                </div>
+                <span class="badge badge-amber">Khá</span>
+            </div>
+            <div class="exercise-content">
+                Thực hiện phép tính bằng cách hợp lý nhất:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">A</span> = <span class="var">M</span> &minus; <span class="var">N</span></span> với:
+                </div>
+                <div>
+                    <span class="math-expr"><span class="var">A</span> = &minus;5,75 &minus; [ 6,25 &minus; ( &minus;5,75 + 3,75 ) ] + (&minus;2024)<sup>0</sup></span>
+                </div>
+            </div>
+            <div class="tip-box">🎯 Thử thách: Áp dụng quy tắc dấu ngoặc phá sạch ngoặc từ trong ra ngoài hoặc nhóm số đối nhau!</div>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 2: Tính nhanh kết hợp phân số và số thập phân</span>
+                </div>
+                <span class="badge badge-red">Diệt Bẫy Dấu</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị biểu thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">B</span> = &minus;<span class="var">x</span> &minus; [ <span class="var">y</span> &minus; ( <span class="var">z</span> &minus; <span class="var">t</span> ) ]</span> biết rằng:
+                    <br>
+                    <span class="math-expr"><span class="var">B</span> = ( 2<span class="var">a</span> &minus; 3<span class="var">b</span> ) &minus; ( &minus;3<span class="var">a</span> + 2<span class="var">b</span> &minus; 1 ) &minus; 5<span class="var">a</span></span> tại <span class="math-expr"><span class="var">b</span> = &minus;0,2</span>
+                </div>
+                Hãy thu gọn biểu thức trước rồi mới thay giá trị của biến vào để tính toán.
+            </div>
+            <div class="tip-box">🎯 Thử thách: Kiểm tra cẩn thận dấu của từng số hạng khi phá cụm &minus;( &minus;3a + 2b &minus; 1 ).</div>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 3: Rút gọn biểu thức lũy thừa bậc cao</span>
+                </div>
+                <span class="badge badge-purple">Khá - Giỏi</span>
+            </div>
+            <div class="exercise-content">
+                Rút gọn biểu thức chứa lũy thừa về phân số tối giản:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">C</span> = ( 4<sup>6</sup> &sdot; 9<sup>5</sup> + 6<sup>9</sup> &sdot; 120 ) / ( 8<sup>4</sup> &sdot; 3<sup>12</sup> &minus; 6<sup>11</sup> )</span>
+                </div>
+                <em>(Gợi ý: Hãy phân tích tất cả các cơ số 4, 9, 6, 8, 120 về tích thừa số nguyên tố 2, 3, 5 rồi đặt nhân tử chung).</em>
+            </div>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 4: Tổng dãy phân số sai phân quy luật</span>
+                </div>
+                <span class="badge badge-red">Nâng Cao HSG</span>
+            </div>
+            <div class="exercise-content">
+                Tính tổng dãy số sau:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">S</span> = 2/(1 &sdot; 3) + 2/(3 &sdot; 5) + 2/(5 &sdot; 7) + ... + 2/(99 &sdot; 101)</span>
+                </div>
+                Từ kết quả trên, hãy chứng minh rằng: <span class="math-expr"><span class="var">S</span> &lt; 1</span>.
+            </div>
+        </div>
+
+        <!-- BÀI 5 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 5: Dãy lũy thừa đan dấu</span>
+                </div>
+                <span class="badge badge-purple">Nâng Cao HSG</span>
+            </div>
+            <div class="exercise-content">
+                Cho biểu thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">M</span> = 1 &minus; 2 + 2<sup>2</sup> &minus; 2<sup>3</sup> + 2<sup>4</sup> &minus; ... + 2<sup>2024</sup> &minus; 2<sup>2025</sup></span>
+                </div>
+                a) Rút gọn biểu thức <span class="var">M</span> bằng cách tính <span class="math-expr">2<span class="var">M</span></span> rồi cộng theo vế.<br>
+                b) Chứng minh rằng giá trị của <span class="math-expr">3<span class="var">M</span> + 2<sup>2026</sup> &minus; 1</span> bằng 0.
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN 2: ĐẠI SỐ - TÌM X, LŨY THỪA, GIÁ TRỊ TUYỆT ĐỐI (BÀI 6 -> BÀI 10) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-red">Chủ Đề 2</span>
+            <h2 class="card-title">II. Tìm X Nâng Cao (Lũy Thừa Chẵn, Dấu Giá Trị Tuyệt Đối & Điều Kiện)</h2>
+        </div>
+
+        <!-- BÀI 6 -->
+        <div class="exercise-item">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 6: Tìm x với lũy thừa bậc hai (Phòng chống sót nghiệm âm)</span>
+                </div>
+                <span class="badge badge-amber">Khá</span>
+            </div>
+            <div class="exercise-content">
+                Tìm số hữu tỉ <span class="var">x</span>, biết:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr">[ 3<span class="var">x</span> &minus; (1/2) ]<sup>2</sup> &minus; 9/16 = 0</span>
+                </div>
+            </div>
+            <div class="tip-box">🎯 Thần chú: <span class="var">A</span><sup>2</sup> = <span class="var">k</span><sup>2</sup> thì <span class="var">A</span> = <span class="var">k</span> HOẶC <span class="var">A</span> = &minus;<span class="var">k</span>. Nhớ tìm đủ 2 giá trị của <span class="var">x</span>!</div>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 7: Tìm x trong số mũ lũy thừa</span>
+                </div>
+                <span class="badge badge-purple">Khá - Giỏi</span>
+            </div>
+            <div class="exercise-content">
+                Tìm số tự nhiên <span class="var">x</span>, thỏa mãn đẳng thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr">7<sup><span class="var">x</span>+2</sup> &minus; 2 &sdot; 7<sup><span class="var">x</span>+1</sup> &minus; 5 &sdot; 7<sup><span class="var">x</span></sup> = 1470</span>
+                </div>
+            </div>
+            <div class="tip-box">🎯 Gợi ý: Hãy đặt thừa số chung 7<sup><span class="var">x</span></sup> ra ngoài ngoặc.</div>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 8: Tìm x chứa biểu thức giá trị tuyệt đối</span>
+                </div>
+                <span class="badge badge-red">Diệt Bẫy Dấu</span>
+            </div>
+            <div class="exercise-content">
+                Tìm <span class="var">x</span>, biết:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr">3/4 &minus; 2 &sdot; | 1/2 &minus; <span class="var">x</span> | = &minus;1/4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BÀI 9 -->
+        <div class="exercise-item">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 9: Phương trình tích kết hợp căn bậc hai số học</span>
+                </div>
+                <span class="badge badge-amber">Khá</span>
+            </div>
+            <div class="exercise-content">
+                Tìm tất cả các giá trị của <span class="var">x</span> thỏa mãn:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr">( &radic;x &minus; 2/3 ) &sdot; ( <span class="var">x</span><sup>2</sup> + 25 ) = 0</span> (với <span class="math-expr"><span class="var">x</span> &ge; 0</span>)
+                </div>
+            </div>
+            <div class="tip-box">🎯 Lưu ý: Tích <span class="var">A</span> &sdot; <span class="var">B</span> = 0 thì xét từng thừa số. Có số hạng nào luôn dương với mọi <span class="var">x</span> không?</div>
+        </div>
+
+        <!-- BÀI 10 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 10: Tìm x theo khoảng cách trên trục số</span>
+                </div>
+                <span class="badge badge-red">Nâng Cao HSG</span>
+            </div>
+            <div class="exercise-content">
+                Tìm các số thực <span class="var">x</span> thỏa mãn đồng thời đẳng thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr">| <span class="var">x</span> &minus; 2024 | + | 2026 &minus; <span class="var">x</span> | = 2</span>
+                </div>
+                <em>(Gợi ý: Sử dụng bất đẳng thức giá trị tuyệt đối |A| + |B| &ge; |A + B| và điều kiện xảy ra dấu bằng).</em>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN 3: TOÁN THỰC TẾ, LÀM TRÒN & CỰC TRỊ CƠ BẢN (BÀI 11 -> BÀI 15) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-blue">Chủ Đề 3</span>
+            <h2 class="card-title">III. Toán Thực Tế, Làm Tròn Số Thực & Cực Trị Cơ Bản</h2>
+        </div>
+
+        <!-- BÀI 11 -->
+        <div class="exercise-item real">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 11: Bài toán thực tế - Mua sắm và chiết khấu bậc thang</span>
+                </div>
+                <span class="badge badge-emerald">Toán Thực Tế</span>
+            </div>
+            <div class="exercise-content">
+                Một siêu thị sách có chương trình khuyến mãi: Giảm <strong>12%</strong> cho tất cả các loại sách. Đặc biệt, nếu hóa đơn sau khi giảm lần 1 vẫn từ <strong>250.000 đồng</strong> trở lên, khách hàng thanh toán chuyển khoản sẽ được giảm thêm <strong>3% trên số tiền đó</strong>.<br>
+                Bạn Minh mua 1 cuốn sách Toán nâng cao giá niêm yết 130.000 đồng và 2 cuốn sách Khoa học tự nhiên giá niêm yết 85.000 đồng/cuốn.
+                <br>
+                a) Tính số tiền của hóa đơn sau khi giảm giá đợt 1.<br>
+                b) Bạn Minh thanh toán bằng hình thức chuyển khoản. Hỏi bạn Minh phải trả tất cả bao nhiêu tiền?
+            </div>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="exercise-item real">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 12: Đổi đơn vị quốc tế & Làm tròn căn cứ theo độ chính xác</span>
+                </div>
+                <span class="badge badge-emerald">Số Thực & Làm Tròn</span>
+            </div>
+            <div class="exercise-content">
+                Một sân bóng đá hình chữ nhật chuẩn FIFA có chiều dài là <span class="math-expr">105 m</span> và chiều rộng là <span class="math-expr">68 m</span>.<br>
+                a) Biết <span class="math-expr">1 m &approx; 1,09361 yard</span>. Em hãy đổi chiều dài và chiều rộng của sân bóng sang đơn vị yard (làm tròn với độ chính xác <span class="math-expr"><span class="var">d</span> = 0,005</span>).<br>
+                b) Tính diện tích sân bóng đá đó theo mét vuông và theo yard vuông.
+            </div>
+        </div>
+
+        <!-- BÀI 13 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 13: Tìm giá trị nhỏ nhất của biểu thức chứa giá trị tuyệt đối</span>
+                </div>
+                <span class="badge badge-red">Cực Trị</span>
+            </div>
+            <div class="exercise-content">
+                Tìm giá trị nhỏ nhất của biểu thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">P</span> = | <span class="var">x</span> &minus; 5 | + | <span class="var">x</span> + 3 | + 2025</span>
+                </div>
+                Biểu thức <span class="var">P</span> đạt giá trị nhỏ nhất khi <span class="var">x</span> nhận các giá trị nào?
+            </div>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 14: Tìm giá trị lớn nhất chứa căn bậc hai số học</span>
+                </div>
+                <span class="badge badge-red">Cực Trị</span>
+            </div>
+            <div class="exercise-content">
+                Tìm giá trị lớn nhất của biểu thức:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">Q</span> = 15 &minus; ( 2<span class="var">x</span> &minus; 1 )<sup>2</sup> &minus; &radic;( <span class="var">y</span><sup>2</sup> + 9 )</span>
+                </div>
+                Xác định các giá trị của <span class="var">x</span> và <span class="var">y</span> để <span class="var">Q</span> đạt giá trị lớn nhất đó.
+            </div>
+            <div class="tip-box">🎯 Chú ý: Vì <span class="var">y</span><sup>2</sup> &ge; 0 nên <span class="var">y</span><sup>2</sup> + 9 &ge; 9 &rArr; &radic;(<span class="var">y</span><sup>2</sup> + 9) &ge; ?</div>
+        </div>
+
+        <!-- BÀI 15 -->
+        <div class="exercise-item hard">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 15: Tìm số nguyên x để phân số nhận giá trị nguyên</span>
+                </div>
+                <span class="badge badge-purple">Số Học Lớp 7</span>
+            </div>
+            <div class="exercise-content">
+                Tìm tất cả các số nguyên <span class="var">x</span> để biểu thức sau nhận giá trị nguyên:
+                <div style="margin: 8px 0;">
+                    <span class="math-expr"><span class="var">A</span> = ( 3<span class="var">x</span> + 5 ) / ( <span class="var">x</span> + 1 )</span>
+                </div>
+            </div>
+            <div class="tip-box">🎯 Gợi ý: Tách tử số thành: 3(<span class="var">x</span> + 1) + 2 rồi chia đa thức cho mẫu số.</div>
+        </div>
+    </div>
+
+    <!-- PHẦN 4: HÌNH HỌC - GÓC, ĐƯỜNG THẲNG SONG SONG & ĐƯỜNG PHỤ (BÀI 16 -> BÀI 20) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-emerald">Chủ Đề 4</span>
+            <h2 class="card-title">IV. Góc Ở Vị Trí Đặc Biệt, Hai Đường Thẳng Song Song & Kẻ Đường Phụ</h2>
+        </div>
+
+        <!-- BÀI 16 -->
+        <div class="exercise-item geo">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 16: Kỹ thuật kẻ đường thẳng phụ chữ M kinh điển</span>
+                </div>
+                <span class="badge badge-amber">Khá</span>
+            </div>
+            <div class="exercise-content">
+                Cho hình vẽ có hai đường thẳng <span class="math-expr"><span class="var">Ax</span> // <span class="var">By</span></span>. Điểm <span class="var">C</span> nằm giữa hai đường thẳng sao cho tia <span class="var">Ax</span> và <span class="var">By</span> cùng hướng sang bên phải. Biết góc <span class="math-expr"><span class="var">xAC</span> = 45&deg;</span> và góc <span class="math-expr"><span class="var">ACB</span> = 80&deg;</span>.<br>
+                a) Qua đỉnh góc nhọn <span class="var">C</span>, hãy nêu cách kẻ thêm đường thẳng phụ để chia góc <span class="var">ACB</span> thành hai phần.<br>
+                b) Tính số đo của góc <span class="math-expr"><span class="var">CBy</span></span>.<br>
+                c) Trình bày đầy đủ các bước lập luận với căn cứ hình học rõ ràng.
+            </div>
+        </div>
+
+        <!-- BÀI 17 -->
+        <div class="exercise-item geo">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 17: Hai tia phân giác của hai góc trong cùng phía</span>
+                </div>
+                <span class="badge badge-red">Chứng Minh Logic</span>
+            </div>
+            <div class="exercise-content">
+                Cho hai đường thẳng song song <span class="math-expr"><span class="var">a</span> // <span class="var">b</span></span>. Một đường thẳng <span class="var">c</span> cắt đường thẳng <span class="var">a</span> tại điểm <span class="var">A</span> và cắt đường thẳng <span class="var">b</span> tại điểm <span class="var">B</span>. Kẻ tia phân giác <span class="var">Am</span> của một góc trong cùng phía và tia phân giác <span class="var">Bn</span> của góc trong cùng phía còn lại. Hai tia phân giác này cắt nhau tại điểm <span class="var">K</span>.<br>
+                a) Chứng minh rằng góc <span class="math-expr"><span class="var">AKB</span> = 90&deg;</span> (tức là hai tia phân giác vuông góc với nhau).<br>
+                b) Hãy phát biểu kết luận trên thành một định lý toán học bằng lời.
+            </div>
+        </div>
+
+        <!-- BÀI 18 -->
+        <div class="exercise-item geo">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 18: Kỹ thuật kẻ đường phụ góc ngoài</span>
+                </div>
+                <span class="badge badge-purple">Khá - Giỏi</span>
+            </div>
+            <div class="exercise-content">
+                Cho hai tia song song <span class="math-expr"><span class="var">Ax</span> // <span class="var">Cy</span></span>. Điểm <span class="var">B</span> nằm lệch về phía ngoài sao cho góc <span class="math-expr"><span class="var">xAB</span> = 130&deg;</span> và góc <span class="math-expr"><span class="var">BCy</span> = 150&deg;</span> (với tia <span class="var">Ax</span> và <span class="var">Cy</span> nằm cùng một phía đối với đoạn thẳng <span class="var">AC</span>).<br>
+                Tính số đo góc nhọn <span class="math-expr"><span class="var">ABC</span></span>.
+            </div>
+            <div class="tip-box">🎯 Thần chú kẻ đường phụ: Qua điểm gãy <span class="var">B</span>, kẻ đường thẳng <span class="var">Bt</span> song song với <span class="var">Ax</span>! Sử dụng tính chất cặp góc trong cùng phía bù nhau.</div>
+        </div>
+
+        <!-- BÀI 19 -->
+        <div class="exercise-item geo">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 19: Chứng minh ba điểm thẳng hàng bằng Tiên đề Euclid</span>
+                </div>
+                <span class="badge badge-red">Chứng Minh HSG</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác <span class="var">ABC</span>. Trên nửa mặt phẳng bờ <span class="var">AB</span> không chứa điểm <span class="var">C</span>, vẽ tia <span class="var">Ax</span> sao cho góc <span class="math-expr"><span class="var">xAB</span> = <span class="var">ABC</span></span>. Trên nửa mặt phẳng bờ <span class="var">AC</span> không chứa điểm <span class="var">B</span>, vẽ tia <span class="var">Ay</span> sao cho góc <span class="math-expr"><span class="var">yAC</span> = <span class="var">ACB</span></span>.<br>
+                a) Chứng minh rằng tia <span class="var">Ax</span> song song với cạnh <span class="var">BC</span> và tia <span class="var">Ay</span> cũng song song với cạnh <span class="var">BC</span>.<br>
+                b) Dựa vào <strong>Tiên đề Euclid</strong>, hãy chứng minh ba điểm <span class="var">x, A, y</span> thẳng hàng.
+            </div>
+        </div>
+
+        <!-- BÀI 20 -->
+        <div class="exercise-item geo">
+            <div class="exercise-top">
+                <div class="exercise-label">
+                    <input type="checkbox" class="checkbox-done">
+                    <span>Bài 20: Tổng hợp tính chất góc tam giác và tia phân giác</span>
+                </div>
+                <span class="badge badge-purple">Khá - Giỏi</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác <span class="var">ABC</span> có góc <span class="math-expr"><span class="var">B</span> = 75&deg;</span> và góc <span class="math-expr"><span class="var">C</span> = 45&deg;</span>. Kẻ tia phân giác <span class="var">AD</span> của góc <span class="math-expr"><span class="var">BAC</span></span> (với <span class="math-expr"><span class="var">D</span> &isin; <span class="var">BC</span></span>).<br>
+                a) Tính số đo góc <span class="math-expr"><span class="var">BAC</span></span>.<br>
+                b) Tính số đo hai góc <span class="math-expr"><span class="var">ADB</span></span> và <span class="math-expr"><span class="var">ADC</span></span>.<br>
+                c) Từ điểm <span class="var">D</span> kẻ đường thẳng song song với cạnh <span class="var">AB</span>, cắt cạnh <span class="var">AC</span> tại điểm <span class="var">E</span>. Tính số đo các góc của tam giác <span class="var">ADE</span>.
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner động viên cuối bài -->
+    <div class="footer-banner">
+        🚀 "Chinh phục Toán học không có đường tắt, chỉ có sự kiên trì và tỉ mỉ trong từng dấu trừ!"<br>
+        <span style="font-size: 0.95rem; font-weight: 500; opacity: 0.95;">Khánh Huy nhớ làm bài đầy đủ ra vở, dùng thước kẻ hình cẩn thận và chụp ảnh gửi thầy trước 20h00 nhé!</span>
+    </div>
+
+</div>
+
+<!-- SCRIPT MINI-GAME: DIỆT QUÁI DẤU ÂM -->
+<script>
+    const questions = [
+        {
+            q: "Khi phá ngoặc biểu thức: -(x - 5), kết quả đúng là gì?",
+            options: ["-x - 5", "-x + 5", "x - 5"],
+            correct: 1,
+            monster: "👾"
+        },
+        {
+            q: "Kết quả của phép tính: (-3)² bằng bao nhiêu?",
+            options: ["-9", "9", "-6"],
+            correct: 1,
+            monster: "👹"
+        },
+        {
+            q: "Căn bậc hai số học của 81 là bao nhiêu?",
+            options: ["9", "±9", "-9"],
+            correct: 0,
+            monster: "👺"
+        },
+        {
+            q: "Đẳng thức -(a - b + c) sau khi phá ngoặc sẽ là:",
+            options: ["-a - b + c", "-a + b - c", "-a + b + c"],
+            correct: 1,
+            monster: "👻"
+        },
+        {
+            q: "Hai đường thẳng song song thì hai góc trong cùng phía sẽ:",
+            options: ["Bằng nhau", "Bù nhau (tổng = 180°)", "Phụ nhau (tổng = 90°)"],
+            correct: 1,
+            monster: "🐉"
+        },
+        {
+            q: "Giá trị của biểu thức: -2³ là bao nhiêu?",
+            options: ["8", "-8", "-6"],
+            correct: 1,
+            monster: "🤖"
+        },
+        {
+            q: "Qua 1 điểm ở ngoài 1 đường thẳng, có bao nhiêu đường thẳng song song với nó?",
+            options: ["Chỉ có 1 (Tiên đề Euclid)", "Có ít nhất 2", "Vô số"],
+            correct: 0,
+            monster: "👽"
+        }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let streak = 0;
+
+    const monsterEl = document.getElementById("monster-icon");
+    const questionEl = document.getElementById("game-question");
+    const optionsEl = document.getElementById("game-options");
+    const msgEl = document.getElementById("game-msg");
+    const scoreEl = document.getElementById("game-score");
+    const streakEl = document.getElementById("game-streak");
+
+    function loadQuestion() {
+        const item = questions[currentQ];
+        monsterEl.textContent = item.monster;
+        questionEl.textContent = item.q;
+        optionsEl.innerHTML = "";
+        msgEl.textContent = "";
+
+        item.options.forEach((opt, idx) => {
+            const btn = document.createElement("button");
+            btn.className = "game-btn";
+            btn.textContent = opt;
+            btn.onclick = () => checkAnswer(idx);
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(chosen) {
+        const item = questions[currentQ];
+        const buttons = optionsEl.querySelectorAll("button");
+        buttons.forEach(b => b.disabled = true);
+
+        if (chosen === item.correct) {
+            score += 100;
+            streak++;
+            scoreEl.textContent = score;
+            streakEl.textContent = streak;
+            msgEl.style.color = "#4ade80";
+            msgEl.textContent = "💥 CHÍNH XÁC! Quái vật dấu âm đã bị tiêu diệt!";
+            monsterEl.style.transform = "scale(0) rotate(180deg)";
+            monsterEl.style.transition = "transform 0.4s ease";
+
+            setTimeout(() => {
+                monsterEl.style.transform = "scale(1) rotate(0deg)";
+                currentQ = (currentQ + 1) % questions.length;
+                loadQuestion();
+            }, 1000);
+        } else {
+            msgEl.style.color = "#f87171";
+            msgEl.textContent = "❌ SAI RỒI! Hãy nhớ kĩ quy tắc đổi dấu nhé!";
+            streak = 0;
+            streakEl.textContent = streak;
+            setTimeout(() => {
+                buttons.forEach(b => b.disabled = false);
+                msgEl.textContent = "";
+            }, 1200);
+        }
+    }
+
+    // Khởi chạy câu hỏi đầu tiên
+    loadQuestion();
+</script>
+
+</body>
+</html>
