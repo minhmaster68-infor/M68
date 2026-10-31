@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPA Master Exam - 100 Câu Hỏi Phát Âm Tiếng Anh Mới</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('exam')">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200">
+                        IPA
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">IPA Master Quiz 2.0</h1>
+                        <p class="text-xs text-slate-400 font-bold hidden sm:block">100 Câu Hỏi Chuẩn Quốc Tế Mới 100%</p>
+                    </div>
+                </div>
+
+                <!-- Mode Selectors & Controls -->
+                <div class="flex items-center space-x-2">
+                    <div class="bg-slate-100 p-1 rounded-xl flex items-center space-x-1">
+                        <button id="mode-practice-btn" onclick="setMode('practice')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-600 shadow-sm">
+                            <i class="fa-solid fa-graduation-cap mr-1"></i>Tự Luyện Tập
+                        </button>
+                        <button id="mode-timed-btn" onclick="setMode('timed')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-600 transition">
+                            <i class="fa-solid fa-stopwatch mr-1"></i>Thi Tính Giờ
+                        </button>
+                    </div>
+
+                    <button onclick="toggleGridModal()" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition font-bold text-xs flex items-center space-x-1.5">
+                        <i class="fa-solid fa-table-cells text-sm"></i>
+                        <span class="hidden md:inline">Bảng 100 câu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- VIEW 1: EXAM / PRACTICE VIEW -->
+        <section id="view-exam" class="space-y-6">
+            <!-- Top Dashboard Bar -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Mode & Progress -->
+                <div class="flex items-center space-x-4 w-full md:w-auto justify-between md:justify-start">
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tiến độ bài làm</div>
+                        <div class="text-lg font-black text-slate-800" id="progress-text">Câu 1 / 100</div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                    <div id="timer-box" class="hidden flex items-center space-x-2 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-xl border border-amber-200 font-mono font-bold text-sm">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="timer-display">45:00</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full md:max-w-md bg-slate-100 h-3 rounded-full overflow-hidden">
+                    <div id="progress-bar-fill" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full w-[1%] transition-all duration-300"></div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+                    <button onclick="resetCurrentQuiz()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm lại</span>
+                    </button>
+                    <button onclick="submitExam()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs hover:opacity-90 transition shadow-md shadow-emerald-100 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Nộp Bài</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Display Card & Navigator Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+                <!-- Main Question Card (3 cols) -->
+                <div class="lg:col-span-3 space-y-4">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md relative min-h-[420px] flex flex-col justify-between" id="question-card">
+                        <!-- Card Header -->
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs uppercase tracking-wide" id="q-category-tag">Nguyên âm đơn</span>
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" id="q-type-tag">Dạng: Tìm âm khác</span>
+                                </div>
+                                <button id="q-speak-btn" onclick="speakCurrentWord()" class="w-10 h-10 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition shadow-sm text-base" title="Nghe câu hỏi / phát âm">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+
+                            <!-- Question Text -->
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 mb-6 leading-relaxed" id="q-text">
+                                Câu hỏi sẽ hiển thị ở đây...
+                            </h2>
+
+                            <!-- Options List -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5" id="options-container">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Feedback / Explanation Box (Shows only after answer selection in practice or after submission) -->
+                        <div id="explanation-box" class="mt-6 p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-sm hidden space-y-1">
+                            <div class="font-extrabold text-indigo-900 flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-info text-indigo-600"></i>
+                                <span>Giải thích & Phiên âm IPA:</span>
+                            </div>
+                            <p class="text-slate-700 font-medium" id="explanation-text"></p>
+                        </div>
+
+                        <!-- Card Footer Navigation -->
+                        <div class="pt-6 border-t border-slate-100 flex items-center justify-between mt-6">
+                            <button onclick="prevQuestion()" id="prev-btn" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition flex items-center space-x-1.5 disabled:opacity-40">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                                <span>Câu trước</span>
+                            </button>
+
+                            <span class="text-xs font-bold text-slate-400 font-mono" id="q-counter-mini">1 / 100</span>
+
+                            <button onclick="nextQuestion()" id="next-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center space-x-1.5">
+                                <span>Câu tiếp</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Grid Navigator (1 col) -->
+                <div class="lg:col-span-1 space-y-4">
+                    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4 sticky top-24">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-black text-slate-800 text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-list-check text-indigo-600"></i>
+                                <span>Danh sách câu hỏi</span>
+                            </h3>
+                            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500" id="answered-count-tag">0/100 đã làm</span>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="grid grid-cols-2 gap-2 text-[10px] font-bold text-slate-500 pb-2 border-b border-slate-100">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-md bg-indigo-600 inline-block"></span>
+                                <span>Đang làm</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-md bg-slate-200 inline-block"></span>
+                                <span>Chưa làm</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-md bg-emerald-500 inline-block"></span>
+                                <span>Đã chọn</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-md bg-rose-500 inline-block"></span>
+                                <span>Sai (Luyện)</span>
+                            </div>
+                        </div>
+
+                        <!-- 100 Grid Container -->
+                        <div class="grid grid-cols-5 gap-1.5 max-h-[360px] overflow-y-auto pr-1" id="sidebar-grid">
+                            <!-- 100 Buttons rendered dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- VIEW 2: FINAL SCORE SUMMARY REPORT -->
+        <section id="view-result" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl max-w-3xl mx-auto text-center space-y-6">
+                <!-- Score Circle Badge -->
+                <div class="relative w-36 h-36 mx-auto flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                        <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path id="score-circle-stroke" class="text-indigo-600" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span class="text-3xl font-black text-slate-800" id="result-score">0/100</span>
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest" id="result-percent">0%</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800 mb-2" id="result-title">Hoàn Thành Bài Kiểm Tra!</h2>
+                    <p class="text-slate-500 text-sm max-w-md mx-auto" id="result-subtitle">Bạn đã hoàn tất 100 câu hỏi phát âm IPA. Dưới đây là thống kê chi tiết kết quả của bạn.</p>
+                </div>
+
+                <!-- Grid Details -->
+                <div class="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div>
+                        <div class="text-xs font-bold text-slate-400">Đúng</div>
+                        <div class="text-xl font-black text-emerald-600" id="res-correct">0</div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400">Sai</div>
+                        <div class="text-xl font-black text-rose-600" id="res-wrong">0</div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400">Bỏ qua</div>
+                        <div class="text-xl font-black text-amber-600" id="res-skipped">0</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-center space-x-3 pt-2">
+                    <button onclick="reviewAnswers()" class="px-6 py-3 rounded-2xl bg-indigo-600 text-white font-extrabold text-sm hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center space-x-2">
+                        <i class="fa-solid fa-eye"></i>
+                        <span>Xem lại đáp án 100 câu</span>
+                    </button>
+                    <button onclick="resetCurrentQuiz()" class="px-6 py-3 rounded-2xl bg-slate-100 text-slate-700 font-extrabold text-sm hover:bg-slate-200 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm bài lại từ đầu</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FULL 100 QUESTION GRID MODAL (MOBILE / QUICK ACCESS) -->
+    <div id="grid-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] p-6 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-lg text-slate-800 flex items-center space-x-2">
+                    <i class="fa-solid fa-grip text-indigo-600"></i>
+                    <span>Bảng Điều Hướng 100 Câu Hỏi</span>
+                </h3>
+                <button onclick="toggleGridModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold transition flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 overflow-y-auto p-1 flex-grow" id="modal-grid-container">
+                <!-- Dynamic 100 buttons -->
+            </div>
+
+            <div class="pt-2 text-center border-t border-slate-100">
+                <button onclick="toggleGridModal()" class="px-6 py-2 rounded-xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-900 transition">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DATA & APP LOGIC -->
+    <script>
+        // ==========================================
+        // 100 COMPLETELY NEW IPA QUESTIONS
+        // ==========================================
+        const newQuestions = [
+            // MONOPHTHONGS (1 - 30)
+            { id: 1, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào có phần âm phát âm KHÁC với các từ còn lại?', options: ['heat', 'cheat', 'great', 'meat'], answer: 'great', explain: 'great (/ɡreɪt/ - /eɪ/), các từ còn lại chứa /i:/ (heat /hiːt/, cheat /tʃiːt/, meat /miːt/).' },
+            { id: 2, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Âm gạch chân trong từ "l<ins>e</ins>mon" được ghi bằng ký hiệu IPA nào?', options: ['/e/', '/æ/', '/ɪ/', '/ə/'], answer: '/e/', explain: 'lemon /ˈlemən/ mang nguyên âm /e/ ở âm tiết thứ nhất.' },
+            { id: 3, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Phân biệt nguyên âm trong cặp từ: "lip" và "leap"', options: ['/ɪ/ và /i:/', '/e/ và /i:/', '/æ/ và /e/', '/i:/ và /ɪ/'], answer: '/ɪ/ và /i:/', explain: 'lip (/lɪp/ - âm i ngắn) vs leap (/liːp/ - âm i dài).' },
+            { id: 4, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào phát âm nguyên âm KHÁC các từ còn lại?', options: ['flood', 'blood', 'good', 'mud'], answer: 'good', explain: 'good (/ɡʊd/ - /ʊ/), flood (/flʌd/) và blood (/blʌd/) mang âm /ʌ/.' },
+            { id: 5, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Chữ "a" trong từ "m<ins>a</ins>n" biểu diễn bằng âm IPA nào?', options: ['/æ/', '/e/', '/ɑ:/', '/ʌ/'], answer: '/æ/', explain: 'man /mæn/ chứa nguyên âm a bẹt /æ/.' },
+            { id: 6, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ có phần gạch chân đọc KHÁC:', options: ['park', 'smart', 'card', 'warm'], answer: 'warm', explain: 'warm (/wɔːm/ - /ɔ:/), park /pɑːk/, smart /smɑːt/, card /kɑːd/ mang âm /ɑ:/.' },
+            { id: 7, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Cặp từ "pull" và "pool" có nguyên âm tương ứng là:', options: ['/ʊ/ và /u:/', '/u:/ và /ʊ/', '/ɒ/ và /ɔ:/', '/ʌ/ và /u:/'], answer: '/ʊ/ và /u:/', explain: 'pull (/pʊl/ - u ngắn) vs pool (/puːl/ - u dài).' },
+            { id: 8, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ chứa nguyên âm ngắn /ɒ/:', options: ['lock', 'more', 'door', 'four'], answer: 'lock', explain: 'lock (/lɒk/ - /ɒ/), các từ còn lại đọc là /ɔ:/.' },
+            { id: 9, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Âm nguyên âm trong từ "s<ins>u</ins>n" là:', options: ['/ʌ/', '/ʊ/', '/u:/', '/ɒ/'], answer: '/ʌ/', explain: 'sun /sʌn/ chứa nguyên âm ngắn /ʌ/.' },
+            { id: 10, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào có âm gạch chân đọc KHÁC:', options: ['turn', 'shirt', 'short', 'burn'], answer: 'short', explain: 'short (/ʃɔːt/ - /ɔ:/), turn /tɜːn/, shirt /ʃɜːt/, burn /bɜːn/ mang âm /ɜ:/.' },
+            { id: 11, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Âm đầu tiên trong từ "a<ins>g</ins>ain" phát âm theo IPA là:', options: ['/ə/', '/æ/', '/e/', '/aɪ/'], answer: '/ə/', explain: 'again /əˈɡen/ bắt đầu bằng âm schwa /ə/.' },
+            { id: 12, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ có nguyên âm phát âm KHÁC:', options: ['key', 'sea', 'tea', 'they'], answer: 'they', explain: 'they (/ðeɪ/ - nguyên âm đôi /eɪ/), key /kiː/, sea /siː/, tea /tiː/ mang /i:/.' },
+            { id: 13, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp từ: "pen" vs "pan"', options: ['/e/ và /æ/', '/æ/ và /e/', '/ɪ/ và /e/', '/e/ và /ʌ/'], answer: '/e/ và /æ/', explain: 'pen (/pen/) vs pan (/pæn/).' },
+            { id: 14, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ phát âm KHÁC:', options: ['cut', 'nut', 'put', 'shut'], answer: 'put', explain: 'put (/pʊt/ - /ʊ/), cut /kʌt/, nut /nʌt/, shut /ʃʌt/ mang âm /ʌ/.' },
+            { id: 15, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Từ "d<ins>oo</ins>r" chứa nguyên âm nào dưới đây?', options: ['/ɔ:/', '/ɒ/', '/u:/', '/ʊ/'], answer: '/ɔ:/', explain: 'door /dɔː(r)/.' },
+            { id: 16, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào có phát âm "i" KHÁC các từ còn lại?', options: ['sing', 'ring', 'king', 'kind'], answer: 'kind', explain: 'kind (/kaɪnd/ - /aɪ/), sing /sɪŋ/, ring /rɪŋ/, king /kɪŋ/ đọc /ɪ/.' },
+            { id: 17, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Nguyên âm trong từ "b<ins>i</ins>rd" là:', options: ['/ɜ:/', '/ɪ/', '/e/', '/ə/'], answer: '/ɜ:/', explain: 'bird /bɜːd/.' },
+            { id: 18, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào phát âm phần gạch chân KHÁC:', options: ['wash', 'watch', 'want', 'water'], answer: 'water', explain: 'water (/ˈwɔːtə/ - /ɔ:/), wash /wɒʃ/, watch /wɒtʃ/, want /wɒnt/ mang /ɒ/.' },
+            { id: 19, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Phân biệt nguyên âm trong "cot" vs "caught":', options: ['/ɒ/ và /ɔ:/', '/ɔ:/ và /ɒ/', '/ʌ/ và /ɒ/', '/ɒ/ và /oʊ/'], answer: '/ɒ/ và /ɔ:/', explain: 'cot (/kɒt/) vs caught (/kɔːt/).' },
+            { id: 20, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Chữ "e" trong từ "d<ins>e</ins>sk" đọc là:', options: ['/e/', '/æ/', '/ɪ/', '/i:/'], answer: '/e/', explain: 'desk /desk/.' },
+            { id: 21, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào có phát âm "ea" KHÁC:', options: ['bread', 'head', 'heavy', 'beach'], answer: 'beach', explain: 'beach (/biːtʃ/ - /i:/), bread /bred/, head /hed/, heavy /ˈhevi/ mang âm /e/.' },
+            { id: 22, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Âm nguyên âm của từ "l<ins>u</ins>ck" là:', options: ['/ʌ/', '/ʊ/', '/u:/', '/ɒ/'], answer: '/ʌ/', explain: 'luck /lʌk/.' },
+            { id: 23, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ phát âm KHÁC các từ còn lại:', options: ['far', 'march', 'star', 'war'], answer: 'war', explain: 'war (/wɔː/ - /ɔ:/), các từ còn lại mang âm /ɑ:/.' },
+            { id: 24, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Cặp âm trong từ "fit" và "feet" là:', options: ['/ɪ/ và /i:/', '/i:/ và /ɪ/', '/e/ và /i:/', '/ɪ/ và /e/'], answer: '/ɪ/ và /i:/', explain: 'fit /fɪt/ vs feet /fiːt/.' },
+            { id: 25, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Từ "t<ins>w</ins>o" phát âm nguyên âm nào?', options: ['/u:/', '/ʊ/', '/ɒ/', '/ɔ:/'], answer: '/u:/', explain: 'two /tuː/.' },
+            { id: 26, cat: 'Monophthong', type: 'Phát âm khác', q: 'Từ nào có phần "o" phát âm KHÁC:', options: ['son', 'ton', 'done', 'stone'], answer: 'stone', explain: 'stone (/stəʊn/ - /əʊ/), son /sʌn/, ton /tʌn/, done /dʌn/ đọc /ʌ/.' },
+            { id: 27, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Âm schwa /ə/ xuất hiện trong từ nào sau đây?', options: ['doctor', 'cat', 'red', 'sit'], answer: 'doctor', explain: 'doctor /ˈdɒktə(r)/ kết thúc bằng âm /ə/.' },
+            { id: 28, cat: 'Monophthong', type: 'Phát âm khác', q: 'Chọn từ có phát âm KHÁC:', options: ['foot', 'book', 'boot', 'cook'], answer: 'boot', explain: 'boot (/buːt/ - /u:/), foot /fʊt/, book /bʊk/, cook /kʊk/ đọc /ʊ/.' },
+            { id: 29, cat: 'Monophthong', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp từ: "hat" vs "hut"', options: ['/æ/ và /ʌ/', '/ʌ/ và /æ/', '/e/ và /ʌ/', '/æ/ và /ɑ:/'], answer: '/æ/ và /ʌ/', explain: 'hat /hæt/ vs hut /hʌt/.' },
+            { id: 30, cat: 'Monophthong', type: 'Nhận diện IPA', q: 'Từ "w<ins>o</ins>rk" chứa nguyên âm IPA nào?', options: ['/ɜ:/', '/ɔ:/', '/ɒ/', '/ə/'], answer: '/ɜ:/', explain: 'work /wɜːk/.' },
+
+            // DIPHTHONGS (31 - 55)
+            { id: 31, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào có phần gạch chân đọc KHÁC:', options: ['rain', 'train', 'said', 'main'], answer: 'said', explain: 'said (/sed/ - /e/), rain /reɪn/, train /treɪn/, main /meɪn/ mang /eɪ/.' },
+            { id: 32, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Nguyên âm đôi trong từ "h<ins>i</ins>gh" là:', options: ['/aɪ/', '/eɪ/', '/ɪə/', '/ɔɪ/'], answer: '/aɪ/', explain: 'high /haɪ/.' },
+            { id: 33, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào phát âm nguyên âm đôi KHÁC:', options: ['voice', 'choice', 'noise', 'prose'], answer: 'prose', explain: 'prose (/prəʊz/ - /əʊ/), voice /vɔɪs/, choice /tʃɔɪs/, noise /nɔɪs/ mang /ɔɪ/.' },
+            { id: 34, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Nguyên âm đôi trong từ "t<own>n" là:', options: ['/aʊ/', '/əʊ/', '/ɔ:/', '/ɒ/'], answer: '/aʊ/', explain: 'town /taʊn/.' },
+            { id: 35, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào phát âm "o" KHÁC:', options: ['go', 'so', 'no', 'do'], answer: 'do', explain: 'do (/duː/ - /u:/), go /ɡəʊ/, so /səʊ/, no /nəʊ/ mang nguyên âm đôi /əʊ/.' },
+            { id: 36, cat: 'Diphthong', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp từ "ear" vs "air":', options: ['/ɪə/ và /eə/', '/eə/ và /ɪə/', '/i:/ và /e/', '/ɜ:/ và /eə/'], answer: '/ɪə/ và /eə/', explain: 'ear (/ɪə/) vs air (/eə/).' },
+            { id: 37, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "p<ins>u</ins>re" có chứa âm nào dưới đây?', options: ['/ʊə/', '/ɔ:/', '/aʊ/', '/ɜ:/'], answer: '/ʊə/', explain: 'pure /pjʊə(r)/.' },
+            { id: 38, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào có phần gạch chân đọc KHÁC:', options: ['fear', 'clear', 'dear', 'bear'], answer: 'bear', explain: 'bear (/beə(r)/ - /eə/), fear /fɪə/, clear /klɪə/, dear /dɪə/ mang /ɪə/.' },
+            { id: 39, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Âm nguyên âm đôi trong từ "l<ins>a</ins>te" là:', options: ['/eɪ/', '/aɪ/', '/eə/', '/æ/'], answer: '/eɪ/', explain: 'late /leɪt/.' },
+            { id: 40, cat: 'Diphthong', type: 'Phát âm khác', q: 'Chọn từ phát âm nguyên âm đôi KHÁC:', options: ['fly', 'sky', 'die', 'key'], answer: 'key', explain: 'key (/kiː/ - /i:/), fly /flaɪ/, sky /skaɪ/, die /daɪ/ mang /aɪ/.' },
+            { id: 41, cat: 'Diphthong', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp từ "boat" vs "boot":', options: ['/əʊ/ và /u:/', '/u:/ và /əʊ/', '/ɒ/ và /u:/', '/ɔ:/ và /ʊ/'], answer: '/əʊ/ và /u:/', explain: 'boat (/bəʊt/) vs boot (/buːt/).' },
+            { id: 42, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "c<ins>oi</ins>n" phát âm là:', options: ['/ɔɪ/', '/aɪ/', '/əʊ/', '/eɪ/'], answer: '/ɔɪ/', explain: 'coin /kɔɪn/.' },
+            { id: 43, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào phát âm "ou" KHÁC:', options: ['shout', 'cloud', 'south', 'soup'], answer: 'soup', explain: 'soup (/suːp/ - /u:/), shout /ʃaʊt/, cloud /klaʊt/, south /saʊθ/ mang /aʊ/.' },
+            { id: 44, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "sh<ins>ow</ins>" chứa âm nào?', options: ['/əʊ/', '/aʊ/', '/ɔ:/', '/ɒ/'], answer: '/əʊ/', explain: 'show /ʃəʊ/.' },
+            { id: 45, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào chứa nguyên âm đôi /eə/?', options: ['pair', 'peer', 'pier', 'per'], answer: 'pair', explain: 'pair /peə(r)/.' },
+            { id: 46, cat: 'Diphthong', type: 'Phân biệt cặp âm', q: 'Phân biệt từ "buy" vs "boy":', options: ['/aɪ/ và /ɔɪ/', '/ɔɪ/ và /aɪ/', '/eɪ/ và /ɔɪ/', '/aɪ/ và /eɪ/'], answer: '/aɪ/ và /ɔɪ/', explain: 'buy (/baɪ/) vs boy (/bɔɪ/).' },
+            { id: 47, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "d<ins>ay</ins>" có phát âm âm đôi là:', options: ['/eɪ/', '/aɪ/', '/e/', '/i:/'], answer: '/eɪ/', explain: 'day /deɪ/.' },
+            { id: 48, cat: 'Diphthong', type: 'Phát âm khác', q: 'Chọn từ phát âm KHÁC:', options: ['coy', 'toy', 'joy', 'way'], answer: 'way', explain: 'way (/weɪ/), coy /kɔɪ/, toy /tɔɪ/, joy /dʒɔɪ/ mang /ɔɪ/.' },
+            { id: 49, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "c<ins>ow</ins>" chứa nguyên âm nào?', options: ['/aʊ/', '/əʊ/', '/ɔ:/', '/ɒ/'], answer: '/aʊ/', explain: 'cow /kaʊ/.' },
+            { id: 50, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào có phát âm âm đôi KHÁC:', options: ['hair', 'chair', 'stair', 'star'], answer: 'star', explain: 'star (/stɑː/ - /ɑ:/), hair /heə/, chair /tʃeə/, stair /steə/ mang /eə/.' },
+            { id: 51, cat: 'Diphthong', type: 'Phân biệt cặp âm', q: 'Cặp từ "late" vs "light" có âm tương ứng là:', options: ['/eɪ/ và /aɪ/', '/aɪ/ và /eɪ/', '/e/ và /aɪ/', '/æ/ và /aɪ/'], answer: '/eɪ/ và /aɪ/', explain: 'late /leɪt/ vs light /laɪt/.' },
+            { id: 52, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Từ "n<ins>ea</ins>r" chứa nguyên âm nào?', options: ['/ɪə/', '/eə/', '/i:/', '/ɜ:/'], answer: '/ɪə/', explain: 'near /nɪə(r)/.' },
+            { id: 53, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào phát âm "o" KHÁC:', options: ['home', 'bone', 'cone', 'some'], answer: 'some', explain: 'some (/sʌm/ - /ʌ/), home /həʊm/, bone /bəʊn/, cone /kəʊn/ mang /əʊ/.' },
+            { id: 54, cat: 'Diphthong', type: 'Nhận diện IPA', q: 'Nguyên âm đôi trong "m<ins>i</ins>ght" là:', options: ['/aɪ/', '/eɪ/', '/ɪ/', '/i:/'], answer: '/aɪ/', explain: 'might /maɪt/.' },
+            { id: 55, cat: 'Diphthong', type: 'Phát âm khác', q: 'Từ nào có chứa âm /ʊə/?', options: ['tour', 'four', 'door', 'floor'], answer: 'tour', explain: 'tour /tʊə(r)/, các từ còn lại mang âm /ɔ:/.' },
+
+            // CONSONANTS & SPECIAL RULES (56 - 100)
+            { id: 56, cat: 'Phụ âm', type: 'Phân biệt cặp âm', q: 'Phụ âm /θ/ trong từ "think" là phụ âm:', options: ['Vô thanh (Unvoiced)', 'Hữu thanh (Voiced)', 'Nguyên âm', 'Âm mũi'], answer: 'Vô thanh (Unvoiced)', explain: 'Phụ âm /θ/ phát âm không làm rung dây thanh quản (unvoiced).' },
+            { id: 57, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "th" trong từ "<ins>th</ins>is" phát âm là:', options: ['/ð/', '/θ/', '/t/', '/s/'], answer: '/ð/', explain: 'this /ðɪs/ (phụ âm hữu thanh /ð/).' },
+            { id: 58, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phần "th" đọc KHÁC:', options: ['think', 'thank', 'thick', 'these'], answer: 'these', explain: 'these (/ðiːz/ - /ð/), think /θɪŋk/, thank /θæŋk/, thick /θɪk/ mang /θ/.' },
+            { id: 59, cat: 'Phụ âm', type: 'Phát âm -ed', q: 'Đuôi "-ed" trong từ "work<ins>ed</ins>" phát âm là:', options: ['/t/', '/d/', '/ɪd/', '/ed/'], answer: '/t/', explain: 'work kết thúc bằng âm vô thanh /k/ nên -ed đọc là /t/.' },
+            { id: 60, cat: 'Phụ âm', type: 'Phát âm -ed', q: 'Đuôi "-ed" trong từ "play<ins>ed</ins>" phát âm là:', options: ['/d/', '/t/', '/ɪd/', '/ed/'], answer: '/d/', explain: 'play kết thúc bằng nguyên âm (hữu thanh) nên -ed đọc là /d/.' },
+            { id: 61, cat: 'Phụ âm', type: 'Phát âm -ed', q: 'Đuôi "-ed" trong từ "want<ins>ed</ins>" phát âm là:', options: ['/ɪd/', '/t/', '/d/', '/ed/'], answer: '/ɪd/', explain: 'want kết thúc bằng âm /t/ nên -ed đọc là /ɪd/.' },
+            { id: 62, cat: 'Phụ âm', type: 'Phát âm -s/es', q: 'Đuôi "-s" trong từ "cat<ins>s</ins>" phát âm là:', options: ['/s/', '/z/', '/ɪz/', '/es/'], answer: '/s/', explain: 'cat kết thúc bằng âm vô thanh /t/ nên -s đọc là /s/.' },
+            { id: 63, cat: 'Phụ âm', type: 'Phát âm -s/es', q: 'Đuôi "-s" trong từ "dog<ins>s</ins>" phát âm là:', options: ['/z/', '/s/', '/ɪz/', '/es/'], answer: '/z/', explain: 'dog kết thúc bằng âm hữu thanh /ɡ/ nên -s đọc là /z/.' },
+            { id: 64, cat: 'Phụ âm', type: 'Phát âm -s/es', q: 'Đuôi "-es" trong từ "bus<ins>es</ins>" phát âm là:', options: ['/ɪz/', '/s/', '/z/', '/es/'], answer: '/ɪz/', explain: 'bus kết thúc bằng âm /s/ nên -es đọc là /ɪz/.' },
+            { id: 65, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào có chữ "ch" phát âm KHÁC:', options: ['cheap', 'child', 'chef', 'chair'], answer: 'chef', explain: 'chef (/ʃef/ - âm /ʃ/), cheap /tʃiːp/, child /tʃaɪld/, chair /tʃeə/ mang /tʃ/.' },
+            { id: 66, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "s" trong từ "vi<ins>s</ins>ion" phát âm là:', options: ['/ʒ/', '/ʃ/', '/z/', '/s/'], answer: '/ʒ/', explain: 'vision /ˈvɪʒn/.' },
+            { id: 67, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "sh" trong từ "<ins>sh</ins>op" biểu diễn IPA là:', options: ['/ʃ/', '/ʒ/', '/s/', '/tʃ/'], answer: '/ʃ/', explain: 'shop /ʃɒp/.' },
+            { id: 68, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào có phát âm "g" KHÁC:', options: ['game', 'get', 'give', 'gem'], answer: 'gem', explain: 'gem (/dʒem/ - /dʒ/), game /ɡeɪm/, get /ɡet/, give /ɡɪv/ đọc /ɡ/.' },
+            { id: 69, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái nào bị CÂM (silent) trong từ "k<ins>n</ins>ife"?', options: ['Chữ k', 'Chữ n', 'Chữ i', 'Chữ f'], answer: 'Chữ k', explain: 'knife /naɪf/ có chữ "k" bị câm.' },
+            { id: 70, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái nào bị CÂM trong từ "clim<ins>b</ins>"?', options: ['Chữ b', 'Chữ m', 'Chữ l', 'Chữ i'], answer: 'Chữ b', explain: 'climb /klaɪm/ chữ "b" đuôi bị câm.' },
+            { id: 71, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phụ âm gạch chân đọc KHÁC:', options: ['fan', 'of', 'fast', 'food'], answer: 'of', explain: 'of (/əv/ - phụ âm /v/), fan /fæn/, fast /fɑːst/, food /fuːd/ mang âm /f/.' },
+            { id: 72, cat: 'Phụ âm', type: 'Phân biệt cặp âm', q: 'Cặp âm vô thanh và hữu thanh tương ứng là:', options: ['/p/ và /b/', '/p/ và /f/', '/t/ và /s/', '/k/ và /h/'], answer: '/p/ và /b/', explain: '/p/ (vô thanh) đi kèm cặp hữu thanh là /b/.' },
+            { id: 73, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "ng" cuối từ "ki<ins>ng</ins>" đọc là âm IPA:', options: ['/ŋ/', '/n/', '/g/', '/nk/'], answer: '/ŋ/', explain: 'king /kɪŋ/.' },
+            { id: 74, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào có cách phát âm "c" KHÁC:', options: ['city', 'centre', 'cinema', 'cold'], answer: 'cold', explain: 'cold (/kəʊld/ - /k/), city /ˈsɪti/, centre /ˈsentə/, cinema /ˈsɪnəmə/ đọc /s/.' },
+            { id: 75, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "j" trong từ "<ins>j</ins>ob" phát âm là:', options: ['/dʒ/', '/tʃ/', '/ʒ/', '/j/'], answer: '/dʒ/', explain: 'job /dʒɒb/.' },
+            { id: 76, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "y" trong từ "<ins>y</ins>oung" được ghi bằng ký hiệu IPA:', options: ['/j/', '/y/', '/i:/', '/dʒ/'], answer: '/j/', explain: 'young /jʌŋ/ có phụ âm đầu là /j/.' },
+            { id: 77, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phát âm đuôi "-ed" KHÁC:', options: ['asked', 'helped', 'liked', 'lived'], answer: 'lived', explain: 'lived (/lɪvd/ - /d/), asked /ɑːskt/, helped /helpt/, liked /laɪkt/ đuôi đọc /t/.' },
+            { id: 78, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phát âm đuôi "-ed" KHÁC:', options: ['needed', 'visited', 'decided', 'stopped'], answer: 'stopped', explain: 'stopped (/stɒpt/ - /t/), các từ khác kết thúc bằng /t/ hoặc /d/ nên đọc /ɪd/.' },
+            { id: 79, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phát âm đuôi "-s" KHÁC:', options: ['books', 'pens', 'hats', 'maps'], answer: 'pens', explain: 'pens (/penz/ - /z/), books /bʊks/, hats /hæts/, maps /mæps/ đọc /s/.' },
+            { id: 80, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào phát âm "s" là /z/:', options: ['easy', 'some', 'see', 'sun'], answer: 'easy', explain: 'easy (/ˈiːzi/ - /z/), các từ còn lại phát âm là /s/.' },
+            { id: 81, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Phụ âm đầu từ "<ins>w</ins>ater" phát âm là:', options: ['/w/', '/v/', '/r/', '/u:/'], answer: '/w/', explain: 'water /ˈwɔːtə(r)/.' },
+            { id: 82, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái CÂM trong từ "lis<ins>t</ins>en" là:', options: ['Chữ t', 'Chữ s', 'Chữ e', 'Chữ n'], answer: 'Chữ t', explain: 'listen /ˈlɪsn/ chữ "t" bị câm.' },
+            { id: 83, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái CÂM trong từ "<ins>w</ins>rite" là:', options: ['Chữ w', 'Chữ r', 'Chữ i', 'Chữ t'], answer: 'Chữ w', explain: 'write /raɪt/ chữ "w" bị câm.' },
+            { id: 84, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào phát âm "gh" là /f/:', options: ['laugh', 'high', 'night', 'through'], answer: 'laugh', explain: 'laugh (/lɑːf/ - /f/), trong high, night, through thì "gh" bị câm.' },
+            { id: 85, cat: 'Phụ âm', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp phụ âm trong từ "zip" vs "sip":', options: ['/z/ và /s/', '/s/ và /z/', '/ʒ/ và /ʃ/', '/dʒ/ và /tʃ/'], answer: '/z/ và /s/', explain: 'zip (/zɪp/) vs sip (/sɪp/).' },
+            { id: 86, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Phụ âm trong từ "<ins>r</ins>un" là:', options: ['/r/', '/l/', '/w/', '/j/'], answer: '/r/', explain: 'run /rʌn/.' },
+            { id: 87, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Phụ âm trong từ "<ins>l</ins>ight" là:', options: ['/l/', '/r/', '/n/', '/m/'], answer: '/l/', explain: 'light /laɪt/.' },
+            { id: 88, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Từ nào phát âm "x" khác biệt:', options: ['box', 'fox', 'six', 'example'], answer: 'example', explain: 'example (/ɪɡˈzɑːmpl/ - /ɡz/), box /bɒks/, fox /fɒks/, six /sɪks/ phát âm /ks/.' },
+            { id: 89, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Chữ "qu" trong từ "<ins>qu</ins>een" phát âm theo IPA là:', options: ['/kw/', '/k/', '/w/', '/kʊ/'], answer: '/kw/', explain: 'queen /kwiːn/.' },
+            { id: 90, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phát âm "ph" đọc KHÁC:', options: ['phone', 'photo', 'shepherd', 'graph'], answer: 'shepherd', explain: 'shepherd (/ˈʃepəd/ - chữ h câm, đọc /p/), phone, photo, graph đọc /f/.' },
+            { id: 91, cat: 'Phụ âm', type: 'Trọng âm', q: 'Từ nào có trọng âm rơi vào âm tiết THỨ NHẤT?', options: ['mother', 'about', 'again', 'relax'], answer: 'mother', explain: 'mother /ˈmʌðə/ (trọng âm 1), các từ còn lại trọng âm 2.' },
+            { id: 92, cat: 'Phụ âm', type: 'Trọng âm', q: 'Từ nào có trọng âm rơi vào âm tiết THỨ HAI?', options: ['teacher', 'student', 'decide', 'happy'], answer: 'decide', explain: 'decide /dɪˈsaɪd/ (trọng âm 2), teacher, student, happy trọng âm 1.' },
+            { id: 93, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ phát âm phụ âm "th" KHÁC các từ còn lại:', options: ['father', 'mother', 'brother', 'tooth'], answer: 'tooth', explain: 'tooth (/tuːθ/ - /θ/), father, mother, brother phát âm /ð/.' },
+            { id: 94, cat: 'Phụ âm', type: 'Phát âm -s/es', q: 'Chọn từ có phát âm "-es" KHÁC:', options: ['watches', 'washes', 'changes', 'likes'], answer: 'likes', explain: 'likes (/laɪks/ - /s/), watches, washes, changes đọc /ɪz/.' },
+            { id: 95, cat: 'Phụ âm', type: 'Phân biệt cặp âm', q: 'Phân biệt cặp từ "chin" vs "shin":', options: ['/tʃ/ và /ʃ/', '/ʃ/ và /tʃ/', '/dʒ/ và /ʒ/', '/tʃ/ và /ʒ/'], answer: '/tʃ/ và /ʃ/', explain: 'chin (/tʃɪn/) vs shin (/ʃɪn/).' },
+            { id: 96, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Từ "<ins>h</ins>ouse" chứa phụ âm đầu:', options: ['/h/', '/w/', '/r/', '/j/'], answer: '/h/', explain: 'house /haʊs/.' },
+            { id: 97, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái CÂM trong từ "<ins>h</ins>onest" là:', options: ['Chữ h', 'Chữ o', 'Chữ n', 'Chữ t'], answer: 'Chữ h', explain: 'honest /ˈɒnɪst/ chữ "h" bị câm.' },
+            { id: 98, cat: 'Phụ âm', type: 'Phát âm khác', q: 'Chọn từ có phát âm KHÁC:', options: ['van', 'very', 'voice', 'fan'], answer: 'fan', explain: 'fan (/fæn/ - /f/), van, very, voice đọc /v/.' },
+            { id: 99, cat: 'Phụ âm', type: 'Phát âm câm', q: 'Chữ cái CÂM trong từ "isl<ins>a</ins>nd" là:', options: ['Chữ s', 'Chữ l', 'Chữ a', 'Chữ n'], answer: 'Chữ s', explain: 'island /ˈaɪlənd/ chữ "s" bị câm.' },
+            { id: 100, cat: 'Phụ âm', type: 'Nhận diện IPA', q: 'Âm cuối trong từ "ba<ins>th</ins>" phát âm là:', options: ['/θ/', '/ð/', '/t/', '/s/'], answer: '/θ/', explain: 'bath /bɑːθ/.' }
+        ];
+
+        // Global State
+        let currentIndex = 0;
+        let answersState = {}; // { qId: selectedOption }
+        let currentMode = 'practice'; // 'practice' or 'timed'
+        let timerInterval = null;
+        let timeRemaining = 45 * 60; // 45 minutes
+        let isSubmitted = false;
+
+        // Speech Engine
+        function speakCurrentWord() {
+            const q = newQuestions[currentIndex];
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                // Find potential word inside question text or use answer
+                const textToSpeak = q.answer.replace(/\//g, '');
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakOption(optText) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const clean = optText.replace(/\//g, '');
+                const utterance = new SpeechSynthesisUtterance(clean);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // ==========================================
+        // RENDER QUESTION & NAVIGATION
+        // ==========================================
+        function renderQuestion() {
+            const q = newQuestions[currentIndex];
+            const userChoice = answersState[q.id];
+            const isAnswered = userChoice !== undefined;
+
+            // UI Elements
+            document.getElementById('q-category-tag').innerText = q.cat;
+            document.getElementById('q-type-tag').innerText = `Dạng: ${q.type}`;
+            document.getElementById('q-text').innerHTML = `${currentIndex + 1}. ${q.q}`;
+            document.getElementById('q-counter-mini').innerText = `${currentIndex + 1} / ${newQuestions.length}`;
+            document.getElementById('progress-text').innerText = `Câu ${currentIndex + 1} / ${newQuestions.length}`;
+
+            // Progress Bar
+            const progressPct = ((currentIndex + 1) / newQuestions.length) * 100;
+            document.getElementById('progress-bar-fill').style.width = `${progressPct}%`;
+
+            // Prev/Next buttons
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+
+            const nextBtn = document.getElementById('next-btn');
+            if (currentIndex === newQuestions.length - 1) {
+                nextBtn.innerHTML = `<span>Nộp Bài</span> <i class="fa-solid fa-paper-plane text-xs"></i>`;
+                nextBtn.className = "px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center space-x-1.5";
+            } else {
+                nextBtn.innerHTML = `<span>Câu tiếp</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
+                nextBtn.className = "px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center space-x-1.5";
+            }
+
+            // Options Container Logic (SỬA HOÀN TOÀN LỖI HIỂN THỊ ĐÁP ÁN)
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = userChoice === opt;
+                let btnStyle = "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300";
+                let statusBadge = '';
+
+                // LOGIC PHẢN HỒI MÀU SẮC CHUẨN XÁC:
+                if (currentMode === 'practice') {
+                    // Chế độ tự luyện: Phản hồi ngay khi học sinh ĐÃ CHỌN câu này
+                    if (isAnswered) {
+                        if (isSelected) {
+                            if (opt === q.answer) {
+                                // CHỌN ĐÚNG -> XANH LÁ
+                                btnStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold ring-2 ring-emerald-500";
+                                statusBadge = `<span class="px-2 py-0.5 rounded bg-emerald-500 text-white text-[10px] font-bold"><i class="fa-solid fa-check"></i> Đúng</span>`;
+                            } else {
+                                // CHỌN SAI -> ĐỎ
+                                btnStyle = "bg-rose-50 border-rose-500 text-rose-800 font-bold ring-2 ring-rose-500";
+                                statusBadge = `<span class="px-2 py-0.5 rounded bg-rose-500 text-white text-[10px] font-bold"><i class="fa-solid fa-xmark"></i> Sai</span>`;
+                            }
+                        } else {
+                            // Đáp án đúng CHỈ HIỆN XANH KHI học sinh lỡ chọn sai (để học sinh biết câu đúng là câu nào)
+                            if (opt === q.answer && userChoice !== q.answer) {
+                                btnStyle = "bg-emerald-50/70 border-emerald-400 text-emerald-700 font-semibold";
+                                statusBadge = `<span class="text-xs text-emerald-600 font-bold">(Đáp án đúng)</span>`;
+                            } else {
+                                btnStyle = "bg-slate-50 border-slate-100 text-slate-400 opacity-60";
+                            }
+                        }
+                    }
+                } else {
+                    // Chế độ thi tính giờ / Đã nộp bài:
+                    if (isSubmitted) {
+                        if (opt === q.answer) {
+                            btnStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
+                            if (isSelected) statusBadge = `<span class="text-xs text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Bạn chọn đúng</span>`;
+                            else statusBadge = `<span class="text-xs text-emerald-600 font-bold">(Đáp án đúng)</span>`;
+                        } else if (isSelected && opt !== q.answer) {
+                            btnStyle = "bg-rose-50 border-rose-500 text-rose-800 font-bold";
+                            statusBadge = `<span class="text-xs text-rose-600 font-bold"><i class="fa-solid fa-xmark"></i> Bạn chọn sai</span>`;
+                        } else {
+                            btnStyle = "bg-slate-50 border-slate-100 text-slate-400 opacity-50";
+                        }
+                    } else {
+                        // Chưa nộp bài trong chế độ thi: Chỉ làm nổi bật lựa chọn đang chọn bằng màu tím nhẹ
+                        if (isSelected) {
+                            btnStyle = "bg-indigo-50 border-indigo-600 text-indigo-700 font-bold ring-2 ring-indigo-500";
+                        }
+                    }
+                }
+
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-4 rounded-2xl border ${btnStyle} transition flex items-center justify-between font-ipa group`;
+                optBtn.onclick = () => selectOption(q.id, opt);
+                optBtn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-xl bg-black/5 text-slate-600 text-xs font-bold flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="text-base">${opt}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        ${statusBadge}
+                        <span onclick="event.stopPropagation(); speakOption('${opt.replace(/'/g, "\\'")}')" class="p-2 text-slate-400 hover:text-indigo-600 transition" title="Nghe đọc">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </span>
+                    </div>
+                `;
+                optionsContainer.appendChild(optBtn);
+            });
+
+            // Explanation Box
+            const expBox = document.getElementById('explanation-box');
+            if ((currentMode === 'practice' && isAnswered) || isSubmitted) {
+                expBox.classList.remove('hidden');
+                document.getElementById('explanation-text').innerText = q.explain;
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            renderSidebarGrid();
+        }
+
+        function selectOption(qId, opt) {
+            if (isSubmitted && currentMode === 'timed') return; // Lock if submitted
+            answersState[qId] = opt;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIndex < newQuestions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                submitExam();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        }
+
+        // ==========================================
+        // SIDEBAR & MODAL GRID NAVIGATOR
+        // ==========================================
+        function renderSidebarGrid() {
+            const container = document.getElementById('sidebar-grid');
+            const modalContainer = document.getElementById('modal-grid-container');
+            container.innerHTML = '';
+            modalContainer.innerHTML = '';
+
+            let answeredCount = Object.keys(answersState).length;
+            document.getElementById('answered-count-tag').innerText = `${answeredCount}/${newQuestions.length} đã làm`;
+
+            newQuestions.forEach((q, idx) => {
+                const userChoice = answersState[q.id];
+                const isCurrent = idx === currentIndex;
+                const isAnswered = userChoice !== undefined;
+                const isCorrect = isAnswered && userChoice === q.answer;
+
+                let btnClass = "bg-slate-100 text-slate-600 hover:bg-slate-200 border-transparent";
+                if (isCurrent) {
+                    btnClass = "bg-indigo-600 text-white font-extrabold ring-2 ring-indigo-400 shadow-sm";
+                } else if (isAnswered) {
+                    if (currentMode === 'practice') {
+                        btnClass = isCorrect ? "bg-emerald-500 text-white font-bold" : "bg-rose-500 text-white font-bold";
+                    } else {
+                        btnClass = isSubmitted ? (isCorrect ? "bg-emerald-500 text-white font-bold" : "bg-rose-500 text-white font-bold") : "bg-emerald-600 text-white font-bold";
+                    }
+                }
+
+                // Sidebar item
+                const btn = document.createElement('button');
+                btn.className = `h-9 rounded-xl text-xs font-bold transition border ${btnClass}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => { currentIndex = idx; renderQuestion(); };
+                container.appendChild(btn);
+
+                // Modal item
+                const mBtn = document.createElement('button');
+                mBtn.className = `h-10 rounded-xl text-xs font-bold transition border ${btnClass}`;
+                mBtn.innerText = idx + 1;
+                mBtn.onclick = () => { currentIndex = idx; renderQuestion(); toggleGridModal(); };
+                modalContainer.appendChild(mBtn);
+            });
+        }
+
+        function toggleGridModal() {
+            const modal = document.getElementById('grid-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // ==========================================
+        // MODE & TIMER LOGIC
+        // ==========================================
+        function setMode(mode) {
+            currentMode = mode;
+            const pracBtn = document.getElementById('mode-practice-btn');
+            const timedBtn = document.getElementById('mode-timed-btn');
+            const timerBox = document.getElementById('timer-box');
+
+            if (mode === 'practice') {
+                pracBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-600 shadow-sm";
+                timedBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-600 transition";
+                timerBox.classList.add('hidden');
+                clearInterval(timerInterval);
+            } else {
+                timedBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-600 shadow-sm";
+                pracBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-600 transition";
+                timerBox.classList.remove('hidden');
+                startTimer();
+            }
+            renderQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeRemaining = 45 * 60;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Hết giờ làm bài! Hệ thống sẽ tự động nộp bài.');
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            document.getElementById('timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // ==========================================
+        // SUBMIT & RESULTS
+        // ==========================================
+        function submitExam() {
+            isSubmitted = true;
+            clearInterval(timerInterval);
+
+            let correct = 0;
+            let wrong = 0;
+            let skipped = 0;
+
+            newQuestions.forEach(q => {
+                const userChoice = answersState[q.id];
+                if (userChoice === undefined) {
+                    skipped++;
+                } else if (userChoice === q.answer) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            });
+
+            const pct = Math.round((correct / newQuestions.length) * 100);
+
+            // Populate Report
+            document.getElementById('result-score').innerText = `${correct}/100`;
+            document.getElementById('result-percent').innerText = `${pct}%`;
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-wrong').innerText = wrong;
+            document.getElementById('res-skipped').innerText = skipped;
+
+            // Update SVG Stroke
+            document.getElementById('score-circle-stroke').setAttribute('stroke-dasharray', `${pct}, 100`);
+
+            switchView('result');
+        }
+
+        function reviewAnswers() {
+            switchView('exam');
+            currentIndex = 0;
+            renderQuestion();
+        }
+
+        function resetCurrentQuiz() {
+            if (confirm('Bạn có chắc chắn muốn làm lại từ đầu? Tất cả đáp án sẽ bị xóa.')) {
+                answersState = {};
+                isSubmitted = false;
+                currentIndex = 0;
+                if (currentMode === 'timed') startTimer();
+                switchView('exam');
+                renderQuestion();
+            }
+        }
+
+        function switchView(viewName) {
+            document.getElementById('view-exam').classList.add('hidden');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderQuestion();
+        };
+    </script>
+</body>
+</html>
