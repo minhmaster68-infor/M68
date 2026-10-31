@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Bài Tập Về Nhà - Đột Phá Điểm 8+ Toán 8 Giữa Kì 1</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
+            --pink-gradient: linear-gradient(135deg, #ec4899, #f43f5e);
+            --amber-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --emerald-gradient: linear-gradient(135deg, #10b981, #059669);
+            --sky-gradient: linear-gradient(135deg, #0ea5e9, #2563eb);
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f1f5f9; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 980px; margin: 0 auto; }
+
+        /* Banner lớn sắc màu */
+        .hero-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+            color: #ffffff;
+            padding: 35px 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 12px 30px -10px rgba(79, 70, 229, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner h1 { font-size: 2rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.9; }
+
+        /* Card chung */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 12px;
+        }
+        .card-title { font-size: 1.3rem; font-weight: 700; color: #1e1b4b; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-tip { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-math { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-trap { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
+
+        /* Lưới mẹo học tập */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .tip-card {
+            border-radius: 12px;
+            padding: 16px 18px;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        .tip-card.pink { background: var(--pink-gradient); }
+        .tip-card.emerald { background: var(--emerald-gradient); }
+        .tip-card.sky { background: var(--sky-gradient); }
+        .tip-card.amber { background: var(--amber-gradient); }
+        .tip-card h4 { font-size: 1.05rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .tip-card p { font-size: 0.9rem; line-height: 1.5; opacity: 0.95; }
+
+        /* Typography toán học chuẩn sách giáo khoa */
+        .math-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 14px;
+            margin: 6px 0;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.12rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        .var {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: 600;
+            color: #0f172a;
+            padding: 0 1px;
+        }
+        sup { font-size: 0.72em; vertical-align: super; line-height: 0; font-weight: bold; }
+        sub { font-size: 0.72em; vertical-align: sub; line-height: 0; font-weight: bold; }
+
+        /* Hộp bài tập sắc màu */
+        .exercise-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        .exercise-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+        }
+        .exercise-item.pink { border-left-color: #ec4899; }
+        .exercise-item.emerald { border-left-color: #10b981; }
+        .exercise-item.amber { border-left-color: #f59e0b; }
+        .exercise-item.sky { border-left-color: #0284c7; }
+        .exercise-item.trap { border-left-color: #dc2626; background: #fffdfd; }
+
+        .ex-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.02rem;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+        .trap-tag {
+            display: inline-block;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .notice-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 10px;">Toán 8 - Kết Nối Tri Thức</span>
+        <h1>PHIẾU BÀI TẬP VỀ NHÀ - TỰ LUYỆN BỨT PHÁ ĐIỂM 8+</h1>
+        <p>Rèn luyện thói quen tự kiểm soát dấu &bull; Khắc phục triệt để lỗi ẩu &bull; Sẵn sàng cho bài thi Giữa Kì 1</p>
+    </div>
+
+    <div class="notice-box">
+        <strong>📌 Lời nhắn gửi Bảo Bảo:</strong> Hãy dành ra khoảng 45 - 60 phút yên tĩnh để hoàn thành phiếu bài này. Với mỗi bài toán, con hãy thực hiện đúng quy tắc <em>"Dừng 3 giây kiểm tra lại dấu trước khi chuyển dòng"</em>. Làm chậm mà chắc chắn sẽ giúp con đạt trọn vẹn điểm số trong bài thi thật!
+    </div>
+
+    <!-- KHỐI 1: BÍ KÍP VÕ CÔNG - MẸO NHỚ TRỌNG TÂM -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-tip">Cẩm Nang Bỏ Túi</span>
+            <h2 class="card-title">1. Bốn Điểm Tựa Lý Thuyết Cần Đọc Kỹ Trước Khi Làm</h2>
+        </div>
+
+        <div class="grid-2">
+            <div class="tip-card pink">
+                <h4>🎯 1. Bậc Của Đa Thức Là Gì?</h4>
+                <p>
+                    • Phải <strong>thu gọn hoàn toàn</strong> đa thức trước khi tìm bậc.<br>
+                    • Bậc của đa thức là bậc của hạng tử có số mũ lớn nhất.<br>
+                    • <em>Lưu ý đặc biệt:</em> Nếu thu gọn xong chỉ còn lại một số thực khác 0 (ví dụ số 5 hay 2026), thì đa thức đó có <strong>bậc là 0</strong> (không phải bậc 1!).
+                </p>
+            </div>
+
+            <div class="tip-card emerald">
+                <h4>🛡️ 2. "Áo Giáp" Khi Đằng Trước Có Dấu Trừ</h4>
+                <p>
+                    Khi nhân hoặc mở ngoặc mà đằng trước có dấu trừ:<br>
+                    • Bước 1: Giữ nguyên ngoặc vuông <strong>&minus; [ ... ]</strong> và thực hiện phép nhân bên trong.<br>
+                    • Bước 2: Bỏ ngoặc vuông và <strong>đổi dấu toàn bộ</strong> từng số hạng bên trong: (+) thành (&minus;), (&minus;) thành (+).
+                </p>
+            </div>
+
+            <div class="tip-card sky">
+                <h4>🔄 3. Mẹo Đổi Dấu Xuất Hiện Nhân Tử Chung</h4>
+                <p>
+                    Rất nhiều bài tìm <span class="var">x</span> cố tình lừa:<br>
+                    • Đổi (<span class="var">b</span> &minus; <span class="var">a</span>) thành &minus;(<span class="var">a</span> &minus; <span class="var">b</span>) để rút nhân tử chung.<br>
+                    • Nếu gặp cụm &minus;(<span class="var">a</span> &minus; <span class="var">b</span>) đứng cuối, khi rút (<span class="var">a</span> &minus; <span class="var">b</span>) ra ngoài thì bên trong còn lại số <strong>&minus;1</strong> (tuyệt đối không được ghi thành 0!).
+                </p>
+            </div>
+
+            <div class="tip-card amber">
+                <h4>📐 4. Chìa Khóa Vàng Chứng Minh Tứ Giác</h4>
+                <p>
+                    • Muốn chứng minh <strong>Hình bình hành</strong>: Tìm 1 cặp cạnh đối <em>vừa song song vừa bằng nhau</em>.<br>
+                    • Muốn chứng minh <strong>Hình chữ nhật</strong>: Chứng minh hình bình hành có thêm <em>1 góc vuông</em> hoặc <em>2 đường chéo bằng nhau</em>.<br>
+                    • Trong tam giác vuông: <em>Đường trung tuyến ứng với cạnh huyền bằng nửa cạnh huyền</em>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 2: HỆ THỐNG 20 BÀI TẬP VỀ NHÀ TỰ LUYỆN -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Thực Hành Toàn Diện</span>
+            <h2 class="card-title">2. Tuyển Chọn 20 Bài Tập Tự Luyện Trọng Tâm</h2>
+        </div>
+
+        <!-- PHẦN A -->
+        <h3 style="color: #4338ca; margin: 15px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #e0e7ff; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề A: Đơn Thức & Các Phép Tính Đa Thức
+        </h3>
+
+        <!-- BÀI 1 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 1: Thu gọn đa thức và xác định bậc chính xác</span>
+                <span class="badge badge-info">Nhận biết</span>
+            </div>
+            <div class="exercise-content">
+                Cho đa thức:
+                <div class="math-box">
+                    <span class="var">A</span> = ⅔ <span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> &minus; 4<span class="var">x</span><sup>2</sup><span class="var">y</span> + ⅓ <span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> + 4<span class="var">x</span><sup>2</sup><span class="var">y</span> &minus; <span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> &minus; 2<span class="var">xy</span> + 9
+                </div>
+                a) Thu gọn đa thức <span class="var">A</span>.<br>
+                b) Chỉ ra bậc của đa thức <span class="var">A</span> sau khi đã thu gọn.
+            </div>
+            <div class="trap-tag">💡 Bẫy: Quan sát kỹ xem các hạng tử bậc cao có triệt tiêu hết không, đừng bỏ quên hạng tử bậc 2!</div>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 2: Nhân đơn thức với đa thức và triệt tiêu</span>
+                <span class="badge badge-info">Chống sai dấu</span>
+            </div>
+            <div class="exercise-content">
+                Rút gọn biểu thức sau:
+                <div class="math-box">
+                    <span class="var">B</span> = 3<span class="var">x</span><sup>2</sup>(<span class="var">x</span> &minus; 2<span class="var">y</span>) &minus; <span class="var">x</span>(3<span class="var">x</span><sup>2</sup> &minus; 6<span class="var">xy</span> &minus; 1) &minus; <span class="var">x</span>
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy: Chú ý nhân dấu âm: &minus;x nhân với (&minus;6xy) và &minus;x nhân với (&minus;1)!</div>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 3: Tìm đa thức theo quy tắc tìm số trừ</span>
+                <span class="badge badge-info">Vận dụng</span>
+            </div>
+            <div class="exercise-content">
+                Tìm đa thức <span class="var">K</span>, biết:
+                <div class="math-box">
+                    (5<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">xy</span> + 2<span class="var">y</span><sup>2</sup>) &minus; <span class="var">K</span> = 2<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">xy</span> &minus; <span class="var">y</span><sup>2</sup> + 6
+                </div>
+            </div>
+            <div class="trap-tag">💡 Nhắc nhở: Muốn tìm số trừ K, lấy số bị trừ trừ đi hiệu. Nhớ đóng ngoặc cả cụm hiệu trước khi trừ!</div>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 4: Phép chia đa thức cho đơn thức âm</span>
+                <span class="badge badge-info">Kỹ năng tính</span>
+            </div>
+            <div class="exercise-content">
+                Thực hiện phép tính chia:
+                <div class="math-box">
+                    (&minus;12<span class="var">x</span><sup>5</sup><span class="var">y</span><sup>4</sup> + 8<span class="var">x</span><sup>4</sup><span class="var">y</span><sup>3</sup> &minus; 4<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>) : (&minus;4<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>)
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy: Hạng tử thứ ba (&minus;4x³y²) chia cho chính nó sẽ bằng +1, không được ghi thành 0.</div>
+        </div>
+
+        <!-- PHẦN B -->
+        <h3 style="color: #ec4899; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #fbcfe8; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề B: Hằng Đẳng Thức & Biến Đổi Đại Số
+        </h3>
+
+        <!-- BÀI 5 -->
+        <div class="exercise-item pink">
+            <div class="ex-title">
+                <span>Bài 5: Ứng dụng hằng đẳng thức để tính nhanh</span>
+                <span class="badge badge-warning">Tính nhanh</span>
+            </div>
+            <div class="exercise-content">
+                Tính hợp lý giá trị các biểu thức sau mà không dùng máy tính:
+                <div class="math-box">
+                    a) 87<sup>2</sup> + 26 &times; 87 + 13<sup>2</sup><br>
+                    b) 105<sup>2</sup> &minus; 25<br>
+                    c) 53 &times; 47
+                </div>
+            </div>
+            <div class="trap-tag">💡 Gợi ý câu a: Nhận diện 26 = 2 &times; 13 để đưa về dạng (A + B)²!</div>
+        </div>
+
+        <!-- BÀI 6 -->
+        <div class="exercise-item pink">
+            <div class="ex-title">
+                <span>Bài 6: Rút gọn biểu thức chứa hiệu hai bình phương</span>
+                <span class="badge badge-warning">Rút gọn</span>
+            </div>
+            <div class="exercise-content">
+                Rút gọn biểu thức sau:
+                <div class="math-box">
+                    <span class="var">M</span> = (3<span class="var">x</span> &minus; 2)<sup>2</sup> &minus; (3<span class="var">x</span> + 2)<sup>2</sup> + 24<span class="var">x</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="exercise-item pink">
+            <div class="ex-title">
+                <span>Bài 7: Tính giá trị biểu thức đối xứng</span>
+                <span class="badge badge-warning">Tư duy đối xứng</span>
+            </div>
+            <div class="exercise-content">
+                Cho hai số thực <span class="var">a</span> và <span class="var">b</span> thỏa mãn: <span class="var">a</span> &minus; <span class="var">b</span> = 5 và <span class="var">a</span> &times; <span class="var">b</span> = 6.<br>
+                Không tìm giá trị cụ thể của <span class="var">a</span> và <span class="var">b</span>, hãy tính giá trị của:
+                <div class="math-box">
+                    a) <span class="var">P</span> = <span class="var">a</span><sup>2</sup> + <span class="var">b</span><sup>2</sup><br>
+                    b) <span class="var">Q</span> = (<span class="var">a</span> + <span class="var">b</span>)<sup>2</sup><br>
+                    c) <span class="var">R</span> = <span class="var">a</span><sup>3</sup> &minus; <span class="var">b</span><sup>3</sup>
+                </div>
+            </div>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="exercise-item pink">
+            <div class="ex-title">
+                <span>Bài 8: Chứng minh biểu thức luôn nhận giá trị dương</span>
+                <span class="badge badge-warning">Biện luận dấu</span>
+            </div>
+            <div class="exercise-content">
+                Chứng minh rằng biểu thức sau luôn nhận giá trị dương với mọi số thực <span class="var">x</span>:
+                <div class="math-box">
+                    <span class="var">T</span> = <span class="var">x</span><sup>2</sup> &minus; 8<span class="var">x</span> + 19
+                </div>
+            </div>
+            <div class="trap-tag">💡 Gợi ý: Hãy tách số 19 thành 16 + 3 để tạo bình phương (x &minus; 4)²!</div>
+        </div>
+
+        <!-- PHẦN C -->
+        <h3 style="color: #10b981; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #a7f3d0; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề C: Phân Tích Đa Thức Thành Nhân Tử & Tìm x
+        </h3>
+
+        <!-- BÀI 9 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 9: Đặt nhân tử chung bằng kỹ thuật đổi dấu</span>
+                <span class="badge badge-success">Nhân tử chung</span>
+            </div>
+            <div class="exercise-content">
+                Phân tích đa thức sau thành nhân tử:
+                <div class="math-box">
+                    6<span class="var">x</span>(<span class="var">x</span> &minus; 3<span class="var">y</span>) &minus; 4<span class="var">y</span>(3<span class="var">y</span> &minus; <span class="var">x</span>)
+                </div>
+            </div>
+        </div>
+
+        <!-- BÀI 10 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 10: Nhóm hạng tử 2 &minus; 2 kết hợp đổi dấu cẩn thận</span>
+                <span class="badge badge-success">Nhóm hạng tử</span>
+            </div>
+            <div class="exercise-content">
+                Phân tích đa thức sau thành nhân tử:
+                <div class="math-box">
+                    <span class="var">x</span><sup>2</sup> &minus; 5<span class="var">x</span> &minus; <span class="var">xy</span> + 5<span class="var">y</span>
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy: Khi nhóm hai hạng tử cuối: &minus;(xy &minus; 5y), dấu cộng của 5y phải đổi thành dấu trừ!</div>
+        </div>
+
+        <!-- BÀI 11 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 11: Nhóm hạng tử 1 &minus; 3 tạo hiệu hai bình phương</span>
+                <span class="badge badge-success">Nhóm 1 &minus; 3</span>
+            </div>
+            <div class="exercise-content">
+                Phân tích đa thức sau thành nhân tử:
+                <div class="math-box">
+                    16 &minus; <span class="var">x</span><sup>2</sup> + 2<span class="var">xy</span> &minus; <span class="var">y</span><sup>2</sup>
+                </div>
+            </div>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 12: Tách hạng tử tam thức bậc hai</span>
+                <span class="badge badge-success">Kỹ thuật tách</span>
+            </div>
+            <div class="exercise-content">
+                Phân tích đa thức sau thành nhân tử bằng phương pháp tách hạng tử bậc nhất:
+                <div class="math-box">
+                    <span class="var">x</span><sup>2</sup> + 5<span class="var">x</span> &minus; 14
+                </div>
+            </div>
+            <div class="trap-tag">💡 Gợi ý: Tìm hai số có tích bằng &minus;14 và có tổng bằng +5 (đó là +7 và &minus;2).</div>
+        </div>
+
+        <!-- BÀI 13 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 13: Tìm x có bẫy số hạng còn lại là &minus;1</span>
+                <span class="badge badge-success">Tìm x</span>
+            </div>
+            <div class="exercise-content">
+                Tìm <span class="var">x</span>, biết:
+                <div class="math-box">
+                    (<span class="var">x</span> &minus; 4)(2<span class="var">x</span> + 1) + 4 &minus; <span class="var">x</span> = 0
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy kinh điển: Đổi + 4 &minus; x thành &minus; (x &minus; 4). Khi rút (x &minus; 4) ra ngoài, bên trong còn lại [(2x + 1) &minus; 1]!</div>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 14: Tìm x bằng hằng đẳng thức hiệu hai bình phương</span>
+                <span class="badge badge-success">Tìm x</span>
+            </div>
+            <div class="exercise-content">
+                Tìm <span class="var">x</span>, biết:
+                <div class="math-box">
+                    (3<span class="var">x</span> &minus; 2)<sup>2</sup> &minus; (<span class="var">x</span> + 1)<sup>2</sup> = 0
+                </div>
+            </div>
+        </div>
+
+        <!-- PHẦN D -->
+        <h3 style="color: #d97706; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #fed7aa; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề D: Tứ Giác & Hình Học Suy Luận Chặt Chẽ
+        </h3>
+
+        <!-- BÀI 15 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 15: Tính góc tứ giác có liên hệ góc ngoài</span>
+                <span class="badge badge-tip">Góc tứ giác</span>
+            </div>
+            <div class="exercise-content">
+                Cho tứ giác <span class="var">ABCD</span> có góc <span class="var">A</span> = 75&deg;, góc <span class="var">B</span> = 115&deg;. Biết góc ngoài tại đỉnh <span class="var">C</span> có số đo bằng 120&deg;.<br>
+                a) Tính số đo góc trong <span class="var">C</span> của tứ giác.<br>
+                b) Tính số đo góc <span class="var">D</span> của tứ giác.<br>
+                c) Hai cạnh đối <span class="var">AD</span> và <span class="var">BC</span> có song song với nhau không? Vì sao?
+            </div>
+        </div>
+
+        <!-- BÀI 16 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 16: Chứng minh hình thang cân từ tam giác cân</span>
+                <span class="badge badge-tip">Hình thang cân</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác <span class="var">ABC</span> cân tại <span class="var">A</span>. Lấy điểm <span class="var">M</span> trên cạnh <span class="var">AB</span> và điểm <span class="var">N</span> trên cạnh <span class="var">AC</span> sao cho <span class="var">BM</span> = <span class="var">CN</span>.<br>
+                a) Chứng minh tam giác <span class="var">AMN</span> cân tại <span class="var">A</span>.<br>
+                b) Chứng minh tứ giác <span class="var">BMNC</span> là hình thang cân.<br>
+                c) Cho biết góc <span class="var">A</span> = 50&deg;, hãy tính số đo các góc của hình thang cân <span class="var">BMNC</span>.
+            </div>
+        </div>
+
+        <!-- BÀI 17 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 17: Hình bình hành và tính chất đối xứng tâm</span>
+                <span class="badge badge-tip">Hình bình hành</span>
+            </div>
+            <div class="exercise-content">
+                Cho hình bình hành <span class="var">ABCD</span> có <span class="var">O</span> là giao điểm của hai đường chéo <span class="var">AC</span> và <span class="var">BD</span>. Trên đoạn <span class="var">OA</span> lấy điểm <span class="var">P</span>, trên đoạn <span class="var">OC</span> lấy điểm <span class="var">Q</span> sao cho <span class="var">AP</span> = <span class="var">CQ</span>.<br>
+                a) Chứng minh tứ giác <span class="var">PBQD</span> là hình bình hành.<br>
+                b) Chứng minh ba điểm <span class="var">P, O, Q</span> thẳng hàng và <span class="var">O</span> là trung điểm của đoạn thẳng <span class="var">PQ</span>.
+            </div>
+        </div>
+
+        <!-- BÀI 18 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 18: Hình chữ nhật & Tính chất trung tuyến tam giác vuông</span>
+                <span class="badge badge-tip">Hình chữ nhật</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác <span class="var">ABC</span> vuông tại <span class="var">A</span>. Gọi <span class="var">M</span> là trung điểm của cạnh huyền <span class="var">BC</span>. Lấy điểm <span class="var">K</span> đối xứng với điểm <span class="var">A</span> qua điểm <span class="var">M</span>.<br>
+                a) Chứng minh tứ giác <span class="var">ABKC</span> là hình chữ nhật.<br>
+                b) Nếu tam giác <span class="var">ABC</span> có thêm điều kiện <span class="var">AB</span> = <span class="var">AC</span> thì tứ giác <span class="var">ABKC</span> là hình gì? Vì sao?<br>
+                c) Biết độ dài cạnh huyền <span class="var">BC</span> = 12 cm. Tính độ dài đoạn thẳng <span class="var">AM</span> và <span class="var">AK</span> mà không cần tính cạnh tam giác.
+            </div>
+        </div>
+
+        <!-- PHẦN E -->
+        <h3 style="color: #dc2626; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #fecdd3; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề E: Toán Thực Tế & Thử Thách Vận Dụng Cao (Điểm 10)
+        </h3>
+
+        <!-- BÀI 19 -->
+        <div class="exercise-item trap">
+            <div class="ex-title">
+                <span>Bài 19: Toán thực tế tính diện tích và chi phí xây dựng</span>
+                <span class="badge badge-trap">Toán thực tế</span>
+            </div>
+            <div class="exercise-content">
+                Gia đình bạn Minh dự định lát gạch cho một sân phơi hình chữ nhật có kích thước chiều dài là (3<span class="var">x</span> + 1) mét và chiều rộng là (2<span class="var">x</span> + 4) mét. Để tiết kiệm nước mưa, gia đình xây một bồn chứa nước hình chữ nhật ngay trên sân có kích thước đáy là (<span class="var">x</span> + 2) mét và (<span class="var">x</span> + 1) mét.<br>
+                a) Viết biểu thức đại số theo biến <span class="var">x</span> biểu thị diện tích phần sân phơi cần lát gạch.<br>
+                b) Rút gọn biểu thức diện tích ở câu a.<br>
+                c) Tính số tiền gia đình cần chi để mua gạch lát nền nếu <span class="var">x</span> = 3 mét và đơn giá gạch lát là 180.000 đồng/m<sup>2</sup>.
+            </div>
+        </div>
+
+        <!-- BÀI 20 -->
+        <div class="exercise-item trap">
+            <div class="ex-title">
+                <span>Bài 20: Tìm giá trị lớn nhất (GTLN) của biểu thức hai biến</span>
+                <span class="badge badge-trap">Điểm 10 giữa kì</span>
+            </div>
+            <div class="exercise-content">
+                Tìm giá trị lớn nhất (GTLN) của biểu thức hai biến sau:
+                <div class="math-box" style="color: #b91c1c;">
+                    <span class="var">N</span> = &minus;<span class="var">x</span><sup>2</sup> &minus; <span class="var">y</span><sup>2</sup> + 4<span class="var">x</span> &minus; 2<span class="var">y</span> + 2026
+                </div>
+                Chỉ rõ giá trị của <span class="var">x</span> và <span class="var">y</span> khi biểu thức đạt giá trị lớn nhất đó.
+            </div>
+            <div class="trap-tag">💡 Mẹo làm bài: Rút dấu trừ ra trước ngoặc: &minus;[(x² &minus; 4x + 4) + (y² + 2y + 1)] rồi cộng bù hằng số tự do phía ngoài!</div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
