@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Phát Âm Tiếng Anh IPA - 100 Bài Test Tương Tác</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'Inter', 'sans-serif'],
+                        ipa: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-200 font-black text-xl">
+                        IPA
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">IPA Master Practice</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">100 Bài Test Phát Âm Tiếng Anh</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="flex items-center space-x-1 sm:space-x-2">
+                    <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-btn px-3 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 bg-indigo-50 text-indigo-600 transition-all">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span class="hidden md:inline">Tổng quan</span>
+                    </button>
+                    <button id="nav-reference" onclick="switchTab('reference')" class="nav-btn px-3 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 text-slate-600 hover:bg-slate-100 hover:text-indigo-600 transition-all">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span class="hidden md:inline">Bảng tra IPA</span>
+                    </button>
+                    <button id="nav-practice" onclick="switchTab('practice')" class="nav-btn px-3 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 text-slate-600 hover:bg-slate-100 hover:text-indigo-600 transition-all">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>100 Bài Test</span>
+                    </button>
+                    <button id="nav-exam" onclick="startQuizMode(10)" class="px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:opacity-90 shadow-md shadow-indigo-200 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Thi Nhanh</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <!-- Banner Hero -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-6 sm:p-8 text-white shadow-xl">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-bold tracking-wide uppercase mb-3 backdrop-blur-sm">Phương Pháp Chuẩn Quốc Tế</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mb-3 leading-tight">Luyện Phát Âm Chuẩn IPA Với 100 Bài Test Tương Tác</h2>
+                    <p class="text-indigo-100 text-sm sm:text-base mb-6 leading-relaxed">Nắm vững 44 âm Tiếng Anh tiêu chuẩn (Nguyên âm đơn, Nguyên âm đôi, Phụ âm) thông qua hệ thống 100 câu hỏi phân loại chi tiết và phát âm audio giọng đọc tự nhiên.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="switchTab('practice')" class="px-5 py-2.5 rounded-xl bg-white text-indigo-600 font-bold hover:bg-indigo-50 transition shadow-lg flex items-center space-x-2">
+                            <i class="fa-solid fa-play text-xs"></i>
+                            <span>Làm bài ngay (100 câu)</span>
+                        </button>
+                        <button onclick="switchTab('reference')" class="px-5 py-2.5 rounded-xl bg-black/20 hover:bg-black/30 backdrop-blur-md text-white font-semibold transition border border-white/20 flex items-center space-x-2">
+                            <i class="fa-solid fa-book"></i>
+                            <span>Tra bảng IPA chuẩn</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-list-ol"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-800" id="stat-total">100</div>
+                        <div class="text-xs text-slate-500 font-medium">Tổng câu hỏi</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-800" id="stat-done">0</div>
+                        <div class="text-xs text-slate-500 font-medium">Đã hoàn thành</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-800" id="stat-accuracy">0%</div>
+                        <div class="text-xs text-slate-500 font-medium">Độ chính xác</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-slate-800" id="stat-score">0/0</div>
+                        <div class="text-xs text-slate-500 font-medium">Số câu đúng</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Modes Quick Start -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Mode 1: Monophthongs -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="p-3 bg-indigo-50 text-indigo-600 rounded-xl text-lg font-bold"><i class="fa-solid fa-vowel"></i></span>
+                            <span class="px-2.5 py-1 bg-indigo-100 text-indigo-700 font-bold text-xs rounded-full">12 Ngữ Âm</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-1">Nguyên Âm Đơn (Monophthongs)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Luyện tập phân biệt các nguyên âm ngắn & dài như /ɪ/ vs /i:/, /æ/ vs /e/, /ʊ/ vs /u:/.</p>
+                    </div>
+                    <button onclick="filterCategoryAndStart('monophthong')" class="w-full py-2.5 rounded-xl border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white font-bold text-sm transition">Luyện Nguyên Âm Đơn</button>
+                </div>
+
+                <!-- Mode 2: Diphthongs -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="p-3 bg-purple-50 text-purple-600 rounded-xl text-lg font-bold"><i class="fa-solid fa-[#]"></i></span>
+                            <span class="px-2.5 py-1 bg-purple-100 text-purple-700 font-bold text-xs rounded-full">8 Ngữ Âm</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-1">Nguyên Âm Đôi (Diphthongs)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Chinh phục các nguyên âm đôi phức hợp như /eɪ/, /aɪ/, /ɔɪ/, /aʊ/, /əʊ/, /ɪə/, /eə/, /ʊə/.</p>
+                    </div>
+                    <button onclick="filterCategoryAndStart('diphthong')" class="w-full py-2.5 rounded-xl border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-bold text-sm transition">Luyện Nguyên Âm Đôi</button>
+                </div>
+
+                <!-- Mode 3: Consonants -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="p-3 bg-pink-50 text-pink-600 rounded-xl text-lg font-bold"><i class="fa-solid fa-font"></i></span>
+                            <span class="px-2.5 py-1 bg-pink-100 text-pink-700 font-bold text-xs rounded-full">24 Ngữ Âm</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-1">Phụ Âm (Consonants)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Thành thạo các phụ âm hữu thanh, vô thanh và cặp âm khó như /θ/ vs /ð/, /ʃ/ vs /ʒ/, /tʃ/ vs /dʒ/.</p>
+                    </div>
+                    <button onclick="filterCategoryAndStart('consonant')" class="w-full py-2.5 rounded-xl border-2 border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white font-bold text-sm transition">Luyện Phụ Âm</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: REFERENCE IPA CHART -->
+        <section id="tab-reference" class="tab-content hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Bảng Tra Cứu Phát Âm IPA Chuẩn</h2>
+                    <p class="text-sm text-slate-500">Bấm vào bất kỳ âm hoặc từ ví dụ nào để nghe phát âm chuẩn bằng giọng bản ngữ.</p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs font-semibold text-slate-500">
+                    <span class="inline-block w-3 h-3 rounded-full bg-indigo-500"></span> <span>Nguyên âm đơn</span>
+                    <span class="inline-block w-3 h-3 rounded-full bg-purple-500 ml-2"></span> <span>Nguyên âm đôi</span>
+                    <span class="inline-block w-3 h-3 rounded-full bg-pink-500 ml-2"></span> <span>Phụ âm</span>
+                </div>
+            </div>
+
+            <!-- Monophthongs -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-8 bg-indigo-500 rounded-r-md"></span>
+                    <h3 class="text-lg font-bold text-slate-800">1. Nguyên Âm Đơn (Monophthongs - 12 âm)</h3>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3" id="ref-monophthongs"></div>
+            </div>
+
+            <!-- Diphthongs -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-8 bg-purple-500 rounded-r-md"></span>
+                    <h3 class="text-lg font-bold text-slate-800">2. Nguyên Âm Đôi (Diphthongs - 8 âm)</h3>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="ref-diphthongs"></div>
+            </div>
+
+            <!-- Consonants -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-8 bg-pink-500 rounded-r-md"></span>
+                    <h3 class="text-lg font-bold text-slate-800">3. Phụ Âm (Consonants - 24 âm)</h3>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3" id="ref-consonants"></div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PRACTICE & 100 TESTS -->
+        <section id="tab-practice" class="tab-content hidden space-y-6">
+            <!-- Filter Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Left Filters -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1"><i class="fa-solid fa-filter"></i> Lọc:</span>
+                    <button onclick="setFilter('cat', 'all')" class="btn-filter-cat active px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition" data-cat="all">Tất cả (100)</button>
+                    <button onclick="setFilter('cat', 'monophthong')" class="btn-filter-cat px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-cat="monophthong">Nguyên âm đơn</button>
+                    <button onclick="setFilter('cat', 'diphthong')" class="btn-filter-cat px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-cat="diphthong">Nguyên âm đôi</button>
+                    <button onclick="setFilter('cat', 'consonant')" class="btn-filter-cat px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-cat="consonant">Phụ âm</button>
+                </div>
+
+                <!-- Right Type & Tools -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="type-select" onchange="setFilter('type', this.value)" class="bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border-0 py-1.5 px-3 focus:ring-2 focus:ring-indigo-500">
+                        <option value="all">Tất cả dạng bài</option>
+                        <option value="find-ipa">Dạng 1: Từ -> IPA</option>
+                        <option value="find-word">Dạng 2: IPA -> Từ</option>
+                        <option value="odd-one-out">Dạng 3: Tìm từ khác âm</option>
+                        <option value="minimal-pair">Dạng 4: Cặp âm phân biệt</option>
+                    </select>
+
+                    <button onclick="resetAllAnswers()" class="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 transition flex items-center space-x-1" title="Làm lại tất cả">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm lại</span>
+                    </button>
+
+                    <button onclick="window.print()" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition flex items-center space-x-1" title="In/Lưu PDF">
+                        <i class="fa-solid fa-print"></i>
+                        <span>In test</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz List Container -->
+            <div id="quiz-list" class="space-y-4"></div>
+
+            <!-- Pagination Bar -->
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="text-xs font-semibold text-slate-500" id="pagination-info">
+                    Hiển thị 1 - 10 trong tổng số 100 câu
+                </div>
+                <div class="flex items-center space-x-2" id="pagination-controls">
+                    <!-- Dynamic Pagination -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: QUIZ EXAM MODAL / INTERFACE -->
+        <div id="exam-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+                <!-- Exam Header -->
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-t-3xl">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest" id="exam-mode-title">Chế Độ Thi Trắc Nghiệm</span>
+                        <h3 class="text-xl font-black text-slate-800" id="exam-progress-text">Câu 1 / 10</h3>
+                    </div>
+                    <button onclick="closeExamModal()" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 hover:bg-slate-300 transition flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Exam Body -->
+                <div class="p-6 space-y-6 flex-grow" id="exam-body">
+                    <!-- Dynamic Question Content -->
+                </div>
+
+                <!-- Exam Footer -->
+                <div class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50 rounded-b-3xl">
+                    <button id="exam-prev-btn" onclick="prevExamQuestion()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition disabled:opacity-50">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Câu trước
+                    </button>
+                    <button id="exam-next-btn" onclick="nextExamQuestion()" class="px-5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                        Câu tiếp <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-semibold text-slate-600">IPA Master Practice - 100 Bài Test Phát Âm Tiếng Anh Tương Tác</p>
+            <p class="mt-1">Dữ liệu phát âm dựa trên Bảng Ký Hiệu Ngữ Âm Quốc Tế (International Phonetic Alphabet) chuẩn Bảng Anh/Mỹ.</p>
+        </div>
+    </footer>
+
+    <!-- AUDIO SPEECH SYNTHESIS ENGINE & APP SCRIPT -->
+    <script>
+        // ==========================================
+        // 1. DATA STRUCTURE: IPA DATA REFERENCE
+        // ==========================================
+        const ipaReference = {
+            monophthongs: [
+                { symbol: 'ɪ', words: ['big', 'sit', 'fish', 'pin'], label: 'i ngắn' },
+                { symbol: 'i:', words: ['see', 'sheep', 'machine', 'police'], label: 'i dài' },
+                { symbol: 'e', words: ['bed', 'men', 'egg', 'desk'], label: 'e ngắn' },
+                { symbol: 'æ', words: ['cat', 'hat', 'bag', 'map'], label: 'a bẹt' },
+                { symbol: 'ʌ', words: ['cup', 'bus', 'cut', 'fun'], label: 'ă / á' },
+                { symbol: 'ɑ:', words: ['car', 'far', 'father', 'heart'], label: 'a dài' },
+                { symbol: 'ɒ', words: ['hot', 'pot', 'not', 'dog'], label: 'o ngắn' },
+                { symbol: 'ɔ:', words: ['caught', 'bought', 'thought', 'law'], label: 'o dài' },
+                { symbol: 'ʊ', words: ['put', 'book', 'good', 'look'], label: 'u ngắn' },
+                { symbol: 'u:', words: ['moon', 'food', 'too', 'rule'], label: 'u dài' },
+                { symbol: 'ɜ:', words: ['bird', 'word', 'girl', 'work'], label: 'ơ dài' },
+                { symbol: 'ə', words: ['about', 'above', 'sofa', 'cinema'], label: 'ơ ngắn' }
+            ],
+            diphthongs: [
+                { symbol: 'eɪ', words: ['name', 'cake', 'make', 'break'], label: 'ây' },
+                { symbol: 'aɪ', words: ['my', 'bike', 'fly', 'pie'], label: 'ai' },
+                { symbol: 'ɔɪ', words: ['boy', 'toy', 'noise', 'coin'], label: 'oi' },
+                { symbol: 'aʊ', words: ['house', 'mouse', 'now', 'cow'], label: 'ao' },
+                { symbol: 'əʊ', words: ['go', 'so', 'home', 'boat'], label: 'âu / ô' },
+                { symbol: 'ɪə', words: ['here', 'near', 'fear', 'beer'], label: 'ia' },
+                { symbol: 'eə', words: ['there', 'where', 'hair', 'bear'], label: 'ea' },
+                { symbol: 'ʊə', words: ['poor', 'sure', 'tour', 'pure'], label: 'ua' }
+            ],
+            consonants: [
+                { symbol: 'p', words: ['pen', 'pencil', 'puppy', 'pop'] },
+                { symbol: 'b', words: ['bat', 'ball', 'book', 'boy'] },
+                { symbol: 't', words: ['tea', 'table', 'ten', 'cat'] },
+                { symbol: 'd', words: ['dog', 'door', 'day', 'did'] },
+                { symbol: 'k', words: ['cat', 'kite', 'key', 'cook'] },
+                { symbol: 'g', words: ['girl', 'go', 'game', 'get'] },
+                { symbol: 'f', words: ['fish', 'fan', 'food', 'five'] },
+                { symbol: 'v', words: ['very', 'vine', 'voice', 'van'] },
+                { symbol: 'θ', words: ['thin', 'thank', 'bath', 'mouth'] },
+                { symbol: 'ð', words: ['then', 'that', 'mother', 'father'] },
+                { symbol: 's', words: ['sun', 'sea', 'so', 'sister'] },
+                { symbol: 'z', words: ['zoo', 'zero', 'zebra', 'busy'] },
+                { symbol: 'ʃ', words: ['ship', 'shop', 'shy', 'sugar'] },
+                { symbol: 'ʒ', words: ['pleasure', 'measure', 'vision', 'treasure'] },
+                { symbol: 'tʃ', words: ['chair', 'choose', 'much', 'watch'] },
+                { symbol: 'dʒ', words: ['jump', 'job', 'gem', 'giant'] },
+                { symbol: 'm', words: ['man', 'mother', 'moon', 'me'] },
+                { symbol: 'n', words: ['nose', 'name', 'nine', 'new'] },
+                { symbol: 'l', words: ['lip', 'love', 'light', 'leg'] },
+                { symbol: 'r', words: ['red', 'run', 'right', 'room'] },
+                { symbol: 'j', words: ['yes', 'young', 'you', 'year'] },
+                { symbol: 'w', words: ['wet', 'water', 'winter', 'world'] },
+                { symbol: 'h', words: ['hat', 'house', 'happy', 'he'] },
+                { symbol: 'ŋ', words: ['sing', 'ring', 'song', 'king'] }
+            ]
+        };
+
+        // ==========================================
+        // 2. GENERATE 100 COMPREHENSIVE IPA QUESTIONS
+        // ==========================================
+        const rawQuestions = [
+            // --- MONOPHTHONGS (1-35) ---
+            { id: 1, cat: 'monophthong', type: 'find-ipa', question: 'Âm gạch chân trong từ "s<ins>i</ins>t" phát âm là gì?', word: 'sit', highlight: 'i', options: ['/ɪ/', '/i:/', '/e/', '/æ/'], answer: '/ɪ/', explain: 'Từ "sit" chứa nguyên âm ngắn /ɪ/.' },
+            { id: 2, cat: 'monophthong', type: 'find-ipa', question: 'Âm gạch chân trong từ "sh<ins>ee</ins>p" phát âm là gì?', word: 'sheep', highlight: 'ee', options: ['/ɪ/', '/i:/', '/e/', '/eɪ/'], answer: '/i:/', explain: 'Nhóm chữ cái "ee" trong "sheep" đọc là nguyên âm dài /i:/.' },
+            { id: 3, cat: 'monophthong', type: 'find-ipa', question: 'Âm gạch chân trong từ "b<ins>e</ins>d" được đọc là:', word: 'bed', highlight: 'e', options: ['/æ/', '/e/', '/ɪ/', '/i:/'], answer: '/e/', explain: 'Từ "bed" phát âm là /bed/ với nguyên âm /e/.' },
+            { id: 4, cat: 'monophthong', type: 'find-ipa', question: 'Từ "c<ins>a</ins>t" chứa âm nào dưới đây?', word: 'cat', highlight: 'a', options: ['/ɑ:/', '/æ/', '/ʌ/', '/e/'], answer: '/æ/', explain: 'Chữ "a" trong "cat" được đọc là âm a bẹt /æ/.' },
+            { id: 5, cat: 'monophthong', type: 'find-ipa', question: 'Từ "c<ins>u</ins>p" có phần gạch chân phát âm là:', word: 'cup', highlight: 'u', options: ['/ʊ/', '/u:/', '/ʌ/', '/ɒ/'], answer: '/ʌ/', explain: 'Chữ "u" trong "cup" phát âm là /ʌ/.' },
+            { id: 6, cat: 'monophthong', type: 'find-ipa', question: 'Từ "c<ins>a</ins>r" có âm phát âm là:', word: 'car', highlight: 'a', options: ['/æ/', '/ɑ:/', '/ɔ:/', '/ə/'], answer: '/ɑ:/', explain: '"car" phát âm là /kɑ:/ nguyên âm dài /ɑ:/.' },
+            { id: 7, cat: 'monophthong', type: 'find-ipa', question: 'Chữ "o" trong từ "d<ins>o</ins>g" phát âm là:', word: 'dog', highlight: 'o', options: ['/ɒ/', '/ɔ:/', '/ʌ/', '/əʊ/'], answer: '/ɒ/', explain: 'Từ "dog" /dɒɡ/ chứa nguyên âm ngắn /ɒ/.' },
+            { id: 8, cat: 'monophthong', type: 'find-ipa', question: 'Phần gạch chân từ "l<ins>aw</ins>" đọc là:', word: 'law', highlight: 'aw', options: ['/ɒ/', '/ɔ:/', '/əʊ/', '/aʊ/'], answer: '/ɔ:/', explain: '"law" phát âm là /lɔ:/ nguyên âm dài /ɔ:/.' },
+            { id: 9, cat: 'monophthong', type: 'find-ipa', question: 'Từ "b<ins>oo</ins>k" đọc nguyên âm gì?', word: 'book', highlight: 'oo', options: ['/u:/', '/ʊ/', '/ɒ/', '/ʌ/'], answer: '/ʊ/', explain: '"book" /bʊk/ mang nguyên âm ngắn /ʊ/.' },
+            { id: 10, cat: 'monophthong', type: 'find-ipa', question: 'Từ "m<ins>oo</ins>n" mang âm nào?', word: 'moon', highlight: 'oo', options: ['/ʊ/', '/u:/', '/ɔ:/', '/əʊ/'], answer: '/u:/', explain: '"moon" /muːn/ mang nguyên âm dài /u:/.' },
+            { id: 11, cat: 'monophthong', type: 'find-ipa', question: 'Chữ "i" trong "g<ins>i</ins>rl" có âm là:', word: 'girl', highlight: 'i', options: ['/ɪ/', '/e/', '/ɜ:/', '/ə/'], answer: '/ɜ:/', explain: '"girl" /ɡɜːl/ mang nguyên âm dài /ɜ:/.' },
+            { id: 12, cat: 'monophthong', type: 'find-ipa', question: 'Chữ "a" đầu tiên trong "a<ins>b</ins>out" phát âm là:', word: 'about', highlight: 'a', options: ['/æ/', '/ə/', '/ɑ:/', '/e/'], answer: '/ə/', explain: '"about" /əˈbaʊt/ mở đầu bằng âm schwa /ə/.' },
+
+            { id: 13, cat: 'monophthong', type: 'find-word', question: 'Từ nào sau đây chứa nguyên âm /i:/?', options: ['sit', 'pin', 'police', 'desk'], answer: 'police', explain: '"police" phát âm là /pəˈliːs/ chứa âm /i:/.' },
+            { id: 14, cat: 'monophthong', type: 'find-word', question: 'Từ nào chứa nguyên âm /æ/?', options: ['map', 'far', 'car', 'father'], answer: 'map', explain: '"map" /mæp/ chứa nguyên âm /æ/.' },
+            { id: 15, cat: 'monophthong', type: 'find-word', question: 'Từ nào chứa âm /u:/?', options: ['put', 'look', 'good', 'food'], answer: 'food', explain: '"food" /fuːd/ chứa âm /u:/ ngắn hơn /u:/.' },
+            { id: 16, cat: 'monophthong', type: 'find-word', question: 'Từ nào có phát âm nguyên âm /ɜ:/?', options: ['word', 'hot', 'dog', 'pot'], answer: 'word', explain: '"word" /wɜːd/ chứa âm /ɜ:/.' },
+            { id: 17, cat: 'monophthong', type: 'find-word', question: 'Tìm từ chứa âm /ʌ/:', options: ['bus', 'boss', 'book', 'boot'], answer: 'bus', explain: '"bus" /bʌs/ chứa nguyên âm /ʌ/.' },
+
+            { id: 18, cat: 'monophthong', type: 'odd-one-out', question: 'Chọn từ có phần nguyên âm gạch chân phát âm KHIẾU KHÁC:', options: ['big', 'sit', 'fish', 'machine'], answer: 'machine', explain: 'machine (/i:/), các từ còn lại chứa /ɪ/.' },
+            { id: 19, cat: 'monophthong', type: 'odd-one-out', question: 'Chọn từ có phát âm nguyên âm KHÁC:', options: ['cat', 'hat', 'bag', 'car'], answer: 'car', explain: 'car (/ɑ:/), các từ còn lại chứa /æ/.' },
+            { id: 20, cat: 'monophthong', type: 'odd-one-out', question: 'Chọn từ phát âm nguyên âm KHÁC:', options: ['cup', 'cut', 'fun', 'put'], answer: 'put', explain: 'put (/ʊ/), ba từ còn lại phát âm /ʌ/.' },
+            { id: 21, cat: 'monophthong', type: 'odd-one-out', question: 'Từ nào có âm "oo" khác các từ còn lại?', options: ['food', 'too', 'rule', 'look'], answer: 'look', explain: 'look (/ʊ/), ba từ kia chứa /u:/.' },
+            { id: 22, cat: 'monophthong', type: 'odd-one-out', question: 'Từ nào có âm khác loại?', options: ['hot', 'pot', 'thought', 'not'], answer: 'thought', explain: 'thought (/ɔ:/), ba từ còn lại là /ɒ/.' },
+
+            { id: 23, cat: 'monophthong', type: 'minimal-pair', question: 'Phân biệt cặp âm ngắn/dài: "ship" vs "sheep"', options: ['/ɪ/ và /i:/', '/e/ và /i:/', '/i:/ và /ɪ/', '/æ/ và /e/'], answer: '/ɪ/ và /i:/', explain: 'ship (/ʃɪp/ - i ngắn) và sheep (/ʃiːp/ - i dài).' },
+            { id: 24, cat: 'monophthong', type: 'minimal-pair', question: 'Phân biệt cặp âm: "full" vs "fool"', options: ['/ʊ/ và /u:/', '/u:/ và /ʊ/', '/ɒ/ và /ɔ:/', '/ʌ/ và /ɑ:/'], answer: '/ʊ/ và /u:/', explain: 'full (/fʊl/) vs fool (/fuːl/).' },
+            { id: 25, cat: 'monophthong', type: 'minimal-pair', question: 'Phân biệt cặp âm: "pen" vs "pan"', options: ['/e/ và /æ/', '/æ/ và /e/', '/ɪ/ và /e/', '/e/ và /ʌ/'], answer: '/e/ và /æ/', explain: 'pen (/pen/) vs pan (/pæn/).' },
+
+            // Additional Monophthong questions (26-35)
+            { id: 26, cat: 'monophthong', type: 'find-ipa', question: 'Âm nguyên âm trong "h<ins>e</ins>art" là:', word: 'heart', highlight: 'ear', options: ['/ɜ:/', '/ɑ:/', '/eə/', '/ɪə/'], answer: '/ɑ:/', explain: 'heart đọc là /hɑːt/.' },
+            { id: 27, cat: 'monophthong', type: 'find-ipa', question: 'Âm nguyên âm trong từ "m<ins>e</ins>n" là:', word: 'men', highlight: 'e', options: ['/e/', '/æ/', '/ɪ/', '/i:/'], answer: '/e/', explain: 'men /men/.' },
+            { id: 28, cat: 'monophthong', type: 'find-word', question: 'Từ nào có chứa âm schwa /ə/?', options: ['cinema', 'cat', 'red', 'big'], answer: 'cinema', explain: 'cinema /ˈsɪnəmə/ có 2 âm /ə/.' },
+            { id: 29, cat: 'monophthong', type: 'odd-one-out', question: 'Chọn từ có phát âm nguyên âm KHÁC:', options: ['bird', 'girl', 'bed', 'work'], answer: 'bed', explain: 'bed (/e/), các từ còn lại chứa /ɜ:/.' },
+            { id: 30, cat: 'monophthong', type: 'find-ipa', question: 'Phần gạch chân "c<ins>au</ins>ght" phát âm là:', word: 'caught', highlight: 'augh', options: ['/ɔ:/', '/ɒ/', '/aʊ/', '/əʊ/'], answer: '/ɔ:/', explain: 'caught /kɔːt/.' },
+
+            // --- DIPHTHONGS (31-60) ---
+            { id: 31, cat: 'diphthong', type: 'find-ipa', question: 'Âm gạch chân trong "n<ins>a</ins>me" là nguyên âm đôi nào?', word: 'name', highlight: 'a', options: ['/eɪ/', '/aɪ/', '/eə/', '/aʊ/'], answer: '/eɪ/', explain: '"name" /neɪm/ chứa nguyên âm đôi /eɪ/.' },
+            { id: 32, cat: 'diphthong', type: 'find-ipa', question: 'Âm gạch chân trong "m<ins>y</ins>" đọc là:', word: 'my', highlight: 'y', options: ['/aɪ/', '/eɪ/', '/ɪə/', '/ɔɪ/'], answer: '/aɪ/', explain: '"my" /maɪ/ chứa nguyên âm đôi /aɪ/.' },
+            { id: 33, cat: 'diphthong', type: 'find-ipa', question: 'Từ "b<ins>oy</ins>" chứa nguyên âm đôi nào?', word: 'boy', highlight: 'oy', options: ['/ɔɪ/', '/aɪ/', '/əʊ/', '/eɪ/'], answer: '/ɔɪ/', explain: '"boy" /bɔɪ/.' },
+            { id: 34, cat: 'diphthong', type: 'find-ipa', question: 'Phần gạch chân từ "h<ins>ou</ins>se" phát âm là:', word: 'house', highlight: 'ou', options: ['/aʊ/', '/əʊ/', '/ɔ:/', '/u:/'], answer: '/aʊ/', explain: '"house" /haʊs/.' },
+            { id: 35, cat: 'diphthong', type: 'find-ipa', question: 'Từ "g<ins>o</ins>" có chứa nguyên âm đôi:', word: 'go', highlight: 'o', options: ['/əʊ/', '/aʊ/', '/ɒ/', '/ɔ:/'], answer: '/əʊ/', explain: '"go" /ɡəʊ/.' },
+            { id: 36, cat: 'diphthong', type: 'find-ipa', question: 'Từ "h<ins>ere</ins>" chứa âm nào?', word: 'here', highlight: 'ere', options: ['/ɪə/', '/eə/', '/ɜ:/', '/i:/'], answer: '/ɪə/', explain: '"here" /hɪə(r)/.' },
+            { id: 37, cat: 'diphthong', type: 'find-ipa', question: 'Từ "th<ins>ere</ins>" chứa âm nào?', word: 'there', highlight: 'ere', options: ['/eə/', '/ɪə/', '/ɜ:/', '/aɪ/'], answer: '/eə/', explain: '"there" /ðeə(r)/.' },
+            { id: 38, cat: 'diphthong', type: 'find-ipa', question: 'Từ "p<ins>oor</ins>" chứa âm nào?', word: 'poor', highlight: 'oor', options: ['/ʊə/', '/ɔ:/', '/ɔɪ/', '/əʊ/'], answer: '/ʊə/', explain: '"poor" /pʊə(r)/.' },
+
+            { id: 39, cat: 'diphthong', type: 'find-word', question: 'Từ nào chứa nguyên âm đôi /eɪ/?', options: ['break', 'speak', 'read', 'head'], answer: 'break', explain: 'break /breɪk/ (các từ khác /i:/ hoặc /e/).' },
+            { id: 40, cat: 'diphthong', type: 'find-word', question: 'Từ nào chứa âm /aɪ/?', options: ['fly', 'play', 'key', 'stay'], answer: 'fly', explain: 'fly /flaɪ/.' },
+            { id: 41, cat: 'diphthong', type: 'find-word', question: 'Từ nào chứa nguyên âm /ɔɪ/?', options: ['coin', 'cone', 'come', 'corn'], answer: 'coin', explain: 'coin /kɔɪn/.' },
+            { id: 42, cat: 'diphthong', type: 'find-word', question: 'Từ nào phát âm chứa /aʊ/?', options: ['now', 'know', 'no', 'low'], answer: 'now', explain: 'now /naʊ/ (know/no/low chứa /əʊ/).' },
+            { id: 43, cat: 'diphthong', type: 'find-word', question: 'Từ nào chứa nguyên âm /ɪə/?', options: ['beer', 'bear', 'bird', 'burn'], answer: 'beer', explain: 'beer /bɪə(r)/.' },
+
+            { id: 44, cat: 'diphthong', type: 'odd-one-out', question: 'Chọn từ có phát âm nguyên âm đôi KHÁC:', options: ['name', 'cake', 'make', 'cat'], answer: 'cat', explain: 'cat (/æ/), các từ còn lại chứa /eɪ/.' },
+            { id: 45, cat: 'diphthong', type: 'odd-one-out', question: 'Từ nào có cách phát âm KHÁC:', options: ['now', 'cow', 'house', 'so'], answer: 'so', explain: 'so (/əʊ/), ba từ còn lại là /aʊ/.' },
+            { id: 46, cat: 'diphthong', type: 'odd-one-out', question: 'Từ nào có phần gạch chân KHÁC:', options: ['here', 'near', 'fear', 'where'], answer: 'where', explain: 'where (/eə/), ba từ còn lại là /ɪə/.' },
+            { id: 47, cat: 'diphthong', type: 'odd-one-out', question: 'Chọn từ khác loại âm:', options: ['boy', 'toy', 'noise', 'my'], answer: 'my', explain: 'my (/aɪ/), ba từ còn lại là /ɔɪ/.' },
+
+            { id: 48, cat: 'diphthong', type: 'minimal-pair', question: 'Phân biệt: "no" /nəʊ/ vs "now" /naʊ/', options: ['/əʊ/ và /aʊ/', '/aʊ/ và /əʊ/', '/ɒ/ và /ɔ:/', '/eɪ/ và /aɪ/'], answer: '/əʊ/ và /aʊ/', explain: 'no (/əʊ/) vs now (/aʊ/).' },
+            { id: 49, cat: 'diphthong', type: 'minimal-pair', question: 'Phân biệt: "beer" vs "bear"', options: ['/ɪə/ và /eə/', '/eə/ và /ɪə/', '/i:/ và /e/', '/ɜ:/ và /eə/'], answer: '/ɪə/ và /eə/', explain: 'beer (/bɪə/) vs bear (/beə/).' },
+
+            // Additional Diphthong questions (50-60)
+            { id: 50, cat: 'diphthong', type: 'find-ipa', question: 'Từ "t<ins>ou</ins>r" chứa âm nguyên âm đôi:', word: 'tour', highlight: 'our', options: ['/ʊə/', '/ɔ:/', '/aʊ/', '/əʊ/'], answer: '/ʊə/', explain: 'tour /tʊə(r)/.' },
+            { id: 51, cat: 'diphthong', type: 'find-ipa', question: 'Từ "h<ins>ome</ins>" phát âm nguyên âm đôi nào?', word: 'home', highlight: 'ome', options: ['/əʊ/', '/aʊ/', '/ʌ/', '/ɒ/'], answer: '/əʊ/', explain: 'home /həʊm/.' },
+            { id: 52, cat: 'diphthong', type: 'find-word', question: 'Từ nào chứa nguyên âm đôi /eə/?', options: ['hair', 'hear', 'her', 'here'], answer: 'hair', explain: 'hair /heə(r)/.' },
+            { id: 53, cat: 'diphthong', type: 'odd-one-out', question: 'Chọn từ phát âm nguyên âm đôi KHÁC:', options: ['fly', 'pie', 'bike', 'boy'], answer: 'boy', explain: 'boy (/ɔɪ/), các từ còn lại chứa /aɪ/.' },
+            { id: 54, cat: 'diphthong', type: 'find-ipa', question: 'Từ "p<ins>ie</ins>" có chứa âm:', word: 'pie', highlight: 'ie', options: ['/aɪ/', '/i:/', '/eɪ/', '/ɪ/'], answer: '/aɪ/', explain: 'pie /paɪ/.' },
+            { id: 55, cat: 'diphthong', type: 'find-word', question: 'Từ nào phát âm có chứa /aʊ/?', options: ['mouse', 'moss', 'more', 'moon'], answer: 'mouse', explain: 'mouse /maʊs/.' },
+
+            // --- CONSONANTS (56-100) ---
+            { id: 56, cat: 'consonant', type: 'find-ipa', question: 'Phụ âm đầu trong từ "<ins>p</ins>en" là:', word: 'pen', highlight: 'p', options: ['/p/', '/b/', '/f/', '/v/'], answer: '/p/', explain: 'pen /pen/ phụ âm vô thanh /p/.' },
+            { id: 57, cat: 'consonant', type: 'find-ipa', question: 'Phụ âm trong từ "<ins>b</ins>at" là:', word: 'bat', highlight: 'b', options: ['/b/', '/p/', '/v/', '/m/'], answer: '/b/', explain: 'bat /bæt/ phụ âm hữu thanh /b/.' },
+            { id: 58, cat: 'consonant', type: 'find-ipa', question: 'Chữ "th" trong "<ins>th</ins>in" phát âm là:', word: 'thin', highlight: 'th', options: ['/θ/', '/ð/', '/s/', '/t/'], answer: '/θ/', explain: 'thin /θɪn/ phụ âm vô thanh /θ/.' },
+            { id: 59, cat: 'consonant', type: 'find-ipa', question: 'Chữ "th" trong "<ins>th</ins>en" phát âm là:', word: 'then', highlight: 'th', options: ['/ð/', '/θ/', '/z/', '/d/'], answer: '/ð/', explain: 'then /ðen/ phụ âm hữu thanh /ð/.' },
+            { id: 60, cat: 'consonant', type: 'find-ipa', question: 'Phụ âm gạch chân trong "s<ins>i</ins>ster" phát âm là:', word: 'sister', highlight: 's', options: ['/s/', '/z/', '/ʃ/', '/ʒ/'], answer: '/s/', explain: 'sister /ˈsɪstə(r)/.' },
+            { id: 61, cat: 'consonant', type: 'find-ipa', question: 'Chữ "z" trong "<ins>z</ins>oo" đọc là:', word: 'zoo', highlight: 'z', options: ['/z/', '/s/', '/ʒ/', '/dʒ/'], answer: '/z/', explain: 'zoo /zuː/.' },
+            { id: 62, cat: 'consonant', type: 'find-ipa', question: 'Chữ "sh" trong "<ins>sh</ins>ip" đọc là:', word: 'ship', highlight: 'sh', options: ['/ʃ/', '/s/', '/tʃ/', '/ʒ/'], answer: '/ʃ/', explain: 'ship /ʃɪp/.' },
+            { id: 63, cat: 'consonant', type: 'find-ipa', question: 'Phụ âm trong "plea<ins>s</ins>ure" là:', word: 'pleasure', highlight: 's', options: ['/ʒ/', '/ʃ/', '/z/', '/dʒ/'], answer: '/ʒ/', explain: 'pleasure /ˈpleʒə(r)/.' },
+            { id: 64, cat: 'consonant', type: 'find-ipa', question: 'Chữ "ch" trong "<ins>ch</ins>air" phát âm là:', word: 'chair', highlight: 'ch', options: ['/tʃ/', '/dʒ/', '/ʃ/', '/k/'], answer: '/tʃ/', explain: 'chair /tʃeə(r)/.' },
+            { id: 65, cat: 'consonant', type: 'find-ipa', question: 'Chữ "j" trong "<ins>j</ins>ump" đọc là:', word: 'jump', highlight: 'j', options: ['/dʒ/', '/tʃ/', '/ʒ/', '/j/'], answer: '/dʒ/', explain: 'jump /dʒʌmp/.' },
+            { id: 66, cat: 'consonant', type: 'find-ipa', question: 'Chữ "y" trong "<ins>y</ins>es" phát âm theo IPA là:', word: 'yes', highlight: 'y', options: ['/j/', '/dʒ/', '/i:/', '/aɪ/'], answer: '/j/', explain: 'yes /jes/.' },
+            { id: 67, cat: 'consonant', type: 'find-ipa', question: 'Chữ "w" trong "<ins>w</ins>et" phát âm là:', word: 'wet', highlight: 'w', options: ['/w/', '/v/', '/u:/', '/r/'], answer: '/w/', explain: 'wet /wet/.' },
+            { id: 68, cat: 'consonant', type: 'find-ipa', question: 'Chữ "ng" cuối từ "si<ins>ng</ins>" là âm:', word: 'sing', highlight: 'ng', options: ['/ŋ/', '/n/', '/g/', '/nk/'], answer: '/ŋ/', explain: 'sing /sɪŋ/.' },
+
+            { id: 69, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /θ/?', options: ['thank', 'that', 'this', 'there'], answer: 'thank', explain: 'thank /θæŋk/ (các từ khác dùng /ð/).' },
+            { id: 70, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /ð/?', options: ['father', 'thin', 'thank', 'bath'], answer: 'father', explain: 'father /ˈfɑːðə(r)/.' },
+            { id: 71, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /ʃ/?', options: ['sugar', 'sun', 'sea', 'so'], answer: 'sugar', explain: 'sugar /ˈʃʊɡə(r)/ đặc biệt chữ s đọc là /ʃ/.' },
+            { id: 72, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /dʒ/?', options: ['gem', 'game', 'get', 'girl'], answer: 'gem', explain: 'gem /dʒem/.' },
+            { id: 73, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /k/?', options: ['kite', 'cite', 'city', 'cell'], answer: 'kite', explain: 'kite /kaɪt/.' },
+
+            { id: 74, cat: 'consonant', type: 'odd-one-out', question: 'Từ nào có phần "th" phát âm KHÁC các từ còn lại?', options: ['thin', 'thank', 'bath', 'then'], answer: 'then', explain: 'then (/ð/), ba từ kia đọc là /θ/.' },
+            { id: 75, cat: 'consonant', type: 'odd-one-out', question: 'Từ nào có âm đầu phát âm KHÁC:', options: ['cat', 'kite', 'cook', 'city'], answer: 'city', explain: 'city (/s/), ba từ kia đọc là /k/.' },
+            { id: 76, cat: 'consonant', type: 'odd-one-out', question: 'Từ nào có chữ "s" đọc KHÁC:', options: ['sun', 'sea', 'so', 'easy'], answer: 'easy', explain: 'easy (/z/), ba từ kia đọc là /s/.' },
+            { id: 77, cat: 'consonant', type: 'odd-one-out', question: 'Chọn từ phát âm phụ âm KHÁC:', options: ['ship', 'shop', 'shy', 'chair'], answer: 'chair', explain: 'chair (/tʃ/), ba từ còn lại bắt đầu bằng /ʃ/.' },
+
+            { id: 78, cat: 'consonant', type: 'minimal-pair', question: 'Cặp âm vô thanh / hữu thanh: /p/ và ...', options: ['/b/', '/f/', '/v/', '/m/'], answer: '/b/', explain: '/p/ là phụ âm vô thanh, /b/ là phụ âm hữu thanh tương ứng.' },
+            { id: 79, cat: 'consonant', type: 'minimal-pair', question: 'Cặp âm vô thanh / hữu thanh: /t/ và ...', options: ['/d/', '/θ/', '/s/', '/z/'], answer: '/d/', explain: '/t/ (vô thanh) đi kèm /d/ (hữu thanh).' },
+            { id: 80, cat: 'consonant', type: 'minimal-pair', question: 'Cặp âm vô thanh / hữu thanh: /k/ và ...', options: ['/g/', '/c/', '/q/', '/h/'], answer: '/g/', explain: '/k/ (vô thanh) vs /g/ (hữu thanh).' },
+            { id: 81, cat: 'consonant', type: 'minimal-pair', question: 'Cặp âm vô thanh / hữu thanh: /f/ và ...', options: ['/v/', '/w/', '/p/', '/b/'], answer: '/v/', explain: '/f/ (vô thanh) vs /v/ (hữu thanh).' },
+            { id: 82, cat: 'consonant', type: 'minimal-pair', question: 'Phân biệt cặp từ: "fan" vs "van"', options: ['/f/ và /v/', '/v/ và /f/', '/p/ và /b/', '/b/ và /v/'], answer: '/f/ và /v/', explain: 'fan /fæn/ vs van /væn/.' },
+
+            // Questions 83 - 100
+            { id: 83, cat: 'consonant', type: 'find-ipa', question: 'Từ "<ins>h</ins>appy" chứa phụ âm:', word: 'happy', highlight: 'h', options: ['/h/', '/w/', '/r/', '/j/'], answer: '/h/', explain: 'happy /ˈhæpi/.' },
+            { id: 84, cat: 'consonant', type: 'find-ipa', question: 'Từ "<ins>r</ins>ed" chứa phụ âm:', word: 'red', highlight: 'r', options: ['/r/', '/l/', '/w/', '/j/'], answer: '/r/', explain: 'red /red/.' },
+            { id: 85, cat: 'consonant', type: 'find-ipa', question: 'Từ "<ins>l</ins>ove" chứa phụ âm:', word: 'love', highlight: 'l', options: ['/l/', '/r/', '/n/', '/m/'], answer: '/l/', explain: 'love /lʌv/.' },
+            { id: 86, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /ʒ/?', options: ['vision', 'fashion', 'action', 'station'], answer: 'vision', explain: 'vision /ˈvɪʒn/ (các từ khác dùng /ʃ/).' },
+            { id: 87, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /z/?', options: ['busy', 'bus', 'miss', 'pass'], answer: 'busy', explain: 'busy /ˈbɪzi/.' },
+            { id: 88, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /v/?', options: ['vine', 'fine', 'pine', 'line'], answer: 'vine', explain: 'vine /vaɪn/.' },
+            { id: 89, cat: 'consonant', type: 'odd-one-out', question: 'Chọn từ có cách phát âm chữ "c" KHÁC:', options: ['cat', 'cook', 'cup', 'cell'], answer: 'cell', explain: 'cell (/s/), các từ kia đọc /k/.' },
+            { id: 90, cat: 'consonant', type: 'odd-one-out', question: 'Chọn từ phát âm phụ âm KHÁC:', options: ['dog', 'door', 'day', 'ten'], answer: 'ten', explain: 'ten (/t/), các từ khác bắt đầu bằng /d/.' },
+            { id: 91, cat: 'consonant', type: 'find-ipa', question: 'Từ "<ins>m</ins>other" có phụ âm đầu là:', word: 'mother', highlight: 'm', options: ['/m/', '/n/', '/ŋ/', '/b/'], answer: '/m/', explain: 'mother /ˈmʌðə(r)/.' },
+            { id: 92, cat: 'consonant', type: 'find-ipa', question: 'Từ "<ins>n</ins>ose" có phụ âm đầu là:', word: 'nose', highlight: 'n', options: ['/n/', '/m/', '/ŋ/', '/l/'], answer: '/n/', explain: 'nose /nəʊz/.' },
+            { id: 93, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /w/?', options: ['world', 'one', 'water', 'tất cả các từ này'], answer: 'tất cả các từ này', explain: 'world /wɜːld/, water /ˈwɔːtə/, one /wʌn/ đều chứa âm /w/.' },
+            { id: 94, cat: 'consonant', type: 'find-word', question: 'Từ nào có phụ âm câm (silent letter)?', options: ['know', 'cat', 'pen', 'dog'], answer: 'know', explain: 'know /nəʊ/ chữ "k" bị câm.' },
+            { id: 95, cat: 'consonant', type: 'odd-one-out', question: 'Từ nào chứa âm /tʃ/ KHÁC với âm /ʃ/?', options: ['watch', 'ship', 'shop', 'shoe'], answer: 'watch', explain: 'watch (/tʃ/), ba từ còn lại là /ʃ/.' },
+            { id: 96, cat: 'consonant', type: 'minimal-pair', question: 'Phân biệt "think" và "sink"', options: ['/θ/ và /s/', '/ð/ và /z/', '/t/ và /s/', '/f/ và /s/'], answer: '/θ/ và /s/', explain: 'think (/θɪŋk/) vs sink (/sɪŋk/).' },
+            { id: 97, cat: 'consonant', type: 'find-ipa', question: 'Chữ "g" trong "gi<ins>a</ins>nt" phát âm phụ âm là:', word: 'giant', highlight: 'g', options: ['/dʒ/', '/g/', '/ʒ/', '/k/'], answer: '/dʒ/', explain: 'giant /ˈdʒaɪənt/.' },
+            { id: 98, cat: 'consonant', type: 'find-word', question: 'Từ nào chứa phụ âm /r/?', options: ['room', 'car', 'far', 'star'], answer: 'room', explain: 'room /ruːm/ (trong Anh-Anh, car/far/star phụ âm r cuối câm).' },
+            { id: 99, cat: 'consonant', type: 'odd-one-out', question: 'Từ nào có phát âm "ch" KHÁC:', options: ['chair', 'choose', 'much', 'school'], answer: 'school', explain: 'school (/k/), ba từ còn lại đọc /tʃ/.' },
+            { id: 100, cat: 'consonant', type: 'find-ipa', question: 'Từ "me<ins>a</ins>sure" chứa âm gạch chân là:', word: 'measure', highlight: 's', options: ['/ʒ/', '/ʃ/', '/z/', '/s/'], answer: '/ʒ/', explain: 'measure /ˈmeʒə(r)/.' }
+        ];
+
+        // Global State
+        let userAnswers = {}; // { questionId: selectedOption }
+        let currentFilterCat = 'all';
+        let currentFilterType = 'all';
+        let currentPage = 1;
+        const pageSize = 10;
+
+        // Exam Mode State
+        let examQuestions = [];
+        let currentExamIndex = 0;
+        let examAnswers = {};
+
+        // Speech Synthesis Engine
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop current speaking
+                // Remove slashes if text is IPA symbol for better pronunciation attempt
+                const cleanText = text.replace(/\//g, '');
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85; // Slightly slower for clarity
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Trình duyệt của bạn không hỗ trợ phát âm tự động.');
+            }
+        }
+
+        // ==========================================
+        // 3. RENDER IPA REFERENCE CHART
+        // ==========================================
+        function renderReferenceChart() {
+            // Render Monophthongs
+            const monoContainer = document.getElementById('ref-monophthongs');
+            monoContainer.innerHTML = ipaReference.monophthongs.map(item => `
+                <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-3 hover:shadow-md hover:bg-indigo-100/60 transition group cursor-pointer" onclick="speakText('${item.symbol}')">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xl font-black text-indigo-700 font-ipa">${item.symbol}</span>
+                        <button onclick="event.stopPropagation(); speakText('${item.symbol}')" class="w-6 h-6 rounded-full bg-white text-indigo-600 flex items-center justify-center text-xs shadow-sm hover:scale-110 transition">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                    <div class="text-[10px] font-bold text-indigo-400 uppercase mb-2">${item.label || ''}</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${item.words.map(w => `<span onclick="event.stopPropagation(); speakText('${w}')" class="px-1.5 py-0.5 bg-white text-slate-700 rounded text-xs font-semibold hover:bg-indigo-600 hover:text-white transition">${w}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Diphthongs
+            const diphContainer = document.getElementById('ref-diphthongs');
+            diphContainer.innerHTML = ipaReference.diphthongs.map(item => `
+                <div class="bg-purple-50/60 border border-purple-100 rounded-2xl p-3 hover:shadow-md hover:bg-purple-100/60 transition group cursor-pointer" onclick="speakText('${item.symbol}')">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xl font-black text-purple-700 font-ipa">${item.symbol}</span>
+                        <button onclick="event.stopPropagation(); speakText('${item.symbol}')" class="w-6 h-6 rounded-full bg-white text-purple-600 flex items-center justify-center text-xs shadow-sm hover:scale-110 transition">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                    <div class="text-[10px] font-bold text-purple-400 uppercase mb-2">${item.label || ''}</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${item.words.map(w => `<span onclick="event.stopPropagation(); speakText('${w}')" class="px-1.5 py-0.5 bg-white text-slate-700 rounded text-xs font-semibold hover:bg-purple-600 hover:text-white transition">${w}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Consonants
+            const consContainer = document.getElementById('ref-consonants');
+            consContainer.innerHTML = ipaReference.consonants.map(item => `
+                <div class="bg-pink-50/60 border border-pink-100 rounded-2xl p-3 hover:shadow-md hover:bg-pink-100/60 transition group cursor-pointer" onclick="speakText('${item.symbol}')">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xl font-black text-pink-700 font-ipa">${item.symbol}</span>
+                        <button onclick="event.stopPropagation(); speakText('${item.symbol}')" class="w-6 h-6 rounded-full bg-white text-pink-600 flex items-center justify-center text-xs shadow-sm hover:scale-110 transition">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-1 mt-2">
+                        ${item.words.map(w => `<span onclick="event.stopPropagation(); speakText('${w}')" class="px-1.5 py-0.5 bg-white text-slate-700 rounded text-xs font-semibold hover:bg-pink-600 hover:text-white transition">${w}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // 4. QUIZ LIST RENDERING & INTERACTION
+        // ==========================================
+        function getFilteredQuestions() {
+            return rawQuestions.filter(q => {
+                const matchCat = (currentFilterCat === 'all') || (q.cat === currentFilterCat);
+                const matchType = (currentFilterType === 'all') || (q.type === currentFilterType);
+                return matchCat && matchType;
+            });
+        }
+
+        function renderQuizList() {
+            const filtered = getFilteredQuestions();
+            const container = document.getElementById('quiz-list');
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                        <p class="text-slate-500 font-semibold">Không tìm thấy bài test nào phù hợp với bộ lọc.</p>
+                    </div>
+                `;
+                document.getElementById('pagination-info').innerText = '0 câu';
+                document.getElementById('pagination-controls').innerHTML = '';
+                return;
+            }
+
+            // Calculate pagination
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            if (currentPage > totalPages) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, filtered.length);
+            const pageQuestions = filtered.slice(startIndex, endIndex);
+
+            // Update Pagination Info
+            document.getElementById('pagination-info').innerText = `Hiển thị ${startIndex + 1} - ${endIndex} trong tổng số ${filtered.length} câu`;
+
+            // Render Pagination Buttons
+            let pageBtnsHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pageBtnsHTML += `
+                    <button onclick="goToPage(${i})" class="w-8 h-8 rounded-lg text-xs font-bold transition ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                        ${i}
+                    </button>
+                `;
+            }
+            document.getElementById('pagination-controls').innerHTML = pageBtnsHTML;
+
+            // Render Cards
+            container.innerHTML = pageQuestions.map((q, index) => {
+                const globalIndex = startIndex + index + 1;
+                const userChoice = userAnswers[q.id];
+                const isAnswered = userChoice !== undefined;
+                const isCorrect = isAnswered && userChoice === q.answer;
+
+                // Category badge colors
+                let catBadge = '';
+                if (q.cat === 'monophthong') catBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-indigo-100 text-indigo-700">Nguyên âm đơn</span>';
+                else if (q.cat === 'diphthong') catBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-purple-100 text-purple-700">Nguyên âm đôi</span>';
+                else catBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-pink-100 text-pink-700">Phụ âm</span>';
+
+                return `
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-4">
+                        <!-- Top Header -->
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-7 h-7 rounded-lg bg-slate-800 text-white text-xs font-black flex items-center justify-center">#${q.id}</span>
+                                ${catBadge}
+                            </div>
+                            ${isAnswered ? (
+                                isCorrect ? 
+                                `<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center space-x-1"><i class="fa-solid fa-circle-check"></i> <span>Chính xác</span></span>` :
+                                `<span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold flex items-center space-x-1"><i class="fa-solid fa-circle-xmark"></i> <span>Chưa đúng</span></span>`
+                            ) : ''}
+                        </div>
+
+                        <!-- Question Title -->
+                        <div>
+                            <div class="text-base font-bold text-slate-800 leading-snug flex items-center flex-wrap gap-2">
+                                <span>${q.question}</span>
+                                ${q.word ? `
+                                    <button onclick="speakText('${q.word}')" class="inline-flex items-center space-x-1 px-2 py-0.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-md text-xs font-bold transition">
+                                        <i class="fa-solid fa-volume-high"></i>
+                                        <span>/ ${q.word} /</span>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <!-- Options Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            ${q.options.map(opt => {
+                                let btnStyle = 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100';
+                                if (isAnswered) {
+                                    if (opt === q.answer) {
+                                        btnStyle = 'bg-emerald-500 border-emerald-500 text-white font-bold shadow-sm';
+                                    } else if (opt === userChoice) {
+                                        btnStyle = 'bg-rose-500 border-rose-500 text-white font-bold';
+                                    } else {
+                                        btnStyle = 'bg-slate-50 border-slate-100 text-slate-400 opacity-60';
+                                    }
+                                }
+
+                                return `
+                                    <button onclick="selectAnswer(${q.id}, '${opt.replace(/'/g, "\\'")}')" 
+                                            class="w-full text-left p-3 rounded-xl border text-sm transition flex items-center justify-between font-ipa ${btnStyle}">
+                                        <span>${opt}</span>
+                                        <button type="button" onclick="event.stopPropagation(); speakText('${opt.replace(/'/g, "\\'")}')" class="text-xs px-2 py-1 rounded bg-black/10 hover:bg-black/20 transition">
+                                            <i class="fa-solid fa-volume-high"></i>
+                                        </button>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Explanation Box (If answered) -->
+                        ${isAnswered ? `
+                            <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
+                                <div class="font-bold text-slate-800 flex items-center space-x-1">
+                                    <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                                    <span>Giải thích chi tiết:</span>
+                                </div>
+                                <div>${q.explain}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectAnswer(qId, selectedOpt) {
+            userAnswers[qId] = selectedOpt;
+            updateDashboardStats();
+            renderQuizList();
+        }
+
+        function goToPage(p) {
+            currentPage = p;
+            renderQuizList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setFilter(filterType, val) {
+            if (filterType === 'cat') {
+                currentFilterCat = val;
+                document.querySelectorAll('.btn-filter-cat').forEach(btn => {
+                    if (btn.dataset.cat === val) {
+                        btn.className = 'btn-filter-cat active px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition';
+                    } else {
+                        btn.className = 'btn-filter-cat px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+                    }
+                });
+            } else if (filterType === 'type') {
+                currentFilterType = val;
+            }
+            currentPage = 1;
+            renderQuizList();
+        }
+
+        function filterCategoryAndStart(cat) {
+            switchTab('practice');
+            setFilter('cat', cat);
+        }
+
+        function resetAllAnswers() {
+            if (confirm('Bạn có chắc chắn muốn xóa tất cả kết quả đã làm và làm lại từ đầu?')) {
+                userAnswers = {};
+                updateDashboardStats();
+                renderQuizList();
+            }
+        }
+
+        // ==========================================
+        // 5. STATS & DASHBOARD LOGIC
+        // ==========================================
+        function updateDashboardStats() {
+            const answeredIds = Object.keys(userAnswers);
+            const totalAnswered = answeredIds.length;
+            let correctCount = 0;
+
+            answeredIds.forEach(id => {
+                const q = rawQuestions.find(item => item.id == id);
+                if (q && userAnswers[id] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+            document.getElementById('stat-done').innerText = totalAnswered;
+            document.getElementById('stat-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('stat-score').innerText = `${correctCount}/${totalAnswered}`;
+        }
+
+        // ==========================================
+        // 6. EXAM / QUICK QUIZ MODE LOGIC
+        // ==========================================
+        function startQuizMode(count = 10) {
+            // Shuffle & pick questions
+            const shuffled = [...rawQuestions].sort(() => 0.5 - Math.random());
+            examQuestions = shuffled.slice(0, count);
+            currentExamIndex = 0;
+            examAnswers = {};
+
+            document.getElementById('exam-modal').classList.remove('hidden');
+            renderExamQuestion();
+        }
+
+        function closeExamModal() {
+            document.getElementById('exam-modal').classList.add('hidden');
+        }
+
+        function renderExamQuestion() {
+            if (examQuestions.length === 0) return;
+
+            const q = examQuestions[currentExamIndex];
+            const userChoice = examAnswers[q.id];
+            const isAnswered = userChoice !== undefined;
+
+            document.getElementById('exam-mode-title').innerText = `Chế độ Thi Nhanh (${examQuestions.length} câu)`;
+            document.getElementById('exam-progress-text').innerText = `Câu ${currentExamIndex + 1} / ${examQuestions.length}`;
+
+            // Control buttons
+            document.getElementById('exam-prev-btn').disabled = currentExamIndex === 0;
+            const nextBtn = document.getElementById('exam-next-btn');
+            if (currentExamIndex === examQuestions.length - 1) {
+                nextBtn.innerHTML = `Nộp bài <i class="fa-solid fa-check ml-1"></i>`;
+                nextBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition";
+            } else {
+                nextBtn.innerHTML = `Câu tiếp <i class="fa-solid fa-arrow-right ml-1"></i>`;
+                nextBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition";
+            }
+
+            const body = document.getElementById('exam-body');
+            body.innerHTML = `
+                <div class="space-y-4">
+                    <div class="text-sm font-semibold text-indigo-600">Loại bài: ${q.cat.toUpperCase()}</div>
+                    <div class="text-lg font-bold text-slate-800 leading-relaxed">${q.question}</div>
+                    ${q.word ? `
+                        <div class="my-2">
+                            <button onclick="speakText('${q.word}')" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-xl font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-volume-high"></i>
+                                <span>Nghe từ ví dụ: / ${q.word} /</span>
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    <div class="grid grid-cols-1 gap-3 pt-2">
+                        ${q.options.map(opt => {
+                            let borderStyle = 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700';
+                            if (userChoice === opt) {
+                                borderStyle = 'border-indigo-600 bg-indigo-50 text-indigo-700 font-bold ring-2 ring-indigo-500';
+                            }
+                            return `
+                                <button onclick="selectExamAnswer(${q.id}, '${opt.replace(/'/g, "\\'")}')" class="w-full text-left p-4 rounded-2xl border ${borderStyle} transition flex items-center justify-between font-ipa">
+                                    <span>${opt}</span>
+                                    <span onclick="event.stopPropagation(); speakText('${opt.replace(/'/g, "\\'")}')" class="p-2 text-xs text-slate-400 hover:text-indigo-600">
+                                        <i class="fa-solid fa-volume-high"></i>
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectExamAnswer(qId, opt) {
+            examAnswers[qId] = opt;
+            // Record to main answers as well
+            userAnswers[qId] = opt;
+            updateDashboardStats();
+            renderExamQuestion();
+        }
+
+        function nextExamQuestion() {
+            if (currentExamIndex < examQuestions.length - 1) {
+                currentExamIndex++;
+                renderExamQuestion();
+            } else {
+                // Finish exam
+                finishExam();
+            }
+        }
+
+        function prevExamQuestion() {
+            if (currentExamIndex > 0) {
+                currentExamIndex--;
+                renderExamQuestion();
+            }
+        }
+
+        function finishExam() {
+            let correct = 0;
+            examQuestions.forEach(q => {
+                if (examAnswers[q.id] === q.answer) correct++;
+            });
+            const pct = Math.round((correct / examQuestions.length) * 100);
+
+            const body = document.getElementById('exam-body');
+            body.innerHTML = `
+                <div class="text-center py-6 space-y-4">
+                    <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-3xl font-black">
+                        ${pct}%
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-800">Hoàn Thành Bài Thi!</h3>
+                    <p class="text-slate-600 text-sm">Bạn đã trả lời đúng <strong>${correct}</strong> / <strong>${examQuestions.length}</strong> câu hỏi.</p>
+                    <div class="pt-4 flex justify-center space-x-3">
+                        <button onclick="closeExamModal(); switchTab('practice')" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition">Xem chi tiết 100 câu</button>
+                        <button onclick="startQuizMode(${examQuestions.length})" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200 transition">Thi lại lượt khác</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // 7. TAB NAVIGATION
+        // ==========================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Update nav button states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-3 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 text-slate-600 hover:bg-slate-100 hover:text-indigo-600 transition-all";
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = "nav-btn px-3 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 bg-indigo-50 text-indigo-600 transition-all";
+            }
+
+            if (tabId === 'practice') {
+                renderQuizList();
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION ON LOAD
+        // ==========================================
+        window.onload = function() {
+            renderReferenceChart();
+            renderQuizList();
+            updateDashboardStats();
+        };
+    </script>
+</body>
+</html>
