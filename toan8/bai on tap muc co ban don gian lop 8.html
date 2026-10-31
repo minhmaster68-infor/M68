@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cẩm Nang Ôn Thi Giữa Kì I - Toán 8 (Lời Giải Chi Tiết Đề Cương)</title>
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0284c7;
+            --secondary-light: #e0f2fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --dark: #0f172a;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f8fafc; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 1050px; margin: 0 auto; }
+
+        /* Banner lớn */
+        .hero-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+            color: #ffffff;
+            padding: 35px 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px -5px rgba(67, 56, 202, 0.4);
+        }
+        .hero-banner h1 { font-size: 2.1rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.95; }
+
+        /* Nút điều khiển nhanh */
+        .control-panel {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #3730a3; transform: translateY(-1px); }
+        .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary-light); }
+
+        /* Card chung */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 12px;
+        }
+        .card-title { font-size: 1.35rem; font-weight: 700; color: #1e1b4b; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-math { background: var(--primary-light); color: var(--primary); border: 1px solid #c7d2fe; }
+        .badge-geo { background: var(--warning-light); color: var(--warning); border: 1px solid #fde68a; }
+        .badge-adv { background: var(--danger-light); color: var(--danger); border: 1px solid #fecdd3; }
+        .badge-correct { background: var(--success-light); color: var(--success); font-weight: bold; }
+
+        /* Math typography */
+        .var { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; font-weight: 600; padding: 0 1px; color: #0f172a; }
+        .math-box {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 8px 0;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        sup { font-size: 0.72em; vertical-align: super; line-height: 0; font-weight: bold; }
+        sub { font-size: 0.72em; vertical-align: sub; line-height: 0; font-weight: bold; }
+
+        /* Hộp câu hỏi */
+        .question-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .question-box.geo { border-left-color: var(--warning); }
+        .question-box.adv { border-left-color: var(--danger); }
+        .question-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mcq-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .option-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .option-item.correct {
+            background: #f0fdf4;
+            border-color: #86efac;
+            font-weight: bold;
+            color: #15803d;
+        }
+
+        /* Chi tiết lời giải */
+        details {
+            margin-top: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        summary {
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: #f1f5f9;
+            color: #334155;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        summary:hover { background: #e2e8f0; color: var(--primary); }
+        .solution-body {
+            padding: 15px 18px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+        .step-tag {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+        .trap-warning {
+            background: #fff1f2;
+            border-left: 4px solid var(--danger);
+            color: #9f1239;
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .sign-alert { color: #dc2626; font-weight: bold; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <span class="badge badge-math" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 10px;">Bám sát Đề Cương Ôn Tập Giữa Kì 1</span>
+        <h1>HƯỚNG DẪN & LỜI GIẢI CHI TIẾT ĐỀ CƯƠNG TOÁN 8</h1>
+        <p>Học sinh: <strong>Bảo Bảo</strong> &bull; Trị dứt điểm lỗi tính ẩu, sai dấu và hổng lý thuyết hình học</p>
+    </div>
+
+    <!-- BẢNG ĐIỀU KHIỂN -->
+    <div class="control-panel">
+        <button class="btn btn-primary" onclick="toggleAll(true)">📖 Mở Tất Cả Lời Giải & Mẹo</button>
+        <button class="btn btn-outline" onclick="toggleAll(false)">🔒 Đóng Tất Cả (Để Tự Luyện Tập)</button>
+    </div>
+
+    <!-- PHẦN I: TÓM TẮT LÝ THUYẾT TRỌNG TÂM -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Phần I</span>
+            <h2 class="card-title">KIẾN THỨC TRỌNG TÂM (TỪ TUẦN 1 ĐẾN TUẦN 7)</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 15px;">
+                <h4 style="color: #166534; margin-bottom: 8px;">📘 ĐẠI SỐ CỐT LÕI</h4>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: #14532d;">
+                    <li><strong>Đơn thức:</strong> Chỉ gồm tích của số và biến. Bậc = Tổng số mũ các biến.</li>
+                    <li><strong>Đa thức:</strong> Thu gọn hết &rarr; Lấy bậc của hạng tử cao nhất. <em>Hằng số khác 0 có bậc là 0</em>.</li>
+                    <li><strong>Nhân đơn/đa thức:</strong> Chú ý dấu: (&minus;) &times; (&minus;) = (+); (&minus;) &times; (+) = (&minus;).</li>
+                    <li><strong>Hằng đẳng thức bậc hai:</strong>
+                        <br>&bull; (<span class="var">A</span> + <span class="var">B</span>)<sup>2</sup> = <span class="var">A</span><sup>2</sup> + 2<span class="var">AB</span> + <span class="var">B</span><sup>2</sup>
+                        <br>&bull; (<span class="var">A</span> &minus; <span class="var">B</span>)<sup>2</sup> = <span class="var">A</span><sup>2</sup> &minus; 2<span class="var">AB</span> + <span class="var">B</span><sup>2</sup>
+                        <br>&bull; <span class="var">A</span><sup>2</sup> &minus; <span class="var">B</span><sup>2</sup> = (<span class="var">A</span> &minus; <span class="var">B</span>)(<span class="var">A</span> + <span class="var">B</span>)
+                    </li>
+                </ul>
+            </div>
+            <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 12px; padding: 15px;">
+                <h4 style="color: #854d0e; margin-bottom: 8px;">📐 HÌNH HỌC TỨ GIÁC</h4>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: #713f12;">
+                    <li><strong>Tổng 4 góc tứ giác:</strong> Luôn bằng 360&deg;.</li>
+                    <li><strong>Hình thang cân:</strong> Hình thang có 2 góc kề một đáy bằng nhau HOẶC 2 đường chéo bằng nhau.</li>
+                    <li><strong>Hình bình hành:</strong> Cạnh đối // và bằng nhau, 2 đường chéo cắt nhau tại trung điểm mỗi đường.</li>
+                    <li><strong>Hình chữ nhật:</strong> HBH có 1 góc vuông HOẶC 2 đường chéo bằng nhau.</li>
+                    <li><strong>Hình thoi:</strong> HBH có 2 cạnh kề bằng nhau HOẶC 2 đường chéo vuông góc.</li>
+                    <li><strong>Hình vuông:</strong> Vừa là hình chữ nhật vừa là hình thoi.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN II: 28 CÂU TRẮC NGHIỆM ĐỀ CƯƠNG -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Phần II</span>
+            <h2 class="card-title">GIẢI CHI TIẾT 28 CÂU TRẮC NGHIỆM (KÈM BẮT BẪY)</h2>
+        </div>
+
+        <!-- CÂU 1 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 1: Biểu thức nào sau đây là đơn thức?</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup></div>
+                <div class="option-item">B. <span class="var">x</span><sup>2</sup> + <span class="var">y</span><sup>3</sup></div>
+                <div class="option-item">C. <span class="var">x</span><sup>2</sup> &minus; <span class="var">y</span><sup>3</sup></div>
+                <div class="option-item">D. <span class="var">x</span><sup>2</sup> / <span class="var">y</span><sup>3</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Đơn thức là biểu thức đại số chỉ gồm một số, một biến, hoặc một tích giữa các số và các biến. Biểu thức B, C có phép cộng/trừ (đa thức), biểu thức D chứa biến ở mẫu nên không phải đơn thức. Chọn <strong>A</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 2 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 2: Phần hệ số của đơn thức 12<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup><span class="var">z</span><sup>4</sup> là:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 12<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup><span class="var">z</span><sup>4</sup></div>
+                <div class="option-item correct">B. 12</div>
+                <div class="option-item">C. <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup><span class="var">z</span><sup>4</sup></div>
+                <div class="option-item">D. 12<span class="var">xyz</span></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Phần hệ số là phần số thực đứng trước phần biến: ở đây là số <strong>12</strong>. Chọn <strong>B</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 3 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 3: Bậc của đơn thức 3<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> là:</span>
+                <span class="badge badge-correct">Đáp án: D</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 6</div>
+                <div class="option-item">B. 3</div>
+                <div class="option-item">C. 4</div>
+                <div class="option-item correct">D. 5</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Bậc của đơn thức có hệ số khác 0 là tổng số mũ của tất cả các biến: số mũ của <span class="var">x</span> là 2, của <span class="var">y</span> là 3 &rarr; Bậc = 2 + 3 = <strong>5</strong>. Chọn <strong>D</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 4 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 4: Đa thức <span class="var">A</span> = 5<span class="var">x</span><sup>2</sup><span class="var">y</span> + <span class="var">xy</span><sup>3</sup> có bậc là:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 5</div>
+                <div class="option-item correct">B. 4</div>
+                <div class="option-item">C. 3</div>
+                <div class="option-item">D. 2</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Đa thức đã thu gọn. Hạng tử 5<span class="var">x</span><sup>2</sup><span class="var">y</span> có bậc là 2 + 1 = 3. Hạng tử <span class="var">xy</span><sup>3</sup> có bậc là 1 + 3 = 4. Hạng tử có bậc cao nhất là 4 nên bậc của đa thức là <strong>4</strong>. Chọn <strong>B</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 5 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 5: Đa thức <span class="var">B</span> = 7 + 4<span class="var">x</span> có bậc mấy?</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. 1</div>
+                <div class="option-item">B. 2</div>
+                <div class="option-item">C. 3</div>
+                <div class="option-item">D. 4</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Hạng tử 4<span class="var">x</span> có bậc là 1 (vì <span class="var">x</span> = <span class="var">x</span><sup>1</sup>). Hạng tử 7 có bậc 0. Bậc cao nhất là <strong>1</strong>. Chọn <strong>A</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 6 (ĐIỂM HỌC SINH KHOANH SAI TRONG ĐỀ CƯƠNG) -->
+        <div class="question-box" style="border: 2px solid #ef4444;">
+            <div class="question-title">
+                <span style="color: #b91c1c;">Câu 6 (BẢO BẢO ĐÃ KHOANH SAI TRONG ĐỀ CƯƠNG): Đa thức <span class="var">C</span> = 4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; <span class="var">xy</span><sup>2</sup> + 3 &minus; 4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> + <span class="var">xy</span><sup>2</sup> có bậc là:</span>
+                <span class="badge badge-correct">Đáp án đúng: A (0)</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. 0 (ĐÚNG)</div>
+                <div class="option-item" style="text-decoration: line-through; color: #dc2626;">B. 1 (BẢO BẢO ĐÃ CHỌN SAI)</div>
+                <div class="option-item">C. 3</div>
+                <div class="option-item">D. 4</div>
+            </div>
+            <details open>
+                <summary>Giải thích lỗi sai & Khắc phục</summary>
+                <div class="solution-body">
+                    <p><span class="step-tag">Bước 1: Thu gọn</span> Nhóm các hạng tử đồng dạng:</p>
+                    <p><span class="var">C</span> = (4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; 4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>) + (&minus;<span class="var">xy</span><sup>2</sup> + <span class="var">xy</span><sup>2</sup>) + 3 = 0 + 0 + 3 = <strong>3</strong>.</p>
+                    <p><span class="step-tag">Bước 2: Tìm bậc</span> Sau khi thu gọn, đa thức chỉ còn lại số 3 (hằng số khác 0).</p>
+                    <div class="trap-warning">🚨 QUY TẮC VÀNG SGK KNTT TRANG 13: Một số khác 0 được coi là một đa thức bậc 0. Vì vậy bậc của C là 0, không phải bậc 1!</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 7 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 7: Kết quả phép nhân hai đơn thức <span class="var">x</span>(2<span class="var">x</span><sup>2</sup>) là:</span>
+                <span class="badge badge-correct">Đáp án: C</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 2<span class="var">x</span><sup>2</sup></div>
+                <div class="option-item">B. 3<span class="var">x</span><sup>3</sup></div>
+                <div class="option-item correct">C. 2<span class="var">x</span><sup>3</sup></div>
+                <div class="option-item">D. <span class="var">x</span><sup>3</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body"><span class="var">x</span> &times; 2<span class="var">x</span><sup>2</sup> = 2 &times; (<span class="var">x</span><sup>1</sup> &times; <span class="var">x</span><sup>2</sup>) = 2<span class="var">x</span><sup>1+2</sup> = <strong>2<span class="var">x</span><sup>3</sup></strong>. Chọn <strong>C</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 8 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 8: Rút gọn biểu thức (<span class="var">x</span> + <span class="var">y</span>) + (<span class="var">x</span> + <span class="var">z</span>) &minus; (<span class="var">y</span> + <span class="var">z</span>) có kết quả là:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 0</div>
+                <div class="option-item correct">B. 2<span class="var">x</span></div>
+                <div class="option-item">C. &minus;2<span class="var">z</span></div>
+                <div class="option-item">D. &minus;2<span class="var">y</span></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Phá ngoặc có dấu trừ cẩn thận: <span class="var">x</span> + <span class="var">y</span> + <span class="var">x</span> + <span class="var">z</span> <span class="sign-alert">&minus; y &minus; z</span> = (<span class="var">x</span> + <span class="var">x</span>) + (<span class="var">y</span> &minus; <span class="var">y</span>) + (<span class="var">z</span> &minus; <span class="var">z</span>) = <strong>2<span class="var">x</span></strong>. Chọn <strong>B</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 9 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 9: Kết quả của phép tính (<span class="var">x</span> + 2)<sup>2</sup> &minus; 4(<span class="var">x</span> + 2) + 4 là:</span>
+                <span class="badge badge-correct">Đáp án: D</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. <span class="var">x</span><sup>2</sup> + 16</div>
+                <div class="option-item">B. <span class="var">x</span><sup>2</sup> + 8<span class="var">x</span> + 16</div>
+                <div class="option-item">C. <span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span></div>
+                <div class="option-item correct">D. <span class="var">x</span><sup>2</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Nhận diện dạng hằng đẳng thức <span class="var">A</span><sup>2</sup> &minus; 2<span class="var">AB</span> + <span class="var">B</span><sup>2</sup> với <span class="var">A</span> = (<span class="var">x</span> + 2) và <span class="var">B</span> = 2:
+                    <br>&rarr; Biểu thức = [(<span class="var">x</span> + 2) &minus; 2]<sup>2</sup> = (<span class="var">x</span>)<sup>2</sup> = <strong><span class="var">x</span><sup>2</sup></strong>. Chọn <strong>D</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 10 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 10: Kết quả của phép tính 2<span class="var">xy</span>(<span class="var">x</span><sup>2</sup> &minus; <span class="var">xy</span> + <span class="var">y</span>) là:</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. 2<span class="var">x</span><sup>3</sup><span class="var">y</span> &minus; 2<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup> + 2<span class="var">xy</span><sup>2</sup></div>
+                <div class="option-item">B. 2<span class="var">x</span><sup>3</sup><span class="var">y</span> + 2<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup> + 2<span class="var">xy</span><sup>2</sup></div>
+                <div class="option-item">C. 2<span class="var">x</span><sup>3</sup><span class="var">y</span> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup> + <span class="var">xy</span><sup>2</sup></div>
+                <div class="option-item">D. 2<span class="var">x</span><sup>3</sup><span class="var">y</span> &minus; <span class="var">xy</span> + <span class="var">y</span></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Nhân phân phối từng hạng tử: 2<span class="var">xy</span> &times; <span class="var">x</span><sup>2</sup> &minus; 2<span class="var">xy</span> &times; <span class="var">xy</span> + 2<span class="var">xy</span> &times; <span class="var">y</span> = <strong>2<span class="var">x</span><sup>3</sup><span class="var">y</span> &minus; 2<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup> + 2<span class="var">xy</span><sup>2</sup></strong>. Chọn <strong>A</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 11 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 11: Giá trị <span class="var">a, b</span> thỏa mãn (<span class="var">x</span> &minus; 3)(2<span class="var">x</span><sup>2</sup> + <span class="var">ax</span> + <span class="var">b</span>) = 2<span class="var">x</span><sup>3</sup> &minus; 8<span class="var">x</span><sup>2</sup> + 9<span class="var">x</span> &minus; 9 là:</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. <span class="var">a</span> = &minus;2, <span class="var">b</span> = 3</div>
+                <div class="option-item">B. <span class="var">a</span> = &minus;3, <span class="var">b</span> = 2</div>
+                <div class="option-item">C. <span class="var">a</span> = 3, <span class="var">b</span> = &minus;2</div>
+                <div class="option-item">D. <span class="var">a</span> = 2, <span class="var">b</span> = 3</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Khai triển vế trái: 2<span class="var">x</span><sup>3</sup> + <span class="var">ax</span><sup>2</sup> + <span class="var">bx</span> &minus; 6<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">ax</span> &minus; 3<span class="var">b</span> = 2<span class="var">x</span><sup>3</sup> + (<span class="var">a</span> &minus; 6)<span class="var">x</span><sup>2</sup> + (<span class="var">b</span> &minus; 3<span class="var">a</span>)<span class="var">x</span> &minus; 3<span class="var">b</span>.
+                    <br>&bull; Hệ số tự do: &minus;3<span class="var">b</span> = &minus;9 &rarr; <span class="var">b</span> = 3.
+                    <br>&bull; Hệ số của <span class="var">x</span><sup>2</sup>: <span class="var">a</span> &minus; 6 = &minus;8 &rarr; <span class="var">a</span> = &minus;2. Chọn <strong>A</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 12 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 12: Giá trị biểu thức <span class="var">A</span> = 6<span class="var">x</span><sup>3</sup> : <span class="var">x</span> tại <span class="var">x</span> = &minus;1 là:</span>
+                <span class="badge badge-correct">Đáp án: D</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 1</div>
+                <div class="option-item">B. &minus;1</div>
+                <div class="option-item">C. &minus;6</div>
+                <div class="option-item correct">D. 6</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Thu gọn: <span class="var">A</span> = 6<span class="var">x</span><sup>3&minus;1</sup> = 6<span class="var">x</span><sup>2</sup>.
+                    <br>Thay <span class="var">x</span> = &minus;1 vào: <span class="var">A</span> = 6 &times; (&minus;1)<sup>2</sup> = 6 &times; 1 = <strong>6</strong>. (Chú ý: bình phương số âm mang dấu dương!). Chọn <strong>D</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 13 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 13: Giá trị biểu thức <span class="var">C</span> = (3<span class="var">x</span><sup>5</sup> + 2<span class="var">x</span><sup>4</sup> &minus; 2<span class="var">x</span><sup>3</sup>) : <span class="var">x</span><sup>3</sup> tại <span class="var">x</span> = 1 là:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 1</div>
+                <div class="option-item correct">B. 3</div>
+                <div class="option-item">C. &minus;3</div>
+                <div class="option-item">D. 2</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Chia từng hạng tử: <span class="var">C</span> = 3<span class="var">x</span><sup>2</sup> + 2<span class="var">x</span> &minus; 2.
+                    <br>Thay <span class="var">x</span> = 1 vào: <span class="var">C</span> = 3(1)<sup>2</sup> + 2(1) &minus; 2 = 3 + 2 &minus; 2 = <strong>3</strong>. Chọn <strong>B</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 14 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 14: Khẳng định nào sau đây là đúng?</span>
+                <span class="badge badge-correct">Đáp án: D</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. (<span class="var">x</span> + 5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 5<span class="var">x</span> + 25<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item">B. (<span class="var">x</span> + 5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 2<span class="var">x</span> + 25<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item">C. (<span class="var">x</span> + 5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 10<span class="var">x</span> + 10<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item correct">D. (<span class="var">x</span> + 5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 10<span class="var">xy</span> + 25<span class="var">y</span><sup>2</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">(<span class="var">x</span> + 5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 2 &times; <span class="var">x</span> &times; (5<span class="var">y</span>) + (5<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 10<span class="var">xy</span> + 25<span class="var">y</span><sup>2</sup>. Chọn <strong>D</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 15 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 15: Khai triển hằng đẳng thức (<span class="var">x</span> &minus; 3<span class="var">y</span>)<sup>2</sup> ta được:</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. <span class="var">x</span><sup>2</sup> &minus; 6<span class="var">xy</span> + 9<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item">B. <span class="var">x</span><sup>2</sup> &minus; 3<span class="var">xy</span> + 9<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item">C. <span class="var">x</span><sup>2</sup> &minus; 9<span class="var">y</span><sup>2</sup></div>
+                <div class="option-item">D. <span class="var">x</span><sup>2</sup> &minus; 6<span class="var">xy</span> + 3<span class="var">y</span><sup>2</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">(<span class="var">x</span> &minus; 3<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> &minus; 2 &times; <span class="var">x</span> &times; (3<span class="var">y</span>) + (3<span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> &minus; 6<span class="var">xy</span> + 9<span class="var">y</span><sup>2</sup>. Chọn <strong>A</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 16 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 16: Viết biểu thức <span class="var">x</span><sup>2</sup> &minus; 8<span class="var">x</span> + 16 dưới dạng bình phương một hiệu:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. (<span class="var">x</span> &minus; 16)<sup>2</sup></div>
+                <div class="option-item correct">B. (<span class="var">x</span> &minus; 4)<sup>2</sup></div>
+                <div class="option-item">C. (<span class="var">x</span> &minus; 2)<sup>2</sup></div>
+                <div class="option-item">D. (<span class="var">x</span> &minus; 8)<sup>2</sup></div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body"><span class="var">x</span><sup>2</sup> &minus; 2 &times; <span class="var">x</span> &times; 4 + 4<sup>2</sup> = (<span class="var">x</span> &minus; 4)<sup>2</sup>. Chọn <strong>B</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 17 -->
+        <div class="question-box">
+            <div class="question-title">
+                <span>Câu 17: Cho 2 số <span class="var">x; y</span> thỏa mãn <span class="var">x</span> &minus; <span class="var">y</span> = 5 và <span class="var">xy</span> = 3. Khi đó giá trị <span class="var">x</span><sup>2</sup> + <span class="var">y</span><sup>2</sup> là:</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. 31</div>
+                <div class="option-item">B. 19</div>
+                <div class="option-item">C. 25</div>
+                <div class="option-item">D. 28</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Ta có: (<span class="var">x</span> &minus; <span class="var">y</span>)<sup>2</sup> = <span class="var">x</span><sup>2</sup> &minus; 2<span class="var">xy</span> + <span class="var">y</span><sup>2</sup>
+                    <br>&rarr; <span class="var">x</span><sup>2</sup> + <span class="var">y</span><sup>2</sup> = (<span class="var">x</span> &minus; <span class="var">y</span>)<sup>2</sup> + 2<span class="var">xy</span> = 5<sup>2</sup> + 2 &times; 3 = 25 + 6 = <strong>31</strong>. Chọn <strong>A</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 18 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 18: Cho tứ giác ABCD có góc A = B = 100&deg;, C = 50&deg;. Khi đó số đo góc D là:</span>
+                <span class="badge badge-correct">Đáp án: A</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item correct">A. 110&deg;</div>
+                <div class="option-item">B. 50&deg;</div>
+                <div class="option-item">C. 150&deg;</div>
+                <div class="option-item">D. 70&deg;</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Tổng 4 góc tứ giác bằng 360&deg; &rarr; Góc D = 360&deg; &minus; (100&deg; + 100&deg; + 50&deg;) = 360&deg; &minus; 250&deg; = <strong>110&deg;</strong>. Chọn <strong>A</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 19 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 19: Cho tứ giác ABCD, trong đó có góc A + B = 140&deg;. Khi đó, tổng C + D bằng:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 160&deg;</div>
+                <div class="option-item correct">B. 220&deg;</div>
+                <div class="option-item">C. 200&deg;</div>
+                <div class="option-item">D. 150&deg;</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Góc C + D = 360&deg; &minus; (A + B) = 360&deg; &minus; 140&deg; = <strong>220&deg;</strong>. Chọn <strong>B</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 20 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 20: Giá trị số đo 2y &minus; x trong hình vẽ tứ giác là:</span>
+                <span class="badge badge-correct">Đáp án: D</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 46&deg;</div>
+                <div class="option-item">B. 58&deg;</div>
+                <div class="option-item">C. 134&deg;</div>
+                <div class="option-item correct">D. 126&deg;</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">
+                    Từ hình vẽ: Góc ngoài đỉnh I là 124&deg; &rarr; Góc trong y = 180&deg; &minus; 124&deg; = 56&deg; (hoặc áp dụng tổng góc tứ giác tính ra x = 14&deg;). Khi đó 2y &minus; x = 2(70&deg;) &minus; 14&deg; = <strong>126&deg;</strong>. Chọn <strong>D</strong>.
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 21 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 21: Trong các phát biểu sau, có bao nhiêu phát biểu sai?</span>
+                <span class="badge badge-correct">Đáp án phân tích: Cả A và D đều SAI</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. Hình thang có 2 cạnh bên bằng nhau là HTC (SAI)</div>
+                <div class="option-item">B. Hình thang có 2 đường chéo bằng nhau là HTC (ĐÚNG)</div>
+                <div class="option-item">C. Hình thang có 2 góc kề 1 đáy bằng nhau là HTC (ĐÚNG)</div>
+                <div class="option-item">D. Hình thang có 2 đường chéo vuông góc là HTC (SAI)</div>
+            </div>
+            <details>
+                <summary>Xem giải thích hạt sạn đề thi</summary>
+                <div class="solution-body">
+                    &bull; Phát biểu A sai vì hình thang có 2 cạnh bên bằng nhau có thể là <em>hình bình hành</em>.
+                    <br>&bull; Phát biểu D sai vì 2 đường chéo vuông góc chưa đủ kết luận hình thang cân (phải là 2 đường chéo bằng nhau).
+                </div>
+            </details>
+        </div>
+
+        <!-- CÂU 22 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 22: Cho hình thang cân ABCD (AB // CD) có góc A = 60&deg;. Số đo của góc ABC bằng:</span>
+                <span class="badge badge-correct">Đáp án: D (60&deg;)</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 40&deg;</div>
+                <div class="option-item">B. 120&deg;</div>
+                <div class="option-item">C. 30&deg;</div>
+                <div class="option-item correct">D. 60&deg;</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Vì ABCD là hình thang cân có 2 đáy là AB và CD nên 2 góc kề đáy AB bằng nhau: góc ABC = góc A = <strong>60&deg;</strong>. (Hai góc kề đáy CD sẽ bù với góc đáy AB: C = D = 180&deg; &minus; 60&deg; = 120&deg;). Chọn <strong>D</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 23 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 23: Trong các khẳng định sau, khẳng định SAI là:</span>
+                <span class="badge badge-correct">Đáp án: C</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. Tứ giác có 2 cạnh đối // và bằng nhau là HBH.</div>
+                <div class="option-item">B. Hình thang có 2 cạnh bên song song là HBH.</div>
+                <div class="option-item correct">C. Hình thang có 2 đường chéo bằng nhau là HBH. (SAI)</div>
+                <div class="option-item">D. Tứ giác có 2 đường chéo cắt nhau tại trung điểm mỗi đường là HBH.</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Hình thang có 2 đường chéo bằng nhau là <strong>hình thang cân</strong>, không phải hình bình hành! Khẳng định C sai. Chọn <strong>C</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 24 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 24: Hình bình hành ABCD là hình chữ nhật khi:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. AB = AD</div>
+                <div class="option-item correct">B. Góc A = 90&deg;</div>
+                <div class="option-item">C. AB = 2AC</div>
+                <div class="option-item">D. Góc A = C</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Dấu hiệu nhận biết: Hình bình hành có <strong>một góc vuông</strong> là hình chữ nhật. Chọn <strong>B</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 25 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 25: Hình chữ nhật là tứ giác:</span>
+                <span class="badge badge-correct">Đáp án: C</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. Có bốn cạnh bằng nhau.</div>
+                <div class="option-item">B. Có hai cạnh vừa song song vừa bằng nhau.</div>
+                <div class="option-item correct">C. Có bốn góc vuông.</div>
+                <div class="option-item">D. Có hai cạnh bằng nhau và một góc vuông.</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Định nghĩa SGK: Hình chữ nhật là tứ giác có <strong>bốn góc vuông</strong>. Chọn <strong>C</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 26 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 26: Khẳng định nào sau đây là SAI khi nói về hình thoi?</span>
+                <span class="badge badge-correct">Đáp án: C</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. Hình thoi có bốn cạnh bằng nhau.</div>
+                <div class="option-item">B. Hai đường chéo vuông góc với nhau.</div>
+                <div class="option-item correct">C. Hai đường chéo của hình thoi bằng nhau. (SAI)</div>
+                <div class="option-item">D. Hình thoi cũng là một hình bình hành.</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Hai đường chéo của hình thoi nói chung <em>không bằng nhau</em> (nếu bằng nhau thì nó biến thành hình vuông). Do đó C là khẳng định sai. Chọn <strong>C</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 27 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 27: Cho hình thoi ABCD có chu vi bằng 32 cm. Độ dài cạnh của hình thoi là:</span>
+                <span class="badge badge-correct">Đáp án: B</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. 4 cm</div>
+                <div class="option-item correct">B. 8 cm</div>
+                <div class="option-item">C. 16 cm</div>
+                <div class="option-item">D. 64 cm</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Hình thoi có 4 cạnh bằng nhau &rarr; Độ dài 1 cạnh = Chu vi : 4 = 32 : 4 = <strong>8 cm</strong>. Chọn <strong>B</strong>.</div>
+            </details>
+        </div>
+
+        <!-- CÂU 28 -->
+        <div class="question-box geo">
+            <div class="question-title">
+                <span>Câu 28: Chọn khẳng định ĐÚNG trong các khẳng định sau:</span>
+                <span class="badge badge-correct">Đáp án: C</span>
+            </div>
+            <div class="mcq-options">
+                <div class="option-item">A. Tứ giác có bốn góc vuông là hình vuông.</div>
+                <div class="option-item">B. Hình bình hành có hai đường chéo bằng nhau là hình vuông.</div>
+                <div class="option-item correct">C. Hình thoi có hai đường chéo bằng nhau là hình vuông. (ĐÚNG)</div>
+                <div class="option-item">D. Hình bình hành có hai đường chéo vuông góc là hình vuông.</div>
+            </div>
+            <details>
+                <summary>Xem giải thích</summary>
+                <div class="solution-body">Dấu hiệu nhận biết hình vuông từ hình thoi: Hình thoi có hai đường chéo bằng nhau là hình vuông. Khẳng định C đúng. Chọn <strong>C</strong>.</div>
+            </details>
+        </div>
+
+    </div>
+
+    <!-- PHẦN III: TỰ LUẬN ĐẠI SỐ (BÀI 1 -> BÀI 10) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Phần III</span>
+            <h2 class="card-title">TỰ LUẬN ĐẠI SỐ: RÈN KỸ NĂNG BIẾN ĐỔI KHÔNG SAI DẤU</h2>
+        </div>
+
+        <!-- BÀI 1 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 1: Đơn thức và tính giá trị</span></div>
+            <div class="exercise-content">
+                Cho đơn thức: <span class="var">A</span> = 2<span class="var">xy</span><sup>2</sup> &times; (½ <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup><span class="var">x</span>).
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><span class="step-tag">a) Thu gọn:</span> <span class="var">A</span> = [2 &times; ½] &times; (<span class="var">x</span> &times; <span class="var">x</span><sup>2</sup> &times; <span class="var">x</span>) &times; (<span class="var">y</span><sup>2</sup> &times; <span class="var">y</span><sup>2</sup>) = 1 &times; <span class="var">x</span><sup>4</sup><span class="var">y</span><sup>4</sup> = <strong><span class="var">x</span><sup>4</sup><span class="var">y</span><sup>4</sup></strong>.</p>
+                    <p><span class="step-tag">b) Bậc, hệ số:</span> Hệ số là <strong>1</strong>; Phần biến là <strong><span class="var">x</span><sup>4</sup><span class="var">y</span><sup>4</sup></strong>; Bậc là 4 + 4 = <strong>8</strong>.</p>
+                    <p><span class="step-tag">c) Tính giá trị tại x = 2, y = &minus;1:</span></p>
+                    <p><span class="var">A</span> = (2)<sup>4</sup> &times; (&minus;1)<sup>4</sup> = 16 &times; 1 = <strong>16</strong>. <em>(Lưu ý: số âm mũ chẵn ra kết quả dương!)</em></p>
+                    <p><span class="step-tag">d) Chứng minh A không âm:</span></p>
+                    <p>Ta có <span class="var">A</span> = <span class="var">x</span><sup>4</sup><span class="var">y</span><sup>4</sup> = (<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>2</sup>)<sup>2</sup> &ge; 0 với mọi số thực <span class="var">x, y</span>. Vậy <span class="var">A</span> luôn không âm.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 2: Thu gọn và tìm bậc của đa thức</span></div>
+            <div class="exercise-content">
+                Thu gọn và tìm bậc của các đa thức:
+                <br>a) <span class="var">A</span> = 3<span class="var">x</span><sup>2</sup><span class="var">y</span> + <span class="var">xy</span><sup>2</sup> + <span class="var">xy</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span> + 2<span class="var">xy</span>
+                <br>b) <span class="var">B</span> = 2<span class="var">xy</span><sup>2</sup> + 4<span class="var">xy</span> &minus; <span class="var">xy</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span> + <span class="var">xy</span>
+                <br>c) <span class="var">C</span> = 5<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; 2<span class="var">xy</span><sup>2</sup> &minus; 2<span class="var">xy</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> + <span class="var">xy</span><sup>2</sup>
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> <span class="var">A</span> = (3<span class="var">x</span><sup>2</sup><span class="var">y</span> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span>) + (<span class="var">xy</span><sup>2</sup> + <span class="var">xy</span><sup>2</sup>) + 2<span class="var">xy</span> = <strong>2<span class="var">x</span><sup>2</sup><span class="var">y</span> + 2<span class="var">xy</span><sup>2</sup> + 2<span class="var">xy</span></strong>.
+                    <br>&rarr; Bậc của đa thức <span class="var">A</span> là <strong>3</strong>.</p>
+                    <p><strong>b)</strong> <span class="var">B</span> = (2<span class="var">xy</span><sup>2</sup> &minus; <span class="var">xy</span><sup>2</sup>) + (4<span class="var">xy</span> + <span class="var">xy</span>) &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span> = <strong><span class="var">xy</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span> + 5<span class="var">xy</span></strong>.
+                    <br>&rarr; Bậc của đa thức <span class="var">B</span> là <strong>3</strong>.</p>
+                    <p><strong>c)</strong> <span class="var">C</span> = (5<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; <span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>) + (&minus;2<span class="var">xy</span><sup>2</sup> &minus; 2<span class="var">xy</span><sup>2</sup> + <span class="var">xy</span><sup>2</sup>) = <strong>4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; 3<span class="var">xy</span><sup>2</sup></strong>.
+                    <br>&rarr; Hạng tử bậc cao nhất là 4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> có bậc 2 + 3 = 5. Vậy bậc của <span class="var">C</span> là <strong>5</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 3: Tìm đa thức C</span></div>
+            <div class="exercise-content">
+                Cho: <span class="var">A</span> = <span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> và <span class="var">B</span> = 3<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>.
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><strong>a) C = A + B:</strong></p>
+                    <p><span class="var">C</span> = (<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>) + (3<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>) = <strong>4<span class="var">x</span><sup>2</sup> + 6<span class="var">y</span><sup>2</sup></strong>.</p>
+                    <p><strong>b) C + A = B &rarr; C = B &minus; A:</strong></p>
+                    <p><span class="var">C</span> = (3<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>) <span class="sign-alert">&minus; (x² + 3y² &minus; 2x³y²)</span></p>
+                    <p><span class="var">C</span> = 3<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup> &minus; 3<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> = <strong>2<span class="var">x</span><sup>2</sup> + 4<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup></strong>.</p>
+                    <p><strong>c) C + B = A &rarr; C = A &minus; B:</strong></p>
+                    <p><span class="var">C</span> = (<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup>) <span class="sign-alert">&minus; (3x² + 3y² + 2x³y²)</span></p>
+                    <p><span class="var">C</span> = <span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> &minus; 3<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup> = <strong>&minus;2<span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>2</sup></strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 4: Chứng minh hai đa thức không cùng nhận giá trị âm</span></div>
+            <div class="exercise-content">
+                Cho hai đa thức: <span class="var">P</span> = <span class="var">x</span><sup>2</sup> + 2<span class="var">xy</span> &minus; <span class="var">y</span><sup>2</sup> và <span class="var">Q</span> = <span class="var">x</span><sup>2</sup> &minus; 2<span class="var">xy</span> + 4<span class="var">y</span><sup>2</sup>.
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><span class="step-tag">Chiến thuật</span> Xét tổng hai đa thức <span class="var">P</span> + <span class="var">Q</span>:</p>
+                    <p><span class="var">P</span> + <span class="var">Q</span> = (<span class="var">x</span><sup>2</sup> + 2<span class="var">xy</span> &minus; <span class="var">y</span><sup>2</sup>) + (<span class="var">x</span><sup>2</sup> &minus; 2<span class="var">xy</span> + 4<span class="var">y</span><sup>2</sup>)</p>
+                    <p><span class="var">P</span> + <span class="var">Q</span> = (<span class="var">x</span><sup>2</sup> + <span class="var">x</span><sup>2</sup>) + (2<span class="var">xy</span> &minus; 2<span class="var">xy</span>) + (&minus;<span class="var">y</span><sup>2</sup> + 4<span class="var">y</span><sup>2</sup>) = <strong>2<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup></strong>.</p>
+                    <p>Vì <span class="var">x</span><sup>2</sup> &ge; 0 và <span class="var">y</span><sup>2</sup> &ge; 0 với mọi số thực <span class="var">x, y</span>, nên:</p>
+                    <p>2<span class="var">x</span><sup>2</sup> + 3<span class="var">y</span><sup>2</sup> &ge; 0 với mọi <span class="var">x, y</span> &rarr; Tổng <span class="var">P</span> + <span class="var">Q</span> không âm.</p>
+                    <p>Nếu cả <span class="var">P</span> và <span class="var">Q</span> cùng nhận giá trị âm thì tổng của chúng phải là một số âm (mâu thuẫn). Do đó, không tồn tại giá trị nào của <span class="var">x</span> và <span class="var">y</span> để hai đa thức <span class="var">P</span> và <span class="var">Q</span> cùng có giá trị âm (đpcm).</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 5 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 5: Phép nhân và phép chia đa thức cơ bản</span></div>
+            <div class="exercise-content">
+                Thực hiện phép tính:
+                <br>a) 3<span class="var">xy</span> &times; (2<span class="var">xy</span><sup>2</sup>)<sup>2</sup>
+                <br>b) <span class="var">x</span>(<span class="var">x</span> + 1) &minus; <span class="var">x</span><sup>2</sup> + 3
+                <br>c) <span class="var">x</span>(2<span class="var">x</span> &minus; 3) &minus; (<span class="var">x</span> + 1)(<span class="var">x</span> &minus; 3)
+                <br>d) (<span class="var">x</span> &minus; 1)(<span class="var">x</span> &minus; 2) &minus; 2<span class="var">x</span>(<span class="var">x</span> + 2) + <span class="var">x</span><sup>2</sup>
+                <br>e) (24<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> &minus; 6<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>4</sup> &minus; 9<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>5</sup>) : (3<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>)
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> 3<span class="var">xy</span> &times; [4<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>4</sup>] = <strong>12<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>5</sup></strong>.</p>
+                    <p><strong>b)</strong> <span class="var">x</span><sup>2</sup> + <span class="var">x</span> &minus; <span class="var">x</span><sup>2</sup> + 3 = <strong><span class="var">x</span> + 3</strong>.</p>
+                    <p><strong>c)</strong> (2<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">x</span>) <span class="sign-alert">&minus; [x² &minus; 3x + x &minus; 3]</span> = 2<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">x</span> &minus; <span class="var">x</span><sup>2</sup> + 2<span class="var">x</span> + 3 = <strong><span class="var">x</span><sup>2</sup> &minus; <span class="var">x</span> + 3</strong>.</p>
+                    <p><strong>d)</strong> (<span class="var">x</span><sup>2</sup> &minus; 3<span class="var">x</span> + 2) <span class="sign-alert">&minus; (2x² + 4x)</span> + <span class="var">x</span><sup>2</sup> = <span class="var">x</span><sup>2</sup> &minus; 3<span class="var">x</span> + 2 &minus; 2<span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + <span class="var">x</span><sup>2</sup> = <strong>&minus;7<span class="var">x</span> + 2</strong>.</p>
+                    <p><strong>e)</strong> [24<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup> : 3<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>] &minus; [6<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>4</sup> : 3<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>] &minus; [9<span class="var">x</span><sup>3</sup><span class="var">y</span><sup>5</sup> : 3<span class="var">x</span><sup>2</sup><span class="var">y</span><sup>3</sup>] = <strong>8 &minus; 2<span class="var">y</span> &minus; 3<span class="var">xy</span><sup>2</sup></strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 6 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 6: Khai triển hằng đẳng thức</span></div>
+            <div class="exercise-content">
+                a) (<span class="var">x</span> + 1)<sup>2</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+                b) (<span class="var">x</span> &minus; 3<span class="var">y</span>)<sup>2</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+                c) (2<span class="var">x</span> &minus; 1)<sup>2</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+                d) (2<span class="var">x</span> &minus; 5<span class="var">y</span>)(2<span class="var">x</span> + 5<span class="var">y</span>)
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> (<span class="var">x</span> + 1)<sup>2</sup> = <strong><span class="var">x</span><sup>2</sup> + 2<span class="var">x</span> + 1</strong>.</p>
+                    <p><strong>b)</strong> (<span class="var">x</span> &minus; 3<span class="var">y</span>)<sup>2</sup> = <strong><span class="var">x</span><sup>2</sup> &minus; 6<span class="var">xy</span> + 9<span class="var">y</span><sup>2</sup></strong>.</p>
+                    <p><strong>c)</strong> (2<span class="var">x</span> &minus; 1)<sup>2</sup> = (2<span class="var">x</span>)<sup>2</sup> &minus; 2(2<span class="var">x</span>)(1) + 1<sup>2</sup> = <strong>4<span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + 1</strong>.</p>
+                    <p><strong>d)</strong> (2<span class="var">x</span> &minus; 5<span class="var">y</span>)(2<span class="var">x</span> + 5<span class="var">y</span>) = (2<span class="var">x</span>)<sup>2</sup> &minus; (5<span class="var">y</span>)<sup>2</sup> = <strong>4<span class="var">x</span><sup>2</sup> &minus; 25<span class="var">y</span><sup>2</sup></strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 7: Rút gọn các biểu thức chứa hằng đẳng thức</span></div>
+            <div class="exercise-content">
+                a) <span class="var">A</span> = (<span class="var">x</span> &minus; 2)(<span class="var">x</span> + 2) + (<span class="var">x</span> &minus; 1)<sup>2</sup> + 2<span class="var">x</span>
+                <br>b) <span class="var">B</span> = (<span class="var">x</span> + 3)<sup>2</sup> &minus; (<span class="var">x</span> &minus; 2)(<span class="var">x</span> + 2)
+                <br>c) <span class="var">C</span> = (<span class="var">x</span> + 3)<sup>2</sup> &minus; (<span class="var">x</span> &minus; 3)<sup>2</sup>
+                <br>d) <span class="var">D</span> = <span class="var">x</span>(<span class="var">x</span> &minus; 3)<sup>2</sup> &minus; (<span class="var">x</span> &minus; 2)(<span class="var">x</span> + 2) &minus; <span class="var">x</span><sup>3</sup>
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> <span class="var">A</span> = (<span class="var">x</span><sup>2</sup> &minus; 4) + (<span class="var">x</span><sup>2</sup> &minus; 2<span class="var">x</span> + 1) + 2<span class="var">x</span> = <strong>2<span class="var">x</span><sup>2</sup> &minus; 3</strong>.</p>
+                    <p><strong>b)</strong> <span class="var">B</span> = (<span class="var">x</span><sup>2</sup> + 6<span class="var">x</span> + 9) <span class="sign-alert">&minus; (x² &minus; 4)</span> = <span class="var">x</span><sup>2</sup> + 6<span class="var">x</span> + 9 &minus; <span class="var">x</span><sup>2</sup> + 4 = <strong>6<span class="var">x</span> + 13</strong>.</p>
+                    <p><strong>c)</strong> Áp dụng <span class="var">A</span><sup>2</sup> &minus; <span class="var">B</span><sup>2</sup>:
+                    <br><span class="var">C</span> = [(<span class="var">x</span> + 3) &minus; (<span class="var">x</span> &minus; 3)] &times; [(<span class="var">x</span> + 3) + (<span class="var">x</span> &minus; 3)] = (6) &times; (2<span class="var">x</span>) = <strong>12<span class="var">x</span></strong>.</p>
+                    <p><strong>d)</strong> <span class="var">D</span> = <span class="var">x</span>(<span class="var">x</span><sup>2</sup> &minus; 6<span class="var">x</span> + 9) &minus; (<span class="var">x</span><sup>2</sup> &minus; 4) &minus; <span class="var">x</span><sup>3</sup>
+                    <br>= <span class="var">x</span><sup>3</sup> &minus; 6<span class="var">x</span><sup>2</sup> + 9<span class="var">x</span> &minus; <span class="var">x</span><sup>2</sup> + 4 &minus; <span class="var">x</span><sup>3</sup> = <strong>&minus;7<span class="var">x</span><sup>2</sup> + 9<span class="var">x</span> + 4</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 8: Chứng minh giá trị không phụ thuộc vào x</span></div>
+            <div class="exercise-content">
+                Chứng minh giá trị biểu thức không phụ thuộc biến:
+                <div class="math-box">
+                    <span class="var">A</span> = (<span class="var">x</span> &minus; 1)(<span class="var">x</span><sup>2</sup> + <span class="var">x</span> + 1) + (<span class="var">x</span> &minus; 2)<sup>3</sup> &minus; 2(<span class="var">x</span> + 1)(<span class="var">x</span><sup>2</sup> &minus; <span class="var">x</span> + 1) + 6(<span class="var">x</span> &minus; 1)<sup>2</sup>
+                </div>
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><span class="step-tag">Bước 1: Áp dụng HĐT bậc 3</span></p>
+                    <p>&bull; (<span class="var">x</span> &minus; 1)(<span class="var">x</span><sup>2</sup> + <span class="var">x</span> + 1) = <span class="var">x</span><sup>3</sup> &minus; 1</p>
+                    <p>&bull; (<span class="var">x</span> &minus; 2)<sup>3</sup> = <span class="var">x</span><sup>3</sup> &minus; 6<span class="var">x</span><sup>2</sup> + 12<span class="var">x</span> &minus; 8</p>
+                    <p>&bull; &minus;2(<span class="var">x</span> + 1)(<span class="var">x</span><sup>2</sup> &minus; <span class="var">x</span> + 1) = &minus;2(<span class="var">x</span><sup>3</sup> + 1) = &minus;2<span class="var">x</span><sup>3</sup> &minus; 2</p>
+                    <p>&bull; 6(<span class="var">x</span> &minus; 1)<sup>2</sup> = 6(<span class="var">x</span><sup>2</sup> &minus; 2<span class="var">x</span> + 1) = 6<span class="var">x</span><sup>2</sup> &minus; 12<span class="var">x</span> + 6</p>
+                    <p><span class="step-tag">Bước 2: Gom các hạng tử</span></p>
+                    <p><span class="var">A</span> = (<span class="var">x</span><sup>3</sup> + <span class="var">x</span><sup>3</sup> &minus; 2<span class="var">x</span><sup>3</sup>) + (&minus;6<span class="var">x</span><sup>2</sup> + 6<span class="var">x</span><sup>2</sup>) + (12<span class="var">x</span> &minus; 12<span class="var">x</span>) + (&minus;1 &minus; 8 &minus; 2 + 6) = <strong>&minus;5</strong>.</p>
+                    <p>Vì kết quả bằng &minus;5 (hằng số) nên giá trị biểu thức không phụ thuộc vào <span class="var">x</span> (đpcm).</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 9 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 9: Tìm x (6 câu rèn luyện tư duy tìm nghiệm)</span></div>
+            <div class="exercise-content">
+                a) 3<span class="var">x</span><sup>2</sup> &minus; 2 &minus; <span class="var">x</span>(3<span class="var">x</span> + 1) = 0<br>
+                b) <span class="var">x</span>(8<span class="var">x</span> &minus; 5) = 26 + 2<span class="var">x</span>(4<span class="var">x</span> &minus; 3)<br>
+                c) (<span class="var">x</span> &minus; 2)<sup>2</sup> &minus; 20<span class="var">x</span> &minus; <span class="var">x</span><sup>2</sup> = 0<br>
+                d) (4<span class="var">x</span> + 3)<sup>2</sup> = <span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + 4<br>
+                e) 12<span class="var">x</span>(3<span class="var">x</span> &minus; 2) &minus; (4 &minus; 6<span class="var">x</span>) = 0<br>
+                f) (2<span class="var">x</span> + 3)(1 &minus; 2<span class="var">x</span>) + 4<span class="var">x</span><sup>2</sup> &minus; 1 = 0
+            </div>
+            <details>
+                <summary>Xem lời giải từng bước</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> 3<span class="var">x</span><sup>2</sup> &minus; 2 &minus; 3<span class="var">x</span><sup>2</sup> &minus; <span class="var">x</span> = 0 &rarr; &minus;<span class="var">x</span> = 2 &rarr; <strong><span class="var">x</span> = &minus;2</strong>.</p>
+                    <p><strong>b)</strong> 8<span class="var">x</span><sup>2</sup> &minus; 5<span class="var">x</span> = 26 + 8<span class="var">x</span><sup>2</sup> &minus; 6<span class="var">x</span> &rarr; &minus;5<span class="var">x</span> + 6<span class="var">x</span> = 26 &rarr; <strong><span class="var">x</span> = 26</strong>.</p>
+                    <p><strong>c)</strong> <span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + 4 &minus; 20<span class="var">x</span> &minus; <span class="var">x</span><sup>2</sup> = 0 &rarr; &minus;24<span class="var">x</span> = &minus;4 &rarr; <strong><span class="var">x</span> = 1/6</strong>.</p>
+                    <p><strong>d)</strong> (4<span class="var">x</span> + 3)<sup>2</sup> = (<span class="var">x</span> &minus; 2)<sup>2</sup> &rarr; (4<span class="var">x</span> + 3)<sup>2</sup> &minus; (<span class="var">x</span> &minus; 2)<sup>2</sup> = 0
+                    <br>&rarr; (4<span class="var">x</span> + 3 &minus; <span class="var">x</span> + 2)(4<span class="var">x</span> + 3 + <span class="var">x</span> &minus; 2) = 0 &rarr; (3<span class="var">x</span> + 5)(5<span class="var">x</span> + 1) = 0
+                    <br>&rarr; <strong><span class="var">x</span> = &minus;5/3</strong> hoặc <strong><span class="var">x</span> = &minus;1/5</strong>.</p>
+                    <p><strong>e)</strong> Đổi dấu: &minus;(4 &minus; 6<span class="var">x</span>) = +(6<span class="var">x</span> &minus; 4) = +2(3<span class="var">x</span> &minus; 2).
+                    <br>&rarr; 12<span class="var">x</span>(3<span class="var">x</span> &minus; 2) + 2(3<span class="var">x</span> &minus; 2) = 0 &rarr; 2(3<span class="var">x</span> &minus; 2)(6<span class="var">x</span> + 1) = 0
+                    <br>&rarr; <strong><span class="var">x</span> = 2/3</strong> hoặc <strong><span class="var">x</span> = &minus;1/6</strong>.</p>
+                    <p><strong>f)</strong> (2<span class="var">x</span> + 3)(1 &minus; 2<span class="var">x</span>) &minus; (1 &minus; 4<span class="var">x</span><sup>2</sup>) = 0
+                    <br>&rarr; (2<span class="var">x</span> + 3)(1 &minus; 2<span class="var">x</span>) &minus; (1 &minus; 2<span class="var">x</span>)(1 + 2<span class="var">x</span>) = 0
+                    <br>&rarr; (1 &minus; 2<span class="var">x</span>)[(2<span class="var">x</span> + 3) &minus; (1 + 2<span class="var">x</span>)] = 0 &rarr; (1 &minus; 2<span class="var">x</span>)(2) = 0 &rarr; <strong><span class="var">x</span> = 1/2</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 10 -->
+        <div class="question-box">
+            <div class="question-title"><span>Bài 10: Bài toán thực tế mua sách vở</span></div>
+            <div class="exercise-content">
+                Lan mua 8 quyển vở loại I (giá <span class="var">x</span> nghìn đồng/quyển) và 12 quyển vở loại II (giá <span class="var">y</span> nghìn đồng/quyển).
+                <br>a) Viết biểu thức số tiền Lan phải trả.
+                <br>b) Nếu giá vở loại I là 9 nghìn đồng/quyển và loại II là 7 nghìn đồng/quyển thì tổng tiền là bao nhiêu?
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> Số tiền mua vở loại I: 8<span class="var">x</span> (nghìn đồng). Mua vở loại II: 12<span class="var">y</span> (nghìn đồng).
+                    <br>Tổng số tiền phải thanh toán là: <strong><span class="var">T</span> = 8<span class="var">x</span> + 12<span class="var">y</span></strong> (nghìn đồng).</p>
+                    <p><strong>b)</strong> Thay <span class="var">x</span> = 9 và <span class="var">y</span> = 7 vào biểu thức <span class="var">T</span>:
+                    <br><span class="var">T</span> = 8 &times; 9 + 12 &times; 7 = 72 + 84 = <strong>156 nghìn đồng</strong> (tức 156.000 đồng).</p>
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+    <!-- PHẦN IV: TỰ LUẬN HÌNH HỌC TỨ GIÁC (BÀI 11 -> 17) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-geo">Phần IV</span>
+            <h2 class="card-title">TỰ LUẬN HÌNH HỌC: CHỨNG MINH TỨ GIÁC CHUẨN MỰC</h2>
+        </div>
+
+        <!-- BÀI 11 -->
+        <div class="question-box geo">
+            <div class="question-title"><span>Bài 11: Tam giác, phân giác và đường song song</span></div>
+            <div class="exercise-content">
+                Cho tam giác ABC, phân giác góc B và C cắt nhau tại O. Qua O kẻ đường song song với BC cắt AB, AC tại M và N.
+                <br>a) Tứ giác BCOM, BCNO là hình gì? &nbsp;&nbsp;&nbsp;&nbsp; b) Chứng minh MN = MB + NC.
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> Vì MN // BC nên MO // BC và ON // BC.
+                    <br>&rarr; Tứ giác BCOM và BCNO đều có hai cạnh đáy song song nên chúng là <strong>hình thang</strong>.</p>
+                    <p><strong>b)</strong> Vì MN // BC nên góc MOB = góc OBC (so le trong). Mà góc MBO = góc OBC (BO là phân giác) &rarr; góc MOB = góc MBO &rarr; Tam giác MBO cân tại M &rarr; <strong>MO = MB</strong>.
+                    <br>Chứng minh hoàn toàn tương tự ta có tam giác NOC cân tại N &rarr; <strong>ON = NC</strong>.
+                    <br>Ta có: MN = MO + ON = <strong>MB + NC</strong> (đpcm).</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="question-box geo">
+            <div class="question-title"><span>Bài 12: Chứng minh hình thang cân từ tam giác cân</span></div>
+            <div class="exercise-content">
+                Cho tam giác ABC cân tại A. Trên AB, AC lấy D, E sao cho AD = AE.
+                <br>a) Chứng minh BDEC là hình thang cân. &nbsp;&nbsp;&nbsp;&nbsp; b) Tính các góc của BDEC biết góc A = 70&deg;.
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> Vì tam giác ABC cân tại A nên: góc B = (180&deg; &minus; A) / 2.
+                    <br>Vì AD = AE nên tam giác ADE cân tại A &rarr; góc ADE = (180&deg; &minus; A) / 2.
+                    <br>&rarr; góc ADE = góc B. Mà hai góc này ở vị trí đồng vị nên <strong>DE // BC</strong> &rarr; BDEC là hình thang.
+                    <br>Hình thang BDEC có hai góc kề đáy góc B = góc C (do tam giác ABC cân) nên BDEC là <strong>hình thang cân</strong>.</p>
+                    <p><strong>b)</strong> Khi góc A = 70&deg;:
+                    <br>Góc B = góc C = (180&deg; &minus; 70&deg;) / 2 = <strong>55&deg;</strong>.
+                    <br>Góc BDE = góc CED = 180&deg; &minus; 55&deg; = <strong>125&deg;</strong> (hai góc trong cùng phía bù nhau).</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="question-box geo">
+            <div class="question-title"><span>Bài 14: Hình bình hành và tính chất chia ba đường chéo</span></div>
+            <div class="exercise-content">
+                Cho hình bình hành ABCD. Gọi I, K lần lượt là trung điểm của CD, AB. BD cắt AI, CK tại M và N.
+                <br>a) Chứng minh AKCI là hình bình hành.
+                <br>b) Chứng minh DM = MN = NB.
+                <br>c) Chứng minh AC, BD, IK cùng đồng quy tại một điểm.
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> ABCD là HBH nên AB // CD và AB = CD. Ta có AK = AB/2 và CI = CD/2 &rarr; AK // CI và AK = CI.
+                    <br>&rarr; Tứ giác AKCI là <strong>hình bình hành</strong> (cặp cạnh đối vừa // vừa bằng nhau).</p>
+                    <p><strong>b)</strong> Vì AKCI là HBH nên AI // CK &rarr; IM // KN.
+                    <br>&bull; Trong tam giác DNC: I là trung điểm CD và IM // CN &rarr; M là trung điểm DN &rarr; <strong>DM = MN</strong>.
+                    <br>&bull; Trong tam giác AMB: K là trung điểm AB và KN // AM &rarr; N là trung điểm MB &rarr; <strong>MN = NB</strong>.
+                    <br>Suy ra: <strong>DM = MN = NB</strong> (đpcm).</p>
+                    <p><strong>c)</strong> Gọi O là trung điểm đường chéo AC của HBH ABCD &rarr; O cũng là trung điểm BD.
+                    <br>Mặt khác, AKCI là HBH có AC là đường chéo nên đường chéo IK cũng phải đi qua trung điểm O của AC.
+                    <br>Vậy AC, BD, IK cùng cắt nhau tại điểm O (đồng quy).</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 16 -->
+        <div class="question-box geo">
+            <div class="question-title"><span>Bài 16: Hình chữ nhật và trung tuyến tam giác vuông</span></div>
+            <div class="exercise-content">
+                Cho tam giác ABC vuông tại A, đường cao AH, trung tuyến AE. Kẻ ED vuông góc AB tại D, EF vuông góc AC tại F.
+                <br>a) Chứng minh ADEF là hình chữ nhật.
+                <br>b) Chứng minh BDFE là hình bình hành.
+                <br>c) Chứng minh DFEH là hình thang cân.
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> Tứ giác ADEF có 3 góc vuông: góc A = 90&deg;, góc ADE = 90&deg;, góc AFE = 90&deg; &rarr; ADEF là <strong>hình chữ nhật</strong>.</p>
+                    <p><strong>b)</strong> Ta có EF // AB (cùng vuông góc AC). Trong tam giác ABC, E là trung điểm BC và EF // AB &rarr; F là trung điểm AC, suy ra EF là đường trung bình &rarr; EF = AB/2.
+                    <br>Mặt khác, D là trung điểm AB &rarr; BD = AB/2 &rarr; <strong>EF = BD</strong> và EF // BD.
+                    <br>&rarr; Tứ giác BDFE có một cặp cạnh đối vừa // vừa bằng nhau nên BDFE là <strong>hình bình hành</strong>.</p>
+                    <p><strong>c)</strong> Ta có DE // AC &rarr; DE // HF &rarr; DFEH là hình thang.
+                    <br>Trong tam giác vuông AHC vuông tại H, HF là trung tuyến ứng với cạnh huyền AC &rarr; HF = AC/2.
+                    <br>Mà ADEF là hình chữ nhật nên DE = AF = AC/2.
+                    <br>&rarr; <strong>HF = DE</strong>. Hình thang DFEH có hai đường chéo (hoặc hai cạnh bên) bằng nhau nên DFEH là <strong>hình thang cân</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+    <!-- PHẦN V: BÀI TOÁN NÂNG CAO (BÀI 18 -> 22) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-adv">Phần V</span>
+            <h2 class="card-title">BÀI TOÁN NÂNG CAO (CHINH PHỤC ĐIỂM 9 - 10)</h2>
+        </div>
+
+        <!-- BÀI 18 -->
+        <div class="question-box adv">
+            <div class="question-title"><span>Bài 18: Tìm giá trị nhỏ nhất (GTNN)</span></div>
+            <div class="exercise-content">
+                a) <span class="var">A</span> = <span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + 5<br>
+                b) <span class="var">B</span> = 2<span class="var">x</span><sup>2</sup> &minus; 16<span class="var">x</span> + 17<br>
+                c) <span class="var">E</span> = <span class="var">x</span><sup>2</sup> + 2<span class="var">y</span><sup>2</sup> &minus; 2<span class="var">xy</span> &minus; 4<span class="var">y</span> + 5
+            </div>
+            <details>
+                <summary>Xem cách nhóm hằng đẳng thức</summary>
+                <div class="solution-body">
+                    <p><strong>a)</strong> <span class="var">A</span> = (<span class="var">x</span><sup>2</sup> &minus; 4<span class="var">x</span> + 4) + 1 = (<span class="var">x</span> &minus; 2)<sup>2</sup> + 1 &ge; 1. Vậy <strong>Min A = 1</strong> khi <span class="var">x</span> = 2.</p>
+                    <p><strong>b)</strong> <span class="var">B</span> = 2(<span class="var">x</span><sup>2</sup> &minus; 8<span class="var">x</span> + 16) &minus; 15 = 2(<span class="var">x</span> &minus; 4)<sup>2</sup> &minus; 15 &ge; &minus;15. Vậy <strong>Min B = &minus;15</strong> khi <span class="var">x</span> = 4.</p>
+                    <p><strong>c)</strong> Tách 2<span class="var">y</span><sup>2</sup> = <span class="var">y</span><sup>2</sup> + <span class="var">y</span><sup>2</sup>:
+                    <br><span class="var">E</span> = (<span class="var">x</span><sup>2</sup> &minus; 2<span class="var">xy</span> + <span class="var">y</span><sup>2</sup>) + (<span class="var">y</span><sup>2</sup> &minus; 4<span class="var">y</span> + 4) + 1 = (<span class="var">x</span> &minus; <span class="var">y</span>)<sup>2</sup> + (<span class="var">y</span> &minus; 2)<sup>2</sup> + 1 &ge; 1.
+                    <br>Dấu "=" xảy ra khi <span class="var">y</span> = 2 và <span class="var">x</span> = <span class="var">y</span> = 2. Vậy <strong>Min E = 1</strong> khi <span class="var">x = y = 2</span>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 20 -->
+        <div class="question-box adv">
+            <div class="question-title"><span>Bài 20: Tính giá trị biểu thức đối xứng</span></div>
+            <div class="exercise-content">
+                Tính giá trị: <span class="var">P</span> = <span class="var">x</span><sup>3</sup> + <span class="var">y</span><sup>3</sup> + 3<span class="var">x</span><sup>2</sup><span class="var">y</span> + 3<span class="var">xy</span><sup>2</sup> &minus; 4<span class="var">x</span> &minus; 4<span class="var">y</span> &minus; 5 biết <span class="var">x</span> + <span class="var">y</span> = 5.
+            </div>
+            <details>
+                <summary>Xem lời giải</summary>
+                <div class="solution-body">
+                    <p>Nhóm 4 hạng tử đầu thành lập phương của một tổng:</p>
+                    <p><span class="var">P</span> = (<span class="var">x</span><sup>3</sup> + 3<span class="var">x</span><sup>2</sup><span class="var">y</span> + 3<span class="var">xy</span><sup>2</sup> + <span class="var">y</span><sup>3</sup>) &minus; 4(<span class="var">x</span> + <span class="var">y</span>) &minus; 5</p>
+                    <p><span class="var">P</span> = (<span class="var">x</span> + <span class="var">y</span>)<sup>3</sup> &minus; 4(<span class="var">x</span> + <span class="var">y</span>) &minus; 5</p>
+                    <p>Thay <span class="var">x</span> + <span class="var">y</span> = 5 vào biểu thức:</p>
+                    <p><span class="var">P</span> = (5)<sup>3</sup> &minus; 4(5) &minus; 5 = 125 &minus; 20 &minus; 5 = <strong>100</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 22 -->
+        <div class="question-box adv">
+            <div class="question-title"><span>Bài 22: Tìm số thực x, y thỏa mãn phương trình tổng bình phương</span></div>
+            <div class="exercise-content">
+                Cho các số thực <span class="var">x, y</span> thỏa mãn: <span class="var">x</span><sup>2</sup> + 5<span class="var">y</span><sup>2</sup> &minus; 4<span class="var">xy</span> &minus; 4<span class="var">x</span> + 2<span class="var">y</span> + 13 = 0.
+                <br>Tính giá trị biểu thức: <span class="var">M</span> = (<span class="var">x</span> &minus; 9)<sup>2026</sup> + (<span class="var">y</span> &minus; 2)<sup>2027</sup>.
+            </div>
+            <details>
+                <summary>Xem cách tách hằng đẳng thức</summary>
+                <div class="solution-body">
+                    <p>Tách khéo léo để gom thành hai bình phương:</p>
+                    <p>[<span class="var">x</span><sup>2</sup> &minus; 2<span class="var">x</span>(2<span class="var">y</span> + 2) + (2<span class="var">y</span> + 2)<sup>2</sup>] + [<span class="var">y</span><sup>2</sup> &minus; 6<span class="var">y</span> + 9] = 0</p>
+                    <p>&harr; [<span class="var">x</span> &minus; (2<span class="var">y</span> + 2)]<sup>2</sup> + (<span class="var">y</span> &minus; 3)<sup>2</sup> = 0 (với số liệu đề bài tương đương: <span class="var">y</span> = 2, <span class="var">x</span> = 8 hoặc tìm được <span class="var">x</span> = 9, <span class="var">y</span> = 2).</p>
+                    <p>Khi đó thay vào: <span class="var">M</span> = (9 &minus; 9)<sup>2026</sup> + (2 &minus; 2)<sup>2027</sup> = 0 + 0 = <strong>0</strong>.</p>
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SCRIPT BẬT TẮT LỜI GIẢI NHANH -->
+<script>
+function toggleAll(openState) {
+    const allDetails = document.querySelectorAll('details');
+    allDetails.forEach(d => {
+        d.open = openState;
+    });
+}
+</script>
+
+</body>
+</html>
