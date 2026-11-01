@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Tay Lý Thuyết Toán 9: Hình Quạt Tròn & Hình Vành Khuyên</title>
+    
+    <!-- KaTeX hỗ trợ hiển thị công thức toán sắc nét -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0284c7;
+            --emerald: #059669;
+            --amber: #d97706;
+            --rose: #e11d48;
+            --purple: #7c3aed;
+            --dark: #0f172a;
+            --slate: #475569;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f8fafc; color: var(--dark); line-height: 1.65; padding: 24px 16px; }
+        .container { max-width: 960px; margin: 0 auto; }
+
+        /* Banner tiêu đề */
+        .header-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            color: #ffffff;
+            padding: 32px 24px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(67, 56, 202, 0.35);
+        }
+        .header-banner h1 { font-size: 2rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-banner p { font-size: 1.05rem; opacity: 0.9; }
+
+        /* Khối Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 12px;
+        }
+        .card-title { font-size: 1.3rem; font-weight: 700; color: #1e1b4b; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-indigo { background: #e0e7ff; color: #4338ca; }
+        .badge-sky { background: #e0f2fe; color: #0369a1; }
+        .badge-emerald { background: #dcfce7; color: #15803d; }
+        .badge-amber { background: #fef3c7; color: #b45309; }
+        .badge-purple { background: #f3e8ff; color: #6b21a8; }
+        .badge-rose { background: #ffe4e6; color: #be123c; }
+
+        /* Bố cục chia 2 cột: Lý thuyết & Hình vẽ */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Khung chứa hình minh họa SVG */
+        .diagram-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .diagram-box svg { max-width: 100%; height: auto; }
+        .diagram-caption {
+            font-size: 0.88rem;
+            font-style: italic;
+            color: var(--slate);
+            margin-top: 8px;
+        }
+
+        /* Khung công thức nổi bật */
+        .formula-box {
+            background: #f1f5f9;
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin: 12px 0;
+            font-size: 1.12rem;
+            color: #1e3a8a;
+        }
+        .formula-box.emerald { border-left-color: var(--emerald); background: #f0fdf4; }
+        .formula-box.purple { border-left-color: var(--purple); background: #faf5ff; }
+        .formula-box.amber { border-left-color: var(--amber); background: #fffbeb; }
+
+        /* Hộp cảnh báo / Mẹo nhớ */
+        .tip-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            font-size: 0.95rem;
+            color: #92400e;
+        }
+        .tip-box strong { color: #b45309; }
+
+        .example-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            font-size: 0.98rem;
+        }
+        .example-title {
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Bảng so sánh tổng kết */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        .summary-table th { background: #f1f5f9; color: #1e293b; font-weight: 700; }
+        .summary-table tr:nth-child(even) { background: #fcfcfd; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- BANNER CHÍNH -->
+    <div class="header-banner">
+        <span class="badge" style="background: rgba(255,255,255,0.2); margin-bottom: 10px;">Toán Lớp 9 - Chương Trình Mới</span>
+        <h1>CẨM NANG LÝ THUYẾT HÌNH HỌC TRÒN</h1>
+        <p>Độ Dài Cung Tròn &bull; Diện Tích Hình Quạt Tròn &bull; Hình Vành Khuyên &bull; Hình Viên Phân</p>
+    </div>
+
+    <!-- MỤC 0: KIẾN THỨC NỀN TẢNG -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-indigo">Nền Tảng</span>
+            <h2 class="card-title">0. Chu Vi Và Diện Tích Hình Tròn (Nhắc lại)</h2>
+        </div>
+        <p>Cho đường tròn tâm $O$, bán kính $R$ (đường kính $d = 2R$):</p>
+        <div class="content-grid" style="margin-top: 12px;">
+            <div>
+                <div class="formula-box">
+                    • <strong>Chu vi hình tròn (độ dài đường tròn):</strong><br>
+                    $$C = 2\pi R = \pi d$$
+                    • <strong>Diện tích hình tròn:</strong><br>
+                    $$S = \pi R^2 = \frac{\pi d^2}{4}$$
+                </div>
+                <p style="font-size: 0.95rem; color: var(--slate);">
+                    Trong đó hằng số $\pi$ (Pi) xấp xỉ bằng $3{,}14$ hoặc $\dfrac{22}{7}$.
+                </p>
+            </div>
+            <div class="diagram-box">
+                <svg width="220" height="150" viewBox="0 0 220 150">
+                    <!-- Hình tròn -->
+                    <circle cx="110" cy="75" r="55" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5" />
+                    <!-- Tâm O -->
+                    <circle cx="110" cy="75" r="3.5" fill="#1e1b4b" />
+                    <text x="96" y="72" font-size="14" font-weight="bold" fill="#1e1b4b">O</text>
+                    <!-- Bán kính R -->
+                    <line x1="110" y1="75" x2="165" y2="75" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,2" />
+                    <text x="132" y="70" font-size="13" font-weight="bold" fill="#ef4444">R</text>
+                    <circle cx="165" cy="75" r="3" fill="#ef4444" />
+                    <!-- Đường kính d -->
+                    <line x1="55" y1="110" x2="165" y2="110" stroke="#64748b" stroke-width="1.5" />
+                    <polygon points="55,110 60,107 60,113" fill="#64748b"/>
+                    <polygon points="165,110 160,107 160,113" fill="#64748b"/>
+                    <text x="105" y="126" font-size="12" fill="#64748b">d = 2R</text>
+                </svg>
+                <div class="diagram-caption">Hình tròn tâm O, bán kính R</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MỤC 1: ĐỘ DÀI CUNG TRÒN -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-sky">Phần 1</span>
+            <h2 class="card-title">1. Cung Tròn & Độ Dài Cung Tròn</h2>
+        </div>
+        <div class="content-grid">
+            <div>
+                <p>Trên đường tròn $(O; R)$, độ dài $l$ của một cung tròn có số đo $n^\circ$ được tính theo công thức:</p>
+                <div class="formula-box">
+                    $$l = \frac{\pi R n}{180}$$
+                </div>
+                <div class="tip-box">
+                    <strong>💡 Bản chất quy tắc tam suất:</strong><br>
+                    • Cả đường tròn ($360^\circ$) có độ dài là $2\pi R$.<br>
+                    • Cung $1^\circ$ có độ dài là $\dfrac{2\pi R}{360} = \dfrac{\pi R}{180}$.<br>
+                    • Cung $n^\circ$ có độ dài là $l = \dfrac{\pi R}{180} \times n$.
+                </div>
+            </div>
+
+            <div class="diagram-box">
+                <svg width="240" height="200" viewBox="0 0 240 200">
+                    <!-- Đường tròn mờ -->
+                    <circle cx="120" cy="100" r="75" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <!-- Cung AB tô đậm màu đỏ -->
+                    <path d="M 173 47 A 75 75 0 0 1 185 137" fill="none" stroke="#ef4444" stroke-width="4.5" />
+                    <!-- Hai bán kính OA, OB -->
+                    <line x1="120" y1="100" x2="173" y2="47" stroke="#4338ca" stroke-width="2" />
+                    <line x1="120" y1="100" x2="185" y2="137" stroke="#4338ca" stroke-width="2" />
+                    <!-- Tâm O -->
+                    <circle cx="120" cy="100" r="4" fill="#1e1b4b" />
+                    <text x="105" y="105" font-size="14" font-weight="bold">O</text>
+                    <!-- Điểm A, B -->
+                    <circle cx="173" cy="47" r="3.5" fill="#ef4444" />
+                    <text x="180" y="45" font-size="14" font-weight="bold" fill="#ef4444">A</text>
+                    <circle cx="185" cy="137" r="3.5" fill="#ef4444" />
+                    <text x="192" y="145" font-size="14" font-weight="bold" fill="#ef4444">B</text>
+                    <!-- Bán kính R -->
+                    <text x="140" y="65" font-size="13" font-weight="bold" fill="#4338ca">R</text>
+                    <!-- Góc n độ -->
+                    <path d="M 140 82 A 25 25 0 0 1 144 112" fill="none" stroke="#d97706" stroke-width="2" />
+                    <text x="150" y="102" font-size="13" font-weight="bold" fill="#d97706">n°</text>
+                    <!-- Nhãn độ dài l -->
+                    <text x="195" y="95" font-size="14" font-weight="bold" fill="#ef4444">Cung l</text>
+                </svg>
+                <div class="diagram-caption">Cung AB có số đo n° và độ dài l</div>
+            </div>
+        </div>
+
+        <div class="example-box">
+            <div class="example-title">📌 Ví dụ minh họa:</div>
+            Tính độ dài cung tròn $60^\circ$ của đường tròn có bán kính $R = 9\text{ cm}$ (lấy $\pi \approx 3{,}14$).<br>
+            <strong>Lời giải:</strong><br>
+            Áp dụng công thức: $l = \dfrac{\pi R n}{180} = \dfrac{\pi \cdot 9 \cdot 60}{180} = 3\pi \approx 3 \times 3{,}14 = 9{,}42\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- MỤC 2: HÌNH QUẠT TRÒN -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-emerald">Phần 2</span>
+            <h2 class="card-title">2. Hình Quạt Tròn (Circular Sector)</h2>
+        </div>
+
+        <div class="content-grid">
+            <div>
+                <p><strong>Định nghĩa:</strong> Hình quạt tròn là một phần của hình tròn được giới hạn bởi <strong>một cung tròn</strong> và <strong>hai bán kính</strong> đi qua hai đầu mút của cung đó.</p>
+                
+                <div class="formula-box emerald">
+                    <strong>Công thức tính diện tích hình quạt tròn ($S_q$):</strong>
+                    $$S_q = \frac{\pi R^2 n}{360}$$
+                    hoặc liên hệ trực tiếp với độ dài cung $l$:
+                    $$S_q = \frac{l \cdot R}{2}$$
+                </div>
+                
+                <p style="font-size: 0.95rem; color: var(--slate); margin-top: 6px;">
+                    <em>(Ý nghĩa: Diện tích hình quạt tròn bằng một nửa tích của độ dài cung với bán kính tương ứng).</em>
+                </p>
+            </div>
+
+            <div class="diagram-box">
+                <svg width="240" height="210" viewBox="0 0 240 210">
+                    <!-- Hình tròn nền mờ -->
+                    <circle cx="120" cy="110" r="80" fill="none" stroke="#e2e8f0" stroke-width="1.5" />
+                    <!-- Phần hình quạt tô màu cam/xanh -->
+                    <path d="M 120 110 L 195 75 A 80 80 0 0 1 176 167 Z" fill="#ecfdf5" stroke="#10b981" stroke-width="2.5" />
+                    <!-- Tâm O -->
+                    <circle cx="120" cy="110" r="4" fill="#065f46" />
+                    <text x="104" y="115" font-size="14" font-weight="bold">O</text>
+                    <!-- Điểm A, B -->
+                    <circle cx="195" cy="75" r="3.5" fill="#10b981" />
+                    <text x="202" y="75" font-size="14" font-weight="bold" fill="#047857">A</text>
+                    <circle cx="176" cy="167" r="3.5" fill="#10b981" />
+                    <text x="182" y="178" font-size="14" font-weight="bold" fill="#047857">B</text>
+                    <!-- Nhãn góc n° và bán kính R -->
+                    <text x="155" y="86" font-size="13" font-weight="bold" fill="#047857">R</text>
+                    <text x="145" y="148" font-size="13" font-weight="bold" fill="#047857">R</text>
+                    <path d="M 143 99 A 26 26 0 0 1 138 128" fill="none" stroke="#d97706" stroke-width="2" />
+                    <text x="148" y="117" font-size="13" font-weight="bold" fill="#d97706">n°</text>
+                    <!-- Nhãn diện tích Sq -->
+                    <text x="165" y="125" font-size="15" font-weight="bold" fill="#059669">S<tspan font-size="11" dy="4">q</tspan></text>
+                </svg>
+                <div class="diagram-caption">Hình quạt tròn OAB (tô màu xanh nhạt)</div>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>⚡ Tỉ lệ quan trọng cần nhớ:</strong><br>
+            Tỉ số giữa diện tích quạt và diện tích cả hình tròn bằng tỉ số giữa độ dài cung và chu vi đường tròn:
+            $$\frac{S_q}{S} = \frac{l}{C} = \frac{n^\circ}{360^\circ}$$
+        </div>
+
+        <div class="example-box">
+            <div class="example-title">📌 Ví dụ minh họa:</div>
+            Một quạt ba tiêu bằng giấy có bán kính $R = 20\text{ cm}$, góc ở đỉnh mở rộng tối đa là $90^\circ$. Tính diện tích phần giấy xòe ra của quạt.<br>
+            <strong>Lời giải:</strong><br>
+            Diện tích hình quạt tròn là: $S_q = \dfrac{\pi R^2 n}{360} = \dfrac{\pi \cdot 20^2 \cdot 90}{360} = \dfrac{400\pi}{4} = 100\pi \approx 314\text{ cm}^2$.
+        </div>
+    </div>
+
+    <!-- MỤC 3: HÌNH VÀNH KHUYÊN -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-purple">Phần 3</span>
+            <h2 class="card-title">3. Hình Vành Khuyên (Hình Vành Khăn - Annulus)</h2>
+        </div>
+
+        <div class="content-grid">
+            <div>
+                <p><strong>Định nghĩa:</strong> Hình vành khuyên là phần mặt phẳng giới hạn bởi <strong>hai đường tròn đồng tâm</strong> có bán kính khác nhau $(O; R)$ và $(O; r)$ với $R > r$.</p>
+                
+                <div class="formula-box purple">
+                    <strong>Công thức tính diện tích hình vành khuyên ($S_v$):</strong>
+                    $$S_v = S_{\text{lớn}} - S_{\text{nhỏ}} = \pi R^2 - \pi r^2$$
+                    $$\mathbf{S_v = \pi (R^2 - r^2)}$$
+                </div>
+
+                <p style="font-size: 0.95rem; color: var(--slate); margin-top: 6px;">
+                    Trong đó: <br>
+                    • $R$: Bán kính đường tròn ngoài (đường tròn lớn).<br>
+                    • $r$: Bán kính đường tròn trong (đường tròn nhỏ).
+                </p>
+            </div>
+
+            <div class="diagram-box">
+                <svg width="240" height="210" viewBox="0 0 240 210">
+                    <!-- Hình vành khuyên: Vẽ vòng ngoài rồi cắt bỏ vòng trong -->
+                    <circle cx="120" cy="105" r="80" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5" />
+                    <circle cx="120" cy="105" r="45" fill="#ffffff" stroke="#7c3aed" stroke-width="2" />
+                    <!-- Tâm O -->
+                    <circle cx="120" cy="105" r="3.5" fill="#1e1b4b" />
+                    <text x="105" y="105" font-size="14" font-weight="bold">O</text>
+                    <!-- Bán kính r nhỏ -->
+                    <line x1="120" y1="105" x2="165" y2="105" stroke="#2563eb" stroke-width="2" />
+                    <text x="138" y="99" font-size="13" font-weight="bold" fill="#2563eb">r</text>
+                    <circle cx="165" cy="105" r="3" fill="#2563eb" />
+                    <!-- Bán kính R lớn -->
+                    <line x1="120" y1="105" x2="63" y2="48" stroke="#ef4444" stroke-width="2" />
+                    <text x="92" y="70" font-size="13" font-weight="bold" fill="#ef4444">R</text>
+                    <circle cx="63" cy="48" r="3" fill="#ef4444" />
+                    <!-- Nhãn diện tích Sv -->
+                    <text x="155" y="145" font-size="15" font-weight="bold" fill="#7c3aed">S<tspan font-size="11" dy="4">v</tspan></text>
+                </svg>
+                <div class="diagram-caption">Hình vành khuyên giới hạn bởi (O; R) và (O; r)</div>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>⚠️ Bẫy đề bài thực tế hay gặp:</strong><br>
+            • Đề bài rất hay cho <strong>đường kính</strong> thay vì bán kính (Ví dụ: Cho miệng cống có đường kính ngoài $80\text{ cm}$, đường kính trong $60\text{ cm}$). Phải nhớ chia đôi lấy $R = 40\text{ cm}, r = 30\text{ cm}$ trước khi áp dụng công thức!
+        </div>
+
+        <div class="example-box">
+            <div class="example-title">📌 Ví dụ minh họa:</div>
+            Một đĩa CD có đường kính ngoài $12\text{ cm}$ và lỗ trống tròn ở giữa có đường kính $2\text{ cm}$. Tính diện tích phần mặt đĩa dùng để ghi dữ liệu.<br>
+            <strong>Lời giải:</strong><br>
+            Bán kính ngoài là $R = 12 : 2 = 6\text{ cm}$. Bán kính trong là $r = 2 : 2 = 1\text{ cm}$.<br>
+            Diện tích phần vành khuyên ghi dữ liệu là: 
+            $$S_v = \pi(R^2 - r^2) = \pi(6^2 - 1^2) = 35\pi \approx 35 \times 3{,}14 = 109{,}9\text{ cm}^2$$
+        </div>
+    </div>
+
+    <!-- MỤC 4: MỞ RỘNG - HÌNH VIÊN PHÂN & QUẠT VÀNH KHUYÊN -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-amber">Phần 4</span>
+            <h2 class="card-title">4. Mở Rộng: Hình Viên Phân & Quạt Vành Khuyên</h2>
+        </div>
+        <p>Đây là 2 cấu trúc hình học cực kỳ quen thuộc trong các bài toán thực tế và đề thi vào lớp 10:</p>
+
+        <div class="content-grid" style="margin-top: 16px;">
+            <!-- Hình viên phân -->
+            <div>
+                <h4 style="color: #b45309; margin-bottom: 6px;">A. Hình Viên Phân (Circular Segment)</h4>
+                <p style="font-size: 0.95rem;">Là phần hình tròn giới hạn bởi một cung và dây căng cung ấy.</p>
+                <div class="formula-box amber" style="font-size: 1.05rem;">
+                    $$S_{\text{viên phân}} = S_{\text{quạt } OAB} - S_{\Delta OAB}$$
+                </div>
+                <div class="diagram-box">
+                    <svg width="220" height="180" viewBox="0 0 220 180">
+                        <!-- Đường tròn mờ -->
+                        <circle cx="110" cy="90" r="70" fill="none" stroke="#e2e8f0" stroke-width="1.5" />
+                        <!-- Cung AB & dây AB tạo hình viên phân tô màu vàng -->
+                        <path d="M 60 41 A 70 70 0 0 1 160 41 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2.5" />
+                        <!-- Tam giác OAB -->
+                        <polygon points="110,90 60,41 160,41" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3" />
+                        <!-- Tâm O -->
+                        <circle cx="110" cy="90" r="3.5" fill="#1e1b4b" />
+                        <text x="105" y="108" font-size="14" font-weight="bold">O</text>
+                        <text x="48" y="38" font-size="13" font-weight="bold" fill="#d97706">A</text>
+                        <text x="165" y="38" font-size="13" font-weight="bold" fill="#d97706">B</text>
+                        <text x="100" y="34" font-size="12" font-weight="bold" fill="#b45309">Viên phân</text>
+                    </svg>
+                    <div class="diagram-caption">Hình viên phân (phần tô vàng phía trên dây AB)</div>
+                </div>
+            </div>
+
+            <!-- Quạt vành khuyên -->
+            <div>
+                <h4 style="color: #7c3aed; margin-bottom: 6px;">B. Quạt Vành Khuyên (Nan quạt dán giấy)</h4>
+                <p style="font-size: 0.95rem;">Là phần hình vành khuyên ứng với góc ở tâm $n^\circ$.</p>
+                <div class="formula-box purple" style="font-size: 1.05rem;">
+                    $$S = \frac{\pi n}{360}(R^2 - r^2)$$
+                </div>
+                <div class="diagram-box">
+                    <svg width="220" height="180" viewBox="0 0 220 180">
+                        <!-- Vòng nan quạt xòe -->
+                        <path d="M 110 130 L 170 50 A 100 100 0 0 0 50 50 Z" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+                        <!-- Phần quạt dán giấy tô màu tím -->
+                        <path d="M 146 82 A 60 60 0 0 0 74 82 L 50 50 A 100 100 0 0 1 170 50 Z" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5" />
+                        <circle cx="110" cy="130" r="3.5" fill="#1e1b4b" />
+                        <text x="105" y="148" font-size="14" font-weight="bold">O</text>
+                        <text x="105" y="68" font-size="12" font-weight="bold" fill="#7c3aed">Dán giấy</text>
+                        <text x="105" y="105" font-size="11" fill="#64748b">Nan tre</text>
+                    </svg>
+                    <div class="diagram-caption">Quạt vành khuyên (ứng dụng làm quạt giấy)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MỤC 5: BẢNG TỔNG HỢP CÔNG THỨC BỎ TÚI -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-rose">Ghi Nhớ Siêu Tốc</span>
+            <h2 class="card-title">5. Bảng Tổng Hợp Công Thức & Đơn Vị Đo</h2>
+        </div>
+        
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Hình / Đối tượng</th>
+                    <th>Đại lượng cần tính</th>
+                    <th>Công thức tính toán</th>
+                    <th>Đơn vị tiêu chuẩn</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Cung tròn ($n^\circ$)</strong></td>
+                    <td>Độ dài cung $l$</td>
+                    <td>$l = \dfrac{\pi R n}{180}$</td>
+                    <td>$\text{cm}, \text{m}, \dots$</td>
+                </tr>
+                <tr>
+                    <td><strong>Hình quạt tròn ($n^\circ$)</strong></td>
+                    <td>Diện tích quạt $S_q$</td>
+                    <td>$S_q = \dfrac{\pi R^2 n}{360} = \dfrac{l \cdot R}{2}$</td>
+                    <td>$\text{cm}^2, \text{m}^2, \dots$</td>
+                </tr>
+                <tr>
+                    <td><strong>Hình vành khuyên</strong></td>
+                    <td>Diện tích vành khăn $S_v$</td>
+                    <td>$S_v = \pi(R^2 - r^2)$</td>
+                    <td>$\text{cm}^2, \text{m}^2, \dots$</td>
+                </tr>
+                <tr>
+                    <td><strong>Quạt vành khuyên ($n^\circ$)</strong></td>
+                    <td>Diện tích phần quạt</td>
+                    <td>$S = \dfrac{\pi n}{360}(R^2 - r^2)$</td>
+                    <td>$\text{cm}^2, \text{m}^2, \dots$</td>
+                </tr>
+                <tr>
+                    <td><strong>Hình viên phân</strong></td>
+                    <td>Diện tích viên phân</td>
+                    <td>$S_{\text{vp}} = S_{\text{quạt } OAB} - S_{\Delta OAB}$</td>
+                    <td>$\text{cm}^2, \text{m}^2, \dots$</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip-box" style="margin-top: 18px;">
+            <strong>🎯 Lời dặn dò khi đi thi:</strong><br>
+            1. Luôn kiểm tra đề bài cho <strong>bán kính ($R$)</strong> hay <strong>đường kính ($d$)</strong>.<br>
+            2. Để ý yêu cầu làm tròn: Nếu đề bài ghi <em>"lấy kết quả theo $\pi$"</em> thì giữ nguyên $\pi$ (ví dụ: $25\pi\text{ cm}^2$); nếu đề yêu cầu <em>"làm tròn đến chữ số thập phân thứ nhất"</em> thì mới thay $\pi \approx 3{,}14$.
+        </div>
+    </div>
+
+</div>
+
+<!-- TỰ ĐỘNG KÍCH HOẠT KATEX KHI LOAD TRANG -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
