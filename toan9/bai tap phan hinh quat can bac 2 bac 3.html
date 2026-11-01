@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyên Đề Toán 9: Căn Bậc 2, Bậc 3 & Hình Quạt - Vành Khuyên</title>
+    
+    <!-- Tích hợp KaTeX chuẩn quốc tế: Dấu căn liền mạch 100%, không bao giờ bị đứt đoạn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
+            --pink-gradient: linear-gradient(135deg, #ec4899, #f43f5e);
+            --amber-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --emerald-gradient: linear-gradient(135deg, #10b981, #059669);
+            --sky-gradient: linear-gradient(135deg, #0284c7, #2563eb);
+            --purple-gradient: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f1f5f9; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 1020px; margin: 0 auto; }
+
+        /* Banner lớn sắc màu */
+        .hero-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #4338ca 100%);
+            color: #ffffff;
+            padding: 35px 25px;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.45);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner h1 { font-size: 2.1rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.92; }
+
+        .notice-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid #2563eb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 25px;
+            font-size: 0.98rem;
+            color: #1e40af;
+        }
+
+        /* Card chung */
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 14px;
+        }
+        .card-title { font-size: 1.35rem; font-weight: 700; color: #1e1b4b; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-tip { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-math { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-danger { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
+        .badge-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
+        /* Lưới mẹo học tập */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        @media (max-width: 860px) { .grid-3 { grid-template-columns: 1fr; } }
+
+        .tip-card {
+            border-radius: 14px;
+            padding: 18px;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .tip-card.pink { background: var(--pink-gradient); }
+        .tip-card.emerald { background: var(--emerald-gradient); }
+        .tip-card.purple { background: var(--purple-gradient); }
+        .tip-card h4 { font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tip-card p { font-size: 0.92rem; line-height: 1.6; opacity: 0.96; }
+
+        /* Khối hiển thị công thức toán học */
+        .math-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin: 10px 0;
+            font-size: 1.18rem;
+            color: #1e3a8a;
+            font-weight: 500;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+
+        /* Hộp bài tập */
+        .exercise-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            transition: all 0.25s ease;
+        }
+        .exercise-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+        }
+        .exercise-item.sky { border-left-color: #0284c7; }
+        .exercise-item.emerald { border-left-color: #10b981; }
+        .exercise-item.purple { border-left-color: #8b5cf6; }
+
+        .ex-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        .trap-tag {
+            display: inline-block;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* KHU VỰC GAME 3D HOẠT HÌNH */
+        .game-wrapper {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090919 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #6366f1;
+        }
+        #gameCanvas {
+            background: #050515;
+            border-radius: 14px;
+            display: block;
+            margin: 15px auto;
+            max-width: 100%;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .game-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+        }
+        .game-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+        }
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            max-width: 450px;
+            margin: 10px auto;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #a5f3fc;
+        }
+        .quiz-panel {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .opt-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .opt-btn:hover {
+            background: #334155;
+            border-color: #818cf8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 10px;">Toán Lớp 9 - Chương Trình Mới</span>
+        <h1>HỆ THỐNG LUYỆN TẬP CHUYÊN ĐỀ 8+ VÀ 9+</h1>
+        <p>Căn Thức Bậc Hai &bull; Căn Bậc Ba &bull; Hình Quạt Tròn & Hình Vành Khuyên</p>
+    </div>
+
+    <div class="notice-box">
+        <strong>📌 Chuẩn hoá toán học:</strong> Toàn bộ công thức và dấu căn trong phiếu học tập được kết xuất chuẩn xác theo chuẩn $\rm\LaTeX$ quốc tế. Dấu căn liền mạch 100%, thanh ngang vươn dài che phủ trọn vẹn biểu thức, chỉ số căn đặt ngay ngắn, giúp học sinh quan sát rõ ràng và làm bài hiệu quả nhất!
+    </div>
+
+    <!-- KHỐI 1: TÓM TẮT LÝ THUYẾT TRỌNG TÂM -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-tip">Cẩm Nang Kiến Thức</span>
+            <h2 class="card-title">1. Trọng Tâm Lý Thuyết Cần Ghi Nhớ Trước Khi Giải Bài</h2>
+        </div>
+
+        <div class="grid-3">
+            <!-- Lý thuyết 1 -->
+            <div class="tip-card pink">
+                <h4>✨ 1. Căn Bậc Hai & Căn Thức</h4>
+                <p>
+                    • $\sqrt{A}$ xác định khi và chỉ khi <strong>$A \ge 0$</strong>.<br>
+                    • Hằng đẳng thức cốt lõi: <strong>$\sqrt{A^2} = |A|$</strong>.<br>
+                    • Đưa thừa số ra ngoài căn:<br>
+                    $\sqrt{A^2 B} = |A|\sqrt{B}$ ($B \ge 0$).<br>
+                    • Trục căn thức ở mẫu:<br>
+                    $\dfrac{1}{\sqrt{A} \pm \sqrt{B}} = \dfrac{\sqrt{A} \mp \sqrt{B}}{A - B}$.
+                </p>
+            </div>
+
+            <!-- Lý thuyết 2 -->
+            <div class="tip-card emerald">
+                <h4>🔮 2. Căn Bậc Ba Của Số Thực</h4>
+                <p>
+                    • Căn bậc ba của mọi số thực $a$ luôn xác định (kể cả số âm, <strong>không cần điều kiện</strong> $\ge 0$).<br>
+                    • Tính chất: <strong>$(\sqrt[3]{a})^3 = \sqrt[3]{a^3} = a$</strong>.<br>
+                    • Với $a < 0$ thì $\sqrt[3]{a} < 0$ (Ví dụ: $\sqrt[3]{-27} = -3$).<br>
+                    • Khai căn một tích & thương:<br>
+                    $\sqrt[3]{a \cdot b} = \sqrt[3]{a} \cdot \sqrt[3]{b}$ ; $\sqrt[3]{\dfrac{a}{b}} = \dfrac{\sqrt[3]{a}}{\sqrt[3]{b}}$.
+                </p>
+            </div>
+
+            <!-- Lý thuyết 3 -->
+            <div class="tip-card purple">
+                <h4>📐 3. Cung, Hình Quạt & Vành Khuyên</h4>
+                <p>
+                    • <strong>Độ dài cung tròn</strong> $n^\circ$: $l = \dfrac{\pi R n}{180}$.<br>
+                    • <strong>Diện tích hình quạt tròn</strong>: <br>
+                    $S_q = \dfrac{\pi R^2 n}{360} = \dfrac{l \cdot R}{2}$.<br>
+                    • <strong>Diện tích hình vành khuyên</strong> ($R > r$):<br>
+                    <strong>$S_v = \pi(R^2 - r^2)$</strong>.<br>
+                    • <strong>Hình viên phân</strong>: $S_{\text{vp}} = S_{\text{quạt}} - S_{\text{tam giác}}$.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 2: HỆ THỐNG 15 BÀI TẬP ĐẶC SẮC -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Bộ Đề Tự Luyện</span>
+            <h2 class="card-title">2. Tuyển Tập 15 Bài Toán Chọn Lọc (3 Chủ Đề Trọng Tâm)</h2>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ 1: CĂN BẬC HAI ================= -->
+        <h3 style="color: #4f46e5; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #4f46e5; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề 1: Căn Bậc Hai & Rút Gọn Biểu Thức Chứa Căn (5 Bài)
+        </h3>
+
+        <!-- BÀI 1 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 1: Tính và rút gọn dạng căn lồng nhau</span>
+                <span class="badge badge-info">Thông hiểu</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị biểu thức số sau không dùng máy tính cầm tay:
+                <div class="math-box">
+                    $$A = \sqrt{11 - 6\sqrt{2}} + \sqrt{11 + 6\sqrt{2}} - \sqrt{19 - 6\sqrt{2}}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy thường gặp: Viết $11 - 6\sqrt{2} = 9 - 2 \cdot 3 \cdot \sqrt{2} + 2 = (3 - \sqrt{2})^2$. Khi bỏ căn phải có trị tuyệt đối: $|3 - \sqrt{2}| = 3 - \sqrt{2}$ vì $3 > \sqrt{2}$!</div>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 2: Rút gọn biểu thức chứa căn bậc hai tổng hợp</span>
+                <span class="badge badge-info">Vận dụng</span>
+            </div>
+            <div class="exercise-content">
+                Cho biểu thức:
+                <div class="math-box">
+                    $$P = \left( \frac{1}{\sqrt{x} - 1} - \frac{2\sqrt{x}}{x\sqrt{x} - x + \sqrt{x} - 1} \right) : \left( 1 - \frac{\sqrt{x}}{x + 1} \right) \quad (x \ge 0, \; x \ne 1)$$
+                </div>
+                a) Rút gọn biểu thức $P$.<br>
+                b) Tính giá trị của $P$ khi $x = 4 + 2\sqrt{3}$.
+            </div>
+            <div class="trap-tag">💡 Mẹo phân tích mẫu: $x\sqrt{x} - x + \sqrt{x} - 1 = x(\sqrt{x} - 1) + (\sqrt{x} - 1) = (x + 1)(\sqrt{x} - 1)$.</div>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 3: Giải phương trình chứa dấu căn bậc hai</span>
+                <span class="badge badge-info">Kỹ năng giải</span>
+            </div>
+            <div class="exercise-content">
+                Giải phương trình sau trên tập số thực:
+                <div class="math-box">
+                    $$\sqrt{4x - 8} - \frac{1}{3}\sqrt{9x - 18} + \sqrt{16x - 32} = 15$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy kinh điển: Phải đặt điều kiện $x \ge 2$ trước tiên! Sau đó đưa $4, 9, 16$ ra ngoài căn để đưa về đơn thức đồng dạng theo $\sqrt{x - 2}$.</div>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 4: Tìm giá trị x nguyên để biểu thức nhận giá trị nguyên</span>
+                <span class="badge badge-info">Vận dụng cao</span>
+            </div>
+            <div class="exercise-content">
+                Cho biểu thức:
+                <div class="math-box">
+                    $$M = \frac{2\sqrt{x} + 7}{\sqrt{x} + 2} \quad (x \ge 0)$$
+                </div>
+                a) Tìm các số nguyên $x$ để $M$ nhận giá trị là một số nguyên dương.<br>
+                b) Tìm số chính phương $x$ nhỏ nhất thỏa mãn $M < 3$.
+            </div>
+            <div class="trap-tag">💡 Mẹo tách phần nguyên: $M = \dfrac{2(\sqrt{x} + 2) + 3}{\sqrt{x} + 2} = 2 + \dfrac{3}{\sqrt{x} + 2}$. Vì $\sqrt{x} + 2 \ge 2$ nên ước số phù hợp chỉ có thể là 3!</div>
+        </div>
+
+        <!-- BÀI 5 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 5: Bài toán thực tế ứng dụng công thức căn thức bậc hai</span>
+                <span class="badge badge-info">Thực tế</span>
+            </div>
+            <div class="exercise-content">
+                Để đo vận tốc $v$ (dặm/giờ) của một chiếc ô tô trước khi phanh gấp, các giám định viên áp dụng công thức:
+                <div class="math-box">
+                    $$v = \sqrt{30 \cdot f \cdot d}$$
+                </div>
+                Trong đó $d$ là chiều dài vết trượt bánh xe trên mặt đường (tính bằng feet) và $f$ là hệ số ma sát giữa lốp xe với mặt đường.<br>
+                a) Trên một đoạn đường có $f = 0{,}8$, cảnh sát đo được vết trượt dài $d = 60\text{ feet}$. Tính vận tốc $v$ theo đơn vị km/h (biết 1 dặm $\approx 1{,}609\text{ km}$, làm tròn đến hàng đơn vị).<br>
+                b) Nếu đoạn đường quy định tốc độ tối đa là $50\text{ km/h}$ thì tài xế có vi phạm tốc độ hay không?
+            </div>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ 2: CĂN BẬC BA ================= -->
+        <h3 style="color: #059669; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #10b981; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề 2: Căn Bậc Ba & Các Bài Toán Biến Đổi Đại Số (5 Bài)
+        </h3>
+
+        <!-- BÀI 6: ĐÃ SỬA TRIỆT ĐỂ LỖI DẤU CĂN BỊ HỞ, ĐỨT ĐOẠN -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 6: Khai căn và tính toán giá trị căn bậc ba</span>
+                <span class="badge badge-success">Nhận biết</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị các biểu thức sau:
+                <div class="math-box">
+                    a) $$K = \sqrt[3]{125} - \sqrt[3]{-216} + \sqrt[3]{0{,}027}$$
+                    b) $$L = \frac{\sqrt[3]{135}}{\sqrt[3]{5}} - \sqrt[3]{54} \times \sqrt[3]{4}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Chú ý dấu: Thanh ngang bao trùm toàn bộ $(-216)$. Vì $(-6)^3 = -216$ nên $\sqrt[3]{-216} = -6$, do đó $-\sqrt[3]{-216} = -(-6) = +6$!</div>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 7: Rút gọn sử dụng hằng đẳng thức căn bậc ba</span>
+                <span class="badge badge-success">Thông hiểu</span>
+            </div>
+            <div class="exercise-content">
+                Thực hiện phép tính rút gọn:
+                <div class="math-box">
+                    $$H = \left( \sqrt[3]{25} - \sqrt[3]{10} + \sqrt[3]{4} \right) \left( \sqrt[3]{5} + \sqrt[3]{2} \right) - \sqrt[3]{8 \times 27}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Nhận diện hằng đẳng thức: Cụm đầu tiên có dạng $(a^2 - ab + b^2)(a + b) = a^3 + b^3$ với $a = \sqrt[3]{5}$ và $b = \sqrt[3]{2}$!</div>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 8: Giải phương trình chứa căn bậc ba</span>
+                <span class="badge badge-success">Vận dụng</span>
+            </div>
+            <div class="exercise-content">
+                Giải các phương trình sau:
+                <div class="math-box">
+                    a) $$\sqrt[3]{2x - 5} = -3$$
+                    b) $$\sqrt[3]{x^3 - 6x^2 + 12x - 8} = 2x - 5$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Gợi ý câu b: Biểu thức dưới dấu căn chính là hằng đẳng thức $(x - 2)^3$! Nhớ rằng $\sqrt[3]{(x - 2)^3} = x - 2$ (không cần trị tuyệt đối).</div>
+        </div>
+
+        <!-- BÀI 9 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 9: Rút gọn biểu thức vô tỉ chứa căn bậc ba kép</span>
+                <span class="badge badge-success">Vận dụng cao</span>
+            </div>
+            <div class="exercise-content">
+                Chứng minh rằng giá trị của số thực sau là một số tự nhiên:
+                <div class="math-box">
+                    $$x = \sqrt[3]{20 + 14\sqrt{2}} + \sqrt[3]{20 - 14\sqrt{2}}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Phương pháp kinh điển: Lập phương hai vế $x^3 = (a + b)^3 = a^3 + b^3 + 3ab(a + b)$ với $ab = \sqrt[3]{400 - 392} = \sqrt[3]{8} = 2$, đưa về $x^3 - 6x - 40 = 0$.</div>
+        </div>
+
+        <!-- BÀI 10 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 10: Toán ứng dụng thể tích hình khối với căn bậc ba</span>
+                <span class="badge badge-success">Thực tế</span>
+            </div>
+            <div class="exercise-content">
+                Một thùng chứa nước dạng hình lập phương không nắp có thể tích chứa được đúng $1{,}728\text{ m}^3$ nước.
+                <div class="math-box">
+                    $$V = a^3 = 1{,}728\text{ m}^3 \implies a = \sqrt[3]{1{,}728}$$
+                </div>
+                a) Tính độ dài cạnh trong $a$ của thùng nước bằng cách khai căn bậc ba.<br>
+                b) Người ta muốn sơn toàn bộ mặt ngoài của 4 mặt bên và đáy của thùng nước đó. Biết mỗi mét vuông sơn tiêu tốn hết 45.000 đồng tiền sơn. Tính tổng chi phí sơn thùng nước trên.
+            </div>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ 3: HÌNH QUẠT TRÒN & VÀNH KHUYÊN ================= -->
+        <h3 style="color: #7c3aed; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #8b5cf6; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề 3: Độ Dài Cung, Hình Quạt Tròn & Hình Vành Khuyên (5 Bài)
+        </h3>
+
+        <!-- BÀI 11 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 11: Tính độ dài cung tròn và diện tích hình quạt cơ bản</span>
+                <span class="badge badge-purple">Cơ bản</span>
+            </div>
+            <div class="exercise-content">
+                Cho hình tròn tâm $O$ có bán kính $R = 12\text{ cm}$.<br>
+                a) Tính độ dài cung tròn có số đo góc ở tâm bằng $75^\circ$ (lấy $\pi \approx 3{,}14$, làm tròn đến chữ số thập phân thứ nhất).<br>
+                b) Tính diện tích hình quạt tròn ứng với cung tròn đó.<br>
+                c) Nếu một hình quạt tròn khác của đường tròn này có diện tích bằng $24\pi\text{ cm}^2$ thì số đo góc ở tâm tương ứng là bao nhiêu độ?
+            </div>
+            <div class="trap-tag">💡 Mẹo nhớ: Diện tích hình quạt có thể tính nhanh theo độ dài cung: $S_q = \dfrac{1}{2} \cdot l \cdot R$.</div>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 12: Tính diện tích hình vành khuyên (bồn hoa đô thị)</span>
+                <span class="badge badge-purple">Hình vành khuyên</span>
+            </div>
+            <div class="exercise-content">
+                Một công viên trung tâm xây dựng một bồn hoa hình vành khuyên nằm giữa hai đường tròn đồng tâm. Đường tròn viền ngoài có đường kính $16\text{ m}$ và đường tròn viền trong có bán kính $5\text{ m}$.
+                <div class="math-box">
+                    $$S_v = \pi(R^2 - r^2)$$
+                </div>
+                a) Xác định bán kính lớn $R$ và bán kính nhỏ $r$ của bồn hoa.<br>
+                b) Tính diện tích mặt bằng bồn hoa trồng hoa (lấy $\pi \approx 3{,}14$).<br>
+                c) Người ta trồng một loại hoa với mật độ 12 cây/$\text{m}^2$. Hỏi cần mua khoảng bao nhiêu cây hoa để trồng phủ kín bồn hoa đó?
+            </div>
+            <div class="trap-tag">💡 Bẫy đọc đề: Đường tròn ngoài có ĐƯỜNG KÍNH $16\text{ m}$, do đó bán kính $R = 8\text{ m}$, không được nhầm $R = 16\text{ m}$!</div>
+        </div>
+
+        <!-- BÀI 13 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 13: Bài toán nan quạt xòe giấy truyền thống</span>
+                <span class="badge badge-purple">Toán thực tế</span>
+            </div>
+            <div class="exercise-content">
+                Để làm một chiếc quạt giấy xòe truyền thống, người thợ dùng các thanh nan tre dài $30\text{ cm}$ gắn vào một trục xoay chung. Khi mở xòe rộng tối đa, hai nan ngoài cùng tạo thành một góc bằng $150^\circ$. Người thợ dán giấy lên cả hai mặt của quạt, phần chân nan tre phía dưới không dán giấy dài $12\text{ cm}$ tính từ trục xoay.
+                <div class="math-box">
+                    $$R_{\text{lớn}} = 30\text{ cm}, \quad r_{\text{nhỏ}} = 12\text{ cm}, \quad n = 150^\circ$$
+                </div>
+                a) Tính diện tích dán giấy của một mặt quạt.<br>
+                b) Tính tổng diện tích giấy tối thiểu cần dùng để dán cả hai mặt của chiếc quạt (kết quả theo $\pi$ và làm tròn số thập phân thứ hai).
+            </div>
+            <div class="trap-tag">💡 Nhận diện hình học: Diện tích dán giấy một mặt là diện tích hình quạt vành khuyên: $S = \dfrac{\pi \cdot 150}{360}(30^2 - 12^2)$.</div>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 14: Bài toán bãi cỏ buộc vật nuôi (Góc hình quạt 90°)</span>
+                <span class="badge badge-purple">Hình quạt ứng dụng</span>
+            </div>
+            <div class="exercise-content">
+                Một khu vườn cỏ hình chữ nhật $ABCD$ có chiều dài $AB = 25\text{ m}$ và chiều rộng $AD = 15\text{ m}$. Một con dê được buộc bằng sợi dây thừng dài $10\text{ m}$ vào chiếc cọc đóng cố định tại góc sân $A$.
+                <div class="math-box">
+                    $$\text{Góc tại đỉnh hình chữ nhật: } \widehat{A} = 90^\circ$$
+                </div>
+                a) Con dê có thể ăn cỏ trên một vùng đất có dạng hình gì? Tính diện tích vùng cỏ con dê có thể ăn tới.<br>
+                b) Bác chủ muốn mở rộng vùng ăn cỏ của con dê bằng cách tăng chiều dài sợi dây thừng thêm $x\text{ mét}$ (với $10 + x \le 15\text{ m}$). Tìm $x$ để diện tích cỏ con dê ăn được tăng gấp đôi diện tích ban đầu.
+            </div>
+        </div>
+
+        <!-- BÀI 15 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 15: Tính diện tích hình viên phân & họa tiết quả trám</span>
+                <span class="badge badge-danger">Vận dụng cao</span>
+            </div>
+            <div class="exercise-content">
+                Một tấm bìa hình vuông $ABCD$ có độ dài cạnh bằng $10\text{ cm}$. Vẽ cung tròn tâm $B$ bán kính $10\text{ cm}$ và cung tròn tâm $D$ bán kính $10\text{ cm}$ cùng nối hai đỉnh $A$ và $C$. Hai cung này giao nhau tạo thành một hình cánh hoa (quả trám) bên trong hình vuông.<br>
+                a) Chứng minh diện tích hình cánh hoa quả trám đó được tính bằng công thức:
+                <div class="math-box" style="text-align: center; color: #7c3aed;">
+                    $$S_{\text{hoa}} = 2 \times S_{\text{quạt } 90^\circ} - S_{\text{hình vuông}}$$
+                </div>
+                b) Tính diện tích hình cánh hoa đó theo $\text{cm}^2$ (lấy $\pi \approx 3{,}1416$).
+            </div>
+            <div class="trap-tag">💡 Mẹo hình học: Mỗi cung tạo một hình quạt tròn 90°. Khi cộng diện tích 2 hình quạt lại, phần cánh hoa ở giữa bị tính 2 lần, do đó lấy tổng trừ đi diện tích hình vuông sẽ ra diện tích cánh hoa!</div>
+        </div>
+
+    </div>
+
+    <!-- KHỐI 3: TRÒ CHƠI TOÁN HỌC 3D VUI NHỘN (JAVASCRIPT & CANVAS) -->
+    <div class="game-wrapper">
+        <span class="badge badge-tip" style="margin-bottom: 8px;">Góc Giải Trí Tương Tác</span>
+        <h2 style="font-size: 1.6rem; color: #facc15;">🚀 THỬ THÁCH PHI THUYỀN TOÁN HỌC 3D 🛸</h2>
+        <p style="font-size: 0.95rem; color: #cbd5e1; max-width: 600px; margin: 0 auto;">
+            Điều khiển tinh thể 3D quay trong không gian! Trả lời đúng các câu hỏi toán 9 để thu thập năng lượng và kích hoạt động cơ ánh sáng!
+        </p>
+
+        <div class="game-stats">
+            <div>⭐ Điểm số: <span id="scoreDisplay" style="color: #4ade80;">0</span></div>
+            <div>🔥 Chuỗi đúng: <span id="streakDisplay" style="color: #f43f5e;">0</span></div>
+            <div>🏆 Câu hỏi: <span id="qIndexDisplay" style="color: #60a5fa;">1/6</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="600" height="260"></canvas>
+
+        <div class="quiz-panel">
+            <div id="quizQuestion" style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; min-height: 48px;">
+                Đang nạp câu hỏi năng lượng...
+            </div>
+            <div class="options-grid" id="optionsContainer">
+                <!-- Nút đáp án sẽ sinh tự động từ JS -->
+            </div>
+            <div id="quizFeedback" style="margin-top: 10px; font-weight: 700; font-size: 0.95rem; min-height: 24px;"></div>
+        </div>
+
+        <div class="game-controls">
+            <button class="game-btn" onclick="resetGame()">🔄 Chơi Lại Từ Đầu</button>
+            <button class="game-btn" style="background: var(--pink-gradient);" onclick="toggleSpinSpeed()">⚡ Tăng Tốc Xoay 3D</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT GAME LOGIC VỚI HÌNH HỌC 3D CANVAS & KHỞI TẠO KATEX -->
+<script>
+    // Khởi tạo KaTeX tự động quét và vẽ dấu căn chuẩn
+    function initMath() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        initMath();
+    });
+
+    // Canvas & 3D Cartoon Projection Engine
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let angleX = 0;
+    let angleY = 0;
+    let speed = 0.02;
+    let particles = [];
+    let celebrationParticles = [];
+
+    // Danh sách đỉnh của khối đa diện 3D (Khối 8 mặt đều Octahedron)
+    const vertices = [
+        {x: 0, y: -100, z: 0},
+        {x: 80, y: 0, z: 0},
+        {x: 0, y: 0, z: 80},
+        {x: -80, y: 0, z: 0},
+        {x: 0, y: 0, z: -80},
+        {x: 0, y: 100, z: 0}
+    ];
+
+    const edges = [
+        [0, 1], [0, 2], [0, 3], [0, 4],
+        [5, 1], [5, 2], [5, 3], [5, 4],
+        [1, 2], [2, 3], [3, 4], [4, 1]
+    ];
+
+    // Ngân hàng câu hỏi trắc nghiệm nhanh Toán 9 chuẩn LaTeX
+    const questions = [
+        {
+            q: "Tính giá trị căn thức: $\\sqrt{(\\sqrt{3} - 2)^2}$ bằng bao nhiêu?",
+            options: ["$\\sqrt{3} - 2$", "$2 - \\sqrt{3}$", "$-2 - \\sqrt{3}$", "$1$"],
+            answer: 1,
+            explain: "Chính xác! Vì $\\sqrt{3} < 2$ nên $|\\sqrt{3} - 2| = 2 - \\sqrt{3}$."
+        },
+        {
+            q: "Giá trị của căn bậc ba $\\sqrt[3]{-64}$ là:",
+            options: ["$-4$", "$4$", "Không xác định", "$8$"],
+            answer: 0,
+            explain: "Xuất sắc! Căn bậc ba của số âm luôn xác định và $(-4)^3 = -64$."
+        },
+        {
+            q: "Một hình quạt tròn bán kính $R = 6\\text{ cm}$ có số đo cung $60^\\circ$. Diện tích là:",
+            options: ["$12\\pi\\text{ cm}^2$", "$6\\pi\\text{ cm}^2$", "$36\\pi\\text{ cm}^2$", "$3\\pi\\text{ cm}^2$"],
+            answer: 1,
+            explain: "Đúng rồi! $S_q = \\dfrac{\\pi \\cdot 6^2 \\cdot 60}{360} = 6\\pi\\text{ cm}^2$."
+        },
+        {
+            q: "Diện tích hình vành khuyên giới hạn bởi 2 đường tròn $R = 5\\text{ m}$ và $r = 4\\text{ m}$ là:",
+            options: ["$9\\pi\\text{ m}^2$", "$1\\pi\\text{ m}^2$", "$41\\pi\\text{ m}^2$", "$20\\pi\\text{ m}^2$"],
+            answer: 0,
+            explain: "Chuẩn xác! $S_v = \\pi(R^2 - r^2) = \\pi(25 - 16) = 9\\pi\\text{ m}^2$."
+        },
+        {
+            q: "Điều kiện xác định của căn thức $\\sqrt{3x - 6}$ là:",
+            options: ["$x > 2$", "$x \\ge 2$", "$x \\le 2$", "$x \\ne 2$"],
+            answer: 1,
+            explain: "Chính xác! Biểu thức dưới căn không âm: $3x - 6 \\ge 0 \\iff x \\ge 2$."
+        },
+        {
+            q: "Rút gọn thương $\\dfrac{\\sqrt[3]{54}}{\\sqrt[3]{2}}$ ta được kết quả là:",
+            options: ["$2$", "$3$", "$3\\sqrt{3}$", "$9$"],
+            answer: 1,
+            explain: "Tuyệt vời! $\\dfrac{\\sqrt[3]{54}}{\\sqrt[3]{2}} = \\sqrt[3]{\\dfrac{54}{2}} = \\sqrt[3]{27} = 3$."
+        }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let streak = 0;
+
+    // Hiển thị câu hỏi
+    function loadQuestion() {
+        if (currentQ >= questions.length) {
+            document.getElementById('quizQuestion').innerHTML = "🎉 CHÚC MỪNG BẠN ĐÃ HOÀN THÀNH XUẤT SẮC TẤT CẢ CÂU HỎI! ĐẠT ĐIỂM 10 TOÁN 9!";
+            document.getElementById('optionsContainer').innerHTML = "";
+            document.getElementById('quizFeedback').innerHTML = `Tổng kết: Bạn đạt ${score} điểm với chuỗi đúng cao nhất!`;
+            triggerConfetti(100);
+            return;
+        }
+
+        const qData = questions[currentQ];
+        document.getElementById('quizQuestion').innerHTML = qData.q;
+        document.getElementById('qIndexDisplay').innerText = `${currentQ + 1}/${questions.length}`;
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = "";
+        document.getElementById('quizFeedback').innerHTML = "";
+
+        qData.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}`;
+            btn.onclick = () => checkAnswer(idx);
+            container.appendChild(btn);
+        });
+
+        // Vẽ lại KaTeX cho nội dung câu hỏi và các đáp án
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.querySelector('.quiz-panel'), {
+                delimiters: [{left: '$', right: '$', display: false}],
+                throwOnError: false
+            });
+        }
+    }
+
+    function checkAnswer(selectedIdx) {
+        const qData = questions[currentQ];
+        const feedback = document.getElementById('quizFeedback');
+        const buttons = document.querySelectorAll('.opt-btn');
+
+        buttons.forEach(b => b.disabled = true);
+
+        if (selectedIdx === qData.answer) {
+            score += 10 + streak * 2;
+            streak++;
+            feedback.style.color = "#4ade80";
+            feedback.innerHTML = `✅ ${qData.explain}`;
+            buttons[selectedIdx].style.background = "#15803d";
+            triggerConfetti(35);
+        } else {
+            streak = 0;
+            feedback.style.color = "#fb7185";
+            feedback.innerHTML = `❌ Chưa chính xác! Đáp án đúng là ${String.fromCharCode(65 + qData.answer)}. ${qData.explain}`;
+            buttons[selectedIdx].style.background = "#be123c";
+            buttons[qData.answer].style.background = "#15803d";
+        }
+
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(feedback, {
+                delimiters: [{left: '$', right: '$', display: false}],
+                throwOnError: false
+            });
+        }
+
+        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('streakDisplay').innerText = streak;
+
+        setTimeout(() => {
+            currentQ++;
+            loadQuestion();
+        }, 2400);
+    }
+
+    function resetGame() {
+        currentQ = 0;
+        score = 0;
+        streak = 0;
+        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('streakDisplay').innerText = streak;
+        loadQuestion();
+    }
+
+    function toggleSpinSpeed() {
+        speed = speed === 0.02 ? 0.06 : 0.02;
+    }
+
+    // Hiệu ứng pháo hoa Confetti hạt
+    function triggerConfetti(num) {
+        for (let i = 0; i < num; i++) {
+            celebrationParticles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                vx: (Math.random() - 0.5) * 12,
+                vy: (Math.random() - 0.5) * 12 - 3,
+                color: `hsl(${Math.random() * 360}, 100%, 65%)`,
+                size: Math.random() * 6 + 3,
+                life: 60
+            });
+        }
+    }
+
+    // Sao nền chuyển động 3D
+    for (let i = 0; i < 40; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.8,
+            speed: Math.random() * 0.8 + 0.3
+        });
+    }
+
+    // Vòng lặp Render 3D Wireframe Canvas
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Nền sao lấp lánh
+        ctx.fillStyle = "#ffffff";
+        particles.forEach(p => {
+            p.y += p.speed;
+            if (p.y > canvas.height) p.y = 0;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        angleX += speed;
+        angleY += speed * 1.3;
+
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const scale = 1.1;
+
+        // Phép chiếu 3D sang 2D
+        const projected = vertices.map(v => {
+            let x1 = v.x * Math.cos(angleY) + v.z * Math.sin(angleY);
+            let z1 = -v.x * Math.sin(angleY) + v.z * Math.cos(angleY);
+
+            let y2 = v.y * Math.cos(angleX) - z1 * Math.sin(angleX);
+            let z2 = v.y * Math.sin(angleX) + z1 * Math.cos(angleX);
+
+            const fov = 260;
+            const pScale = fov / (fov + z2);
+            return {
+                x: cx + x1 * pScale * scale,
+                y: cy + y2 * pScale * scale,
+                z: z2
+            };
+        });
+
+        // Vẽ các cạnh phát sáng (Neon 3D Glow)
+        ctx.lineWidth = 2.5;
+        edges.forEach(([i, j]) => {
+            const grad = ctx.createLinearGradient(projected[i].x, projected[i].y, projected[j].x, projected[j].y);
+            grad.addColorStop(0, '#38bdf8');
+            grad.addColorStop(0.5, '#ec4899');
+            grad.addColorStop(1, '#a855f7');
+
+            ctx.strokeStyle = grad;
+            ctx.beginPath();
+            ctx.moveTo(projected[i].x, projected[i].y);
+            ctx.lineTo(projected[j].x, projected[j].y);
+            ctx.stroke();
+        });
+
+        // Vẽ các đỉnh tinh thể hoạt hình
+        projected.forEach((p, idx) => {
+            ctx.fillStyle = idx === 0 || idx === 5 ? "#facc15" : "#4ade80";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        // Vẽ hiệu ứng chúc mừng (Confetti)
+        for (let i = celebrationParticles.length - 1; i >= 0; i--) {
+            const cp = celebrationParticles[i];
+            cp.x += cp.vx;
+            cp.y += cp.vy;
+            cp.vy += 0.2;
+            cp.life--;
+            ctx.fillStyle = cp.color;
+            ctx.beginPath();
+            ctx.arc(cp.x, cp.y, cp.size, 0, Math.PI * 2);
+            ctx.fill();
+            if (cp.life <= 0) celebrationParticles.splice(i, 1);
+        }
+
+        requestAnimationFrame(render);
+    }
+
+    // Khởi động
+    setTimeout(() => {
+        loadQuestion();
+    }, 300);
+    render();
+</script>
+
+</body>
+</html>
