@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toán 7: Chuyên Đề Đột Phá Điểm 9+ Dành Cho Khánh Huy</title>
+    
+    <!-- Tích hợp KaTeX: Hiển thị công thức toán, phân số, căn bậc hai và góc chuẩn quốc tế -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --pink-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            --amber-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --sky-gradient: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            --purple-gradient: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            --dark: #0f172a;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f1f5f9; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 1040px; margin: 0 auto; }
+
+        /* Banner chính */
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: #ffffff;
+            padding: 35px 25px;
+            border-radius: 22px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(79, 70, 229, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+        }
+        .hero-banner h1 { font-size: 2.1rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.92; }
+
+        .notice-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid #2563eb;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            font-size: 0.98rem;
+            color: #1e40af;
+        }
+
+        /* Thẻ Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 14px;
+        }
+        .card-title { font-size: 1.35rem; font-weight: 700; color: #1e1b4b; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-tip { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-math { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-danger { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
+        .badge-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
+        /* Lưới mẹo học tập */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        @media (max-width: 820px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .tip-card {
+            border-radius: 14px;
+            padding: 18px 20px;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+        .tip-card.pink { background: var(--pink-gradient); }
+        .tip-card.emerald { background: var(--emerald-gradient); }
+        .tip-card.sky { background: var(--sky-gradient); }
+        .tip-card.purple { background: var(--purple-gradient); }
+        .tip-card h4 { font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tip-card p { font-size: 0.92rem; line-height: 1.6; opacity: 0.96; }
+
+        /* Hộp hiển thị công thức */
+        .math-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin: 10px 0;
+            font-size: 1.15rem;
+            color: #1e3a8a;
+            font-weight: 500;
+            overflow-x: auto;
+        }
+
+        /* Danh mục bài tập */
+        .exercise-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+        .exercise-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+        }
+        .exercise-item.sky { border-left-color: #0284c7; }
+        .exercise-item.emerald { border-left-color: #10b981; }
+        .exercise-item.amber { border-left-color: #f59e0b; }
+        .exercise-item.purple { border-left-color: #8b5cf6; }
+        .exercise-item.danger { border-left-color: #ef4444; }
+
+        .ex-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        .trap-tag {
+            display: inline-block;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Nút xem lời giải chi tiết Accordion */
+        details {
+            margin-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 10px;
+        }
+        summary {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #4f46e5;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+        }
+        summary:hover { color: #3730a3; text-decoration: underline; }
+        .solution-content {
+            background: #f8fafc;
+            border-left: 3px solid #10b981;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 10px;">Toán Lớp 7 • KNTT • Đột Phá Điểm 9+</span>
+        <h1>PHIẾU BÀI TẬP & CẨM NĂNG TƯ DUY 1:1</h1>
+        <p>Học viên: <strong>Ngô Khánh Huy</strong> &bull; Mục tiêu: Trị dứt điểm lỗi dấu - Làm chủ góc gãy & Tam giác bằng nhau</p>
+    </div>
+
+    <!-- LỜI NHẮN SƯ PHẠM -->
+    <div class="notice-box">
+        <strong>📌 Lời nhắn gửi riêng cho Khánh Huy:</strong> Con có tư duy tiếp thu rất nhạy bén, nhưng bài toán nâng cao đòi hỏi tính cẩn trọng tuyệt đối! Khi giải các bài tập dưới đây, hãy nghiêm túc thực hiện <strong>"Quy tắc 3 giây"</strong>: <em>Dừng 3 giây kiểm tra lại dấu âm trước ngoặc và ghi rõ tên cặp góc (so le trong/trong cùng phía) trước khi kết luận!</em>
+    </div>
+
+    <!-- KHỐI 1: 4 ĐIỂM TỰA LÝ THUYẾT & MẸO HỌC TRỌNG TÂM -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-tip">Bí Kíp Trọng Tâm</span>
+            <h2 class="card-title">1. Bốn Điểm Tựa Lý Thuyết Cốt Lõi Cần Nhớ Trước Khi Làm Bài</h2>
+        </div>
+
+        <div class="grid-2">
+            <!-- Tip 1 -->
+            <div class="tip-card pink">
+                <h4>🛡️ 1. Quy Tắc Dấu Ngoặc & Chuyển Vế</h4>
+                <p>
+                    • Khi phá ngoặc có dấu "–" đằng trước: <strong>Đổi dấu toàn bộ</strong> các số hạng bên trong: $-(a - b + c) = -a + b - c$.<br>
+                    • Chuyển vế thì <strong>phải đổi dấu ngay</strong>: $x - a = b \iff x = b + a$.<br>
+                    • <em>Phân biệt cẩn thận:</em> $(-3)^2 = 9$ (bình phương số âm), nhưng $-3^2 = -(3^2) = -9$.
+                </p>
+            </div>
+
+            <!-- Tip 2 -->
+            <div class="tip-card emerald">
+                <h4>⚡ 2. Căn Bậc Hai Số Học & Giá Trị Tuyệt Đối</h4>
+                <p>
+                    • $\sqrt{a}$ chỉ xác định khi $a \ge 0$. Căn bậc hai số học <strong>luôn không âm</strong> ($\sqrt{a} \ge 0$).<br>
+                    • Nếu $x^2 = a$ ($a > 0$) thì luôn có <strong>hai giá trị</strong>: $x = \sqrt{a}$ hoặc $x = -\sqrt{a}$.<br>
+                    • Bất đẳng thức trị tuyệt đối: $|A| + |B| \ge |A + B|$, dấu bằng xảy ra khi $A \cdot B \ge 0$.
+                </p>
+            </div>
+
+            <!-- Tip 3 -->
+            <div class="tip-card sky">
+                <h4>📐 3. Cặp Góc Trong Cùng Phía & Kẻ Đường Phụ</h4>
+                <p>
+                    • Nếu $a \parallel b$ thì hai góc <strong>trong cùng phía bù nhau</strong>: $\widehat{A} + \widehat{B} = 180^\circ$.<br>
+                    • <strong>Bí kíp "Điểm Gãy":</strong> Gặp các đường gấp khúc dạng hình chữ $M$, chữ $Z$ hay tia sấm sét $\rightarrow$ <em>Qua đỉnh của góc gãy luôn kẻ thêm một đường thẳng song song!</em>
+                </p>
+            </div>
+
+            <!-- Tip 4 -->
+            <div class="tip-card purple">
+                <h4>🎯 4. Lập Luận Chứng Minh Tam Giác Chuẩn Mực</h4>
+                <p>
+                    • Khi chứng minh tam giác bằng nhau: Viết đúng <strong>thứ tự các đỉnh tương ứng</strong>.<br>
+                    • Cấu trúc 3 bước chặt chẽ: Nêu giả thiết $\rightarrow$ Chỉ ra các yếu tố bằng nhau $\rightarrow$ Kết luận trường hợp (c-c-c, c-g-c, g-c-g hoặc cạnh huyền - góc nhọn).<br>
+                    • Điểm thuộc đường trung trực thì <strong>cách đều hai đầu mút</strong> của đoạn thẳng.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 2: HỆ THỐNG 20 BÀI TẬP MỚI TOÀN DIỆN (CHỌN LỌC KHÁ - GIỎI) -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Thực Hành Toàn Diện</span>
+            <h2 class="card-title">2. Quỹ 20 Bài Toán Nâng Cao (Thiết Kế Mới 100%)</h2>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ A ================= -->
+        <h3 style="color: #4338ca; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #4f46e5; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề A: Số Hữu Tỉ, Bẫy Dấu & Kỹ Thuật Biến Đổi Biểu Thức (4 Bài)
+        </h3>
+
+        <!-- BÀI 1 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 1: Tính hợp lý với biểu thức ngoặc nhiều tầng</span>
+                <span class="badge badge-info">Phá ngoặc đổi dấu</span>
+            </div>
+            <div class="exercise-content">
+                Thực hiện phép tính bằng cách bỏ ngoặc rồi nhóm số hạng thích hợp:
+                <div class="math-box">
+                    $$A = \left( \frac{3}{8} - \frac{5}{12} \right) - \left[ \frac{7}{6} - \left( \frac{3}{8} - \frac{11}{12} \right) \right]$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy dấu âm: Phá từ ngoặc tròn bên trong trước, chú ý trước ngoặc vuông là dấu trừ nên khi bỏ ngoặc vuông phải đổi dấu toàn bộ!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Bỏ ngoặc tròn bên trong: $\left[ \frac{7}{6} - \frac{3}{8} + \frac{11}{12} \right]$.<br>
+                    Bỏ tiếp ngoặc vuông: $A = \frac{3}{8} - \frac{5}{12} - \frac{7}{6} + \frac{3}{8} - \frac{11}{12}$.<br>
+                    Nhóm các phân số có mẫu số liên kết:<br>
+                    $A = \left(\frac{3}{8} + \frac{3}{8}\right) - \left(\frac{5}{12} + \frac{11}{12}\right) - \frac{7}{6} = \frac{6}{8} - \frac{16}{12} - \frac{7}{6} = \frac{3}{4} - \frac{4}{3} - \frac{7}{6}$.<br>
+                    Quy đồng mẫu chung 12: $A = \frac{9 - 16 - 14}{12} = \frac{-21}{12} = -\frac{7}{4}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 2: Tính tổng dãy phân số có khoảng cách ở mẫu</span>
+                <span class="badge badge-info">Quy luật sai phân</span>
+            </div>
+            <div class="exercise-content">
+                Tính tổng biểu thức sau:
+                <div class="math-box">
+                    $$S = \frac{5}{4 \cdot 9} + \frac{5}{9 \cdot 14} + \frac{5}{14 \cdot 19} + \dots + \frac{5}{44 \cdot 49}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Mẹo phát hiện: Hiệu hai thừa số ở mỗi mẫu đúng bằng tử số ($9 - 4 = 5$, $14 - 9 = 5$). Áp dụng ngay: $\frac{5}{n(n+5)} = \frac{1}{n} - \frac{1}{n+5}$!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Ta có: $\frac{5}{4 \cdot 9} = \frac{1}{4} - \frac{1}{9}$; $\frac{5}{9 \cdot 14} = \frac{1}{9} - \frac{1}{14}$; ...; $\frac{5}{44 \cdot 49} = \frac{1}{44} - \frac{1}{49}$.<br>
+                    Cộng liên tiếp triệt tiêu các hạng tử đối nhau:<br>
+                    $S = \frac{1}{4} - \frac{1}{9} + \frac{1}{9} - \frac{1}{14} + \dots + \frac{1}{44} - \frac{1}{49} = \frac{1}{4} - \frac{1}{49} = \frac{45}{196}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 3: Rút gọn phân thức lũy thừa cơ số hợp số</span>
+                <span class="badge badge-info">Phân tích cơ số nguyên tố</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị biểu thức phân số lũy thừa:
+                <div class="math-box">
+                    $$M = \frac{9^3 \cdot 2^{10} + 27^2 \cdot 4^4}{3^8 \cdot 2^8 - 6^7}$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Phương pháp chuẩn: Tuyệt đối không tính ra số lớn! Hãy đưa tất cả cơ số 9, 27, 4, 6 về cơ số nguyên tố 2 và 3 rồi đặt thừa số chung.</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Biến đổi cơ số về 2 và 3:<br>
+                    • Tử số: $9^3 \cdot 2^{10} = (3^2)^3 \cdot 2^{10} = 3^6 \cdot 2^{10}$.<br>
+                    $27^2 \cdot 4^4 = (3^3)^2 \cdot (2^2)^4 = 3^6 \cdot 2^8$.<br>
+                    $\Rightarrow \text{Tử} = 3^6 \cdot 2^8 (2^2 + 1) = 3^6 \cdot 2^8 \cdot 5$.<br>
+                    • Mẫu số: $3^8 \cdot 2^8 - (2 \cdot 3)^7 = 3^8 \cdot 2^8 - 3^7 \cdot 2^7 = 3^7 \cdot 2^7 (3 \cdot 2 - 1) = 3^7 \cdot 2^7 \cdot 5$.<br>
+                    $\Rightarrow M = \frac{3^6 \cdot 2^8 \cdot 5}{3^7 \cdot 2^7 \cdot 5} = \frac{2}{3}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 4: Tích dãy thừa số mẫu số lẻ triệt tiêu chéo</span>
+                <span class="badge badge-info">Tư duy Telescoping</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị của tích:
+                <div class="math-box">
+                    $$P = \left( 1 - \frac{2}{3} \right) \left( 1 - \frac{2}{5} \right) \left( 1 - \frac{2}{7} \right) \dots \left( 1 - \frac{2}{99} \right)$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Tính giá trị từng ngoặc:<br>
+                    $1 - \frac{2}{3} = \frac{1}{3}$; $1 - \frac{2}{5} = \frac{3}{5}$; $1 - \frac{2}{7} = \frac{5}{7}$; ...; $1 - \frac{2}{99} = \frac{97}{99}$.<br>
+                    Thay vào: $P = \frac{1}{3} \cdot \frac{3}{5} \cdot \frac{5}{7} \dots \frac{97}{99}$.<br>
+                    Mỗi mẫu số đều triệt tiêu với tử số của phân số liền kề phía sau. Kết quả chỉ còn tử đầu tiên và mẫu cuối cùng: $P = \frac{1}{99}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ B ================= -->
+        <h3 style="color: #059669; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #10b981; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề B: Lũy Thừa, Căn Bậc Hai Số Học & Giá Trị Tuyệt Đối (5 Bài)
+        </h3>
+
+        <!-- BÀI 5 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 5: Tìm x với tổng ba lũy thừa liên tiếp</span>
+                <span class="badge badge-success">Phương trình mũ</span>
+            </div>
+            <div class="exercise-content">
+                Tìm số tự nhiên $x$ thỏa mãn:
+                <div class="math-box">
+                    $$5^x + 5^{x+1} + 5^{x+2} = 775$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Mẹo nhóm: Tách $5^{x+1} = 5^x \cdot 5$ và $5^{x+2} = 5^x \cdot 5^2$ rồi đưa $5^x$ ra làm nhân tử chung!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    $5^x (1 + 5 + 5^2) = 775 \iff 5^x (1 + 5 + 25) = 775$<br>
+                    $\iff 5^x \cdot 31 = 775 \iff 5^x = \frac{775}{31} = 25$.<br>
+                    Vì $25 = 5^2$ nên $x = 2$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 6 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 6: Giải phương trình chứa hai dấu giá trị tuyệt đối</span>
+                <span class="badge badge-success">Vận dụng cao</span>
+            </div>
+            <div class="exercise-content">
+                Tìm tất cả các giá trị của $x$ biết:
+                <div class="math-box">
+                    $$|2x - 3| + |2x + 1| = 8$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy: Biểu thức có 2 mốc giá trị làm trị tuyệt đối bằng 0 là $x = -\frac{1}{2}$ và $x = \frac{3}{2}$. Chia làm 3 khoảng để xét dấu!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    • TH1: $x \ge \frac{3}{2} \Rightarrow (2x - 3) + (2x + 1) = 8 \iff 4x - 2 = 8 \iff 4x = 10 \iff x = 2{,}5$ (Thỏa mãn $\ge 1{,}5$).<br>
+                    • TH2: $-\frac{1}{2} \le x < \frac{3}{2} \Rightarrow -(2x - 3) + (2x + 1) = 8 \iff -2x + 3 + 2x + 1 = 8 \iff 4 = 8$ (Vô lý).<br>
+                    • TH3: $x < -\frac{1}{2} \Rightarrow -(2x - 3) - (2x + 1) = 8 \iff -4x + 2 = 8 \iff -4x = 6 \iff x = -1{,}5$ (Thỏa mãn $< -0{,}5$).<br>
+                    Vậy $x \in \{2{,}5; -1{,}5\}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 7: Rút gọn và giải phương trình căn bậc hai đồng dạng</span>
+                <span class="badge badge-success">Căn thức số học</span>
+            </div>
+            <div class="exercise-content">
+                Tìm $x$ biết:
+                <div class="math-box">
+                    $$\sqrt{9x - 18} - \frac{1}{2}\sqrt{16x - 32} + \sqrt{25x - 50} = 12$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Điều kiện: $x - 2 \ge 0 \iff x \ge 2$.<br>
+                    Đưa thừa số ra ngoài dấu căn:<br>
+                    $\sqrt{9(x - 2)} - \frac{1}{2}\sqrt{16(x - 2)} + \sqrt{25(x - 2)} = 12$<br>
+                    $\iff 3\sqrt{x - 2} - \frac{1}{2} \cdot 4\sqrt{x - 2} + 5\sqrt{x - 2} = 12$<br>
+                    $\iff (3 - 2 + 5)\sqrt{x - 2} = 12 \iff 6\sqrt{x - 2} = 12 \iff \sqrt{x - 2} = 2$.<br>
+                    Bình phương hai vế: $x - 2 = 4 \iff x = 6$ (Thỏa mãn điều kiện).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 8: Tìm cặp số thỏa mãn tổng bình phương và trị tuyệt đối bằng 0</span>
+                <span class="badge badge-success">Đại số suy luận</span>
+            </div>
+            <div class="exercise-content">
+                Tìm các số hữu tỉ $x$ và $y$ thỏa mãn điều kiện:
+                <div class="math-box">
+                    $$(3x - 6)^2 + \left| \frac{1}{2}x - 2y + 1 \right| \le 0$$
+                </div>
+            </div>
+            <div class="trap-tag">💡 Bẫy: Bình phương và trị tuyệt đối đều $\ge 0$ với mọi số. Tổng của chúng chỉ có thể $\le 0$ khi đồng thời từng biểu thức bằng 0!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Vì $(3x - 6)^2 \ge 0$ và $\left| \frac{1}{2}x - 2y + 1 \right| \ge 0$ với mọi $x, y$.<br>
+                    Nên tổng của chúng $\le 0$ khi và chỉ khi:<br>
+                    $\begin{cases} 3x - 6 = 0 \\ \frac{1}{2}x - 2y + 1 = 0 \end{cases} \iff \begin{cases} 3x = 6 \Rightarrow x = 2 \\ \frac{1}{2} \cdot 2 - 2y + 1 = 0 \end{cases} \iff \begin{cases} x = 2 \\ 2 - 2y = 0 \Rightarrow y = 1 \end{cases}$.<br>
+                    Vậy $x = 2$ và $y = 1$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 9 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 9: Tìm giá trị nhỏ nhất của biểu thức hai biến</span>
+                <span class="badge badge-success">Cực trị đại số</span>
+            </div>
+            <div class="exercise-content">
+                Tìm giá trị nhỏ nhất (GTNN) của biểu thức:
+                <div class="math-box">
+                    $$F = |x - 1| + |x - 5| + (3y - 6)^2 + 10$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Áp dụng BĐT $|A| + |B| \ge |A + B|$:<br>
+                    $|x - 1| + |x - 5| = |x - 1| + |5 - x| \ge |x - 1 + 5 - x| = 4$. Dấu "=" khi $1 \le x \le 5$.<br>
+                    Lại có $(3y - 6)^2 \ge 0$, dấu "=" khi $3y - 6 = 0 \iff y = 2$.<br>
+                    Do đó $F \ge 4 + 0 + 10 = 14$.<br>
+                    Vậy GTNN của $F$ là $14$, đạt được khi $1 \le x \le 5$ và $y = 2$.
+                </div>
+            </details>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ C ================= -->
+        <h3 style="color: #d97706; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #f59e0b; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề C: Góc, Đường Thẳng Song Song & Tuyệt Chiêu Kẻ Đường Phụ (5 Bài)
+        </h3>
+
+        <!-- BÀI 10 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 10: Tính góc điểm gãy bằng kỹ thuật kẻ đường phụ</span>
+                <span class="badge badge-warning">Kỹ thuật vẽ hình</span>
+            </div>
+            <div class="exercise-content">
+                Cho hình vẽ có hai tia song song $Ax \parallel By$. Điểm $C$ nằm lệch hẳn về một phía sao cho góc $\widehat{xAC} = 120^\circ$ và góc $\widehat{CBy} = 130^\circ$ (hai tia $Ax, By$ cùng hướng sang phải). Tính số đo của góc $\widehat{ACB}$.
+            </div>
+            <div class="trap-tag">💡 Bẫy thường gặp: Nhớ cặp góc trong cùng phía có tổng bằng 180°! Qua C kẻ tia Cz // Ax // By cùng hướng với Ax.</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Qua điểm $C$, kẻ tia $Cz \parallel Ax \Rightarrow Cz \parallel By$ (cùng hướng sang phải với tia $Ax$).<br>
+                    • Vì $Ax \parallel Cz$, hai góc $\widehat{xAC}$ và $\widehat{ACz}$ ở vị trí trong cùng phía:<br>
+                    $\Rightarrow \widehat{xAC} + \widehat{ACz} = 180^\circ \Rightarrow \widehat{ACz} = 180^\circ - 120^\circ = 60^\circ$.<br>
+                    • Vì $By \parallel Cz$, hai góc $\widehat{yBC}$ và $\widehat{BCz}$ ở vị trí trong cùng phía:<br>
+                    $\Rightarrow \widehat{yBC} + \widehat{BCz} = 180^\circ \Rightarrow \widehat{BCz} = 180^\circ - 130^\circ = 50^\circ$.<br>
+                    Vì tia $Cz$ nằm giữa hai tia $CA$ và $CB$ nên:<br>
+                    $\widehat{ACB} = \widehat{ACz} + \widehat{BCz} = 60^\circ + 50^\circ = 110^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 11 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 11: Tìm các góc của hình thang dựa vào tính chất song song</span>
+                <span class="badge badge-warning">Góc trong cùng phía</span>
+            </div>
+            <div class="exercise-content">
+                Cho hình thang $ABCD$ có đáy $AB \parallel CD$. Biết rằng $\widehat{A} - \widehat{D} = 40^\circ$ và $\widehat{B} = 2\widehat{C}$. Hãy tính số đo của cả bốn góc trong hình thang đó.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Vì $AB \parallel CD$, các cặp góc kề cạnh bên là hai góc trong cùng phía bù nhau:<br>
+                    • $\widehat{A} + \widehat{D} = 180^\circ$. Lại có $\widehat{A} - \widehat{D} = 40^\circ$.<br>
+                    $\Rightarrow \widehat{A} = (180^\circ + 40^\circ) : 2 = 110^\circ$ và $\widehat{D} = 180^\circ - 110^\circ = 70^\circ$.<br>
+                    • $\widehat{B} + \widehat{C} = 180^\circ$. Mà $\widehat{B} = 2\widehat{C}$ nên: $2\widehat{C} + \widehat{C} = 180^\circ \Rightarrow 3\widehat{C} = 180^\circ \Rightarrow \widehat{C} = 60^\circ$.<br>
+                    $\Rightarrow \widehat{B} = 2 \times 60^\circ = 120^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 12: Chứng minh hai đường thẳng song song qua góc so le trong</span>
+                <span class="badge badge-warning">Lập luận 3 bước</span>
+            </div>
+            <div class="exercise-content">
+                Cho góc $\widehat{xOy} = 70^\circ$. Lấy điểm $A$ nằm trên tia $Ox$. Trên cùng nửa mặt phẳng bờ $Ox$ có chứa tia $Oy$, vẽ tia $Am$ sao cho góc $\widehat{OAm} = 110^\circ$. Kẻ tia $An$ là tia đối của tia $Am$. Chứng minh rằng đường thẳng chứa tia $An$ song song với tia $Oy$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Ta có góc $\widehat{OAm}$ và $\widehat{OAn}$ là hai góc kề bù (vì tia $Am$ và $An$ là hai tia đối nhau).<br>
+                    $\Rightarrow \widehat{OAm} + \widehat{OAn} = 180^\circ \Rightarrow \widehat{OAn} = 180^\circ - 110^\circ = 70^\circ$.<br>
+                    Xét hai đường thẳng chứa tia $An$ và tia $Oy$, bị cắt bởi đường thẳng chứa tia $Ox$:<br>
+                    Ta thấy $\widehat{OAn} = \widehat{xOy} = 70^\circ$.<br>
+                    Mà hai góc này ở vị trí <strong>đồng vị</strong> (hoặc so le trong tùy hướng chọn tia).<br>
+                    $\Rightarrow$ Đường thẳng chứa tia $An$ song song với đường thẳng chứa tia $Oy$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 13 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 13: Tia phân giác của hai góc kề bù vuông góc với nhau</span>
+                <span class="badge badge-warning">Định lý kinh điển</span>
+            </div>
+            <div class="exercise-content">
+                Cho hai góc kề bù $\widehat{AOB}$ và $\widehat{BOC}$. Kẻ tia $OD$ là tia phân giác của góc $\widehat{AOB}$ và tia $OE$ là tia phân giác của góc $\widehat{BOC}$.<br>
+                a) Chứng minh rằng $OD \perp OE$.<br>
+                b) Kẻ tia $OD'$ là tia đối của tia $OD$. Chứng minh tia $OE$ là tia phân giác của góc $\widehat{BOD'}$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Vì $\widehat{AOB}$ và $\widehat{BOC}$ kề bù nên $\widehat{AOB} + \widehat{BOC} = 180^\circ$.<br>
+                    Vì $OD$ và $OE$ là các tia phân giác nên:<br>
+                    $\widehat{DOE} = \widehat{DOB} + \widehat{BOE} = \frac{1}{2}\widehat{AOB} + \frac{1}{2}\widehat{BOC} = \frac{1}{2}(\widehat{AOB} + \widehat{BOC}) = \frac{1}{2} \cdot 180^\circ = 90^\circ \Rightarrow OD \perp OE$.<br>
+                    b) Ta có $\widehat{DOE} = 90^\circ \Rightarrow \widehat{EOD'} = 180^\circ - 90^\circ = 90^\circ$.<br>
+                    Mặt khác $\widehat{BOD'} = 180^\circ - \widehat{BOD}$. Mà $\widehat{BOE} = 90^\circ - \widehat{BOD} = \frac{1}{2}\widehat{BOD'}$.<br>
+                    Suy ra $OE$ là phân giác của $\widehat{BOD'}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 14: Chứng minh ba điểm thẳng hàng dựa vào Tiên đề Euclid</span>
+                <span class="badge badge-warning">Tiên đề Euclid</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$. Qua đỉnh $A$, kẻ đường thẳng $d_1$ song song với cạnh $BC$. Cũng qua đỉnh $A$, kẻ đường thẳng $d_2$ vuông góc với đường cao $AH$ của tam giác $ABC$ ($H \in BC$). Chứng minh rằng hai đường thẳng $d_1$ và $d_2$ phải trùng nhau.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    Vì $AH$ là đường cao nên $AH \perp BC$.<br>
+                    • Đường thẳng $d_2 \perp AH$ mà $BC \perp AH \Rightarrow d_2 \parallel BC$ (hai đường thẳng cùng vuông góc với một đường thẳng thứ ba thì song song với nhau).<br>
+                    • Theo giả thiết, đường thẳng $d_1$ cũng đi qua $A$ và song song với $BC$.<br>
+                    Theo <strong>Tiên đề Euclid</strong>: Qua một điểm nằm ngoài một đường thẳng chỉ vẽ được duy nhất một đường thẳng song song với đường thẳng đó.<br>
+                    Do đó $d_1$ và $d_2$ phải trùng nhau (đpcm).
+                </div>
+            </details>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ D ================= -->
+        <h3 style="color: #7c3aed; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #8b5cf6; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề D: Tam Giác Bằng Nhau, Tam Giác Cân & Đường Trung Trực (4 Bài)
+        </h3>
+
+        <!-- BÀI 15 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 15: Tam giác cân kết hợp chứng minh đoạn thẳng bằng nhau</span>
+                <span class="badge badge-purple">Trường hợp c-g-c</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ cân tại $A$. Trên cạnh $AB$ lấy điểm $D$, trên cạnh $AC$ lấy điểm $E$ sao cho $AD = AE$. Gọi $K$ là giao điểm của hai đoạn thẳng $BE$ và $CD$.<br>
+                a) Chứng minh rằng $\triangle ABE = \triangle ACD$. Suy ra $BE = CD$.<br>
+                b) Chứng minh rằng tam giác $KBC$ là tam giác cân tại $K$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Xét $\triangle ABE$ và $\triangle ACD$ có:<br>
+                    • $AB = AC$ (tam giác $ABC$ cân tại $A$).<br>
+                    • Góc $\widehat{A}$ chung.<br>
+                    • $AE = AD$ (giả thiết).<br>
+                    $\Rightarrow \triangle ABE = \triangle ACD$ (c-g-c) $\Rightarrow BE = CD$ và $\widehat{ABE} = \widehat{ACD}$ (hai góc tương ứng).<br>
+                    b) Ta có $\widehat{ABC} = \widehat{ACB}$ (do $\triangle ABC$ cân tại $A$).<br>
+                    Mà $\widehat{KBC} = \widehat{ABC} - \widehat{ABE}$ và $\widehat{KCB} = \widehat{ACB} - \widehat{ACD}$.<br>
+                    Do đó $\widehat{KBC} = \widehat{KCB} \Rightarrow \triangle KBC$ cân tại $K$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 16 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 16: Bài toán kéo dài trung tuyến chứng minh góc vuông</span>
+                <span class="badge badge-purple">Tư duy đối xứng</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ vuông tại $A$. Gọi $M$ là trung điểm của cạnh $BC$. Trên tia đối của tia $MA$ lấy điểm $D$ sao cho $MD = MA$.<br>
+                a) Chứng minh rằng $\triangle MAB = \triangle MDC$.<br>
+                b) Chứng minh rằng $CD \perp AC$ và độ dài đoạn thẳng $AM = \frac{1}{2}BC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Xét $\triangle MAB$ và $\triangle MDC$ có:<br>
+                    • $MA = MD$ (theo cách vẽ).<br>
+                    • $\widehat{AMB} = \widehat{DMC}$ (hai góc đối đỉnh).<br>
+                    • $MB = MC$ ($M$ là trung điểm $BC$).<br>
+                    $\Rightarrow \triangle MAB = \triangle MDC$ (c-g-c).<br>
+                    b) $\Rightarrow \widehat{MAB} = \widehat{MDC}$ (hai góc tương ứng) $\Rightarrow AB \parallel CD$ (hai góc so le trong bằng nhau).<br>
+                    Mà $AB \perp AC$ (do $\triangle ABC$ vuông tại $A$) $\Rightarrow CD \perp AC$.<br>
+                    Từ đó chứng minh được $\triangle ABC = \triangle CDA$ (c-g-c) $\Rightarrow BC = AD$.<br>
+                    Vì $AM = \frac{1}{2}AD$ nên $AM = \frac{1}{2}BC$ (Định lý trung tuyến tam giác vuông).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 17 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 17: Tính chất hai điểm cùng thuộc đường trung trực</span>
+                <span class="badge badge-purple">Đường trung trực</span>
+            </div>
+            <div class="exercise-content">
+                Cho đoạn thẳng $AB$. Lấy hai điểm $M$ và $N$ phân biệt cùng nằm trên đường trung trực của đoạn thẳng $AB$ ($M$ và $N$ không thuộc đoạn thẳng $AB$).<br>
+                a) Chứng minh rằng $\triangle AMN = \triangle BMN$.<br>
+                b) Chứng minh rằng tia $MN$ là tia phân giác của góc $\widehat{AMB}$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Vì $M$ thuộc đường trung trực của $AB \Rightarrow MA = MB$.<br>
+                    Vì $N$ thuộc đường trung trực của $AB \Rightarrow NA = NB$.<br>
+                    Xét $\triangle AMN$ và $\triangle BMN$ có:<br>
+                    • $MA = MB$; $NA = NB$; cạnh $MN$ chung.<br>
+                    $\Rightarrow \triangle AMN = \triangle BMN$ (c-c-c).<br>
+                    b) Vì $\triangle AMN = \triangle BMN \Rightarrow \widehat{AMN} = \widehat{BMN}$ (hai góc tương ứng).<br>
+                    Suy ra tia $MN$ chính là tia phân giác của góc $\widehat{AMB}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 18 -->
+        <div class="exercise-item purple">
+            <div class="ex-title">
+                <span>Bài 18: Tam giác vuông có góc nhọn 30° và bài toán tỉ số cạnh</span>
+                <span class="badge badge-danger">Vận dụng cao 9+</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ vuông tại $A$ có $\widehat{B} = 60^\circ$. Kẻ tia phân giác của góc $B$ cắt cạnh $AC$ tại điểm $D$. Kẻ $DH \perp BC$ ($H \in BC$).<br>
+                a) Chứng minh $\triangle ABD = \triangle HBD$.<br>
+                b) Tính số đo góc $\widehat{C}$ của tam giác $ABC$. Chứng minh $\triangle CDH$ là tam giác cân.<br>
+                c) Chứng minh rằng độ dài đoạn $CD = 2AD$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Xét hai tam giác vuông $\triangle ABD$ và $\triangle HBD$ có: Cạnh huyền $BD$ chung, $\widehat{ABD} = \widehat{HBD} = 30^\circ$ (do $BD$ là phân giác). $\Rightarrow \triangle ABD = \triangle HBD$ (cạnh huyền - góc nhọn) $\Rightarrow AD = HD$.<br>
+                    b) $\triangle ABC$ vuông tại $A \Rightarrow \widehat{C} = 90^\circ - 60^\circ = 30^\circ$.<br>
+                    Trong $\triangle HBD$ vuông tại $H$: $\widehat{HDB} = 90^\circ - 30^\circ = 60^\circ$. Do đó góc ngoài $\widehat{CDH} = 60^\circ$ (hoặc tính trong $\triangle CDH$ vuông tại $H$ có $\widehat{C} = 30^\circ \Rightarrow \widehat{CDH} = 60^\circ$).<br>
+                    c) Tam giác vuông $DHC$ có góc nhọn $\widehat{C} = 30^\circ \Rightarrow$ Cạnh đối diện góc $30^\circ$ bằng nửa cạnh huyền: $DH = \frac{1}{2}CD \Rightarrow CD = 2DH$. Mà $DH = AD$ (ở câu a) nên suy ra $CD = 2AD$.
+                </div>
+            </details>
+        </div>
+
+        <!-- ================= CHỦ ĐỀ E ================= -->
+        <h3 style="color: #ec4899; margin: 25px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #f43f5e; width: 8px; height: 22px; border-radius: 4px; display: inline-block;"></span>
+            Chủ Đề E: Phân Tích Dữ Liệu & Biểu Đồ Thực Tế (2 Bài)
+        </h3>
+
+        <!-- BÀI 19 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 19: Phân tích cơ cấu và góc ở tâm của Biểu đồ quạt tròn</span>
+                <span class="badge badge-danger">Thống kê quạt tròn</span>
+            </div>
+            <div class="exercise-content">
+                Trường của Khánh Huy có 800 học sinh. Nhà trường khảo sát tỉ lệ tham gia các Câu lạc bộ năng khiếu và thu được kết quả: CLB Thể thao chiếm $40\%$, CLB Toán & Khoa học (STEM) chiếm $35\%$, CLB Âm nhạc chiếm $15\%$, còn lại là CLB Kỹ năng sống.<br>
+                a) Tính số học sinh tham gia của từng câu lạc bộ.<br>
+                b) Khi biểu diễn dữ liệu trên bằng biểu đồ hình quạt tròn, hãy tính số đo góc ở tâm ứng với phần hình quạt của từng câu lạc bộ (biết cả đường tròn tương ứng với $360^\circ$).
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Số học sinh từng CLB:<br>
+                    • Thể thao: $800 \times 40\% = 320$ học sinh.<br>
+                    • STEM: $800 \times 35\% = 280$ học sinh.<br>
+                    • Âm nhạc: $800 \times 15\% = 120$ học sinh.<br>
+                    • Kỹ năng sống: $100\% - (40\% + 35\% + 15\%) = 10\% \Rightarrow 800 \times 10\% = 80$ học sinh.<br>
+                    b) Số đo góc ở tâm tương ứng:<br>
+                    • Thể thao: $360^\circ \times 40\% = 144^\circ$.<br>
+                    • STEM: $360^\circ \times 35\% = 126^\circ$.<br>
+                    • Âm nhạc: $360^\circ \times 15\% = 54^\circ$.<br>
+                    • Kỹ năng sống: $360^\circ \times 10\% = 36^\circ$.<br>
+                    <em>Kiểm tra tổng: $144^\circ + 126^\circ + 54^\circ + 36^\circ = 360^\circ$ (Chính xác 100%).</em>
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 20 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 20: Đọc và phân tích tốc độ biến thiên từ Biểu đồ đoạn thẳng</span>
+                <span class="badge badge-danger">Biểu đồ đoạn thẳng</span>
+            </div>
+            <div class="exercise-content">
+                Chỉ số bụi mịn $\text{AQI}$ trung bình tại một trạm quan trắc không khí được ghi lại qua các ngày trong tuần như sau:
+                <div class="math-box">
+                    Thứ Hai: 110 &bull; Thứ Ba: 140 &bull; Thứ Tư: 190 &bull; Thứ Năm: 170 &bull; Thứ Sáu: 120
+                </div>
+                a) Trong khoảng thời gian từ Thứ Hai đến Thứ Tư, chỉ số chất lượng không khí có xu hướng tăng hay giảm? Tăng/giảm bao nhiêu đơn vị?<br>
+                b) Giữa hai ngày liên tiếp nào thì chỉ số $\text{AQI}$ giảm mạnh nhất? Mức độ giảm là bao nhiêu đơn vị?
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải chi tiết</summary>
+                <div class="solution-content">
+                    a) Từ Thứ Hai đến Thứ Tư, chỉ số $\text{AQI}$ tăng liên tục từ $110$ lên $190$. Mức tăng là: $190 - 110 = 80$ đơn vị.<br>
+                    b) Xét các khoảng giảm:<br>
+                    • Từ Thứ Tư đến Thứ Năm: Giảm từ $190$ xuống $170$ (giảm $20$ đơn vị).<br>
+                    • Từ Thứ Năm đến Thứ Sáu: Giảm từ $170$ xuống $120$ (giảm $170 - 120 = 50$ đơn vị).<br>
+                    Vậy chỉ số $\text{AQI}$ giảm mạnh nhất là giữa <strong>Thứ Năm và Thứ Sáu</strong>, mức giảm là <strong>50 đơn vị</strong>.
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- KHỞI CHẠY KATEX TỰ ĐỘNG TẠO DẤU CĂN LIỀN MẠCH -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
