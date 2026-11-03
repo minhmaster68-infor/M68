@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bí Kíp Bỏ Túi Trước Giờ Thi Giữa Kì I - Môn Toán 8</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #0284c7;
+            --secondary-light: #e0f2fe;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --success: #10b981;
+            --success-light: #dcfce7;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background: #f1f5f9; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Header rực rỡ */
+        .cheat-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+            color: white;
+            padding: 35px 20px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(79, 70, 229, 0.35);
+            margin-bottom: 25px;
+        }
+        .cheat-header h1 { font-size: 2.1rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .cheat-header p { font-size: 1.05rem; opacity: 0.95; max-width: 650px; margin: 0 auto; }
+        .badge-pill { display: inline-block; background: rgba(255,255,255,0.25); padding: 5px 15px; border-radius: 9999px; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; }
+
+        /* Card chung */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
+        }
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 18px;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        /* SVG Comic Boxes */
+        .comic-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        .comic-card {
+            background: #fffdf5;
+            border: 2px solid #fef08a;
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+        }
+        .comic-caption {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #854d0e;
+            margin-top: 10px;
+        }
+
+        /* Định dạng hiển thị toán học chuẩn */
+        .var {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: 600;
+            padding: 0 1.5px;
+            color: #1e3a8a;
+        }
+        .math-res {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: #b91c1c;
+        }
+        .math-badge {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 10px 14px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+        sup { font-size: 0.72em; vertical-align: super; line-height: 0; font-weight: bold; }
+        sub { font-size: 0.72em; vertical-align: sub; line-height: 0; font-weight: bold; }
+
+        /* Ví dụ điển hình */
+        .example-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        .example-header {
+            font-weight: 800;
+            color: #0369a1;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .example-body {
+            font-size: 0.98rem;
+            color: #1e293b;
+        }
+        .step-pill {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        .calc-line {
+            padding-left: 18px;
+            margin: 6px 0;
+            color: #0f172a;
+        }
+
+        /* Tips & Checklist */
+        .tips-list { list-style: none; }
+        .tips-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            font-size: 0.98rem;
+        }
+        .tips-list li::before {
+            content: "⭐";
+            position: absolute;
+            left: 0;
+            top: 1px;
+            font-size: 1.1rem;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #166534;
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- BANNER BÍ KÍP -->
+    <div class="cheat-header">
+        <span class="badge-pill">Bản Chuẩn Bị Trước Giờ Thi &bull; Môn Toán 8</span>
+        <h1>BÍ KÍP BỎ TÚI: PHÒNG THI TOÁN 8</h1>
+        <p>Ghi nhớ 5 phút trước khi thi &bull; Tự tin làm bài, không sai dấu, ăn trọn điểm!</p>
+    </div>
+
+    <!-- PHẦN 1: 3 BỨC TRANH HOẠT CẢNH -->
+    <div class="card">
+        <div class="card-title">
+            <span>🎨 1. Ba Bức Tranh Giúp Thuộc Bài Trong 60 Giây</span>
+        </div>
+        <div class="comic-row">
+            <!-- Tranh 1: Quái vật dấu trừ -->
+            <div class="comic-card">
+                <svg width="100%" height="95" viewBox="0 0 200 95">
+                    <circle cx="50" cy="45" r="32" fill="#ef4444" />
+                    <rect x="32" y="42" width="36" height="7" rx="3" fill="white" />
+                    <circle cx="42" cy="33" r="4" fill="white" /><circle cx="42" cy="33" r="2" fill="#1e293b" />
+                    <circle cx="58" cy="33" r="4" fill="white" /><circle cx="58" cy="33" r="2" fill="#1e293b" />
+                    <path d="M 105 20 L 120 20 L 120 70 L 105 70" stroke="#4f46e5" stroke-width="4" fill="none" />
+                    <text x="128" y="48" font-size="13" font-weight="bold" fill="#0f172a">&minus;(<span class="var">x</span> &minus; 3)</text>
+                    <text x="110" y="85" font-size="12" font-weight="bold" fill="#16a34a">&rarr; = &minus;<span class="var">x</span> + 3</text>
+                </svg>
+                <div class="comic-caption">Thấy dấu TRỪ trước ngoặc: LẬP TỨC ĐỔI DẤU TẤT CẢ bên trong!</div>
+            </div>
+
+            <!-- Tranh 2: Hằng đẳng thức -->
+            <div class="comic-card">
+                <svg width="100%" height="95" viewBox="0 0 200 95">
+                    <rect x="25" y="15" width="45" height="45" rx="5" fill="#3b82f6" />
+                    <text x="38" y="44" font-size="16" font-weight="bold" fill="white">A²</text>
+                    <rect x="75" y="15" width="22" height="45" rx="3" fill="#93c5fd" />
+                    <text x="78" y="42" font-size="11" font-weight="bold" fill="#1e3a8a">AB</text>
+                    <rect x="25" y="65" width="45" height="18" rx="3" fill="#93c5fd" />
+                    <rect x="75" y="65" width="22" height="18" rx="3" fill="#f59e0b" />
+                    <text x="80" y="78" font-size="10" font-weight="bold" fill="white">B²</text>
+                    <text x="110" y="52" font-size="12" font-weight="bold" fill="#b45309">(A+B)²</text>
+                </svg>
+                <div class="comic-caption">Khai triển (A+B)²: Luôn có 3 miếng ghép, đừng quên miếng 2AB!</div>
+            </div>
+
+            <!-- Tranh 3: Phả hệ Tứ giác -->
+            <div class="comic-card">
+                <svg width="100%" height="95" viewBox="0 0 200 95">
+                    <rect x="10" y="30" width="45" height="28" rx="4" fill="#a7f3d0"/>
+                    <text x="14" y="48" font-size="9" font-weight="bold">H.BÌNH HÀNH</text>
+                    <path d="M 60 35 L 85 20" stroke="#64748b" stroke-width="2"/>
+                    <rect x="90" y="8" width="45" height="24" rx="4" fill="#fde68a"/>
+                    <text x="94" y="24" font-size="8" font-weight="bold">+1 Góc vuông &rarr; HCN</text>
+                    <path d="M 60 52 L 85 68" stroke="#64748b" stroke-width="2"/>
+                    <rect x="90" y="58" width="45" height="24" rx="4" fill="#fed7aa"/>
+                    <text x="96" y="74" font-size="8" font-weight="bold">+2 Đ/chéo &perp; &rarr; Thoi</text>
+                    <path d="M 140 20 L 155 35" stroke="#64748b" stroke-width="2"/>
+                    <path d="M 140 70 L 155 55" stroke="#64748b" stroke-width="2"/>
+                    <rect x="158" y="32" width="38" height="30" rx="6" fill="#f43f5e"/>
+                    <text x="162" y="51" font-size="9" font-weight="bold" fill="white">H.VUÔNG</text>
+                </svg>
+                <div class="comic-caption">HÌNH VUÔNG: Vừa mang gen Hình Chữ Nhật, vừa có gen Hình Thoi!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN 2: BẢNG TRA CỨU SIÊU TỐC -->
+    <div class="card">
+        <div class="card-title">
+            <span>⚡ 2. Bảng Tra Cứu Siêu Tốc (Gặp Đề Là Nhớ)</span>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+                <h4 style="color: var(--primary); margin-bottom: 6px;">📌 3 HẰNG ĐẲNG THỨC GẶP NHIỀU NHẤT</h4>
+                <div class="math-badge">1. (<span class="var">A</span> + <span class="var">B</span>)<sup>2</sup> = <span class="var">A</span><sup>2</sup> + 2<span class="var">AB</span> + <span class="var">B</span><sup>2</sup></div>
+                <div class="math-badge">2. (<span class="var">A</span> &minus; <span class="var">B</span>)<sup>2</sup> = <span class="var">A</span><sup>2</sup> &minus; 2<span class="var">AB</span> + <span class="var">B</span><sup>2</sup></div>
+                <div class="math-badge">3. <span class="var">A</span><sup>2</sup> &minus; <span class="var">B</span><sup>2</sup> = (<span class="var">A</span> &minus; <span class="var">B</span>)(<span class="var">A</span> + <span class="var">B</span>)</div>
+                <div class="math-badge" style="border-left-color: var(--danger); background: #fff5f5;">
+                    ⚠️ <strong>Đặc biệt lưu ý:</strong>
+                    <br>&bull; (<span class="var">y</span> &minus; <span class="var">x</span>)<sup>2</sup> = (<span class="var">x</span> &minus; <span class="var">y</span>)<sup>2</sup>
+                    <br>&bull; (<span class="var">y</span> &minus; <span class="var">x</span>) = <strong style="color: #dc2626;">&minus;(<span class="var">x</span> &minus; <span class="var">y</span>)</strong>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="color: var(--accent); margin-bottom: 6px;">📐 DẤU HIỆU NHẬN BIẾT ĂN ĐIỂM</h4>
+                <div class="math-badge">&bull; <strong>Hình thang cân:</strong> 2 góc kề 1 đáy bằng nhau HOẶC 2 đường chéo bằng nhau.</div>
+                <div class="math-badge">&bull; <strong>Hình bình hành:</strong> Cạnh đối // hoặc bằng nhau; 2 đường chéo cắt nhau tại trung điểm.</div>
+                <div class="math-badge">&bull; <strong>Hình chữ nhật:</strong> HBH có 1 góc vuông HOẶC 2 đường chéo bằng nhau.</div>
+                <div class="math-badge">&bull; <strong>Hình thoi:</strong> HBH có 2 cạnh kề bằng nhau HOẶC 2 đường chéo vuông góc.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN 3: 5 VÍ DỤ ĐIỂN HÌNH NHẤT (ĐÃ KHẮC PHỤC HOÀN TOÀN LỖI HIỂN THỊ) -->
+    <div class="card">
+        <div class="card-title">
+            <span>🎯 3. Năm Bài Toán Điển Hình Chắc Chắn Có Trong Đề Thi</span>
+        </div>
+
+        <!-- VÍ DỤ 1 -->
+        <div class="example-box">
+            <div class="example-header">
+                <span>Dạng 1: Rút gọn đa thức (Không bị lừa dấu trừ)</span>
+                <span style="color: #64748b;">[1,0 điểm]</span>
+            </div>
+            <div class="example-body">
+                <p><strong>Đề bài:</strong> Rút gọn biểu thức <span class="var">P</span> = (<span class="var">x</span> + 3)<sup>2</sup> &minus; (<span class="var">x</span> &minus; 2)(<span class="var">x</span> + 2) &minus; 6<span class="var">x</span>.</p>
+                <div style="margin-top: 8px;">
+                    <p><span class="step-pill">Bước 1: Khai triển</span> (<span class="var">x</span> + 3)<sup>2</sup> = <span class="var">x</span><sup>2</sup> + 6<span class="var">x</span> + 9 và (<span class="var">x</span> &minus; 2)(<span class="var">x</span> + 2) = <span class="var">x</span><sup>2</sup> &minus; 4.</p>
+                    <p><span class="step-pill">Bước 2: Mở ngoặc an toàn</span> Giữ dấu trừ đằng trước ngoặc và đổi dấu cẩn thận:</p>
+                    <div class="calc-line">
+                        <span class="var">P</span> = (<span class="var">x</span><sup>2</sup> + 6<span class="var">x</span> + 9) &minus; (<span class="var">x</span><sup>2</sup> &minus; 4) &minus; 6<span class="var">x</span>
+                    </div>
+                    <div class="calc-line">
+                        <span class="var">P</span> = <span class="var">x</span><sup>2</sup> + 6<span class="var">x</span> + 9 &minus; <span class="var">x</span><sup>2</sup> + 4 &minus; 6<span class="var">x</span>
+                    </div>
+                    <p><span class="step-pill">Bước 3: Thu gọn</span> (<span class="var">x</span><sup>2</sup> &minus; <span class="var">x</span><sup>2</sup>) + (6<span class="var">x</span> &minus; 6<span class="var">x</span>) + (9 + 4) = <span class="math-res">13</span>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VÍ DỤ 2 -->
+        <div class="example-box">
+            <div class="example-header">
+                <span>Dạng 2: Phân tích đa thức thành nhân tử</span>
+                <span style="color: #64748b;">[1,5 điểm]</span>
+            </div>
+            <div class="example-body">
+                <p><strong>Đề bài:</strong> Phân tích thành nhân tử: 
+                    <br>a) 3<span class="var">x</span><sup>2</sup> &minus; 6<span class="var">x</span> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    b) <span class="var">x</span><sup>2</sup> &minus; 4<span class="var">y</span><sup>2</sup> + 2<span class="var">x</span> + 4<span class="var">y</span>
+                </p>
+                <div style="margin-top: 8px;">
+                    <p><span class="step-pill">Câu a</span> 3<span class="var">x</span><sup>2</sup> &minus; 6<span class="var">x</span> = <span class="math-res">3x(x &minus; 2)</span>.</p>
+                    <p><span class="step-pill">Câu b</span> Nhóm 2 hạng tử đầu (dùng HĐT) và 2 hạng tử cuối (đặt nhân tử chung):</p>
+                    <div class="calc-line">
+                        = (<span class="var">x</span><sup>2</sup> &minus; 4<span class="var">y</span><sup>2</sup>) + (2<span class="var">x</span> + 4<span class="var">y</span>)
+                    </div>
+                    <div class="calc-line">
+                        = (<span class="var">x</span> &minus; 2<span class="var">y</span>)(<span class="var">x</span> + 2<span class="var">y</span>) + 2(<span class="var">x</span> + 2<span class="var">y</span>)
+                    </div>
+                    <div class="calc-line">
+                        = <span class="math-res">(x + 2y)(x &minus; 2y + 2)</span>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VÍ DỤ 3 -->
+        <div class="example-box">
+            <div class="example-header">
+                <span>Dạng 3: Tìm x bằng cách đưa về tích A &times; B = 0</span>
+                <span style="color: #64748b;">[1,0 điểm]</span>
+            </div>
+            <div class="example-body">
+                <p><strong>Đề bài:</strong> Tìm <span class="var">x</span>, biết: 2<span class="var">x</span>(<span class="var">x</span> &minus; 3) &minus; <span class="var">x</span> + 3 = 0.</p>
+                <div style="margin-top: 8px;">
+                    <p><span class="step-pill">Bí quyết</span> Đổi dấu cụm (&minus;<span class="var">x</span> + 3) thành &minus;(<span class="var">x</span> &minus; 3) để có nhân tử chung:</p>
+                    <div class="calc-line">
+                        2<span class="var">x</span>(<span class="var">x</span> &minus; 3) &minus; (<span class="var">x</span> &minus; 3) = 0
+                    </div>
+                    <div class="calc-line">
+                        &hArr; (<span class="var">x</span> &minus; 3)(2<span class="var">x</span> &minus; 1) = 0
+                    </div>
+                    <div class="calc-line">
+                        &rArr; <span class="var">x</span> &minus; 3 = 0 hoặc 2<span class="var">x</span> &minus; 1 = 0
+                    </div>
+                    <p style="padding-left: 18px;">
+                        &rArr; <span class="math-res">x = 3</span> hoặc <span class="math-res">x = ½</span>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VÍ DỤ 4 -->
+        <div class="example-box">
+            <div class="example-header">
+                <span>Dạng 4: Hình học - Chứng minh Hình chữ nhật & Tính góc</span>
+                <span style="color: #64748b;">[2,0 điểm]</span>
+            </div>
+            <div class="example-body">
+                <p><strong>Đề bài:</strong> Cho tam giác <span class="var">ABC</span> vuông tại <span class="var">A</span>. Gọi <span class="var">M</span> là trung điểm của <span class="var">BC</span>. Kẻ <span class="var">MD</span> &perp; <span class="var">AB</span> tại <span class="var">D</span> và <span class="var">ME</span> &perp; <span class="var">AC</span> tại <span class="var">E</span>. Tứ giác <span class="var">ADME</span> là hình gì? Vì sao?</p>
+                <div style="margin-top: 8px;">
+                    <p><span class="step-pill">Lời giải mẫu mực</span></p>
+                    <p>Xét tứ giác <span class="var">ADME</span>, ta có:</p>
+                    <p class="calc-line">&bull; Góc <span class="var">DAE</span> = 90&deg; (do tam giác <span class="var">ABC</span> vuông tại <span class="var">A</span>).</p>
+                    <p class="calc-line">&bull; Góc <span class="var">ADM</span> = 90&deg; (do <span class="var">MD</span> &perp; <span class="var">AB</span>).</p>
+                    <p class="calc-line">&bull; Góc <span class="var">AEM</span> = 90&deg; (do <span class="var">ME</span> &perp; <span class="var">AC</span>).</p>
+                    <p>Suy ra tứ giác <span class="var">ADME</span> có 3 góc vuông nên <strong><span class="var">ADME</span> là hình chữ nhật</strong> (dấu hiệu nhận biết).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VÍ DỤ 5 -->
+        <div class="example-box">
+            <div class="example-header">
+                <span>Dạng 5: Bài toán thực tế tính tiền (Dễ lấy điểm nhất)</span>
+                <span style="color: #64748b;">[1,0 điểm]</span>
+            </div>
+            <div class="example-body">
+                <p><strong>Đề bài:</strong> Giá tiền 1 quyển vở loại I là <span class="var">x</span> đồng, loại II là <span class="var">y</span> đồng. Bạn An mua 10 quyển vở loại I và 5 quyển vở loại II.</p>
+                <div style="margin-top: 8px;">
+                    <p><strong>a)</strong> Viết biểu thức số tiền An phải thanh toán:</p>
+                    <p class="calc-line">
+                        <strong><span class="var">T</span> = 10<span class="var">x</span> + 5<span class="var">y</span></strong> (đồng).
+                    </p>
+                    <p><strong>b)</strong> Nếu giá vở loại I là 9.000 đồng/quyển và loại II là 6.000 đồng/quyển:</p>
+                    <div class="calc-line">
+                        Thay <span class="var">x</span> = 9.000 và <span class="var">y</span> = 6.000 vào biểu thức <span class="var">T</span>:
+                    </div>
+                    <div class="calc-line">
+                        <span class="var">T</span> = 10 &times; 9.000 + 5 &times; 6.000 = 90.000 + 30.000 = <span class="math-res">120.000 đồng</span>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PHẦN 4: DẶN DÒ TRONG PHÒNG THI & CHECKLIST -->
+    <div class="card" style="border-top: 5px solid var(--success);">
+        <div class="card-title">
+            <span style="color: var(--success);">🏆 4. Lời Dặn Dò Sống Còn & Checklist Trước Khi Nộp Bài</span>
+        </div>
+
+        <ul class="tips-list">
+            <li><strong>Chiến thuật 10 phút đầu:</strong> Quét sạch toàn bộ trắc nghiệm trước. Câu nào phân vân, hãy dùng phương pháp loại trừ hoặc thử một số nhỏ (ví dụ <span class="var">x</span> = 1, <span class="var">y</span> = 0).</li>
+            <li><strong>Tuyệt đối không bỏ trắng:</strong> Bài hình dù chưa biết làm hết, hãy vẽ hình thật chuẩn, đánh dấu góc vuông, ghi giả thiết - kết luận để lấy trọn 0,25 &minus; 0,5 điểm trình bày ban đầu.</li>
+            <li><strong>Chậm 3 giây ở mỗi dấu trừ:</strong> Khi chuyển vế hoặc phá ngoặc tròn, hãy nhìn lại xem mình đã đổi dấu chưa!</li>
+        </ul>
+
+        <div style="margin-top: 15px;">
+            <h4 style="color: #15803d; margin-bottom: 8px;">⏰ CHECKLIST 60 GIÂY CUỐI CÙNG TRƯỚC KHI NỘP BÀI:</h4>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> Đã ghi đầy đủ Họ tên, Lớp, Số báo danh vào tờ giấy thi.
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> Kiểm tra các bài Tìm x: Đã có kết luận "Vậy x = ..." chưa? Có bỏ quên nghiệm âm nào không?
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> Kiểm tra bài đa thức chỉ còn hằng số: Hằng số khác 0 là bậc 0 (không phải bậc 1)!
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> Kiểm tra bài hình: Đã ghi lí do trong ngoặc đơn sau mỗi bước suy luận chưa (ví dụ: "(so le trong)", "(tính chất hình bình hành)")?
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
