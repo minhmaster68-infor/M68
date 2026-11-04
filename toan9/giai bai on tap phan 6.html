@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinh Phục Bài Toán Tối Ưu Doanh Thu - Toán 9</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Be Vietnam Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX CSS & JS Core + Auto-render extension -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '1', filter: 'drop-shadow(0 0 15px rgba(245, 158, 11, 0.6))' },
+                            '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 5px rgba(245, 158, 11, 0.2))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0b0f19 0%, #111827 40%, #1e1b4b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .gradient-text-orange {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-cyan {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: #1e293b;
+            border-radius: 6px;
+            border: 1px solid #334155;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px;
+            box-shadow: 0 0 15px #00f2fe;
+            transition: all 0.2s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased pb-16">
+
+    <!-- Header Section -->
+    <header class="relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8 text-center border-b border-slate-800">
+        <div class="absolute inset-0 z-0 opacity-20 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 mb-4 animate-bounce">
+                <i class="fa-solid fa-graduation-cap"></i> Toán Đại Số 9 - Chuyên Đề Tối Ưu Lợi Nhuận
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 gradient-text-gold">
+                HƯỚNG DẪN GIẢI BÀI TOÁN TỐI ƯU DOANH THU CĂN HỘ
+            </h1>
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto">
+                Hiểu rõ bản chất ứng dụng Hàm Số Bậc Hai - Lập phương trình & Tìm Cực Trị thu về trọn 0,5 điểm tuyệt đối! 🎯
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-12">
+
+        <!-- THẺ ĐỀ BÀI (CARD 1) -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border-l-8 border-l-amber-400">
+            <div class="flex items-center gap-3 mb-4 text-amber-400">
+                <i class="fa-solid fa-file-invoice-dollar text-2xl"></i>
+                <h2 class="text-xl sm:text-2xl font-bold uppercase tracking-wide">Đề Bài (Bài V - 0.5 điểm)</h2>
+            </div>
+            <div class="bg-slate-900/90 p-5 rounded-2xl text-slate-100 text-base sm:text-lg leading-relaxed border border-slate-800 shadow-inner">
+                <p>
+                    Một công ty bất động sản có <span class="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-bold border border-amber-400/30">100 căn hộ</span> cho thuê. 
+                    Biết rằng nếu cho thuê mỗi căn hộ với giá <span class="bg-emerald-400/20 text-emerald-300 px-2 py-0.5 rounded font-bold border border-emerald-400/30">4 triệu đồng</span> một tháng thì mọi căn hộ đều có người thuê. 
+                    Và cứ tăng thêm giá cho thuê mỗi căn hộ <span class="bg-cyan-400/20 text-cyan-300 px-2 py-0.5 rounded font-bold border border-cyan-400/30">200 nghìn đồng</span> một tháng thì sẽ có <span class="bg-rose-400/20 text-rose-300 px-2 py-0.5 rounded font-bold border border-rose-400/30">4 căn hộ bị bỏ trống</span>. 
+                </p>
+                <p class="mt-4 font-semibold text-amber-200 border-t border-slate-800 pt-3">
+                    👉 Hỏi muốn thu về lợi nhuận (doanh thu) cao nhất thì công ty đó phải cho thuê mỗi căn hộ với giá bao nhiêu một tháng?
+                </p>
+            </div>
+        </section>
+
+        <!-- MÔ PHỎNG TƯƠNG TÁC (INTERACTIVE SLIDER) -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 bg-slate-900/90 relative shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="bg-cyan-500/20 text-cyan-300 text-xs px-3 py-1 rounded-full font-semibold border border-cyan-500/30 uppercase tracking-wider">
+                        <i class="fa-solid fa-calculator mr-1"></i> Trực quan hóa toán học
+                    </span>
+                    <h2 class="text-2xl font-bold gradient-text-cyan mt-1">Mô Phỏng Doanh Thu Tương Tác</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-400 max-w-xs">Hãy kéo thanh trượt bên dưới để khám phá mức tăng giá giúp doanh thu đạt đỉnh!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Control Panel -->
+                <div class="lg:col-span-5 space-y-6 bg-slate-800/60 p-6 rounded-2xl border border-slate-700">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold text-slate-300">Số lần tăng giá ($x$):</label>
+                            <span id="xValueText" class="text-xl font-extrabold text-cyan-400 bg-cyan-950/80 px-3 py-0.5 rounded-lg border border-cyan-800">x = 0</span>
+                        </div>
+                        <input type="range" id="xSlider" min="0" max="25" step="0.5" value="0" class="w-full">
+                        <div class="flex justify-between text-xs text-slate-500 mt-1 font-mono">
+                            <span>0 (Giá cũ)</span>
+                            <span>2.5 (Tối ưu)</span>
+                            <span>25 (Trống 100%)</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2 border-t border-slate-700 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400"><i class="fa-solid fa-tag text-emerald-400 mr-2"></i>Giá thuê 1 căn:</span>
+                            <span id="pricePerRoom" class="font-bold text-emerald-400 text-base">4.0 triệu/tháng</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400"><i class="fa-solid fa-building-circle-xmark text-rose-400 mr-2"></i>Số căn bị trống:</span>
+                            <span id="emptyRooms" class="font-bold text-rose-400 text-base">0 căn</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400"><i class="fa-solid fa-building-circle-check text-indigo-400 mr-2"></i>Số căn được thuê:</span>
+                            <span id="rentedRooms" class="font-bold text-indigo-400 text-base">100 căn</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div class="lg:col-span-7 flex flex-col justify-center items-center text-center p-6 bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl border border-indigo-500/30 relative min-h-[220px]">
+                    <div id="maxBadge" class="hidden absolute top-3 right-3 bg-amber-400 text-slate-950 font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-lg animate-pulse">
+                        <i class="fa-solid fa-trophy"></i> Cực đại (MAX)!
+                    </div>
+
+                    <span class="text-slate-400 text-sm font-medium mb-1">TỔNG DOANH THU THU VỀ $T(x)$</span>
+                    <div id="totalRevenue" class="text-4xl sm:text-5xl font-black text-amber-400 my-2 tracking-tight">
+                        400.0 <span class="text-2xl font-normal">triệu VNĐ</span>
+                    </div>
+
+                    <!-- Progress Bar / Peak Bar -->
+                    <div class="w-full bg-slate-800 h-4 rounded-full mt-4 overflow-hidden p-0.5 border border-slate-700">
+                        <div id="revenueBar" class="bg-gradient-to-r from-cyan-500 via-indigo-500 to-amber-400 h-full rounded-full transition-all duration-300" style="width: 98.76%;"></div>
+                    </div>
+                    <p id="simulatorHint" class="text-xs text-slate-400 mt-3 italic">
+                        💡 Thử kéo thanh trượt đến mốc <span class="text-cyan-300 font-bold">x = 2.5</span> để kiểm tra điểm cực đại!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SƠ ĐỒ PHÂN TÍCH TƯ DUY -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl border border-purple-500/30">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-purple-300">Phân Tích Hướng Giải Bài Toán</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl hover:border-purple-500/50 transition-all">
+                    <div class="text-purple-400 font-bold text-lg mb-2"><i class="fa-solid fa-arrows-rotate mr-2"></i>1. Quy đổi đơn vị</div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Đổi $200.000\text{ đồng} = 0{,}2\text{ triệu đồng}$ để đồng nhất đơn vị tính toán là "triệu đồng".
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition-all">
+                    <div class="text-cyan-400 font-bold text-lg mb-2"><i class="fa-solid fa-xmark mr-2"></i>2. Đặt ẩn phù hợp</div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Gọi $x$ là số lần tăng giá ($x \ge 0$). Từ đó biểu diễn giá thuê mới và số căn bị bỏ trống theo $x$.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-emerald-500/50 transition-all">
+                    <div class="text-emerald-400 font-bold text-lg mb-2"><i class="fa-solid fa-chart-line mr-2"></i>3. Lập hàm Doanh Thu</div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        $\text{Doanh Thu} = (\text{Giá thuê 1 căn}) \times (\text{Số căn được thuê})$. Sử dụng hằng đẳng thức để tìm GTLN.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LỜI GIẢI CHI TIẾT 4 BƯỚC CHUẨN ĐIỂM -->
+        <section class="space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl border border-emerald-500/30">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-emerald-300">Lời Giải Chi Tiết Trình Bày Bài Thi</h2>
+            </div>
+
+            <div class="space-y-6">
+                
+                <!-- BƯỚC 1 -->
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-l-cyan-400 relative">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-300 font-bold flex items-center justify-center border border-cyan-400/40 text-sm">B1</span>
+                        <h3 class="text-lg font-bold text-cyan-200">Đổi đơn vị và đặt ẩn, xác định điều kiện</h3>
+                    </div>
+                    <div class="text-slate-200 pl-2 sm:pl-11 space-y-2 text-base leading-relaxed">
+                        <p>Đổi: $200.000\text{ đồng} = 0{,}2\text{ triệu đồng}$.</p>
+                        <p>Gọi $x$ là số lần tăng giá tiền thuê mỗi căn hộ ($x \ge 0$).</p>
+                        <p class="text-xs text-slate-400 italic bg-slate-900/50 p-2 rounded border border-slate-800">
+                            *Ghi chú: Vì tổng số căn hộ là 100 và mỗi lần tăng giá bỏ trống 4 căn nên số căn bị bỏ trống không vượt quá 100. Do đó điều kiện đầy đủ là $0 \le x \le 25$.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2 -->
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-l-indigo-400 relative">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center border border-indigo-400/40 text-sm">B2</span>
+                        <h3 class="text-lg font-bold text-indigo-200">Biểu diễn các đại lượng theo ẩn $x$</h3>
+                    </div>
+                    <div class="text-slate-200 pl-2 sm:pl-11 space-y-3 text-base">
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-indigo-400 mt-1"></i>
+                            <div>Giá cho thuê một căn hộ sau khi tăng giá là: <span class="text-emerald-300 font-bold">$4 + 0{,}2x$</span> (triệu đồng/tháng).</div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-indigo-400 mt-1"></i>
+                            <div>Số căn hộ bị bỏ trống là: <span class="text-rose-300 font-bold">$4x$</span> (căn hộ).</div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-indigo-400 mt-1"></i>
+                            <div>Số căn hộ thực tế có người thuê là: <span class="text-amber-300 font-bold">$100 - 4x$</span> (căn hộ).</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 3 -->
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-l-amber-400 relative">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center border border-amber-400/40 text-sm">B3</span>
+                        <h3 class="text-lg font-bold text-amber-200">Lập hàm số Doanh Thu $T(x)$ và biến đổi về hằng đẳng thức</h3>
+                    </div>
+                    <div class="text-slate-200 pl-2 sm:pl-11 space-y-4 text-base">
+                        <p>Tổng doanh thu của công ty thu được trong một tháng là $T(x)$ (triệu đồng):</p>
+                        
+                        <!-- KaTeX Formula Display Box -->
+                        <div class="bg-slate-900/95 p-4 sm:p-6 rounded-xl border border-slate-700 text-slate-100 text-lg overflow-x-auto shadow-inner">
+                            $$\begin{aligned}
+                            T(x) &= (4 + 0{,}2x)(100 - 4x) \\
+                            &= 400 - 16x + 20x - 0{,}8x^2 \\
+                            &= -0{,}8x^2 + 4x + 400 \\
+                            &= -0{,}8\left(x^2 - 5x\right) + 400 \\
+                            &= -0{,}8\left[x^2 - 2 \cdot x \cdot 2{,}5 + (2{,}5)^2 - (2{,}5)^2\right] + 400 \\
+                            &= -0{,}8(x - 2{,}5)^2 + 0{,}8 \cdot 6{,}25 + 400 \\
+                            &= -0{,}8(x - 2{,}5)^2 + 5 + 400 \\
+                            &= -0{,}8(x - 2{,}5)^2 + 405
+                            \end{aligned}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 4 -->
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-l-rose-400 relative">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-300 font-bold flex items-center justify-center border border-rose-400/40 text-sm">B4</span>
+                        <h3 class="text-lg font-bold text-rose-200">Đánh giá Giá Trị Lớn Nhất và Kết Luận</h3>
+                    </div>
+                    <div class="text-slate-200 pl-2 sm:pl-11 space-y-3 text-base">
+                        <p>Vì $(x - 2{,}5)^2 \ge 0$ với mọi $x \ge 0$, suy ra $-0{,}8(x - 2{,}5)^2 \le 0$.</p>
+                        <p class="text-lg">
+                            Do đó: $T(x) = -0{,}8(x - 2{,}5)^2 + 405 \le 405$ (triệu đồng).
+                        </p>
+                        <p>
+                            Dấu <span class="font-bold text-amber-300">"="</span> xảy ra khi $x - 2{,}5 = 0 \iff x = 2{,}5$ (thỏa mãn điều kiện $0 \le x \le 25$).
+                        </p>
+                        
+                        <div class="mt-4 p-5 bg-emerald-950/70 border border-emerald-500/40 rounded-2xl">
+                            <p class="font-bold text-emerald-300 text-lg mb-1"><i class="fa-solid fa-circle-check mr-2"></i>KẾT LUẬN CUỐI CÙNG:</p>
+                            <p class="text-slate-200">
+                                Muốn thu về doanh thu cao nhất, công ty phải cho thuê mỗi căn hộ với giá là:
+                            </p>
+                            <div class="text-2xl sm:text-3xl font-black text-amber-300 my-2">
+                                $4 + 0{,}2 \times 2{,}5 = 4{,}5\text{ (triệu đồng/tháng)}$
+                            </div>
+                            <p class="text-sm text-slate-300">
+                                Đổi: $4{,}5\text{ triệu đồng} = \mathbf{4.500.000\text{ VNĐ}}$. (Doanh thu cực đại khi đó đạt $\mathbf{405\text{ triệu đồng}}$).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BẢNG TỔNG KẾT & MẸO LÀM BÀI -->
+        <section class="glass-card p-6 sm:p-8 rounded-3xl border border-amber-500/30 bg-slate-900/80">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-star text-amber-400 text-2xl animate-spin"></i>
+                <h2 class="text-2xl font-bold text-amber-300">Kinh Nghiệm & Lưu Ý Tránh Mất Điểm</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-cyan-300 text-base mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Dạng bài Hàm Số Bậc Hai Cực Trị</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Luôn biến đổi biểu thức bậc hai về dạng chuẩn:
+                        <br>
+                        <span class="text-amber-300 font-mono text-base block my-1 text-center">$-a(x - h)^2 + k \le k \quad (a > 0)$</span>
+                        Giá trị lớn nhất đạt được là <span class="text-emerald-300 font-bold">$k$</span> xảy ra khi <span class="text-cyan-300 font-bold">$x = h$</span>.
+                    </p>
+                </div>
+
+                <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-rose-300 text-base mb-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Sai lầm hay gặp</h3>
+                    <ul class="text-sm text-slate-300 space-y-1.5 list-disc list-inside">
+                        <li>Quên đổi đơn vị giữa <span class="text-amber-300 font-semibold">triệu đồng</span> và <span class="text-amber-300 font-semibold">nghìn đồng</span>.</li>
+                        <li>Lầm tưởng $x = 2{,}5$ là đáp án. Đề hỏi **GIÁ THUÊ CĂN HỘ**, do đó phải tính $4 + 0{,}2 \times 2{,}5 = 4{,}5$.</li>
+                        <li>Thiếu điều kiện kiểm tra của $x$.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 text-center text-slate-500 text-sm border-t border-slate-800 pt-8">
+        <p>Hệ Thống Bài Giảng Toán Đại Số 9 - Ôn Thi Vào Lớp 10 🚀</p>
+    </footer>
+
+    <!-- Script Tự Động Render KaTeX & Interactive Simulator -->
+    <script>
+        // 1. TỰ ĐỘNG RENDER TOÁN LÊN MÀN HÌNH BẰNG KATEX KHI DOM TẢI XONG
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+
+        // 2. MÔ PHỎNG TƯƠNG TÁC DOANH THU (INTERACTIVE SIMULATOR)
+        const xSlider = document.getElementById('xSlider');
+        const xValueText = document.getElementById('xValueText');
+        const pricePerRoom = document.getElementById('pricePerRoom');
+        const emptyRooms = document.getElementById('emptyRooms');
+        const rentedRooms = document.getElementById('rentedRooms');
+        const totalRevenue = document.getElementById('totalRevenue');
+        const revenueBar = document.getElementById('revenueBar');
+        const maxBadge = document.getElementById('maxBadge');
+
+        function updateSimulation() {
+            const x = parseFloat(xSlider.value);
+            
+            // Tính toán các đại lượng
+            const price = 4 + 0.2 * x;
+            const empty = 4 * x;
+            const rented = 100 - empty;
+            const revenue = price * rented; // Hàm T(x) = -0.8*x^2 + 4*x + 400
+
+            // Cập nhật văn bản hiển thị
+            xValueText.innerText = `x = ${x}`;
+            pricePerRoom.innerText = `${price.toFixed(2)} triệu/tháng`;
+            emptyRooms.innerText = `${empty} căn`;
+            rentedRooms.innerText = `${rented} căn`;
+            totalRevenue.innerHTML = `${revenue.toFixed(1)} <span class="text-2xl font-normal">triệu VNĐ</span>`;
+
+            // Cập nhật thanh phần trăm doanh thu (Cực đại là 405 tại x = 2.5)
+            const percentage = (revenue / 405) * 100;
+            revenueBar.style.width = `${percentage}%`;
+
+            // Điểm cực đại Highlight
+            if (Math.abs(x - 2.5) < 0.01) {
+                maxBadge.classList.remove('hidden');
+                totalRevenue.classList.add('text-amber-300', 'scale-105');
+            } else {
+                maxBadge.classList.add('hidden');
+                totalRevenue.classList.remove('scale-105');
+            }
+        }
+
+        xSlider.addEventListener('input', updateSimulation);
+        
+        // Khởi chạy mô phỏng lần đầu
+        updateSimulation();
+    </script>
+</body>
+</html>

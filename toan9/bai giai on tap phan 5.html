@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Giải Bài Tập Hình Học Lớp 9 - Tam Giác Vuông & Tỉ Số Lượng Giác</title>
+    
+    <!-- Cấu hình MathJax 3 để hiển thị chính xác kí hiệu toán học $...$ -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1a56db;
+            --secondary-color: #0e9f6e;
+            --dark-color: #1f2937;
+            --light-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --highlight-bg: #f0fdf4;
+            --warning-bg: #fffbe6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+
+        .problem-statement {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .layout-grid {
+                grid-template-columns: 380px 1fr;
+            }
+        }
+
+        .canvas-container {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .solution-step {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .teacher-note {
+            background-color: var(--warning-bg);
+            border-left: 4px solid #f59e0b;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-size: 0.95em;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .teacher-note strong {
+            color: #b45309;
+        }
+
+        .highlight-box {
+            background-color: var(--highlight-bg);
+            border: 1px solid #a7f3d0;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HƯỚNG DẪN GIẢI BÀI TOÁN HÌNH HỌC LỚP 9</h1>
+
+    <!-- ĐỀ BÀI -->
+    <div class="problem-statement">
+        <strong>Đề bài:</strong> Cho tam giác $ABC$ vuông tại $A$, đường cao $AH$.
+        <ul>
+            <li><strong>a)</strong> Giả sử biết $AB = 9\text{ cm}$; $BC = 15\text{ cm}$. Giải tam giác vuông $ABC$ (góc làm tròn đến phút, độ dài làm tròn đến hàng đơn vị).</li>
+            <li><strong>b)</strong> Chứng minh $AB = \dfrac{BH}{\cos B}$ và $AB^2 = BH \cdot BC$.</li>
+            <li><strong>c)</strong> Lấy điểm $G$ nằm giữa $A$ và $C$, kẻ $AK \perp BG$ tại $K$. Chứng minh $HK = CG \cdot \sin \widehat{AGB} \cdot \cos \widehat{ABC}$.</li>
+        </ul>
+    </div>
+
+    <div class="layout-grid">
+        <!-- KHUNG VẼ HÌNH HỌC -->
+        <div class="canvas-container">
+            <h3 style="margin-top: 0;">Hình minh họa</h3>
+            <canvas id="geometryCanvas" width="360" height="340"></canvas>
+            <p style="font-size: 0.85em; color: #6b7280; margin-bottom: 0;">Sơ đồ hình học trực quan chuẩn tỉ lệ toán học</p>
+        </div>
+
+        <!-- BÀI GIẢI CHI TIẾT -->
+        <div class="solution">
+            
+            <!-- CÂU A -->
+            <div class="solution-step">
+                <div class="step-title">Lời giải Câu a: Giải tam giác vuông $ABC$</div>
+                
+                <p>Áp dụng định lý Định lý Pythagore vào tam giác $ABC$ vuông tại $A$:</p>
+                $$BC^2 = AB^2 + AC^2 \implies AC = \sqrt{BC^2 - AB^2} = \sqrt{15^2 - 9^2} = 12\text{ cm}$$
+
+                <p>Tính các góc nhọn của tam giác $ABC$ bằng tỉ số lượng giác:</p>
+                $$\sin B = \frac{AC}{BC} = \frac{12}{15} = 0,8 \implies \widehat{B} \approx 53^\circ 8'$$
+                $$\widehat{C} = 90^\circ - \widehat{B} \approx 90^\circ - 53^\circ 8' = 36^\circ 52'$$
+
+                <div class="teacher-note">
+                    <strong>💡 Lời khuyên trình bày:</strong> Khi làm bài "giải tam giác vuông", học sinh cần tìm đủ độ dài tất cả các cạnh và số đo các góc chưa biết. Đừng quên chú ý yêu cầu làm tròn của đề bài (góc làm tròn đến phút, độ dài làm tròn đến hàng đơn vị).
+                </div>
+            </div>
+
+            <!-- CÂU B -->
+            <div class="solution-step">
+                <div class="step-title">Lời giải Câu b: Chứng minh các đẳng thức</div>
+                
+                <p><strong>1. Chứng minh $AB = \dfrac{BH}{\cos B}$:</strong></p>
+                <p>Xét tam giác $ABH$ vuông tại $H$, ta có tỉ số lượng giác:</p>
+                $$\cos B = \frac{BH}{AB} \implies AB = \frac{BH}{\cos B} \quad \text{(đpcm)}$$
+
+                <p><strong>2. Chứng minh $AB^2 = BH \cdot BC$:</strong></p>
+                <p>Xét $\triangle ABH$ và $\triangle CBA$ có:</p>
+                <ul>
+                    <li>$\widehat{AHB} = \widehat{BAC} = 90^\circ$</li>
+                    <li>Góc $\widehat{B}$ chung</li>
+                </ul>
+                $$\implies \triangle ABH \sim \triangle CBA \text{ (g-g)}$$
+                $$\implies \frac{AB}{CB} = \frac{BH}{BA} \implies AB^2 = BH \cdot BC \quad \text{(đpcm)}$$
+
+                <div class="teacher-note">
+                    <strong>💡 Lời khuyên trình bày:</strong> Đây chính là Hệ thức lượng trong tam giác vuông ($c^2 = a \cdot c'$). Khi trình bày tự luận ở HK1 lớp 9, học sinh chứng minh lại bằng hai tam giác đồng dạng như trên để đạt điểm tối đa.
+                </div>
+            </div>
+
+            <!-- CÂU C -->
+            <div class="solution-step">
+                <div class="step-title">Lời giải Câu c: Chứng minh $HK = CG \cdot \sin \widehat{AGB} \cdot \cos \widehat{ABC}$</div>
+                
+                <p><strong>Bước 1: Biến đổi biểu thức vế phải (VP)</strong></p>
+                <ul>
+                    <li>Trong $\triangle ABG$ vuông tại $A$: $\sin \widehat{AGB} = \dfrac{AB}{BG}$</li>
+                    <li>Trong $\triangle ABC$ vuông tại $A$: $\cos \widehat{ABC} = \cos B = \dfrac{AB}{BC}$</li>
+                </ul>
+                <p>Thay các tỉ số vào vế phải:</p>
+                $$\text{VP} = CG \cdot \frac{AB}{BG} \cdot \frac{AB}{BC} = \frac{CG \cdot AB^2}{BG \cdot BC}$$
+                <p>Thế $AB^2 = BH \cdot BC$ (kết quả từ câu b) vào vế phải, ta rút gọn được:</p>
+                $$\text{VP} = \frac{CG \cdot (BH \cdot BC)}{BG \cdot BC} = \frac{CG \cdot BH}{BG} \quad (1)$$
+
+                <p><strong>Bước 2: Chứng minh $\triangle BHK \sim \triangle BGC$</strong></p>
+                <ul>
+                    <li>Xét $\triangle ABK$ và $\triangle GBA$ đều vuông tại $K$ and $A$, có góc $\widehat{ABG}$ chung:
+                        $$\implies \triangle ABK \sim \triangle GBA \text{ (g-g)} \implies \frac{BK}{BA} = \frac{BA}{BG} \implies AB^2 = BK \cdot BG$$
+                    </li>
+                    <li>Từ câu b ta có $AB^2 = BH \cdot BC$, suy ra:
+                        $$BH \cdot BC = BK \cdot BG \implies \frac{BH}{BG} = \frac{BK}{BC}$$
+                    </li>
+                    <li>Xét $\triangle BHK$ và $\triangle BGC$ có:
+                        <ul>
+                            <li>Góc $\widehat{B}$ chung</li>
+                            <li>Tỉ số cạnh kẹp góc $\widehat{B}$: $\dfrac{BH}{BG} = \dfrac{BK}{BC}$</li>
+                        </ul>
+                        $$\implies \triangle BHK \sim \triangle BGC \text{ (c-g-c)}$$
+                    </li>
+                </ul>
+
+                <p><strong>Bước 3: Kết luận</strong></p>
+                <p>Từ hai tam giác đồng dạng $\triangle BHK \sim \triangle BGC$, suy ra tỉ số cạnh tương ứng:</p>
+                $$\frac{HK}{GC} = \frac{BH}{BG} \implies HK = \frac{CG \cdot BH}{BG} \quad (2)$$
+
+                <div class="highlight-box">
+                    Từ $(1)$ và $(2)$ suy ra: $HK = CG \cdot \sin \widehat{AGB} \cdot \cos \widehat{ABC}$ (đpcm).
+                </div>
+
+                <div class="teacher-note">
+                    <strong>💡 Lời khuyên trình bày:</strong> 
+                    <br>1. Phương pháp mấu chốt là <strong>biến đổi vế phải</strong> thành tỉ số đoạn thẳng nhờ hệ thức lượng và tỉ số lượng giác.
+                    <br>2. Bài toán sử dụng hoàn toàn kiến thức Học kỳ 1 (Tam giác đồng dạng & Hệ thức lượng), hoàn toàn chuẩn mực và khoa học cho học sinh lớp 9.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© Tài liệu Hướng dẫn Giải bài tập Toán 9 - Chuyên đề Tam giác vuông & Tỉ số lượng giác</p>
+    </footer>
+</div>
+
+<!-- SCRIPT VẼ HÌNH CHUẨN XÁC NGUYÊN TẮC HÌNH HỌC HỌC TỌA ĐỘ -->
+<script>
+    function drawGeometry() {
+        const canvas = document.getElementById('geometryCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 1. Tọa độ đỉnh chính tam giác ABC vuông tại A
+        const pA = { x: 70, y: 70 };
+        const pB = { x: 70, y: 280 };  // AB vuông góc với AC
+        const pC = { x: 320, y: 70 };
+
+        // 2. Điểm G nằm giữa A và C (lấy vị trí 55% đoạn AC)
+        const pG = { 
+            x: pA.x + 0.55 * (pC.x - pA.x), 
+            y: pA.y 
+        };
+
+        // Hàm tính hình chiếu vuông góc của điểm P lên đường thẳng P1P2
+        function getProjection(P, P1, P2) {
+            const dx = P2.x - P1.x;
+            const dy = P2.y - P1.y;
+            const t = ((P.x - P1.x) * dx + (P.y - P1.y) * dy) / (dx * dx + dy * dy);
+            return {
+                x: P1.x + t * dx,
+                y: P1.y + t * dy
+            };
+        }
+
+        // 3. H là hình chiếu vuông góc của A lên BC (AH vuông góc BC)
+        const pH = getProjection(pA, pB, pC);
+
+        // 4. K là hình chiếu vuông góc của A lên BG (AK vuông góc BG)
+        const pK = getProjection(pA, pB, pG);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Hàm vẽ đoạn thẳng
+        function drawLine(p1, p2, color = '#1f2937', width = 2, dash = []) {
+            ctx.beginPath();
+            ctx.setLineDash(dash);
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // Hàm ghi tên điểm
+        function drawText(text, point, offsetX, offsetY, color = '#1a56db') {
+            ctx.font = 'bold 15px Segoe UI, Arial';
+            ctx.fillStyle = color;
+            ctx.fillText(text, point.x + offsetX, point.y + offsetY);
+        }
+
+        // Hàm vẽ ký hiệu góc vuông chuẩn xác theo vector cạnh
+        function drawRightAngle(pVertex, p1, p2, size = 10) {
+            const v1 = { x: p1.x - pVertex.x, y: p1.y - pVertex.y };
+            const v2 = { x: p2.x - pVertex.x, y: p2.y - pVertex.y };
+            const len1 = Math.hypot(v1.x, v1.y);
+            const len2 = Math.hypot(v2.x, v2.y);
+            
+            const u1 = { x: (v1.x / len1) * size, y: (v1.y / len1) * size };
+            const u2 = { x: (v2.x / len2) * size, y: (v2.y / len2) * size };
+
+            ctx.beginPath();
+            ctx.moveTo(pVertex.x + u1.x, pVertex.y + u1.y);
+            ctx.lineTo(pVertex.x + u1.x + u2.x, pVertex.y + u1.y + u2.y);
+            ctx.lineTo(pVertex.x + u2.x, pVertex.y + u2.y);
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        // Vẽ các cạnh tam giác ABC
+        drawLine(pA, pB);
+        drawLine(pB, pC);
+        drawLine(pC, pA);
+
+        // Vẽ đường phụ
+        drawLine(pA, pH, '#d97706', 2);     // Đường cao AH (màu cam)
+        drawLine(pB, pG, '#4b5563', 1.5);   // Đoạn BG
+        drawLine(pA, pK, '#dc2626', 2);     // Đường cao AK (màu đỏ)
+        drawLine(pH, pK, '#059669', 2, [4, 4]); // Đoạn HK (đường nét đứt màu xanh)
+
+        // Vẽ các đỉnh (chấm tròn nhỏ)
+        [pA, pB, pC, pH, pG, pK].forEach(pt => {
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#1f2937';
+            ctx.fill();
+        });
+
+        // Ký hiệu góc vuông chuẩn xác
+        drawRightAngle(pA, pB, pC, 12); // Vuông tại A
+        drawRightAngle(pH, pA, pC, 10); // AH vuông góc BC tại H (hướng về phía C)
+        drawRightAngle(pK, pA, pG, 10); // AK vuông góc BG tại K (hướng về phía G)
+
+        // Ghi tên các đỉnh
+        drawText('A', pA, -18, -8);
+        drawText('B', pB, -18, 15);
+        drawText('C', pC, 10, -5);
+        drawText('H', pH, 8, 18, '#d97706');
+        drawText('G', pG, 0, -10);
+        drawText('K', pK, -20, 5, '#dc2626');
+    }
+
+    window.onload = drawGeometry;
+</script>
+
+</body>
+</html>
