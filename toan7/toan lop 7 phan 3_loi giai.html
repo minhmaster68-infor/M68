@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toán 7: Phiếu Luyện Tập & Đấu Trường Tam Giác - Khánh Huy</title>
+    
+    <!-- KaTeX cho hiển thị công thức toán, căn bậc hai, góc và phân số -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --pink-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            --amber-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --sky-gradient: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            --dark: #0f172a;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f1f5f9; color: var(--dark); line-height: 1.6; padding: 20px; }
+        .container { max-width: 1040px; margin: 0 auto; }
+
+        /* Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: #ffffff;
+            padding: 35px 25px;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(79, 70, 229, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+        }
+        .hero-banner h1 { font-size: 2.1rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.92; }
+
+        .notice-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid #2563eb;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            font-size: 0.98rem;
+            color: #1e40af;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 14px;
+        }
+        .card-title { font-size: 1.35rem; font-weight: 700; color: #1e1b4b; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-tip { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-math { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-danger { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
+        .badge-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
+        /* Lưới mẹo học tập */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        @media (max-width: 820px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .tip-card {
+            border-radius: 14px;
+            padding: 18px 20px;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+        .tip-card.pink { background: var(--pink-gradient); }
+        .tip-card.emerald { background: var(--emerald-gradient); }
+        .tip-card.sky { background: var(--sky-gradient); }
+        .tip-card.amber { background: var(--amber-gradient); }
+        .tip-card h4 { font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tip-card p { font-size: 0.92rem; line-height: 1.6; opacity: 0.96; }
+
+        /* Hộp công thức */
+        .math-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin: 10px 0;
+            font-size: 1.15rem;
+            color: #1e3a8a;
+            font-weight: 500;
+            overflow-x: auto;
+        }
+
+        /* Bài tập */
+        .exercise-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+        .exercise-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+        }
+        .exercise-item.sky { border-left-color: #0284c7; }
+        .exercise-item.emerald { border-left-color: #10b981; }
+        .exercise-item.amber { border-left-color: #f59e0b; }
+        .exercise-item.purple { border-left-color: #8b5cf6; }
+        .exercise-item.danger { border-left-color: #ef4444; }
+
+        .ex-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        .trap-tag {
+            display: inline-block;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        details {
+            margin-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 10px;
+        }
+        summary {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #4f46e5;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+        }
+        summary:hover { color: #3730a3; text-decoration: underline; }
+        .solution-content {
+            background: #f8fafc;
+            border-left: 3px solid #10b981;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.7;
+        }
+
+        /* KHU VỰC MINI GAME 3D CANVAS */
+        .game-wrapper {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090919 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #6366f1;
+        }
+        #gameCanvas {
+            background: #050515;
+            border-radius: 14px;
+            display: block;
+            margin: 15px auto;
+            max-width: 100%;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            max-width: 480px;
+            margin: 10px auto;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #a5f3fc;
+        }
+        .quiz-panel {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .opt-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .opt-btn:hover { background: #334155; border-color: #818cf8; }
+        .game-controls { margin-top: 15px; display: flex; justify-content: center; gap: 10px; }
+        .game-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 10px;">Chinh Phục Học Kỳ 1 • Toán 7</span>
+        <h1>PHIẾU BÀI TẬP VỀ NHÀ & ĐẤU TRƯỜNG TOÁN HỌC</h1>
+        <p>Chúc mừng <strong>Khánh Huy</strong> đã hoàn thành kỳ thi! &bull; Cùng bứt phá chuyên đề: Tam Giác Bằng Nhau</p>
+    </div>
+
+    <div class="notice-box">
+        <strong>🎯 Lời nhắn gửi riêng cho Khánh Huy:</strong> Thi xong là lúc tâm lý thoải mái nhất để nâng tầm tư duy! Phiếu bài này gồm 20 bài toán chọn lọc nâng cao giúp con rèn thói quen viết đúng thứ tự đỉnh tam giác và tránh lỗi nhầm góc xen giữa. Hãy làm xong từng bài rồi bấm nút mở lời giải để tự chấm điểm nhé!
+    </div>
+
+    <!-- KHỐI GAME TƯƠNG TÁC 3D -->
+    <div class="game-wrapper">
+        <span class="badge badge-tip" style="margin-bottom: 6px;">Góc Giải Trí Sau Giờ Học</span>
+        <h2 style="font-size: 1.5rem; color: #facc15;">🛸 ĐẤU TRƯỜNG TAM GIÁC VŨ TRỤ 3D 🌌</h2>
+        <p style="font-size: 0.92rem; color: #cbd5e1; max-width: 600px; margin: 0 auto;">
+            Điều khiển tinh thể lăng trụ tam giác không gian! Trả lời đúng các câu hỏi phản xạ hình học để tích lũy năng lượng tinh thể!
+        </p>
+
+        <div class="game-stats">
+            <div>⭐ Điểm số: <span id="scoreDisplay" style="color: #4ade80;">0</span></div>
+            <div>🔥 Chuỗi đúng: <span id="streakDisplay" style="color: #f43f5e;">0</span></div>
+            <div>🏆 Câu hỏi: <span id="qIndexDisplay" style="color: #60a5fa;">1/5</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="600" height="230"></canvas>
+
+        <div class="quiz-panel">
+            <div id="quizQuestion" style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; min-height: 40px;">
+                Đang nạp thử thách vũ trụ...
+            </div>
+            <div class="options-grid" id="optionsContainer"></div>
+            <div id="quizFeedback" style="margin-top: 10px; font-weight: 700; font-size: 0.9rem; min-height: 22px;"></div>
+        </div>
+
+        <div class="game-controls">
+            <button class="game-btn" onclick="resetGame()">🔄 Chơi Lại</button>
+            <button class="game-btn" style="background: var(--pink-gradient);" onclick="toggleSpinSpeed()">⚡ Tăng Tốc Xoay 3D</button>
+        </div>
+    </div>
+
+    <!-- KHỐI BÍ KÍP VÕ CÔNG -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-tip">Cẩm Nang Bỏ Túi</span>
+            <h2 class="card-title">1. Bốn Bí Kíp Cần Nhớ Về Tam Giác Bằng Nhau</h2>
+        </div>
+
+        <div class="grid-2">
+            <div class="tip-card pink">
+                <h4>⚠️ 1. Bẫy Góc Xen Giữa (c-g-c)</h4>
+                <p>
+                    Muốn dùng trường hợp Cạnh - Góc - Cạnh, góc bằng nhau <strong>bắt buộc phải nằm xen giữa</strong> hai cạnh bằng nhau.<br>
+                    <em>Ví dụ:</em> Có $AB = MN, AC = MP$ thì góc bắt buộc phải là $\widehat{A} = \widehat{M}$. Nếu đề cho $\widehat{B} = \widehat{N}$ thì <strong>chưa thể kết luận</strong> bằng nhau!
+                </p>
+            </div>
+
+            <div class="tip-card emerald">
+                <h4>📐 2. Thần Chú Viết Đúng Đỉnh Tương Ứng</h4>
+                <p>
+                    Nếu $\triangle ABC = \triangle MNP$ thì:<br>
+                    • Đỉnh tương ứng: $A \leftrightarrow M$, $B \leftrightarrow N$, $C \leftrightarrow P$.<br>
+                    • Cạnh bằng nhau: $AB = MN, BC = NP, CA = PM$.<br>
+                    • Góc bằng nhau: $\widehat{A} = \widehat{M}, \widehat{B} = \widehat{N}, \widehat{C} = \widehat{P}$.<br>
+                    Viết sai thứ tự đỉnh sẽ bị trừ toàn bộ điểm bài thi!
+                </p>
+            </div>
+
+            <div class="tip-card sky">
+                <h4>⚡ 3. Ưu Tiên Tam Giác Vuông</h4>
+                <p>
+                    Với tam giác vuông, chỉ cần <strong>hai yếu tố</strong>:<br>
+                    • <em>Cạnh huyền - góc nhọn:</em> Nhanh nhất, hay dùng nhất.<br>
+                    • <em>Cạnh huyền - cạnh góc vuông:</em> Cực kỳ hữu dụng.<br>
+                    • Hai cạnh góc vuông (chính là c-g-c).<br>
+                    • Cạnh góc vuông - góc nhọn kề (chính là g-c-g).
+                </p>
+            </div>
+
+            <div class="tip-card amber">
+                <h4>🎯 4. Tính Chất Đường Trung Trực</h4>
+                <p>
+                    • $d$ là trung trực của đoạn $AB \iff d \perp AB$ tại trung điểm $I$.<br>
+                    • Điểm $M$ thuộc trung trực của $AB \iff MA = MB$.<br>
+                    • Trong tam giác cân: Đường trung tuyến kẻ từ đỉnh đối diện đáy <strong>đồng thời là đường cao, đường phân giác và đường trung trực</strong>!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 20 BÀI TẬP VỀ NHÀ -->
+    <div class="card">
+        <div class="card-header">
+            <span class="badge badge-math">Phiếu Tự Luyện</span>
+            <h2 class="card-title">2. Quỹ 20 Bài Tập Về Nhà Nâng Cao (Kèm Lời Giải)</h2>
+        </div>
+
+        <!-- PHẦN A -->
+        <h3 style="color: #4338ca; margin: 20px 0 12px 0;">Chủ Đề A: Tổng Các Góc & Góc Ngoài Của Tam Giác (4 Bài)</h3>
+
+        <!-- BÀI 1 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 1: Tính góc tam giác khi biết hiệu và góc còn lại</span>
+                <span class="badge badge-info">Thông hiểu</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ có $\widehat{A} = 50^\circ$ và $\widehat{B} - \widehat{C} = 30^\circ$. Hãy tính số đo của góc $\widehat{B}$ và góc $\widehat{C}$.
+            </div>
+            <div class="trap-tag">💡 Gợi ý: Tổng ba góc bằng 180° nên $\widehat{B} + \widehat{C} = 180^\circ - 50^\circ = 130^\circ$. Đưa về bài toán tìm hai số khi biết Tổng và Hiệu!</div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Trong tam giác $ABC$, ta có: $\widehat{A} + \widehat{B} + \widehat{C} = 180^\circ$<br>
+                    $\Rightarrow \widehat{B} + \widehat{C} = 180^\circ - 50^\circ = 130^\circ$.<br>
+                    Biết $\widehat{B} - \widehat{C} = 30^\circ$, suy ra:<br>
+                    $\widehat{B} = (130^\circ + 30^\circ) : 2 = 80^\circ$.<br>
+                    $\widehat{C} = 130^\circ - 80^\circ = 50^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 2 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 2: Tính góc tạo bởi hai tia phân giác trong</span>
+                <span class="badge badge-info">Vận dụng</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ có góc $\widehat{A} = 70^\circ$. Hai tia phân giác của góc $B$ và góc $C$ cắt nhau tại điểm $O$. Tính số đo của góc $\widehat{BOC}$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Trong $\triangle ABC$: $\widehat{B} + \widehat{C} = 180^\circ - \widehat{A} = 180^\circ - 70^\circ = 110^\circ$.<br>
+                    Vì $BO, CO$ là phân giác nên:<br>
+                    $\widehat{OBC} + \widehat{OCB} = \frac{\widehat{B} + \widehat{C}}{2} = \frac{110^\circ}{2} = 55^\circ$.<br>
+                    Trong $\triangle BOC$: $\widehat{BOC} = 180^\circ - (\widehat{OBC} + \widehat{OCB}) = 180^\circ - 55^\circ = 125^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 3 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 3: Ứng dụng định lý góc ngoài của tam giác</span>
+                <span class="badge badge-info">Góc ngoài</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$. Góc ngoài tại đỉnh $B$ có số đo bằng $110^\circ$. Biết số đo góc trong $\widehat{C} = 45^\circ$. Tính số đo của góc $\widehat{A}$ và góc trong $\widehat{B}$ của tam giác $ABC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Theo định lý góc ngoài: Góc ngoài tại đỉnh $B$ bằng tổng hai góc trong không kề:<br>
+                    $\widehat{B}_{\text{ngoài}} = \widehat{A} + \widehat{C} \Rightarrow 110^\circ = \widehat{A} + 45^\circ \Rightarrow \widehat{A} = 110^\circ - 45^\circ = 65^\circ$.<br>
+                    Góc trong tại đỉnh $B$ kề bù với góc ngoài nên:<br>
+                    $\widehat{B} = 180^\circ - 110^\circ = 70^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 4 -->
+        <div class="exercise-item sky">
+            <div class="ex-title">
+                <span>Bài 4: Tam giác có góc tù và mối liên hệ góc phụ nhau</span>
+                <span class="badge badge-info">Tư duy suy luận</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $MNP$ vuông tại $M$. Kẻ đường cao $MH \perp NP$ ($H \in NP$). Chứng minh rằng $\widehat{NMH} = \widehat{P}$ và $\widehat{PMH} = \widehat{N}$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Vì $\triangle MNP$ vuông tại $M$ nên $\widehat{N} + \widehat{P} = 90^\circ$ (hai góc nhọn phụ nhau).<br>
+                    Trong tam giác vuông $MNH$ (vuông tại $H$): $\widehat{NMH} + \widehat{N} = 90^\circ$.<br>
+                    Suy ra $\widehat{NMH} = 90^\circ - \widehat{N} = \widehat{P}$ (cùng phụ với $\widehat{N}$).<br>
+                    Tương tự trong tam giác vuông $MPH$: $\widehat{PMH} + \widehat{P} = 90^\circ \Rightarrow \widehat{PMH} = \widehat{N}$ (cùng phụ với $\widehat{P}$).
+                </div>
+            </details>
+        </div>
+
+        <!-- PHẦN B -->
+        <h3 style="color: #059669; margin: 25px 0 12px 0;">Chủ Đề B: Các Trường Hợp Bằng Nhau Của Tam Giác (6 Bài)</h3>
+
+        <!-- BÀI 5 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 5: Trường hợp Cạnh - Cạnh - Cạnh (c-c-c)</span>
+                <span class="badge badge-success">c-c-c</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ có $AB = AC$. Gọi $I$ là trung điểm của cạnh $BC$.<br>
+                a) Chứng minh $\triangle ABI = \triangle ACI$.<br>
+                b) Chứng minh $AI \perp BC$ và $AI$ là tia phân giác của góc $\widehat{BAC}$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    a) Xét $\triangle ABI$ và $\triangle ACI$ có:<br>
+                    • $AB = AC$ (giả thiết).<br>
+                    • $IB = IC$ ($I$ là trung điểm $BC$).<br>
+                    • $AI$ là cạnh chung.<br>
+                    $\Rightarrow \triangle ABI = \triangle ACI$ (c-c-c).<br>
+                    b) Do $\triangle ABI = \triangle ACI \Rightarrow \widehat{AIB} = \widehat{AIC}$ (hai góc tương ứng).<br>
+                    Mà $\widehat{AIB} + \widehat{AIC} = 180^\circ$ (hai góc kề bù) $\Rightarrow \widehat{AIB} = \widehat{AIC} = 90^\circ \Rightarrow AI \perp BC$.<br>
+                    Đồng thời $\widehat{BAI} = \widehat{CAI}$ nên $AI$ là tia phân giác của góc $\widehat{BAC}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 6 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 6: Bẫy góc xen giữa trong trường hợp c-g-c</span>
+                <span class="badge badge-success">Bẫy góc xen giữa</span>
+            </div>
+            <div class="exercise-content">
+                Cho đoạn thẳng $AB$. Đường thẳng $xy$ vuông góc với $AB$ tại trung điểm $M$ của $AB$. Lấy điểm $P$ tùy ý trên đường thẳng $xy$ ($P \neq M$). Chứng minh rằng $PA = PB$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Xét hai tam giác vuông $\triangle PMA$ và $\triangle PMB$ có:<br>
+                    • $MA = MB$ ($M$ là trung điểm $AB$).<br>
+                    • $\widehat{PMA} = \widehat{PMB} = 90^\circ$ (do $xy \perp AB$).<br>
+                    • $PM$ là cạnh chung.<br>
+                    $\Rightarrow \triangle PMA = \triangle PMB$ (c-g-c).<br>
+                    $\Rightarrow PA = PB$ (hai cạnh tương ứng).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 7 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 7: Bài toán kéo dài trung tuyến chứng minh song song</span>
+                <span class="badge badge-success">Kéo dài đoạn thẳng</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$. Gọi $M$ là trung điểm của cạnh $AC$. Trên tia đối của tia $MB$, lấy điểm $D$ sao cho $MD = MB$.<br>
+                a) Chứng minh $\triangle AMD = \triangle CMB$.<br>
+                b) Chứng minh $AD \parallel BC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    a) Xét $\triangle AMD$ và $\triangle CMB$ có:<br>
+                    • $MA = MC$ ($M$ là trung điểm $AC$).<br>
+                    • $\widehat{AMD} = \widehat{CMB}$ (hai góc đối đỉnh).<br>
+                    • $MD = MB$ (giả thiết).<br>
+                    $\Rightarrow \triangle AMD = \triangle CMB$ (c-g-c).<br>
+                    b) Từ câu a suy ra $\widehat{MAD} = \widehat{MCB}$ (hai góc tương ứng).<br>
+                    Mà hai góc này ở vị trí so le trong nên $AD \parallel BC$ (dấu hiệu nhận biết).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 8 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 8: Trường hợp Góc - Cạnh - Góc (g-c-g)</span>
+                <span class="badge badge-success">g-c-g</span>
+            </div>
+            <div class="exercise-content">
+                Cho góc nhọn $\widehat{xOy}$. Lấy điểm $A$ trên tia phân giác $Ot$ của góc $\widehat{xOy}$. Qua $A$, kẻ đường thẳng vuông góc với $Ot$, đường thẳng này cắt $Ox$ tại $B$ và cắt $Oy$ tại $C$. Chứng minh rằng $OB = OC$ và $AB = AC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Xét hai tam giác vuông $\triangle OAB$ và $\triangle OAC$ có:<br>
+                    • $\widehat{OAB} = \widehat{OAC} = 90^\circ$ (do $BC \perp Ot$).<br>
+                    • Cạnh $OA$ chung.<br>
+                    • $\widehat{AOB} = \widehat{AOC}$ ($Ot$ là tia phân giác $\widehat{xOy}$).<br>
+                    $\Rightarrow \triangle OAB = \triangle OAC$ (g-c-g hoặc cạnh góc vuông - góc nhọn kề).<br>
+                    $\Rightarrow OB = OC$ và $AB = AC$ (các cạnh tương ứng).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 9 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 9: Trường hợp tam giác vuông Cạnh huyền - Góc nhọn</span>
+                <span class="badge badge-success">Tam giác vuông</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ có $AB = AC$ ($\widehat{A} < 90^\circ$). Kẻ $BH \perp AC$ ($H \in AC$) và $CK \perp AB$ ($K \in AB$). Chứng minh rằng $BH = CK$ và $AH = AK$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Xét hai tam giác vuông $\triangle ABH$ (vuông tại $H$) và $\triangle ACK$ (vuông tại $K$):<br>
+                    • Cạnh huyền $AB = AC$ (giả thiết).<br>
+                    • Góc $\widehat{A}$ chung (góc nhọn).<br>
+                    $\Rightarrow \triangle ABH = \triangle ACK$ (cạnh huyền - góc nhọn).<br>
+                    $\Rightarrow BH = CK$ và $AH = AK$ (các cạnh tương ứng).
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 10 -->
+        <div class="exercise-item emerald">
+            <div class="ex-title">
+                <span>Bài 10: Trường hợp Cạnh huyền - Cạnh góc vuông</span>
+                <span class="badge badge-success">Cạnh huyền - CGV</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ vuông tại $A$. Kẻ phân giác $BD$ ($D \in AC$). Từ $D$ kẻ $DE \perp BC$ ($E \in BC$). Chứng minh $\triangle ABD = \triangle EBD$ và $BD$ là đường trung trực của đoạn thẳng $AE$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    • Xét hai tam giác vuông $\triangle ABD$ và $\triangle EBD$ có: Cạnh huyền $BD$ chung; $\widehat{ABD} = \widehat{EBD}$ (do $BD$ là phân giác). $\Rightarrow \triangle ABD = \triangle EBD$ (cạnh huyền - góc nhọn).<br>
+                    • Suy ra $BA = BE$ và $DA = DE$ (các cạnh tương ứng).<br>
+                    Vì $B$ cách đều hai đầu mút $A, E$ và $D$ cũng cách đều $A, E$ nên đường thẳng $BD$ là đường trung trực của đoạn thẳng $AE$.
+                </div>
+            </details>
+        </div>
+
+        <!-- PHẦN C -->
+        <h3 style="color: #d97706; margin: 25px 0 12px 0;">Chủ Đề C: Tam Giác Cân, Tam Giác Đều & Đường Trung Trực (5 Bài)</h3>
+
+        <!-- BÀI 11 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 11: Tính các góc của tam giác cân</span>
+                <span class="badge badge-warning">Tam giác cân</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ cân tại $A$. Biết rằng số đo góc ở đỉnh $\widehat{A}$ bằng $4$ lần số đo của một góc ở đáy. Tính số đo của cả ba góc trong tam giác $ABC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Vì $\triangle ABC$ cân tại $A$ nên $\widehat{B} = \widehat{C}$.<br>
+                    Theo giả thiết: $\widehat{A} = 4\widehat{B}$.<br>
+                    Tổng ba góc: $\widehat{A} + \widehat{B} + \widehat{C} = 180^\circ \iff 4\widehat{B} + \widehat{B} + \widehat{B} = 180^\circ \iff 6\widehat{B} = 180^\circ$.<br>
+                    $\Rightarrow \widehat{B} = 30^\circ \Rightarrow \widehat{C} = 30^\circ$ và $\widehat{A} = 4 \times 30^\circ = 120^\circ$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 12 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 12: Chứng minh song song trong tam giác cân</span>
+                <span class="badge badge-warning">Chứng minh song song</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác $ABC$ cân tại $A$. Trên cạnh $AB$ lấy điểm $M$, trên cạnh $AC$ lấy điểm $N$ sao cho $AM = AN$.<br>
+                a) Chứng minh tam giác $AMN$ là tam giác cân.<br>
+                b) Chứng minh $MN \parallel BC$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    a) $\triangle AMN$ có $AM = AN$ nên cân tại $A$.<br>
+                    b) Vì $\triangle AMN$ cân tại $A \Rightarrow \widehat{AMN} = \frac{180^\circ - \widehat{A}}{2}$.<br>
+                    Vì $\triangle ABC$ cân tại $A \Rightarrow \widehat{ABC} = \frac{180^\circ - \widehat{A}}{2}$.<br>
+                    Do đó $\widehat{AMN} = \widehat{ABC}$. Mà hai góc này ở vị trí đồng vị nên $MN \parallel BC$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 13 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 13: Chứng minh tam giác đều bằng cách tạo ba góc 60°</span>
+                <span class="badge badge-warning">Tam giác đều</span>
+            </div>
+            <div class="exercise-content">
+                Cho tam giác đều $ABC$. Trên các cạnh $AB, BC, CA$ lần lượt lấy các điểm $D, E, F$ sao cho $AD = BE = CF$. Chứng minh rằng tam giác $DEF$ là tam giác đều.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Vì $ABC$ đều nên $AB = BC = CA$ và $\widehat{A} = \widehat{B} = \widehat{C} = 60^\circ$.<br>
+                    Vì $AD = BE = CF$ nên $AB - AD = BC - BE = CA - CF \Rightarrow BD = CE = AF$.<br>
+                    Xét 3 tam giác: $\triangle ADF, \triangle BED, \triangle CFE$ có:<br>
+                    $AD = BE = CF$; $\widehat{A} = \widehat{B} = \widehat{C} = 60^\circ$; $AF = BD = CE$.<br>
+                    $\Rightarrow \triangle ADF = \triangle BED = \triangle CFE$ (c-g-c).<br>
+                    $\Rightarrow DF = ED = FE$ (các cạnh tương ứng) $\Rightarrow \triangle DEF$ là tam giác đều.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 14 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 14: Điểm cách đều hai đầu mút đoạn thẳng</span>
+                <span class="badge badge-warning">Đường trung trực</span>
+            </div>
+            <div class="exercise-content">
+                Cho đoạn thẳng $AB = 8\text{ cm}$. Điểm $M$ nằm ngoài đoạn thẳng $AB$ sao cho $MA = MB = 5\text{ cm}$. Gọi $I$ là trung điểm của $AB$. Tính độ dài đoạn thẳng $MI$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Vì $MA = MB$ nên $M$ thuộc đường trung trực của $AB$.<br>
+                    Vì $I$ là trung điểm $AB$ nên $MI \perp AB$ tại $I$ và $IA = IB = 8 : 2 = 4\text{ cm}$.<br>
+                    Xét tam giác $MIA$ vuông tại $I$: Theo định lý Pythagore (hoặc kiểm tra bình phương):<br>
+                    $MI^2 + IA^2 = MA^2 \Rightarrow MI^2 + 4^2 = 5^2 \Rightarrow MI^2 = 25 - 16 = 9 \Rightarrow MI = 3\text{ cm}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 15 -->
+        <div class="exercise-item amber">
+            <div class="ex-title">
+                <span>Bài 15: Bài toán thực tế chọn vị trí trạm bơm</span>
+                <span class="badge badge-warning">Thực tế trung trực</span>
+            </div>
+            <div class="exercise-content">
+                Hai khu dân cư $A$ và $B$ nằm cùng một phía bờ sông $d$. Người ta muốn xây dựng một trạm cấp nước sạch $M$ nằm ngay trên bờ sông $d$ sao cho đường ống dẫn nước từ trạm $M$ về hai khu dân cư có độ dài bằng nhau ($MA = MB$). Hãy nêu cách vẽ hình học để xác định vị trí của trạm cấp nước $M$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Để $MA = MB$ thì điểm $M$ phải thuộc đường trung trực của đoạn thẳng $AB$.<br>
+                    Mà trạm cấp nước $M$ phải nằm trên bờ sông $d$.<br>
+                    <strong>Cách xác định:</strong><br>
+                    1. Nối đoạn thẳng $AB$.<br>
+                    2. Dựng đường trung trực $\Delta$ của đoạn thẳng $AB$.<br>
+                    3. Giao điểm của đường thẳng $\Delta$ với bờ sông $d$ chính là vị trí cần đặt trạm cấp nước $M$.
+                </div>
+            </details>
+        </div>
+
+        <!-- PHẦN D -->
+        <h3 style="color: #ec4899; margin: 25px 0 12px 0;">Chủ Đề D: Ôn Luyện Đại Số, Tìm x & Biểu Đồ Thống Kê (5 Bài)</h3>
+
+        <!-- BÀI 16 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 16: Tìm x chứa giá trị tuyệt đối hai vế có biến</span>
+                <span class="badge badge-danger">Trị tuyệt đối</span>
+            </div>
+            <div class="exercise-content">
+                Tìm số hữu tỉ $x$ biết:
+                <div class="math-box">
+                    $$|2x - 3| = x + 1$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Điều kiện: $x + 1 \ge 0 \iff x \ge -1$.<br>
+                    • TH1: $2x - 3 = x + 1 \iff x = 4$ (Thỏa mãn $\ge -1$).<br>
+                    • TH2: $2x - 3 = -(x + 1) \iff 2x - 3 = -x - 1 \iff 3x = 2 \iff x = \frac{2}{3}$ (Thỏa mãn $\ge -1$).<br>
+                    Vậy $x \in \left\{4; \frac{2}{3}\right\}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 17 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 17: Tính giá trị biểu thức lũy thừa có quy luật đan dấu</span>
+                <span class="badge badge-danger">Lũy thừa</span>
+            </div>
+            <div class="exercise-content">
+                Tính giá trị của biểu thức:
+                <div class="math-box">
+                    $$A = \frac{(-2)^3 \cdot 3^4 - (-6)^3 \cdot 2}{(-12)^3 + 2^5 \cdot 3^3}$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Ta có: $(-2)^3 = -8$; $(-6)^3 = -216$; $(-12)^3 = -1728$.<br>
+                    • Tử số: $-8 \cdot 81 - (-216) \cdot 2 = -648 + 432 = -216$.<br>
+                    • Mẫu số: $-1728 + 32 \cdot 27 = -1728 + 864 = -864$.<br>
+                    $\Rightarrow A = \frac{-216}{-864} = \frac{1}{4}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 18 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 18: Tìm x từ đẳng thức lũy thừa cùng cơ số</span>
+                <span class="badge badge-danger">Phương trình mũ</span>
+            </div>
+            <div class="exercise-content">
+                Tìm số tự nhiên $n$ thỏa mãn:
+                <div class="math-box">
+                    $$\frac{1}{9} \cdot 27^n = 3^n$$
+                </div>
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Đưa tất cả về cơ số 3:<br>
+                    $\frac{1}{3^2} \cdot (3^3)^n = 3^n \iff 3^{-2} \cdot 3^{3n} = 3^n \iff 3^{3n - 2} = 3^n$.<br>
+                    Suy ra: $3n - 2 = n \iff 2n = 2 \iff n = 1$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 19 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 19: Tìm giá trị nhỏ nhất của biểu thức chứa căn</span>
+                <span class="badge badge-danger">Cực trị</span>
+            </div>
+            <div class="exercise-content">
+                Tìm giá trị nhỏ nhất của biểu thức: $M = \sqrt{x^2 + 16} + |y - 3| - 2026$.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    Với mọi số thực $x$, ta có: $x^2 \ge 0 \Rightarrow x^2 + 16 \ge 16 \Rightarrow \sqrt{x^2 + 16} \ge \sqrt{16} = 4$. Dấu "=" khi $x = 0$.<br>
+                    Với mọi số thực $y$, ta có: $|y - 3| \ge 0$. Dấu "=" khi $y = 3$.<br>
+                    Do đó $M \ge 4 + 0 - 2026 = -2022$.<br>
+                    Vậy giá trị nhỏ nhất của $M$ là $-2022$, đạt được khi $x = 0$ và $y = 3$.
+                </div>
+            </details>
+        </div>
+
+        <!-- BÀI 20 -->
+        <div class="exercise-item danger">
+            <div class="ex-title">
+                <span>Bài 20: Phân tích biểu đồ quạt tròn kết quả thi đua lớp 7A</span>
+                <span class="badge badge-danger">Thống kê thực tế</span>
+            </div>
+            <div class="exercise-content">
+                Một cuộc khảo sát xếp loại thi đua tháng của 40 học sinh lớp 7A cho thấy: Học sinh Tốt chiếm $50\%$, Khá chiếm $35\%$, Đạt chiếm $10\%$, còn lại là Chưa đạt.<br>
+                a) Tính số học sinh của mỗi loại xếp loại.<br>
+                b) Khi biểu diễn kết quả trên hình quạt tròn ($360^\circ$), hãy tính góc ở tâm của hình quạt biểu diễn cho nhóm học sinh Khá.
+            </div>
+            <details>
+                <summary>👉 Xem đáp án & hướng dẫn giải</summary>
+                <div class="solution-content">
+                    a) Số học sinh mỗi loại:<br>
+                    • Loại Tốt: $40 \times 50\% = 20$ học sinh.<br>
+                    • Loại Khá: $40 \times 35\% = 14$ học sinh.<br>
+                    • Loại Đạt: $40 \times 10\% = 4$ học sinh.<br>
+                    • Loại Chưa đạt: $40 - (20 + 14 + 4) = 2$ học sinh.<br>
+                    b) Góc ở tâm biểu diễn nhóm học sinh Khá:<br>
+                    $360^\circ \times 35\% = 126^\circ$.
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT GAME LOGIC VÀ KHỞI TẠO KATEX -->
+<script>
+    // KaTeX render
+    function initMath() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }
+    document.addEventListener("DOMContentLoaded", initMath);
+
+    // Mini game Canvas: Tinh thể lăng trụ tam giác không gian 3D
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let angleX = 0;
+    let angleY = 0;
+    let speed = 0.02;
+    let stars = [];
+
+    for (let i = 0; i < 45; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.8 + 0.5,
+            speed: Math.random() * 0.7 + 0.3
+        });
+    }
+
+    // Các đỉnh của hình lăng trụ tam giác 3D
+    const prismVertices = [
+        {x: 0, y: -60, z: -50},
+        {x: 60, y: 50, z: -50},
+        {x: -60, y: 50, z: -50},
+        {x: 0, y: -60, z: 50},
+        {x: 60, y: 50, z: 50},
+        {x: -60, y: 50, z: 50}
+    ];
+
+    const prismEdges = [
+        [0, 1], [1, 2], [2, 0], // Đáy 1
+        [3, 4], [4, 5], [5, 3], // Đáy 2
+        [0, 3], [1, 4], [2, 5]  // Các cạnh bên
+    ];
+
+    // Ngân hàng câu hỏi trắc nghiệm phản xạ Tam Giác
+    const gameQuestions = [
+        {
+            q: "Tam giác ABC có số đo góc A = 40°, góc B = 60°. Số đo góc ngoài tại C là:",
+            options: ["100°", "80°", "120°", "140°"],
+            answer: 0,
+            explain: "Đúng! Góc ngoài bằng tổng hai góc trong không kề: 40° + 60° = 100°."
+        },
+        {
+            q: "Để chứng minh hai tam giác bằng nhau theo trường hợp c-g-c, góc bằng nhau phải là:",
+            options: ["Góc bất kỳ", "Góc xen giữa hai cạnh", "Góc vuông", "Góc nhọn"],
+            answer: 1,
+            explain: "Chính xác! Bắt buộc góc phải nằm xen giữa hai cạnh đã cho bằng nhau."
+        },
+        {
+            q: "Tam giác cân có một góc ở đỉnh bằng 80° thì mỗi góc ở đáy bằng:",
+            options: ["40°", "50°", "60°", "100°"],
+            answer: 1,
+            explain: "Xuất sắc! (180° - 80°) : 2 = 50°."
+        },
+        {
+            q: "Điểm cách đều hai đầu mút của một đoạn thẳng thì luôn nằm trên:",
+            options: ["Tia phân giác", "Đường trung trực của đoạn thẳng", "Đường tròn bán kính bất kỳ", "Đường cao"],
+            answer: 1,
+            explain: "Chuẩn xác! Đó chính là định lý về tính chất đường trung trực."
+        },
+        {
+            q: "Tam giác đều là tam giác có ba góc đều bằng bao nhiêu độ?",
+            options: ["45°", "90°", "60°", "180°"],
+            answer: 2,
+            explain: "Tuyệt vời! Ba góc bằng nhau và bằng 180° : 3 = 60°."
+        }
+    ];
+
+    let curQ = 0;
+    let score = 0;
+    let streak = 0;
+
+    function loadQuiz() {
+        if (curQ >= gameQuestions.length) {
+            document.getElementById('quizQuestion').innerHTML = "🎉 HUY ĐÃ VƯỢT QUA TOÀN BỘ CÂU ĐỐ PHẢN XẠ HÌNH HỌC! SẴN SÀNG LÀM BÀI 10 ĐIỂM!";
+            document.getElementById('optionsContainer').innerHTML = "";
+            document.getElementById('quizFeedback').innerHTML = `Điểm số chung cuộc: ${score} điểm!`;
+            return;
+        }
+
+        const data = gameQuestions[curQ];
+        document.getElementById('quizQuestion').innerText = data.q;
+        document.getElementById('qIndexDisplay').innerText = `${curQ + 1}/${gameQuestions.length}`;
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = "";
+        document.getElementById('quizFeedback').innerText = "";
+
+        data.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}`;
+            btn.onclick = () => answerQuiz(idx);
+            container.appendChild(btn);
+        });
+    }
+
+    function answerQuiz(chosen) {
+        const data = gameQuestions[curQ];
+        const fb = document.getElementById('quizFeedback');
+        const btns = document.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+
+        if (chosen === data.answer) {
+            score += 10 + streak * 2;
+            streak++;
+            fb.style.color = "#4ade80";
+            fb.innerText = `✅ ${data.explain}`;
+            btns[chosen].style.background = "#15803d";
+        } else {
+            streak = 0;
+            fb.style.color = "#fb7185";
+            fb.innerText = `❌ Sai rồi! Đáp án đúng là ${String.fromCharCode(65 + data.answer)}. ${data.explain}`;
+            btns[chosen].style.background = "#be123c";
+            btns[data.answer].style.background = "#15803d";
+        }
+
+        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('streakDisplay').innerText = streak;
+
+        setTimeout(() => {
+            curQ++;
+            loadQuiz();
+        }, 2200);
+    }
+
+    function resetGame() {
+        curQ = 0;
+        score = 0;
+        streak = 0;
+        document.getElementById('scoreDisplay').innerText = score;
+        document.getElementById('streakDisplay').innerText = streak;
+        loadQuiz();
+    }
+
+    function toggleSpinSpeed() {
+        speed = speed === 0.02 ? 0.055 : 0.02;
+    }
+
+    // Vẽ hình lăng trụ không gian
+    function render3D() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Sao rơi
+        ctx.fillStyle = "#ffffff";
+        stars.forEach(s => {
+            s.y += s.speed;
+            if (s.y > canvas.height) s.y = 0;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        angleX += speed;
+        angleY += speed * 1.2;
+
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const fov = 280;
+
+        const projected = prismVertices.map(v => {
+            let x1 = v.x * Math.cos(angleY) + v.z * Math.sin(angleY);
+            let z1 = -v.x * Math.sin(angleY) + v.z * Math.cos(angleY);
+
+            let y2 = v.y * Math.cos(angleX) - z1 * Math.sin(angleX);
+            let z2 = v.y * Math.sin(angleX) + z1 * Math.cos(angleX);
+
+            const scale = fov / (fov + z2);
+            return {
+                x: cx + x1 * scale * 1.3,
+                y: cy + y2 * scale * 1.3,
+                z: z2
+            };
+        });
+
+        // Vẽ cạnh phát sáng Neon
+        ctx.lineWidth = 2.4;
+        prismEdges.forEach(([i, j]) => {
+            const grad = ctx.createLinearGradient(projected[i].x, projected[i].y, projected[j].x, projected[j].y);
+            grad.addColorStop(0, '#38bdf8');
+            grad.addColorStop(0.5, '#ec4899');
+            grad.addColorStop(1, '#a855f7');
+            ctx.strokeStyle = grad;
+            ctx.beginPath();
+            ctx.moveTo(projected[i].x, projected[i].y);
+            ctx.lineTo(projected[j].x, projected[j].y);
+            ctx.stroke();
+        });
+
+        // Vẽ các đỉnh hình học
+        projected.forEach((p, idx) => {
+            ctx.fillStyle = idx < 3 ? "#facc15" : "#4ade80";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        requestAnimationFrame(render3D);
+    }
+
+    setTimeout(loadQuiz, 300);
+    render3D();
+</script>
+
+</body>
+</html>
