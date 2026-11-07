@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trạm Hồi Sinh Nền Tảng Toán 6-7 Dành Cho Lớp 8</title>
+    <!-- MathJax 3 hiển thị công thức chuẩn -->
+    <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-soft: #e0e7ff;
+            --danger: #ef4444;
+            --danger-soft: #fee2e2;
+            --success: #10b981;
+            --success-soft: #d1fae5;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--dark); line-height: 1.6; padding: 15px; }
+        .container { max-width: 960px; margin: 0 auto; }
+
+        /* Banner Header */
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #06b6d4 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(67, 56, 202, 0.4);
+            margin-bottom: 25px;
+        }
+        .hero h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hero p { font-size: 1.05rem; opacity: 0.95; }
+
+        /* Game Progress Bar */
+        .game-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .stat-item { text-align: center; }
+        .stat-val { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .stat-lbl { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #64748b; }
+        .progress-track {
+            flex: 1;
+            margin: 0 20px;
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, var(--warning), var(--success));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+        }
+        .sec-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e293b;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .badge {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        /* Theory Visual Cards */
+        .theory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        .theory-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px;
+            border-top: 4px solid var(--primary);
+        }
+        .theory-box.green { border-top-color: var(--success); }
+        .theory-box.orange { border-top-color: var(--warning); }
+        .theory-box.red { border-top-color: var(--danger); }
+        .theory-box h3 { font-size: 1rem; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .formula-tag {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            margin: 6px 0;
+            display: block;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        /* Question Box */
+        .q-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        .q-title {
+            font-weight: 700;
+            font-size: 1.02rem;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        .q-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media (max-width: 600px) { .q-options { grid-template-columns: 1fr; } }
+        .opt-btn {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.15s ease;
+        }
+        .opt-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .opt-btn.correct { background: var(--success-soft) !important; border-color: var(--success) !important; color: #065f46 !important; }
+        .opt-btn.wrong { background: var(--danger-soft) !important; border-color: var(--danger) !important; color: #991b1b !important; }
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+        .comic-center {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <h1>🛡️ TRẠM HỒI SINH NỀN TẢNG TOÁN 6 - 7</h1>
+        <p>Kho Báu Công Thức Nhanh & 50 Bài Huấn Luyện Diệt Lỗi Sai Cơ Bản</p>
+    </div>
+
+    <!-- STICKY PROGRESS BAR -->
+    <div class="game-bar">
+        <div class="stat-item">
+            <div class="stat-val" id="score-counter">0 / 50</div>
+            <div class="stat-lbl">Đã Hoàn Thành</div>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val" id="rank-title">🌱 Bắt Đầu</div>
+            <div class="stat-lbl">Danh Hiệu</div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: DẤU, NGOẶC, LŨY THỪA, CĂN, TRỊ TUYỆT ĐỐI (LÝ THUYẾT VẼ HÌNH) -->
+    <div class="section-card">
+        <div class="sec-title">
+            <span>📚 CẨM NANG HỒI SINH: 6 "CHÂN LÝ" KHÔNG ĐƯỢC PHÉP QUÊN</span>
+            <span class="badge">Đọc kĩ trước khi làm</span>
+        </div>
+
+        <div class="theory-grid">
+            <!-- 1. Dấu và phép tính -->
+            <div class="theory-box red">
+                <h3>⚡ 1. Phép Tính Số Nguyên & Dấu</h3>
+                <p>• <strong>Cùng dấu:</strong> Cộng số, giữ nguyên dấu:<br>
+                   $(-3) + (-5) = -8$<br>
+                   • <strong>Trái dấu:</strong> Lấy số lớn trừ số bé, lấy dấu số lớn:<br>
+                   $(-8) + 5 = -3$; &nbsp; $10 + (-4) = +6$<br>
+                   • <strong>Nhân/Chia:</strong> Cùng dấu ra $(+)$, trái dấu ra $(-)$:<br>
+                   $(-4) \cdot (-3) = +12$; &nbsp; $(-15) : (+3) = -5$
+                </p>
+            </div>
+
+            <!-- 2. Bỏ ngoặc -->
+            <div class="theory-box orange">
+                <h3>🚪 2. Quy Tắc Bỏ Dấu Ngoặc</h3>
+                <p>• Trước ngoặc có dấu $(+)$: Giữ nguyên tất cả.<br>
+                   • Trước ngoặc có dấu $(-)$: <strong>ĐỔI DẤU TẤT CẢ</strong>:<br>
+                   $-(a - b + c) = -a + b - c$<br>
+                   $-(2x - 5) = -2x + 5$
+                </p>
+                <div class="comic-center">
+                    <svg width="220" height="70" viewBox="0 0 220 70">
+                        <circle cx="35" cy="35" r="22" fill="#ef4444" />
+                        <rect x="23" y="32" width="24" height="6" fill="white" rx="2"/>
+                        <path d="M 70 35 L 110 35" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+                        <rect x="120" y="15" width="90" height="40" rx="8" fill="#fee2e2" stroke="#ef4444"/>
+                        <text x="130" y="40" font-size="12" font-weight="bold" fill="#b91c1c">ĐỔI HẾT DẤU!</text>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 3. Lũy thừa -->
+            <div class="theory-box green">
+                <h3>🚀 3. Thần Chú Số Mũ (Lũy Thừa)</h3>
+                <p>• $x^m \cdot x^n = x^{m+n}$ (Nhân thì <strong>CỘNG</strong> mũ)<br>
+                   • $x^m : x^n = x^{m-n}$ (Chia thì <strong>TRỪ</strong> mũ)<br>
+                   • $(x^m)^n = x^{m \cdot n}$ (Lũy thừa tầng thì <strong>NHÂN</strong>)<br>
+                   • <strong>BẪY ÂM:</strong> Mũ chẵn ra $(+)$, mũ lẻ giữ nguyên $(-)$:<br>
+                   $(-2)^2 = +4$; &nbsp; $(-2)^3 = -8$; &nbsp; <strong>NHƯNG:</strong> $-2^2 = -4$
+                </p>
+            </div>
+
+            <!-- 4. Giá trị tuyệt đối -->
+            <div class="theory-box">
+                <h3>📏 4. Giá Trị Tuyệt Đối $|x|$</h3>
+                <p>• Là khoảng cách trên trục số đến điểm 0 (khoảng cách <strong>luôn $\ge 0$</strong>):<br>
+                   $|5| = 5$; &nbsp; $|-7| = 7$; &nbsp; $|0| = 0$<br>
+                   • $|x| = a$ (với $a > 0$) &rArr; $x = a$ hoặc $x = -a$.<br>
+                   • $|x| = -3$ &rArr; <strong>Vô lý (Không có giá trị x nào)</strong>
+                </p>
+                <div class="comic-center">
+                    <svg width="220" height="45" viewBox="0 0 220 45">
+                        <line x1="10" y1="25" x2="210" y2="25" stroke="#334155" stroke-width="2"/>
+                        <circle cx="110" cy="25" r="4" fill="#0f172a"/><text x="107" y="40" font-size="10">0</text>
+                        <circle cx="50" cy="25" r="4" fill="#ef4444"/><text x="43" y="40" font-size="10">-3</text>
+                        <circle cx="170" cy="25" r="4" fill="#10b981"/><text x="166" y="40" font-size="10">+3</text>
+                        <path d="M 50 20 Q 110 -5 170 20" stroke="#f59e0b" stroke-width="2" fill="none" stroke-dasharray="3,3"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 5. Căn bậc hai số học -->
+            <div class="theory-box red">
+                <h3>🍄 5. Căn Bậc Hai Số Học $\sqrt{a}$</h3>
+                <p>• $\sqrt{a}$ là số không âm mà bình phương bằng $a$ ($a \ge 0$).<br>
+                   $\sqrt{9} = 3$ (Vì $3^2 = 9$ và $3 > 0$).<br>
+                   $\sqrt{16} = 4$; &nbsp; $\sqrt{25} = 5$; &nbsp; $\sqrt{0} = 0$.<br>
+                   • <strong>BẪY:</strong> $\sqrt{-16}$ là <strong>KHÔNG TỒN TẠI</strong> (không có căn số âm).<br>
+                   • $\sqrt{x^2} = |x|$.
+                </p>
+            </div>
+
+            <!-- 6. Góc & Tam giác (Hình 7) -->
+            <div class="theory-box green">
+                <h3>📐 6. Góc Đặc Biệt & 3 Trường Hợp Tam Giác Bằng Nhau</h3>
+                <p>• <strong>Tổng 3 góc tam giác:</strong> Luôn bằng $180^\circ$.<br>
+                   • Hai đường thẳng song song ($a \parallel b$):<br>
+                   - Cặp góc <strong>So le trong</strong> bằng nhau.<br>
+                   - Cặp góc <strong>Đồng vị</strong> bằng nhau.<br>
+                   • <strong>Tam giác bằng nhau:</strong> c-c-c, c-g-c, g-c-g.<br>
+                   • <strong>Tam giác vuông:</strong> Cạnh huyền - góc nhọn, cạnh huyền - cạnh góc vuông.
+                </p>
+                <div class="comic-center">
+                    <svg width="220" height="70" viewBox="0 0 220 70">
+                        <line x1="10" y1="20" x2="210" y2="20" stroke="#2563eb" stroke-width="2"/>
+                        <line x1="10" y1="55" x2="210" y2="55" stroke="#2563eb" stroke-width="2"/>
+                        <line x1="50" y1="65" x2="170" y2="10" stroke="#ef4444" stroke-width="2"/>
+                        <circle cx="102" cy="41" r="2" fill="black"/>
+                        <text x="125" y="17" font-size="10" fill="#dc2626" font-weight="bold">Đồng vị</text>
+                        <text x="75" y="50" font-size="10" fill="#16a34a" font-weight="bold">So le</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: ĐẤU TRƯỜNG 50 BÀI TẬP PHỤC HỒI NỀN TẢNG -->
+    <div class="section-card">
+        <div class="sec-title">
+            <span>🎯 50 CÂU HỎI THỰC CHIẾN - TRỊ DỨT ĐIỂM LỖI SAI</span>
+            <span class="badge" style="background:#fef3c7; color:#b45309;">Bảo Bảo tự làm từng câu</span>
+        </div>
+        <p style="color:#64748b; font-size: 0.95rem; margin-bottom: 20px;">
+            <em>Quy tắc: Đọc kỹ đề, làm ra nháp trước khi bấm chọn. Nếu chọn sai, hãy đọc ngay phần giải thích màu xanh hiện ra!</em>
+        </p>
+
+        <div id="questions-container">
+            <!-- 50 CÂU SẼ ĐƯỢC RENDER HOÀN HẢO BẰNG JAVASCRIPT ĐỂ CODE GỌN GÀNG VÀ CHÍNH XÁC -->
+        </div>
+    </div>
+
+</div>
+
+<!-- DATA & SCRIPT ĐIỀU KHIỂN GAME -->
+<script>
+const qData = [
+    // NHÓM 1: PHÉP CỘNG TRỪ SỐ NGUYÊN & PHÂN SỐ (1-10)
+    { q: "1. Kết quả của phép tính: (-7) + (-5) là:", a: ["-12", "12", "-2", "2"], c: 0, exp: "Cùng dấu âm: Ta cộng hai số lại và đặt dấu trừ đằng trước: -(7 + 5) = -12." },
+    { q: "2. Kết quả của phép tính: (-15) + 9 là:", a: ["-6", "6", "-24", "24"], c: 0, exp: "Khác dấu: Lấy số lớn trừ số bé (15 - 9 = 6), mang dấu của số lớn hơn (-15) &rArr; Kết quả là -6." },
+    { q: "3. Kết quả của phép tính: 8 - (-4) là:", a: ["12", "4", "-12", "-4"], c: 0, exp: "Trừ đi một số âm là cộng với số dương: 8 - (-4) = 8 + 4 = 12." },
+    { q: "4. Kết quả của phép tính: (-10) - 6 là:", a: ["-16", "-4", "16", "4"], c: 0, exp: "Nợ 10 lại nợ thêm 6: (-10) - 6 = -16." },
+    { q: "5. Kết quả của phép tính: -4 + (-6) + 10 là:", a: ["0", "-20", "20", "-10"], c: 0, exp: "(-4) + (-6) = -10. Sau đó -10 + 10 = 0." },
+    { q: "6. Tính: 1/3 - 1/2 = ?", a: ["-1/6", "1/6", "0", "-1"], c: 0, exp: "Quy đồng mẫu chung là 6: 2/6 - 3/6 = -1/6." },
+    { q: "7. Tính: (-3/5) + 1/5 = ?", a: ["-2/5", "2/5", "-4/5", "4/5"], c: 0, exp: "Cùng mẫu số: (-3 + 1)/5 = -2/5." },
+    { q: "8. Tính: (-2/3) . (-9/4) = ?", a: ["3/2", "-3/2", "6/12", "-6/7"], c: 0, exp: "Âm nhân âm ra DƯƠNG: (2 . 9)/(3 . 4) = 18/12 = 3/2." },
+    { q: "9. Tính: (-5/6) : 5/12 = ?", a: ["-2", "2", "-1/2", "1/2"], c: 0, exp: "Nhân đảo ngược: (-5/6) . (12/5) = -12/6 = -2." },
+    { q: "10. Tìm x biết: x + 8 = 3. Giá trị của x là:", a: ["-5", "5", "11", "-11"], c: 0, exp: "Chuyển vế đổi dấu: x = 3 - 8 = -5." },
+
+    // NHÓM 2: QUY TẮC NHÂN CHIA SỐ NGUYÊN & PHÁ NGOẶC (11-20)
+    { q: "11. Kết quả của phép nhân: (-4) . (-7) là:", a: ["28", "-28", "11", "-11"], c: 0, exp: "Âm nhân âm thành DƯƠNG: (-4) . (-7) = +28." },
+    { q: "12. Kết quả của phép chia: (-36) : 9 là:", a: ["-4", "4", "-27", "27"], c: 0, exp: "Âm chia dương ra ÂM: (-36) : 9 = -4." },
+    { q: "13. Phá ngoặc biểu thức: -(x - y + 2) ta được:", a: ["-x + y - 2", "-x - y + 2", "-x - y - 2", "x - y + 2"], c: 0, exp: "Trước ngoặc có dấu trừ, đổi dấu tất cả bên trong: x thành -x; -y thành +y; +2 thành -2." },
+    { q: "14. Rút gọn: (a - b) - (a + b) =", a: ["-2b", "0", "2a", "-2a"], c: 0, exp: "a - b - a - b = (a - a) + (-b - b) = -2b." },
+    { q: "15. Thực hiện phép nhân: -2(3x - 4) =", a: ["-6x + 8", "-6x - 8", "6x - 8", "-6x - 4"], c: 0, exp: "(-2).(3x) + (-2).(-4) = -6x + 8." },
+    { q: "16. Thu gọn biểu thức: -(3x - 1) + 2x =", a: ["-x + 1", "-5x + 1", "x - 1", "-x - 1"], c: 0, exp: "-3x + 1 + 2x = -x + 1." },
+    { q: "17. Rút gọn: 5 - (x - 3) =", a: ["8 - x", "2 - x", "-x + 2", "x + 2"], c: 0, exp: "5 - x + 3 = 8 - x." },
+    { q: "18. Biểu thức: -[-(-x)] rút gọn bằng:", a: ["-x", "x", "2x", "0"], c: 0, exp: "Có 3 dấu trừ (lẻ dấu trừ) nên kết quả vẫn là -x." },
+    { q: "19. Tìm x: 5 - x = 12. Giá trị của x là:", a: ["-7", "7", "17", "-17"], c: 0, exp: "-x = 12 - 5 &rArr; -x = 7 &rArr; x = -7." },
+    { q: "20. Rút gọn: 2x - (3x - 5) =", a: ["-x + 5", "-x - 5", "5x - 5", "x + 5"], c: 0, exp: "2x - 3x + 5 = -x + 5." },
+
+    // NHÓM 3: SỐ MŨ & CÁC PHÉP TÍNH LŨY THỪA (21-30)
+    { q: "21. Giá trị của (-3)² là:", a: ["9", "-9", "6", "-6"], c: 0, exp: "Số âm mũ chẵn ra số dương: (-3) . (-3) = +9." },
+    { q: "22. Giá trị của -3² là:", a: ["-9", "9", "-6", "6"], c: 0, exp: "Dấu trừ nằm NGOÀI lũy thừa: -(3 . 3) = -9." },
+    { q: "23. Giá trị của (-2)³ là:", a: ["-8", "8", "-6", "6"], c: 0, exp: "Số âm mũ lẻ ra số âm: (-2).(-2).(-2) = -8." },
+    { q: "24. Rút gọn phép nhân: x³ . x⁴ =", a: ["x⁷", "x¹²", "2x⁷", "x¹"], c: 0, exp: "Nhân hai lũy thừa cùng cơ số thì CỘNG số mũ: 3 + 4 = 7." },
+    { q: "25. Rút gọn phép chia: x⁸ : x² =", a: ["x⁶", "x⁴", "x¹⁰", "x¹⁶"], c: 0, exp: "Chia hai lũy thừa cùng cơ số thì TRỪ số mũ: 8 - 2 = 6." },
+    { q: "26. Giá trị của lũy thừa (x²)³ bằng:", a: ["x⁶", "x⁵", "x⁸", "x²³"], c: 0, exp: "Lũy thừa của lũy thừa thì NHÂN số mũ: 2 . 3 = 6." },
+    { q: "27. Cho x khác 0, giá trị của x⁰ bằng:", a: ["1", "0", "x", "Không xác định"], c: 0, exp: "Bất kỳ số nào khác 0 nâng lên lũy thừa 0 đều bằng 1." },
+    { q: "28. Thu gọn: (2x³)² =", a: ["4x⁶", "2x⁶", "4x⁵", "2x⁵"], c: 0, exp: "Nâng cả số và biến lên lũy thừa: 2² . (x³)² = 4x⁶." },
+    { q: "29. Tính: (-1)²⁰²⁴ + (-1)²⁰²⁵ =", a: ["0", "2", "-2", "1"], c: 0, exp: "(-1) mũ chẵn = +1; (-1) mũ lẻ = -1. Vậy 1 + (-1) = 0." },
+    { q: "30. Rút gọn: (x . y)³ =", a: ["x³y³", "xy³", "x³y", "3xy"], c: 0, exp: "Lũy thừa của một tích bằng tích các lũy thừa: x³y³." },
+
+    // NHÓM 4: GIÁ TRỊ TUYỆT ĐỐI & CĂN BẬC HAI (31-38)
+    { q: "31. Giá trị của |-9| là:", a: ["9", "-9", "0", "±9"], c: 0, exp: "Giá trị tuyệt đối là khoảng cách, không bao giờ âm: |-9| = 9." },
+    { q: "32. Giá trị của -|-5| là:", a: ["-5", "5", "0", "±5"], c: 0, exp: "|-5| = 5, đằng trước có dấu trừ nên bằng -5." },
+    { q: "33. Tìm x biết: |x| = 4. Giá trị của x là:", a: ["4 hoặc -4", "4", "-4", "16"], c: 0, exp: "Có hai số có khoảng cách đến 0 bằng 4 là 4 và -4." },
+    { q: "34. Tìm x biết: |x| = -2. Kết luận nào sau đây đúng?", a: ["Không tồn tại x", "x = 2", "x = -2", "x = ±2"], c: 0, exp: "Giá trị tuyệt đối luôn >= 0, không thể bằng số âm -2." },
+    { q: "35. Căn bậc hai số học của 25 là:", a: ["5", "-5", "±5", "625"], c: 0, exp: "Căn bậc hai số học là số KHÔNG ÂM mà bình phương lên bằng 25 &rArr; là 5." },
+    { q: "36. Giá trị của √(16) + √(9) bằng:", a: ["7", "5", "25", "12"], c: 0, exp: "√16 = 4 và √9 = 3. Vậy 4 + 3 = 7." },
+    { q: "37. Biểu thức √(-9) có xác định không?", a: ["Không xác định (Vô lý)", "Bằng 3", "Bằng -3", "Bằng 9"], c: 0, exp: "Dưới dấu căn bậc hai không bao giờ được là số âm." },
+    { q: "38. Giá trị của √((-5)²) bằng:", a: ["5", "-5", "25", "-25"], c: 0, exp: "(-5)² = 25 &rArr; √25 = 5 (hoặc áp dụng √A² = |A| = |-5| = 5)." },
+
+    // NHÓM 5: GÓC, ĐƯỜNG THẲNG SONG SONG (39-44)
+    { q: "39. Hai góc đối đỉnh thì:", a: ["Bằng nhau", "Bù nhau", "Phụ nhau", "Cùng bằng 90°"], c: 0, exp: "Tính chất: Hai góc đối đỉnh thì bằng nhau." },
+    { q: "40. Cho hai đường thẳng a // b. Cặp góc so le trong tạo bởi một cát tuyến thì:", a: ["Bằng nhau", "Bù nhau (tổng 180°)", "Phụ nhau", "Khác nhau"], c: 0, exp: "Hai góc so le trong tạo bởi 2 đường thẳng song song thì bằng nhau." },
+    { q: "41. Cho hai đường thẳng a // b. Cặp góc trong cùng phía thì:", a: ["Có tổng bằng 180°", "Bằng nhau", "Có tổng bằng 90°", "Bằng 360°"], c: 0, exp: "Hai góc trong cùng phía tạo bởi 2 đường song song bù nhau (tổng = 180°)." },
+    { q: "42. Cho góc xOy = 70°. Góc kề bù với góc xOy có số đo là:", a: ["110°", "20°", "70°", "180°"], c: 0, exp: "Hai góc kề bù có tổng bằng 180°: 180° - 70° = 110°." },
+    { q: "43. Cho a // b. Nếu đường thẳng c vuông góc với a thì:", a: ["c cũng vuông góc với b", "c song song với b", "c trùng với b", "c không cắt b"], c: 0, exp: "Định lí: Một đường thẳng vuông góc với 1 trong 2 đường song song thì vuông góc với đường còn lại." },
+    { q: "44. Cho tam giác ABC có góc A = 60°, góc B = 80°. Số đo góc C là:", a: ["40°", "50°", "60°", "100°"], c: 0, exp: "Tổng 3 góc tam giác = 180° &rArr; Góc C = 180° - (60° + 80°) = 40°." },
+
+    // NHÓM 6: TAM GIÁC & CÁC TRƯỜNG HỢP BẰNG NHAU (45-50)
+    { q: "45. Tam giác cân là tam giác có:", a: ["Hai cạnh bằng nhau", "Ba cạnh bằng nhau", "Một góc vuông", "Ba góc nhọn"], c: 0, exp: "Định nghĩa: Tam giác có 2 cạnh bằng nhau là tam giác cân." },
+    { q: "46. Tam giác ABC cân tại A có góc A = 40°. Mỗi góc ở đáy B và C bằng:", a: ["70°", "60°", "80°", "50°"], c: 0, exp: "Góc ở đáy = (180° - 40°) : 2 = 140° : 2 = 70°." },
+    { q: "47. Tam giác đều là tam giác có 3 góc bằng nhau và mỗi góc bằng:", a: ["60°", "90°", "45°", "180°"], c: 0, exp: "Mỗi góc tam giác đều = 180° : 3 = 60°." },
+    { q: "48. Tam giác ABC vuông tại A có AB = 3 cm, AC = 4 cm. Độ dài cạnh huyền BC là:", a: ["5 cm", "7 cm", "1 cm", "6 cm"], c: 0, exp: "Theo bộ ba Pitago kinh điển (3 - 4 - 5): BC² = 3² + 4² = 25 &rArr; BC = 5 cm." },
+    { q: "49. Trường hợp nào sau đây KHÔNG PHẢI là trường hợp bằng nhau của tam giác thường?", a: ["Góc - Góc - Góc (g-g-g)", "Cạnh - Cạnh - Cạnh (c-c-c)", "Cạnh - Góc - Cạnh (c-g-c)", "Góc - Cạnh - Góc (g-c-g)"], c: 0, exp: "Ba góc bằng nhau (g-g-g) chỉ làm tam giác đồng dạng, KHÔNG làm hai tam giác bằng nhau." },
+    { q: "50. Trong tam giác vuông, hai góc nhọn phụ nhau có nghĩa là:", a: ["Tổng số đo bằng 90°", "Tổng số đo bằng 180°", "Hai góc bằng nhau", "Mỗi góc bằng 45°"], c: 0, exp: "Hai góc phụ nhau là hai góc có tổng số đo bằng 90°." }
+];
+
+// Trộn ngẫu nhiên các phương án nhưng giữ nguyên tính đúng
+function renderQuestions() {
+    const container = document.getElementById('questions-container');
+    let html = '';
+
+    qData.forEach((item, index) => {
+        // Tạo bản sao các đáp án để xáo trộn
+        const opts = item.a.map((txt, i) => ({ txt, isCorrect: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="q-card" id="card-${index}">
+            <div class="q-title">${item.q}</div>
+            <div class="q-options">
+                ${opts.map(opt => `
+                    <button class="opt-btn" onclick="handleSelect(${index}, ${opt.isCorrect}, this)">
+                        ${opt.txt}
+                    </button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="exp-${index}">
+                💡 <strong>Giải thích:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+let score = 0;
+const answeredList = {};
+
+function handleSelect(qIdx, isCorrect, btn) {
+    if (answeredList[qIdx]) return;
+    answeredList[qIdx] = true;
+
+    const parent = document.getElementById(`card-${qIdx}`);
+    const explain = document.getElementById(`exp-${qIdx}`);
+    const allBtns = parent.querySelectorAll('.opt-btn');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+    } else {
+        btn.classList.add('wrong');
+        // Tìm và hiện nút đúng
+        allBtns.forEach(b => {
+            if (b.innerText.trim() === qData[qIdx].a[qData[qIdx].c].trim()) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    explain.style.display = 'block';
+
+    // Cập nhật thanh điểm
+    const totalAnswered = Object.keys(answeredList).length;
+    document.getElementById('score-counter').innerText = `${score} / 50`;
+    document.getElementById('progress-bar').style.width = `${(totalAnswered / 50) * 100}%`;
+
+    // Cập nhật danh hiệu
+    const rankEl = document.getElementById('rank-title');
+    if (score < 15) {
+        rankEl.innerText = "🌱 Hồi Sức";
+        rankEl.style.color = "#ef4444";
+    } else if (score < 30) {
+        rankEl.innerText = "⚔️ Cứng Cáp";
+        rankEl.style.color = "#f59e0b";
+    } else if (score < 45) {
+        rankEl.innerText = "🛡️ Chắc Nền Tảng";
+        rankEl.style.color = "#3b82f6";
+    } else {
+        rankEl.innerText = "👑 Dũng Sĩ Tự Tin!";
+        rankEl.style.color = "#10b981";
+    }
+}
+
+// Khởi chạy
+window.onload = renderQuestions;
+</script>
+
+</body>
+</html>
