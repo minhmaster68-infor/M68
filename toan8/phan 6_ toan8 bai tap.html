@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Toán Học - Giải Cứu Vương Quốc Kiến Thức</title>
+    <!-- MathJax để render công thức sắc nét -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-card: #243248;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; padding: 15px; }
+        .container { max-width: 920px; margin: 0 auto; }
+
+        /* HUD & Thanh trạng thái RPG */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 999;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1rem; }
+        .hud-value { color: var(--secondary); font-size: 1.25rem; font-weight: 800; }
+        .bar-container { width: 140px; height: 12px; background: #334155; border-radius: 999px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
+        .hp-fill { background: linear-gradient(90deg, #ef4444, #10b981); }
+        .exp-fill { background: linear-gradient(90deg, #6366f1, #06b6d4); width: 0%; }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #0891b2 100%);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(67, 56, 202, 0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero h1 { font-size: 2rem; font-weight: 900; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .hero p { color: #cbd5e1; font-size: 1.05rem; }
+
+        /* Boss Battle Area */
+        .boss-card {
+            background: linear-gradient(180deg, #2a1b3d 0%, #1e293b 100%);
+            border: 2px solid #a855f7;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.2);
+        }
+        .boss-avatar { width: 100px; height: 100px; margin: 0 auto 10px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .boss-name { font-size: 1.3rem; font-weight: 800; color: #f472b6; }
+        .boss-hp-box { max-width: 350px; margin: 10px auto; }
+
+        /* Card Section */
+        .section-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+        .sec-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .sec-title { font-size: 1.3rem; font-weight: 800; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
+
+        /* Theory Quick-cards (Bí kíp) */
+        .cheat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .cheat-item {
+            background: var(--surface-card);
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.95rem;
+        }
+        .cheat-item.danger { border-left-color: var(--danger); }
+        .cheat-item.warning { border-left-color: var(--warning); }
+        .cheat-item.success { border-left-color: var(--success); }
+        .cheat-item strong { color: #f8fafc; display: block; margin-bottom: 5px; }
+
+        /* Question Item Card */
+        .quest-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--primary); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15); }
+        .quest-q { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; color: #f8fafc; }
+        .badge-quest {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media (max-width: 650px) { .answers-grid { grid-template-columns: 1fr; } }
+
+        .btn-ans {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .btn-ans:hover { background: #2d3f59; border-color: var(--primary); }
+        .btn-ans.correct { background: rgba(16, 185, 129, 0.25) !important; border-color: var(--success) !important; color: #6ee7b7 !important; }
+        .btn-ans.wrong { background: rgba(239, 68, 68, 0.25) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 14px;
+            background: #192333;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.92rem;
+            color: #38bdf8;
+        }
+
+        /* Minigame Ghép Cặp (Matching Game) */
+        .match-arena {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .match-col { display: flex; flex-direction: column; gap: 10px; }
+        .match-card {
+            background: #1e293b;
+            border: 2px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .match-card:hover { border-color: var(--secondary); }
+        .match-card.selected { border-color: var(--warning); background: #2d3b2f; box-shadow: 0 0 10px var(--warning); }
+        .match-card.paired { border-color: var(--success); background: rgba(16, 185, 129, 0.2); pointer-events: none; opacity: 0.7; }
+
+        /* Detective Bug Mode */
+        .bug-box {
+            background: #2b1820;
+            border: 2px solid #f43f5e;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+        .bug-step {
+            padding: 8px 12px;
+            margin: 6px 0;
+            background: #3b1d28;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+        .bug-step:hover { border-color: #f43f5e; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- RPG HUD BAR -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>🛡️ HP:</span>
+            <div class="bar-container">
+                <div class="bar-fill hp-fill" id="hp-bar" style="width: 100%;"></div>
+            </div>
+            <span id="hp-val" class="hud-value">100</span>
+        </div>
+        <div class="hud-item">
+            <span>⭐ EXP:</span>
+            <div class="bar-container">
+                <div class="bar-fill exp-fill" id="exp-bar"></div>
+            </div>
+            <span id="score-val" class="hud-value">0/50</span>
+        </div>
+        <div class="hud-item">
+            <span id="player-rank">🌱 Tập Sự</span>
+        </div>
+    </div>
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <h1>⚔️ ĐẤU TRƯỜNG TOÁN HỌC KỲ THÚ</h1>
+        <p>Chiến Dịch Lấy Lại Căn Bản Toán 6 - 7 & Bứt Phá Điểm Số Toán 8</p>
+    </div>
+
+    <!-- MINIGAME 1: BOSS BATTLE RỒNG DẤU ÂM -->
+    <div class="boss-card">
+        <div class="boss-avatar">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <circle cx="50" cy="50" r="45" fill="#701a75" stroke="#f472b6" stroke-width="3"/>
+                <polygon points="30,20 40,35 25,35" fill="#f43f5e"/>
+                <polygon points="70,20 60,35 75,35" fill="#f43f5e"/>
+                <circle cx="38" cy="48" r="7" fill="#ffffff"/><circle cx="38" cy="48" r="3" fill="#000"/>
+                <circle cx="62" cy="48" r="7" fill="#ffffff"/><circle cx="62" cy="48" r="3" fill="#000"/>
+                <path d="M 35 68 Q 50 85 65 68" stroke="#f43f5e" stroke-width="4" fill="none"/>
+                <text x="35" y="30" font-size="16" fill="#facc15" font-weight="bold">- - = +</text>
+            </svg>
+        </div>
+        <div class="boss-name">CHÚA TỂ BẪY DẤU: DRAKO-MINUS</div>
+        <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 4px;">Trả lời đúng các câu hỏi để tung đòn kết liễu Boss rồng!</p>
+        <div class="boss-hp-box">
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:4px;">
+                <span>Máu của Boss:</span>
+                <span id="boss-hp-txt">500 / 500 HP</span>
+            </div>
+            <div class="bar-container" style="width: 100%; height: 16px; background: #475569;">
+                <div class="bar-fill" id="boss-hp-bar" style="background: linear-gradient(90deg, #ec4899, #ef4444); width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHẦN LÝ THUYẾT VÀ BÍ KÍP NHANH -->
+    <div class="section-box">
+        <div class="sec-header">
+            <div class="sec-title">📖 KHO BÍ KÍP TỐI THƯỢNG (Đọc 3 phút trước khi đánh)</div>
+        </div>
+        <div class="cheat-grid">
+            <div class="cheat-item danger">
+                <strong>⚡ 1. Quy tắc nhân chia dấu:</strong>
+                • Cùng dấu &rarr; Dương: $(-a) \cdot (-b) = +ab$<br>
+                • Trái dấu &rarr; Âm: $(-a) \cdot (+b) = -ab$
+            </div>
+            <div class="cheat-item warning">
+                <strong>🚪 2. Phá dấu ngoặc có dấu trừ:</strong>
+                • Trước ngoặc là dấu "$-$", đổi hết dấu bên trong:<br>
+                $-(a - b + c) = -a + b - c$
+            </div>
+            <div class="cheat-item success">
+                <strong>🚀 3. Thần chú số mũ:</strong>
+                • Nhân cộng mũ: $x^m \cdot x^n = x^{m+n}$<br>
+                • Chia trừ mũ: $x^m : x^n = x^{m-n}$<br>
+                • $(-3)^2 = 9$ (mũ chẵn) nhưng $-3^2 = -9$
+            </div>
+            <div class="cheat-item">
+                <strong>📏 4. Trị tuyệt đối & Căn:</strong>
+                • $|-5| = 5$; khoảng cách không âm.<br>
+                • $\sqrt{16} = 4$; không có căn số âm $\sqrt{-9}$.
+            </div>
+        </div>
+    </div>
+
+    <!-- MINIGAME 2: GHÉP CẶP THẺ BÀI KHÁI NIỆM (MATCHING GAME) -->
+    <div class="section-box">
+        <div class="sec-header">
+            <div class="sec-title">🎴 MINIGAME: GHÉP CẶP CÔNG THỨC & KHÁI NIỆM</div>
+            <span style="font-size: 0.85rem; color: #a5b4fc;">Bấm vào 1 thẻ cột Trái & 1 thẻ tương ứng cột Phải</span>
+        </div>
+        <div class="match-arena">
+            <div class="match-col" id="col-left">
+                <div class="match-card" data-pair="1" onclick="selectCard(this)">(-5) . (-4) = ?</div>
+                <div class="match-card" data-pair="2" onclick="selectCard(this)">x² . x³ = ?</div>
+                <div class="match-card" data-pair="3" onclick="selectCard(this)">√49 = ?</div>
+                <div class="match-card" data-pair="4" onclick="selectCard(this)">|-12| = ?</div>
+                <div class="match-card" data-pair="5" onclick="selectCard(this)">Hai góc so le trong a//b</div>
+            </div>
+            <div class="match-col" id="col-right">
+                <div class="match-card" data-pair="3" onclick="selectCard(this)">7</div>
+                <div class="match-card" data-pair="1" onclick="selectCard(this)">+20</div>
+                <div class="match-card" data-pair="5" onclick="selectCard(this)">Bằng nhau</div>
+                <div class="match-card" data-pair="2" onclick="selectCard(this)">x⁵</div>
+                <div class="match-card" data-pair="4" onclick="selectCard(this)">12</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ĐẤU TRƯỜNG 50 CÂU HỎI THỰC CHIẾN -->
+    <div class="section-box">
+        <div class="sec-header">
+            <div class="sec-title">🎯 ĐẤU TRƯỜNG 50 CÂU HỎI TỔNG HỢP</div>
+            <span style="color: var(--secondary); font-weight: 700;">Nhận biết & Thông hiểu</span>
+        </div>
+
+        <div id="quest-list">
+            <!-- 50 CÂU HỎI ĐƯỢC LOAD TỰ ĐỘNG BẰNG JAVASCRIPT BÊN DƯỚI -->
+        </div>
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT GAME ENGINE -->
+<script>
+// TẠO ÂM THANH GAME BẰNG WEB AUDIO API (KHÔNG CẦN TẢI FILE NGOÀI)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'hit') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    } else if (type === 'hurt') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'win') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+    }
+}
+
+// DỮ LIỆU ĐẦY ĐỦ 50 BÀI TẬP VỪA SỨC BẢO BẢO (THEO 6 CHUYÊN ĐỀ HỔNG)
+const questions = [
+    // 1. Dấu số nguyên & phân số (1 - 10)
+    { q: "Tính: (-8) + (-6) = ?", a: ["-14", "14", "-2", "2"], c: 0, exp: "Cùng dấu âm: Ta cộng hai số rồi đặt dấu trừ đằng trước: -(8 + 6) = -14." },
+    { q: "Tính: (-12) + 7 = ?", a: ["-5", "5", "-19", "19"], c: 0, exp: "Khác dấu: Lấy 12 - 7 = 5, mang dấu của số lớn hơn (-12) &rarr; Kết quả là -5." },
+    { q: "Tính: 9 - (-5) = ?", a: ["14", "4", "-14", "-4"], c: 0, exp: "Trừ đi số âm là cộng với số dương: 9 - (-5) = 9 + 5 = 14." },
+    { q: "Tính: (-7) - 4 = ?", a: ["-11", "-3", "11", "3"], c: 0, exp: "Nợ 7 nợ thêm 4: (-7) - 4 = -11." },
+    { q: "Tính: (-5) . (-6) = ?", a: ["30", "-30", "11", "-11"], c: 0, exp: "Âm nhân âm ra DƯƠNG: (-5) . (-6) = +30." },
+    { q: "Tính: (-24) : 6 = ?", a: ["-4", "4", "-18", "18"], c: 0, exp: "Âm chia dương ra ÂM: (-24) : 6 = -4." },
+    { q: "Tính: 1/4 - 1/3 = ?", a: ["-1/12", "1/12", "0", "-1"], c: 0, exp: "Quy đồng mẫu 12: 3/12 - 4/12 = -1/12." },
+    { q: "Tính: (-2/5) . (15/4) = ?", a: ["-3/2", "3/2", "-8/75", "13/9"], c: 0, exp: "Rút gọn chéo: (-2.15)/(5.4) = -30/20 = -3/2." },
+    { q: "Tìm x: x + 9 = 4. Giá trị của x là:", a: ["-5", "5", "13", "-13"], c: 0, exp: "Chuyển vế đổi dấu: x = 4 - 9 = -5." },
+    { q: "Tìm x: 3 - x = 8. Giá trị của x là:", a: ["-5", "5", "11", "-11"], c: 0, exp: "-x = 8 - 3 &rArr; -x = 5 &rArr; x = -5." },
+
+    // 2. Phá ngoặc & Đổi dấu (11 - 18)
+    { q: "Phá ngoặc có dấu trừ: -(2x - 3) =", a: ["-2x + 3", "-2x - 3", "2x - 3", "2x + 3"], c: 0, exp: "Đổi hết dấu bên trong: 2x thành -2x, -3 thành +3." },
+    { q: "Rút gọn: 5 - (x - 2) =", a: ["7 - x", "3 - x", "-x + 3", "x + 3"], c: 0, exp: "5 - x + 2 = 7 - x." },
+    { q: "Nhân phá ngoặc: -3(2x - 5) =", a: ["-6x + 15", "-6x - 15", "6x - 15", "-6x - 5"], c: 0, exp: "(-3).(2x) = -6x; (-3).(-5) = +15 &rarr; -6x + 15." },
+    { q: "Rút gọn: (x - 1) - (x + 4) =", a: ["-5", "3", "2x - 5", "5"], c: 0, exp: "x - 1 - x - 4 = (x - x) + (-1 - 4) = -5." },
+    { q: "Rút gọn: -(a - b) + (a - b) =", a: ["0", "-2a", "2b", "-2b"], c: 0, exp: "Hai biểu thức đối nhau cộng lại luôn bằng 0." },
+    { q: "Phá ngoặc lồng: -[-(x - 2)] =", a: ["x - 2", "-x + 2", "-x - 2", "x + 2"], c: 0, exp: "2 dấu trừ triệt tiêu nhau: -[-A] = A = x - 2." },
+    { q: "Rút gọn: 3x - (2x - 4) =", a: ["x + 4", "x - 4", "5x - 4", "x + 0"], c: 0, exp: "3x - 2x + 4 = x + 4." },
+    { q: "Đổi dấu nhị thức: (3 - x) bằng biểu thức nào sau đây?", a: ["-(x - 3)", "x - 3", "-(3 + x)", "-x - 3"], c: 0, exp: "A - B = -(B - A), do đó 3 - x = -(x - 3)." },
+
+    // 3. Lũy thừa & Số mũ (19 - 28)
+    { q: "Giá trị của (-4)² là:", a: ["16", "-16", "8", "-8"], c: 0, exp: "Số âm mũ chẵn ra số dương: (-4) . (-4) = +16." },
+    { q: "Giá trị của -4² là:", a: ["-16", "16", "-8", "8"], c: 0, exp: "Dấu trừ không nằm trong bình phương: -(4 . 4) = -16." },
+    { q: "Giá trị của (-2)³ là:", a: ["-8", "8", "-6", "6"], c: 0, exp: "Số âm mũ lẻ ra số âm: (-2).(-2).(-2) = -8." },
+    { q: "Rút gọn: x⁴ . x³ =", a: ["x⁷", "x¹²", "2x⁷", "x¹"], c: 0, exp: "Nhân hai lũy thừa cùng cơ số thì CỘNG mũ: 4 + 3 = 7." },
+    { q: "Rút gọn: x⁹ : x³ =", a: ["x⁶", "x³", "x¹²", "x²⁷"], c: 0, exp: "Chia hai lũy thừa cùng cơ số thì TRỪ mũ: 9 - 3 = 6." },
+    { q: "Tính: (x³)² =", a: ["x⁶", "x⁵", "x⁹", "2x³"], c: 0, exp: "Lũy thừa tầng thì NHÂN số mũ: 3 . 2 = 6." },
+    { q: "Thu gọn: (3x²)² =", a: ["9x⁴", "3x⁴", "6x⁴", "9x²"], c: 0, exp: "Nâng cả số và biến: 3² . (x²)² = 9x⁴." },
+    { q: "Với x khác 0, giá trị của x⁰ bằng:", a: ["1", "0", "x", "Không xác định"], c: 0, exp: "Bất kỳ số nào khác 0 lũy thừa 0 đều bằng 1." },
+    { q: "So sánh: (-1)¹⁰⁰ và (-1)¹⁰¹:", a: ["(-1)¹⁰⁰ > (-1)¹⁰¹", "(-1)¹⁰⁰ < (-1)¹⁰¹", "Bằng nhau", "Không so sánh được"], c: 0, exp: "(-1)¹⁰⁰ = +1; (-1)¹⁰¹ = -1. Rõ ràng 1 > -1." },
+    { q: "Rút gọn: 2³ . 2² =", a: ["32", "64", "16", "24"], c: 0, exp: "2³⁺² = 2⁵ = 32." },
+
+    // 4. Giá trị tuyệt đối & Căn bậc hai (29 - 36)
+    { q: "Giá trị của |-7| là:", a: ["7", "-7", "0", "±7"], c: 0, exp: "Khoảng cách trên trục số không âm: |-7| = 7." },
+    { q: "Tính: -|-8| =", a: ["-8", "8", "0", "16"], c: 0, exp: "|-8| = 8, đằng trước có dấu trừ nên ra -8." },
+    { q: "Tìm x: |x| = 5. Giá trị của x là:", a: ["5 hoặc -5", "5", "-5", "25"], c: 0, exp: "Cả 5 và -5 đều có giá trị tuyệt đối bằng 5." },
+    { q: "Tìm x: |x| = -3. Kết luận:", a: ["Không có x thỏa mãn", "x = 3", "x = -3", "x = ±3"], c: 0, exp: "Giá trị tuyệt đối luôn >= 0, không thể bằng -3." },
+    { q: "Căn bậc hai số học của 36 là:", a: ["6", "-6", "±6", "18"], c: 0, exp: "Căn bậc hai số học là số không âm mà bình phương bằng 36 &rarr; là 6." },
+    { q: "Tính: √4 + √25 =", a: ["7", "9", "29", "10"], c: 0, exp: "√4 = 2; √25 = 5. Vậy 2 + 5 = 7." },
+    { q: "Biểu thức √(-16) có giá trị là:", a: ["Không tồn tại trong số thực", "4", "-4", "-8"], c: 0, exp: "Dưới dấu căn bậc hai không thể là số âm!" },
+    { q: "Giá trị của √((-6)²) là:", a: ["6", "-6", "36", "-36"], c: 0, exp: "√A² = |A| = |-6| = 6." },
+
+    // 5. Góc & Đường thẳng song song (37 - 44)
+    { q: "Hai góc kề bù có tổng số đo là:", a: ["180°", "90°", "360°", "120°"], c: 0, exp: "Định nghĩa: Kề bù thì có tổng số đo bằng 180°." },
+    { q: "Hai góc đối đỉnh thì:", a: ["Bằng nhau", "Bù nhau", "Phụ nhau", "Tổng bằng 90°"], c: 0, exp: "Tính chất cơ bản: Hai góc đối đỉnh thì bằng nhau." },
+    { q: "Cho a // b, biết một góc so le trong bằng 50°. Góc so le trong còn lại là:", a: ["50°", "130°", "40°", "180°"], c: 0, exp: "Hai đường song song thì các cặp góc so le trong bằng nhau." },
+    { q: "Cho a // b, biết một góc trong cùng phía bằng 70°. Góc còn lại là:", a: ["110°", "70°", "20°", "90°"], c: 0, exp: "Hai góc trong cùng phía bù nhau: 180° - 70° = 110°." },
+    { q: "Tổng 3 góc trong một tam giác bằng:", a: ["180°", "360°", "90°", "100°"], c: 0, exp: "Định lí: Tổng ba góc của một tam giác luôn bằng 180°." },
+    { q: "Tam giác ABC có góc A = 70°, góc B = 50°. Số đo góc C là:", a: ["60°", "50°", "70°", "80°"], c: 0, exp: "Góc C = 180° - (70° + 50°) = 60°." },
+    { q: "Nếu đường thẳng c vuông góc với a, và a // b thì:", a: ["c vuông góc với b", "c song song b", "c trùng b", "c không cắt b"], c: 0, exp: "Từ vuông góc đến song song: Vuông góc với 1 đường thì vuông góc với đường còn lại." },
+    { q: "Góc phụ với góc 35° có số đo là:", a: ["55°", "145°", "35°", "65°"], c: 0, exp: "Hai góc phụ nhau có tổng bằng 90°: 90° - 35° = 55°." },
+
+    // 6. Tam giác bằng nhau & Tam giác đặc biệt (45 - 50)
+    { q: "Tam giác cân có hai góc ở đáy bằng 50°. Góc ở đỉnh bằng:", a: ["80°", "50°", "100°", "65°"], c: 0, exp: "Góc đỉnh = 180° - (50° + 50°) = 80°." },
+    { q: "Tam giác đều có mỗi góc bằng:", a: ["60°", "90°", "45°", "180°"], c: 0, exp: "Ba góc bằng nhau: 180° : 3 = 60°." },
+    { q: "Trường hợp nào sau đây KHÔNG chứng minh hai tam giác thường bằng nhau?", a: ["Góc - Góc - Góc (g-g-g)", "Cạnh - Cạnh - Cạnh (c-c-c)", "Cạnh - Góc - Cạnh (c-g-c)", "Góc - Cạnh - Góc (g-c-g)"], c: 0, exp: "Ba góc bằng nhau chỉ tạo ra 2 tam giác đồng dạng (cùng hình dạng nhưng kích thước khác nhau)." },
+    { q: "Tam giác vuông có hai cạnh góc vuông là 3 cm và 4 cm. Cạnh huyền là:", a: ["5 cm", "7 cm", "6 cm", "1 cm"], c: 0, exp: "Bộ ba số Pitago kinh điển: 3² + 4² = 25 = 5² &rarr; Cạnh huyền là 5 cm." },
+    { q: "Tam giác vuông cân có mỗi góc nhọn bằng:", a: ["45°", "60°", "30°", "90°"], c: 0, exp: "Góc vuông 90°, hai góc nhọn bằng nhau: (180° - 90°) : 2 = 45°." },
+    { q: "Trong tam giác vuông, cạnh đối diện với góc vuông là:", a: ["Cạnh huyền (cạnh lớn nhất)", "Cạnh góc vuông bé", "Đường cao", "Trung tuyến"], c: 0, exp: "Cạnh đối diện góc vuông là cạnh huyền và là cạnh dài nhất trong tam giác vuông." }
+];
+
+// RENDER DANH SÁCH 50 BÀI TẬP
+function renderQuestions() {
+    const box = document.getElementById('quest-list');
+    let html = '';
+    questions.forEach((q, idx) => {
+        // Trộn phương án
+        const opts = q.a.map((txt, i) => ({ txt, isC: i === q.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="qcard-${idx}">
+            <div class="quest-q">
+                <span class="badge-quest">Câu ${idx + 1}</span> ${q.q}
+            </div>
+            <div class="answers-grid">
+                ${opts.map(o => `
+                    <button class="btn-ans" onclick="pickAns(${idx}, ${o.isC}, this)">${o.txt}</button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="qexp-${idx}">
+                💡 <strong>Bí kíp:</strong> ${q.exp}
+            </div>
+        </div>
+        `;
+    });
+    box.innerHTML = html;
+}
+
+// XỬ LÝ GAMEPLAY
+let score = 0;
+let hp = 100;
+let bossHp = 500;
+const answeredMap = {};
+
+function pickAns(idx, isCorrect, btn) {
+    if (answeredMap[idx]) return;
+    answeredMap[idx] = true;
+
+    const parent = document.getElementById(`qcard-${idx}`);
+    const exp = document.getElementById(`qexp-${idx}`);
+    const allBtns = parent.querySelectorAll('.btn-ans');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playSound('hit');
+        // Đánh Boss
+        bossHp = Math.max(0, bossHp - 10);
+        document.getElementById('boss-hp-txt').innerText = `${bossHp} / 500 HP`;
+        document.getElementById('boss-hp-bar').style.width = `${(bossHp / 500) * 100}%`;
+    } else {
+        btn.classList.add('wrong');
+        hp = Math.max(0, hp - 4);
+        playSound('hurt');
+        // Đánh dấu đáp án đúng
+        allBtns.forEach(b => {
+            if (b.innerText.trim() === questions[idx].a[questions[idx].c].trim()) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    exp.style.display = 'block';
+
+    // Cập nhật HUD
+    document.getElementById('score-val').innerText = `${score}/50`;
+    document.getElementById('exp-bar').style.width = `${(score / 50) * 100}%`;
+    document.getElementById('hp-val').innerText = hp;
+    document.getElementById('hp-bar').style.width = `${hp}%`;
+
+    // Cập nhật danh hiệu
+    const rankEl = document.getElementById('player-rank');
+    if (score >= 45) { rankEl.innerText = "👑 Đại Kiện Tướng"; rankEl.style.color = "#10b981"; }
+    else if (score >= 30) { rankEl.innerText = "🛡️ Hiệp Sĩ Nền Tảng"; rankEl.style.color = "#06b6d4"; }
+    else if (score >= 15) { rankEl.innerText = "⚔️ Chiến Binh Tập Sự"; rankEl.style.color = "#f59e0b"; }
+
+    if (bossHp === 0) {
+        playSound('win');
+        alert("🎉 CHÚC MỪNG BẢO BẢO ĐÃ HẠ GỤC BOSS DRAKO-MINUS VÀ PHỤC HỒI NỀN TẢNG TOÁN THÀNH CÔNG!");
+    }
+}
+
+// XỬ LÝ MINIGAME GHÉP CẶP (MATCHING GAME)
+let firstCard = null;
+let pairedCount = 0;
+
+function selectCard(card) {
+    if (card.classList.contains('paired')) return;
+
+    if (!firstCard) {
+        firstCard = card;
+        card.classList.add('selected');
+        playSound('hit');
+    } else {
+        if (firstCard === card) {
+            firstCard.classList.remove('selected');
+            firstCard = null;
+            return;
+        }
+
+        // Kiểm tra xem 2 thẻ có cùng cặp không
+        if (firstCard.getAttribute('data-pair') === card.getAttribute('data-pair')) {
+            firstCard.classList.remove('selected');
+            firstCard.classList.add('paired');
+            card.classList.add('paired');
+            playSound('win');
+            pairedCount++;
+            firstCard = null;
+
+            if (pairedCount === 5) {
+                setTimeout(() => alert("⭐ Xuất sắc! Bảo Bảo đã ghép đúng 100% công thức cốt lõi!"), 200);
+            }
+        } else {
+            playSound('hurt');
+            firstCard.classList.remove('selected');
+            card.classList.add('wrong');
+            setTimeout(() => {
+                card.classList.remove('wrong');
+            }, 400);
+            firstCard = null;
+        }
+    }
+}
+
+window.onload = renderQuestions;
+</script>
+
+</body>
+</html>
