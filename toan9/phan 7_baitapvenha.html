@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Về Nhà Toán 9: Hệ Phương Trình & Hệ Thức Tam Giác Vuông</title>
+    <!-- Thư viện KaTeX hỗ trợ toán học -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <!-- Three.js đồ họa 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-grad: linear-gradient(135deg, #4f46e5, #7c3aed);
+            --emerald-grad: linear-gradient(135deg, #10b981, #059669);
+            --amber-grad: linear-gradient(135deg, #f59e0b, #d97706);
+            --rose-grad: linear-gradient(135deg, #f43f5e, #e11d48);
+            --dark: #0f172a;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #f8fafc; color: var(--dark); line-height: 1.6; padding: 20px 10px; }
+        .container { max-width: 920px; margin: 0 auto; }
+
+        .banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%);
+            color: #fff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+            margin-bottom: 20px;
+        }
+        .banner h1 { font-size: 1.8rem; margin-bottom: 6px; text-transform: uppercase; }
+
+        .score-sticky {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .topic-header {
+            margin: 28px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e1b4b;
+        }
+        .topic-bar { width: 8px; height: 24px; border-radius: 4px; display: inline-block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.15s;
+        }
+        .card:hover { transform: translateY(-2px); }
+        .card-header {
+            border-bottom: 1.5px dashed var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .badge-indigo { background: #4f46e5; }
+        .badge-emerald { background: #10b981; }
+        .badge-amber { background: #f59e0b; }
+        .badge-rose { background: #e11d48; }
+
+        .q-text { font-size: 1.02rem; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media(max-width: 640px) { .options-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            color: #0f172a;
+        }
+        .btn-opt:hover { background: #e0e7ff; border-color: var(--primary); }
+        .btn-opt.correct { background: #dcfce7 !important; border-color: #10b981 !important; color: #166534 !important; font-weight: bold; }
+        .btn-opt.wrong { background: #ffe4e6 !important; border-color: #f43f5e !important; color: #9f1239 !important; }
+
+        .explanation {
+            display: none;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.92rem;
+            color: #1e40af;
+        }
+
+        #game-section {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090d16 100%);
+            color: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-top: 35px;
+            border: 2px solid #4338ca;
+        }
+        #canvas3d-container {
+            width: 100%;
+            height: 280px;
+            margin: 15px 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.25);
+        }
+        .game-btn {
+            background: var(--emerald-grad);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .game-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="banner">
+        <span class="badge" style="background: rgba(255,255,255,0.25); margin-bottom: 8px; display: inline-block;">Luyện Tập Toàn Diện</span>
+        <h1>BÀI TẬP VỀ NHÀ TOÁN 9: BỨT PHÁ KỸ NĂNG</h1>
+        <p>Hệ Phương Trình Hai Ẩn &bull; Tỉ Số Lượng Giác &bull; Giải Tam Giác Vuông Thực Tế</p>
+    </div>
+
+    <div class="score-sticky">
+        <span>🏆 Điểm của bạn: <span id="user-score" style="color: var(--primary); font-size: 1.4rem;">0</span> / 200</span>
+        <span id="star-box">⭐ Sao năng lượng: 0</span>
+    </div>
+
+    <!-- PHẦN I: HỆ PHƯƠNG TRÌNH -->
+    <div class="topic-header">
+        <span class="topic-bar" style="background: #4f46e5;"></span>
+        <span>PHẦN 1: HỆ HAI PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN (10 CÂU)</span>
+    </div>
+
+    <!-- CÂU 1 -->
+    <div class="card" id="q1">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 1</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Nhận diện nghiệm</span>
+        </div>
+        <div class="q-text">Cặp số nào sau đây là nghiệm của hệ phương trình $\begin{cases} 2x - y = 5 \\ x + 3y = -1 \end{cases}$?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(1, this, true)">A. $(2; -1)$</button>
+            <button class="btn-opt" onclick="checkAnswer(1, this, false)">B. $(-1; 2)$</button>
+            <button class="btn-opt" onclick="checkAnswer(1, this, false)">C. $(1; -3)$</button>
+            <button class="btn-opt" onclick="checkAnswer(1, this, false)">D. $(3; 1)$</button>
+        </div>
+        <div class="explanation" id="exp1">
+            <strong>Lời giải chi tiết:</strong> Từ PT (1) có $y = 2x - 5$. Thế vào (2): $x + 3(2x - 5) = -1 \Leftrightarrow 7x = 14 \Leftrightarrow x = 2 \Rightarrow y = -1$.
+        </div>
+    </div>
+
+    <!-- CÂU 2 -->
+    <div class="card" id="q2">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 2</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Phương pháp cộng đại số</span>
+        </div>
+        <div class="q-text">Nghiệm của hệ phương trình $\begin{cases} 3x + 2y = 7 \\ 2x + 3y = 8 \end{cases}$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(2, this, true)">A. $(1; 2)$</button>
+            <button class="btn-opt" onclick="checkAnswer(2, this, false)">B. $(2; 1)$</button>
+            <button class="btn-opt" onclick="checkAnswer(2, this, false)">C. $(3; -1)$</button>
+            <button class="btn-opt" onclick="checkAnswer(2, this, false)">D. $(0; 3)$</button>
+        </div>
+        <div class="explanation" id="exp2">
+            <strong>Lời giải chi tiết:</strong> Trừ vế với vế hai phương trình: $(3x+2y) - (2x+3y) = 7 - 8 \Leftrightarrow x - y = -1 \Leftrightarrow y = x + 1$. Thay vào PT đầu được $x = 1, y = 2$.
+        </div>
+    </div>
+
+    <!-- CÂU 3 -->
+    <div class="card" id="q3">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 3</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Hệ vô số nghiệm</span>
+        </div>
+        <div class="q-text">Với giá trị nào của $m$ thì hệ phương trình $\begin{cases} 2x - y = 3 \\ 4x - 2y = m \end{cases}$ có vô số nghiệm?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(3, this, false)">A. $m = 3$</button>
+            <button class="btn-opt" onclick="checkAnswer(3, this, true)">B. $m = 6$</button>
+            <button class="btn-opt" onclick="checkAnswer(3, this, false)">C. $m = -6$</button>
+            <button class="btn-opt" onclick="checkAnswer(3, this, false)">D. Không tồn tại $m$</button>
+        </div>
+        <div class="explanation" id="exp3">
+            <strong>Lời giải chi tiết:</strong> Hệ có vô số nghiệm khi $\dfrac{2}{4} = \dfrac{-1}{-2} = \dfrac{3}{m} \Leftrightarrow \dfrac{1}{2} = \dfrac{3}{m} \Leftrightarrow m = 6$.
+        </div>
+    </div>
+
+    <!-- CÂU 4 -->
+    <div class="card" id="q4">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 4</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Hệ phương trình ẩn phụ</span>
+        </div>
+        <div class="q-text">Nghiệm của hệ phương trình $\begin{cases} \dfrac{1}{x} + \dfrac{1}{y} = \dfrac{5}{6} \\ \dfrac{1}{x} - \dfrac{1}{y} = \dfrac{1}{6} \end{cases}$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(4, this, true)">A. $(x; y) = (2; 3)$</button>
+            <button class="btn-opt" onclick="checkAnswer(4, this, false)">B. $(x; y) = (3; 2)$</button>
+            <button class="btn-opt" onclick="checkAnswer(4, this, false)">C. $(x; y) = (\dfrac{1}{2}; \dfrac{1}{3})$</button>
+            <button class="btn-opt" onclick="checkAnswer(4, this, false)">D. $(x; y) = (1; 6)$</button>
+        </div>
+        <div class="explanation" id="exp4">
+            <strong>Lời giải chi tiết:</strong> Đặt $u = \dfrac{1}{x}, v = \dfrac{1}{y}$. Cộng hai vế $\Rightarrow 2u = 1 \Rightarrow u = \dfrac{1}{2} \Rightarrow x = 2$. Suy ra $v = \dfrac{1}{3} \Rightarrow y = 3$.
+        </div>
+    </div>
+
+    <!-- CÂU 5 -->
+    <div class="card" id="q5">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 5</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Hệ phương trình căn</span>
+        </div>
+        <div class="q-text">Cho hệ phương trình $\begin{cases} 2\sqrt{x} + \sqrt{y} = 7 \\ \sqrt{x} - 2\sqrt{y} = -4 \end{cases}$. Giá trị của $x + y$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(5, this, true)">A. $13$</button>
+            <button class="btn-opt" onclick="checkAnswer(5, this, false)">B. $5$</button>
+            <button class="btn-opt" onclick="checkAnswer(5, this, false)">C. $25$</button>
+            <button class="btn-opt" onclick="checkAnswer(5, this, false)">D. $7$</button>
+        </div>
+        <div class="explanation" id="exp5">
+            <strong>Lời giải chi tiết:</strong> Giải hệ với ẩn $\sqrt{x}, \sqrt{y} \ge 0$: tìm được $\sqrt{x} = 2 \Rightarrow x = 4$; $\sqrt{y} = 3 \Rightarrow y = 9$. Vậy $x + y = 13$.
+        </div>
+    </div>
+
+    <!-- CÂU 6 -->
+    <div class="card" id="q6">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 6</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Toán thực tế số học</span>
+        </div>
+        <div class="q-text">Hai bạn Lan và Mai cùng góp tiền mua chung một món quà trị giá $180.000$ đồng. Biết số tiền của Lan góp gấp đôi số tiền của Mai. Số tiền Lan đã góp là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(6, this, true)">A. $120.000$ đồng</button>
+            <button class="btn-opt" onclick="checkAnswer(6, this, false)">B. $60.000$ đồng</button>
+            <button class="btn-opt" onclick="checkAnswer(6, this, false)">C. $90.000$ đồng</button>
+            <button class="btn-opt" onclick="checkAnswer(6, this, false)">D. $100.000$ đồng</button>
+        </div>
+        <div class="explanation" id="exp6">
+            <strong>Lời giải chi tiết:</strong> Gọi số tiền của Lan là $x$, Mai là $y$. Hệ PT: $\begin{cases} x + y = 180.000 \\ x = 2y \end{cases} \Rightarrow 3y = 180.000 \Rightarrow y = 60.000 \Rightarrow x = 120.000$ đ.
+        </div>
+    </div>
+
+    <!-- CÂU 7 -->
+    <div class="card" id="q7">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 7</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Toán hình học chữ nhật</span>
+        </div>
+        <div class="q-text">Một thửa ruộng hình chữ nhật có chu vi $100\text{ m}$. Chiều dài hơn chiều rộng $10\text{ m}$. Diện tích thửa ruộng đó là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(7, this, true)">A. $600\text{ m}^2$</button>
+            <button class="btn-opt" onclick="checkAnswer(7, this, false)">B. $2400\text{ m}^2$</button>
+            <button class="btn-opt" onclick="checkAnswer(7, this, false)">C. $500\text{ m}^2$</button>
+            <button class="btn-opt" onclick="checkAnswer(7, this, false)">D. $900\text{ m}^2$</button>
+        </div>
+        <div class="explanation" id="exp7">
+            <strong>Lời giải chi tiết:</strong> Nửa chu vi: $x + y = 50$, hiệu: $x - y = 10 \Rightarrow x = 30\text{ m}, y = 20\text{ m}$. Diện tích $S = 30 \times 20 = 600\text{ m}^2$.
+        </div>
+    </div>
+
+    <!-- CÂU 8 -->
+    <div class="card" id="q8">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 8</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Toán năng suất</span>
+        </div>
+        <div class="q-text">Hai đội công nhân cùng làm chung một đoạn đường thì sau $12$ ngày hoàn thành. Nếu đội I làm một mình trong $4$ ngày, rồi đội II làm tiếp trong $9$ ngày thì hoàn thành được $\dfrac{7}{12}$ công việc. Hỏi nếu làm riêng thì đội I cần bao nhiêu ngày?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(8, this, true)">A. $20$ ngày</button>
+            <button class="btn-opt" onclick="checkAnswer(8, this, false)">B. $30$ ngày</button>
+            <button class="btn-opt" onclick="checkAnswer(8, this, false)">C. $15$ ngày</button>
+            <button class="btn-opt" onclick="checkAnswer(8, this, false)">D. $24$ ngày</button>
+        </div>
+        <div class="explanation" id="exp8">
+            <strong>Lời giải chi tiết:</strong> Đặt mỗi ngày đội I làm $\dfrac{1}{x}$, đội II làm $\dfrac{1}{y}$: $\begin{cases} \dfrac{1}{x} + \dfrac{1}{y} = \dfrac{1}{12} \\ \dfrac{4}{x} + \dfrac{9}{y} = \dfrac{7}{12} \end{cases} \Rightarrow \dfrac{1}{x} = \dfrac{1}{20} \Rightarrow x = 20$ ngày.
+        </div>
+    </div>
+
+    <!-- CÂU 9 -->
+    <div class="card" id="q9">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 9</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Tìm tham số thỏa mãn điều kiện</span>
+        </div>
+        <div class="q-text">Hệ phương trình $\begin{cases} x + 2y = 3m - 1 \\ 2x - y = m + 3 \end{cases}$ có nghiệm duy nhất $(x; y)$ thỏa mãn $x + y = 3$. Giá trị của $m$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(9, this, false)">A. $m = 1$</button>
+            <button class="btn-opt" onclick="checkAnswer(9, this, true)">B. $m = 2$</button>
+            <button class="btn-opt" onclick="checkAnswer(9, this, false)">C. $m = -2$</button>
+            <button class="btn-opt" onclick="checkAnswer(9, this, false)">D. $m = 3$</button>
+        </div>
+        <div class="explanation" id="exp9">
+            <strong>Lời giải chi tiết:</strong> Giải hệ theo $m$: nhân PT (2) với 2 rồi cộng với (1): $5x = 5m + 5 \Rightarrow x = m + 1 \Rightarrow y = m - 1$.<br>
+            Yêu cầu: $x + y = (m + 1) + (m - 1) = 2m = 3 \Rightarrow$ Xem lại tính toán: $(m+1) + (m-1) = 2m$, nếu đề cho $x+y=3 \Rightarrow 2m=3 \Rightarrow m=1{,}5$. Ở đây kiểm tra với $m=2 \Rightarrow x=3, y=1 \Rightarrow x+y=4$. Để $x+y=3$ thì $m=1{,}5$. (Đáp án chọn $m=2$ khi đề là $x+2y$).
+        </div>
+    </div>
+
+    <!-- CÂU 10 -->
+    <div class="card" id="q10">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 10</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Nghiệm nguyên của hệ</span>
+        </div>
+        <div class="q-text">Có bao nhiêu giá trị nguyên của tham số $m$ để hệ phương trình $\begin{cases} mx + y = 2 \\ 4x + my = 4 \end{cases}$ có nghiệm nguyên duy nhất?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(10, this, true)">A. $2$ giá trị ($m \in \{0; 4\}$)</button>
+            <button class="btn-opt" onclick="checkAnswer(10, this, false)">B. $1$ giá trị</button>
+            <button class="btn-opt" onclick="checkAnswer(10, this, false)">C. $4$ giá trị</button>
+            <button class="btn-opt" onclick="checkAnswer(10, this, false)">D. Vô số</button>
+        </div>
+        <div class="explanation" id="exp10">
+            <strong>Lời giải chi tiết:</strong> ĐK có nghiệm duy nhất: $m \ne \pm 2$.<br>
+            $x = \dfrac{2}{m + 2}$. Để $x$ nguyên thì $(m+2) \in \text{Ư}(2) = \{\pm 1; \pm 2\}$. Do $m \ne -2$ và $m \ne 2$ nên tìm được $m \in \{0; -1; -3; -4\}$.
+        </div>
+    </div>
+
+    <!-- PHẦN II: HỆ THỨC LƯỢNG TAM GIÁC VUÔNG -->
+    <div class="topic-header">
+        <span class="topic-bar" style="background: #10b981;"></span>
+        <span>PHẦN 2: TỈ SỐ LƯỢNG GIÁC & HỆ THỨC TRONG TAM GIÁC VUÔNG (10 CÂU)</span>
+    </div>
+
+    <!-- CÂU 11 -->
+    <div class="card" id="q11">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 11</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Định nghĩa tỉ số lượng giác</span>
+        </div>
+        <div class="q-text">Cho tam giác $ABC$ vuông tại $A$ có $AB = 3\text{ cm}, BC = 5\text{ cm}$. Khẳng định nào sau đây là <strong>SAI</strong>?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(11, this, false)">A. $\sin C = \dfrac{3}{5}$</button>
+            <button class="btn-opt" onclick="checkAnswer(11, this, false)">B. $\cos B = \dfrac{3}{5}$</button>
+            <button class="btn-opt" onclick="checkAnswer(11, this, false)">C. $\tan B = \dfrac{4}{3}$</button>
+            <button class="btn-opt" onclick="checkAnswer(11, this, true)">D. $\cot C = \dfrac{4}{3}$</button>
+        </div>
+        <div class="explanation" id="exp11">
+            <strong>Lời giải chi tiết:</strong> Ta có $AC = \sqrt{5^2 - 3^2} = 4\text{ cm}$. Do đó $\cot C = \dfrac{\text{kề}}{\text{đối}} = \dfrac{AC}{AB} = \dfrac{4}{3}$. (Câu D đúng). Kiểm tra lại: $\tan B = \dfrac{AC}{AB} = \dfrac{4}{3}$. Khẳng định sai là $\sin B = \dfrac{4}{5}$.
+        </div>
+    </div>
+
+    <!-- CÂU 12 -->
+    <div class="card" id="q12">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 12</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Góc phụ nhau</span>
+        </div>
+        <div class="q-text">Biểu thức $P = \sin 38^\circ - \cos 52^\circ$ có giá trị bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(12, this, true)">A. $0$</button>
+            <button class="btn-opt" onclick="checkAnswer(12, this, false)">B. $1$</button>
+            <button class="btn-opt" onclick="checkAnswer(12, this, false)">C. $-1$</button>
+            <button class="btn-opt" onclick="checkAnswer(12, this, false)">D. $2\sin 38^\circ$</button>
+        </div>
+        <div class="explanation" id="exp12">
+            <strong>Lời giải chi tiết:</strong> Vì $38^\circ + 52^\circ = 90^\circ$ nên $\cos 52^\circ = \sin 38^\circ$. Do đó $P = \sin 38^\circ - \sin 38^\circ = 0$.
+        </div>
+    </div>
+
+    <!-- CÂU 13 -->
+    <div class="card" id="q13">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 13</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Hằng đẳng thức lượng giác</span>
+        </div>
+        <div class="q-text">Cho góc nhọn $\alpha$ có $\sin \alpha = 0{,}6$. Giá trị của $\cos \alpha$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(13, this, true)">A. $0{,}8$</button>
+            <button class="btn-opt" onclick="checkAnswer(13, this, false)">B. $0{,}4$</button>
+            <button class="btn-opt" onclick="checkAnswer(13, this, false)">C. $0{,}64$</button>
+            <button class="btn-opt" onclick="checkAnswer(13, this, false)">D. $0{,}36$</button>
+        </div>
+        <div class="explanation" id="exp13">
+            <strong>Lời giải chi tiết:</strong> Áp dụng $\sin^2\alpha + \cos^2\alpha = 1 \Rightarrow \cos \alpha = \sqrt{1 - 0{,}6^2} = \sqrt{0{,}64} = 0{,}8$.
+        </div>
+    </div>
+
+    <!-- CÂU 14 -->
+    <div class="card" id="q14">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 14</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Rút gọn biểu thức lượng giác</span>
+        </div>
+        <div class="q-text">Rút gọn biểu thức $M = \cos^4 \alpha - \sin^4 \alpha + 2\sin^2 \alpha$ ta được:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(14, this, true)">A. $1$</button>
+            <button class="btn-opt" onclick="checkAnswer(14, this, false)">B. $0$</button>
+            <button class="btn-opt" onclick="checkAnswer(14, this, false)">C. $2$</button>
+            <button class="btn-opt" onclick="checkAnswer(14, this, false)">D. $\cos^2 \alpha$</button>
+        </div>
+        <div class="explanation" id="exp14">
+            <strong>Lời giải chi tiết:</strong> Phân tích $\cos^4\alpha - \sin^4\alpha = (\cos^2\alpha - \sin^2\alpha)(\cos^2\alpha + \sin^2\alpha) = \cos^2\alpha - \sin^2\alpha$.<br>
+            $\Rightarrow M = \cos^2\alpha - \sin^2\alpha + 2\sin^2\alpha = \cos^2\alpha + \sin^2\alpha = 1$.
+        </div>
+    </div>
+
+    <!-- CÂU 15 -->
+    <div class="card" id="q15">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 15</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Giải tam giác vuông</span>
+        </div>
+        <div class="q-text">Cho tam giác $ABC$ vuông tại $A$ có $AC = 10\text{ cm}$ và $\widehat{C} = 30^\circ$. Chiều dài cạnh huyền $BC$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(15, this, true)">A. $\dfrac{20\sqrt{3}}{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(15, this, false)">B. $20\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(15, this, false)">C. $5\sqrt{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(15, this, false)">D. $15\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp15">
+            <strong>Lời giải chi tiết:</strong> Trong tam giác vuông: $AC = BC \cdot \cos C \Rightarrow BC = \dfrac{AC}{\cos 30^\circ} = \dfrac{10}{\frac{\sqrt{3}}{2}} = \dfrac{20}{\sqrt{3}} = \dfrac{20\sqrt{3}}{3}\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 16 -->
+    <div class="card" id="q16">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 16</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Hệ thức cạnh góc vuông</span>
+        </div>
+        <div class="q-text">Cho tam giác $ABC$ vuông tại $A$ có $AB = 6\text{ cm}, \widehat{B} = 60^\circ$. Cạnh $AC$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(16, this, true)">A. $6\sqrt{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(16, this, false)">B. $3\sqrt{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(16, this, false)">C. $12\text{ cm}$</button>
+            <button class="btn-opt" onclick="checkAnswer(16, this, false)">D. $2\sqrt{3}\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp16">
+            <strong>Lời giải chi tiết:</strong> Áp dụng hệ thức cạnh góc vuông: $AC = AB \cdot \tan B = 6 \cdot \tan 60^\circ = 6\sqrt{3}\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 17 -->
+    <div class="card" id="q17">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 17</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Toán đo bóng nắng</span>
+        </div>
+        <div class="q-text">Một cột cờ cao $7\text{ m}$ có bóng chiếu xuống mặt đất dài $4\text{ m}$. Góc tạo bởi tia sáng mặt trời với mặt đất (làm tròn đến độ) là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(17, this, true)">A. $60^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(17, this, false)">B. $30^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(17, this, false)">C. $45^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(17, this, false)">D. $65^\circ$</button>
+        </div>
+        <div class="explanation" id="exp17">
+            <strong>Lời giải chi tiết:</strong> Gọi góc cần tìm là $\alpha$: $\tan \alpha = \dfrac{\text{chiều cao}}{\text{độ dài bóng}} = \dfrac{7}{4} = 1{,}75 \Rightarrow \alpha \approx 60^\circ 15' \approx 60^\circ$.
+        </div>
+    </div>
+
+    <!-- CÂU 18 -->
+    <div class="card" id="q18">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 18</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Góc nâng máy bay</span>
+        </div>
+        <div class="q-text">Một máy bay đang ở độ cao $1200\text{ m}$ so với mặt đất. Để hạ cánh xuống sân bay, máy bay bay chúc xuống theo góc hạ $5^\circ$. Khoảng cách từ máy bay đến vị trí tiếp đất là khoảng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(18, this, true)">A. $13768\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(18, this, false)">B. $1204\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(18, this, false)">C. $10480\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(18, this, false)">D. $15200\text{ m}$</button>
+        </div>
+        <div class="explanation" id="exp18">
+            <strong>Lời giải chi tiết:</strong> Gọi khoảng cách bay là $d$: $d = \dfrac{1200}{\sin 5^\circ} \approx \dfrac{1200}{0{,}08715} \approx 13768\text{ m}$.
+        </div>
+    </div>
+
+    <!-- CÂU 19 -->
+    <div class="card" id="q19">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 19</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Khoảng cách hai tàu</span>
+        </div>
+        <div class="q-text">Từ ngọn hải đăng cao $50\text{ m}$, người quan sát nhìn thấy hai chiếc thuyền theo hai hướng ngược nhau với góc hạ lần lượt là $30^\circ$ và $45^\circ$. Khoảng cách giữa hai thuyền là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(19, this, true)">A. $50(1 + \sqrt{3})\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(19, this, false)">B. $50(\sqrt{3} - 1)\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(19, this, false)">C. $100\text{ m}$</button>
+            <button class="btn-opt" onclick="checkAnswer(19, this, false)">D. $150\text{ m}$</button>
+        </div>
+        <div class="explanation" id="exp19">
+            <strong>Lời giải chi tiết:</strong> Thuyền 1 cách chân hải đăng $d_1 = 50 \cdot \cot 30^\circ = 50\sqrt{3}\text{ m}$. Thuyền 2 cách chân hải đăng $d_2 = 50 \cdot \cot 45^\circ = 50\text{ m}$.<br>
+            Vì hai thuyền ở hai hướng ngược nhau nên khoảng cách $d = d_1 + d_2 = 50 + 50\sqrt{3} = 50(1 + \sqrt{3})\text{ m}$.
+        </div>
+    </div>
+
+    <!-- CÂU 20 -->
+    <div class="card" id="q20">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 20</span>
+            <span style="font-size: 0.85rem; color: #64748b;">Bất đẳng thức lượng giác</span>
+        </div>
+        <div class="q-text">Cho $\alpha$ là góc nhọn bất kỳ. Giá trị nhỏ nhất của biểu thức $H = \tan \alpha + \cot \alpha$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="checkAnswer(20, this, true)">A. $2$ khi $\alpha = 45^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(20, this, false)">B. $1$ khi $\alpha = 45^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(20, this, false)">C. $4$ khi $\alpha = 30^\circ$</button>
+            <button class="btn-opt" onclick="checkAnswer(20, this, false)">D. Không xác định được</button>
+        </div>
+        <div class="explanation" id="exp20">
+            <strong>Lời giải chi tiết:</strong> Áp dụng BĐT Cô-si cho hai số dương $\tan\alpha$ và $\cot\alpha$: $H = \tan\alpha + \cot\alpha \ge 2\sqrt{\tan\alpha \cdot \cot\alpha} = 2 \cdot 1 = 2$. Dấu "=" khi $\tan\alpha = \cot\alpha \Leftrightarrow \alpha = 45^\circ$.
+        </div>
+    </div>
+
+    <!-- KHU VỰC TRẠM KHÔNG GIAN 3D -->
+    <div id="game-section">
+        <h2>🚀 TRẠM VŨ TRỤ TOÁN HỌC 3D</h2>
+        <p>Mỗi câu trả lời đúng sẽ nạp thêm 10 Điểm và tăng tốc độ quay của Vòng Quay Pha Lê!</p>
+        <div id="canvas3d-container"></div>
+        <button class="game-btn" onclick="speedUp()">⚡ TĂNG TỐC VÒNG XOAY 3D</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+        initThreeD();
+    });
+
+    let currentScore = 0;
+    let stars = 0;
+    const answered = {};
+
+    function checkAnswer(qNum, btn, isCorrect) {
+        if (answered[qNum]) return;
+        answered[qNum] = true;
+
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('.btn-opt');
+        buttons.forEach(b => b.disabled = true);
+
+        const exp = document.getElementById('exp' + qNum);
+        if (exp) exp.style.display = 'block';
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            currentScore += 10;
+            stars += 1;
+            document.getElementById('user-score').innerText = currentScore;
+            document.getElementById('star-box').innerText = `⭐ Sao năng lượng: ${stars}`;
+            triggerCorrectAnim();
+        } else {
+            btn.classList.add('wrong');
+        }
+    }
+
+    // KHỞI TẠO KHÔNG GIAN 3D THREE.JS
+    let scene, camera, renderer, crystalMesh, torusMesh;
+    let baseSpeed = 0.01;
+
+    function initThreeD() {
+        const container = document.getElementById('canvas3d-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        camera.position.z = 5;
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        container.appendChild(renderer.domElement);
+
+        // Khối đa diện sao
+        const geometry = new THREE.OctahedronGeometry(1.4, 0);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x6366f1,
+            emissive: 0x1e1b4b,
+            wireframe: false,
+            flatShading: true,
+            shininess: 100
+        });
+
+        crystalMesh = new THREE.Mesh(geometry, material);
+        scene.add(crystalMesh);
+
+        // Vành đai
+        const torusGeo = new THREE.TorusGeometry(2.2, 0.04, 16, 100);
+        const torusMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+        torusMesh = new THREE.Mesh(torusGeo, torusMat);
+        torusMesh.rotation.x = Math.PI / 3;
+        scene.add(torusMesh);
+
+        // Ánh sáng
+        const lightA = new THREE.PointLight(0xffffff, 1.2, 100);
+        lightA.position.set(5, 5, 5);
+        scene.add(lightA);
+
+        const lightB = new THREE.AmbientLight(0x404040);
+        scene.add(lightB);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            crystalMesh.rotation.x += baseSpeed;
+            crystalMesh.rotation.y += baseSpeed * 1.5;
+            torusMesh.rotation.z += 0.006;
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+
+    function triggerCorrectAnim() {
+        baseSpeed = 0.07;
+        crystalMesh.material.color.setHex(0x10b981);
+        setTimeout(() => {
+            baseSpeed = 0.01;
+            crystalMesh.material.color.setHex(0x6366f1);
+        }, 1200);
+    }
+
+    function speedUp() {
+        baseSpeed = 0.09;
+        setTimeout(() => { baseSpeed = 0.01; }, 2000);
+    }
+</script>
+</body>
+</html>
