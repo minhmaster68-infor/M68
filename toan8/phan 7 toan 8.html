@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vượt Ải Toán Học 8 - Củng Cố Nền Tảng</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --card-bg: #273549;
+            --text-main: #f8fafc;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* HUD Thanh Trạng Thái Game */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--primary);
+            border-radius: 18px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
+        .hud-val { color: var(--secondary); font-size: 1.25rem; font-weight: 800; }
+        .bar-wrap { width: 130px; height: 12px; background: #334155; border-radius: 999px; overflow: hidden; }
+        .bar-fill { height: 100%; transition: width 0.3s ease; }
+        .hp-fill { background: linear-gradient(90deg, #ef4444, #10b981); width: 100%; }
+        .exp-fill { background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; }
+
+        /* Banner */
+        .hero {
+            background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #0891b2 100%);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero h1 { font-size: 1.9rem; font-weight: 900; margin-bottom: 6px; }
+        .hero p { color: #cbd5e1; font-size: 1rem; }
+
+        /* Khối Bí Kíp Nhanh */
+        .cheat-sheet {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .cheat-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cheat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        .cheat-box {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.92rem;
+        }
+        .cheat-box.green { border-left-color: var(--success); }
+        .cheat-box.orange { border-left-color: var(--warning); }
+        .cheat-box strong { color: #fff; display: block; margin-bottom: 4px; }
+
+        /* Danh Sách Câu Hỏi */
+        .quest-box {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--border);
+        }
+        .quest-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--primary); }
+        .quest-header {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .quest-badge {
+            background: rgba(79, 70, 229, 0.35);
+            color: #c7d2fe;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .ans-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media (max-width: 600px) { .ans-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .btn-opt:hover { background: #2b394e; border-color: var(--primary); }
+        .btn-opt.correct { background: rgba(16, 185, 129, 0.25) !important; border-color: var(--success) !important; color: #6ee7b7 !important; }
+        .btn-opt.wrong { background: rgba(239, 68, 68, 0.25) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            background: #192333;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            color: #38bdf8;
+        }
+
+        /* Định dạng công thức toán hiển thị sắc nét chuẩn xuất bản */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            color: #38bdf8;
+            font-size: 1.05em;
+            letter-spacing: 0.3px;
+        }
+        .math-expr i {
+            font-style: italic;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+        }
+        .math-expr sup {
+            font-size: 0.75em;
+            vertical-align: super;
+            line-height: 0;
+        }
+        .hat-angle {
+            display: inline-block;
+            position: relative;
+        }
+        .hat-angle::before {
+            content: "^";
+            position: absolute;
+            top: -0.45em;
+            left: 50%;
+            transform: translateX(-50%) scaleX(1.4);
+            font-size: 0.75em;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HUD THANH GAME -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>🛡️ HP:</span>
+            <div class="bar-wrap">
+                <div class="bar-fill hp-fill" id="hp-bar"></div>
+            </div>
+            <span id="hp-val" class="hud-val">100</span>
+        </div>
+        <div class="hud-item">
+            <span>⭐ EXP:</span>
+            <div class="bar-wrap">
+                <div class="bar-fill exp-fill" id="exp-bar"></div>
+            </div>
+            <span id="score-val" class="hud-val">0/20</span>
+        </div>
+        <div class="hud-item">
+            <span id="rank-name" style="color: var(--warning);">🌱 Tập Sự</span>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="hero">
+        <h1>⚔️ ĐẤU TRƯỜNG VƯỢT ẢI TOÁN 8</h1>
+        <p>Chiến Dịch Luyện Phản Xạ Nhanh - Không Sợ Sai Dấu - Nắm Chắc Hình Học</p>
+    </div>
+
+    <!-- KHỐI BÍ KÍP NHỚ NHANH -->
+    <div class="cheat-sheet">
+        <div class="cheat-title">📖 3 BÍ KÍP TỐI THƯỢNG CẦN NHỚ</div>
+        <div class="cheat-grid">
+            <div class="cheat-box">
+                <strong>⚡ 1. Quy tắc 3 Nhịp khi Chia:</strong>
+                • Nhịp 1: Xác định dấu: $(-):(-) = (+)$, $(-):(+) = (-)$<br>
+                • Nhịp 2: Lấy số chia số.<br>
+                • Nhịp 3: Lấy biến trừ số mũ: <span class="math-expr"><i>x</i><sup><i>m</i></sup> : <i>x</i><sup><i>n</i></sup> = <i>x</i><sup><i>m</i>-<i>n</i></sup></span>.
+            </div>
+            <div class="cheat-box green">
+                <strong>🌿 2. Đường Trung Bình Tam Giác:</strong>
+                • Nối 2 trung điểm thì song song cạnh đáy.<br>
+                • Độ dài: <span class="math-expr"><i>MN</i> = ½ <i>BC</i></span> hay cạnh đáy gấp đôi: <span class="math-expr"><i>BC</i> = 2 · <i>MN</i></span>.
+            </div>
+            <div class="cheat-box orange">
+                <strong>📐 3. Bẫy số mũ và dấu:</strong>
+                • <span class="math-expr">(-<i>a</i>)² = <i>a</i>²</span> (mũ chẵn thì dương).<br>
+                • <span class="math-expr">-<i>a</i>² = -(<i>a</i> · <i>a</i>)</span> (dấu trừ nằm ngoài!).<br>
+                • <span class="math-expr"><i>A</i> : <i>A</i> = 1</span> (chia cho chính nó bằng 1, không được ghi 0).
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 20 BÀI TẬP TƯƠNG TÁC -->
+    <div class="quest-box">
+        <div style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 16px;">
+            🎯 20 THỬ THÁCH THỰC CHIẾN (BẢO BẢO TỰ LÀM)
+        </div>
+        <div id="quest-container"></div>
+    </div>
+
+</div>
+
+<script>
+// TẠO ÂM THANH BẰNG WEB AUDIO API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playAudio(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    }
+}
+
+// BỘ DỮ LIỆU ĐÃ ĐƯỢC CHUYỂN HOÀN TOÀN SANG HTML TOÁN HỌC CHUẨN ĐẸP 100%
+const quizData = [
+    // Đại số: Dấu, số mũ, phép chia (10 câu)
+    { 
+        q: "Kết quả của phép tính <span class='math-expr'>(-18) : (-3)</span> là:", 
+        a: ["6", "-6", "9", "-9"], 
+        c: 0, 
+        exp: "Âm chia âm ra số DƯƠNG: (-18) : (-3) = +6." 
+    },
+    { 
+        q: "Kết quả của phép tính <span class='math-expr'>(-30<i>x</i><sup>3</sup>) : (5<i>x</i>)</span> là:", 
+        a: ["<span class='math-expr'>-6<i>x</i>²</span>", "<span class='math-expr'>6<i>x</i>²</span>", "<span class='math-expr'>-6<i>x</i></span>", "<span class='math-expr'>-5<i>x</i>²</span>"], 
+        c: 0, 
+        exp: "Âm chia dương ra ÂM: (-30 : 5 = -6) và x³ : x = x² → Kết quả là -6x²." 
+    },
+    { 
+        q: "Rút gọn phép chia: <span class='math-expr'>(-12<i>x</i><sup>4</sup><i>y</i>²) : (-4<i>x</i>²<i>y</i>²)</span> ta được:", 
+        a: ["<span class='math-expr'>3<i>x</i>²</span>", "<span class='math-expr'>-3<i>x</i>²</span>", "<span class='math-expr'>3<i>x</i>²<i>y</i></span>", "<span class='math-expr'>-3<i>x</i>²<i>y</i></span>"], 
+        c: 0, 
+        exp: "(-12):(-4) = +3; x⁴:x² = x²; y²:y² = 1. Kết quả là 3x²." 
+    },
+    { 
+        q: "Thực hiện phép tính: <span class='math-expr'>(6<i>x</i>² - 3<i>x</i>) : (3<i>x</i>)</span> ta được:", 
+        a: ["<span class='math-expr'>2<i>x</i> - 1</span>", "<span class='math-expr'>2<i>x</i></span>", "<span class='math-expr'>2<i>x</i> + 1</span>", "<span class='math-expr'>2<i>x</i> - 0</span>"], 
+        c: 0, 
+        exp: "Nhớ quy tắc không được bỏ sót: (-3x) : (3x) = -1. Kết quả là 2x - 1." 
+    },
+    { 
+        q: "Kết quả phép tính <span class='math-expr'>(8<i>x</i><sup>3</sup><i>y</i> - 4<i>x</i>²<i>y</i>²) : (-2<i>xy</i>)</span> là:", 
+        a: ["<span class='math-expr'>-4<i>x</i>² + 2<i>xy</i></span>", "<span class='math-expr'>-4<i>x</i>² - 2<i>xy</i></span>", "<span class='math-expr'>4<i>x</i>² + 2<i>xy</i></span>", "<span class='math-expr'>-4<i>x</i> + 2<i>y</i></span>"], 
+        c: 0, 
+        exp: "8:(-2) = -4; (-4):(-2) = +2 → Kết quả là -4x² + 2xy." 
+    },
+    { 
+        q: "Giá trị của biểu thức <span class='math-expr'>(-5)²</span> là:", 
+        a: ["25", "-25", "10", "-10"], 
+        c: 0, 
+        exp: "Số âm có mũ chẵn thì bằng số dương: (-5) . (-5) = 25." 
+    },
+    { 
+        q: "Giá trị của biểu thức <span class='math-expr'>-5²</span> là:", 
+        a: ["-25", "25", "-10", "10"], 
+        c: 0, 
+        exp: "Dấu trừ nằm NGOÀI bình phương: -(5 . 5) = -25." 
+    },
+    { 
+        q: "Khai triển biểu thức <span class='math-expr'>-(<i>x</i> - 4)</span> ta được:", 
+        a: ["<span class='math-expr'>-<i>x</i> + 4</span>", "<span class='math-expr'>-<i>x</i> - 4</span>", "<span class='math-expr'><i>x</i> - 4</span>", "<span class='math-expr'><i>x</i> + 4</span>"], 
+        c: 0, 
+        exp: "Trước ngoặc có dấu trừ, đổi dấu tất cả bên trong: x thành -x, -4 thành +4." 
+    },
+    { 
+        q: "Rút gọn biểu thức <span class='math-expr'><i>A</i> = 3<i>x</i>(<i>x</i> - 2) - 3<i>x</i>²</span> ta được:", 
+        a: ["<span class='math-expr'>-6<i>x</i></span>", "<span class='math-expr'>6<i>x</i></span>", "<span class='math-expr'>-6<i>x</i>²</span>", "0"], 
+        c: 0, 
+        exp: "3x . x - 3x . 2 - 3x² = 3x² - 6x - 3x² = -6x." 
+    },
+    { 
+        q: "Tìm <span class='math-expr'><i>x</i></span> biết: <span class='math-expr'>2(<i>x</i> - 3) = -8</span>. Giá trị của <span class='math-expr'><i>x</i></span> là:", 
+        a: ["-1", "1", "-5", "5"], 
+        c: 0, 
+        exp: "x - 3 = -8 : 2 → x - 3 = -4 → x = -4 + 3 = -1." 
+    },
+
+    // Hình học: Đường trung bình, tam giác, góc (10 câu)
+    { 
+        q: "Cho tam giác <i>ABC</i> có <i>M</i> là trung điểm <i>AB</i>, <i>N</i> là trung điểm <i>AC</i>. Đoạn thẳng <i>MN</i> là:", 
+        a: ["Đường trung bình của tam giác <i>ABC</i>", "Đường cao của tam giác <i>ABC</i>", "Đường phân giác của tam giác <i>ABC</i>", "Đường trung tuyến của tam giác <i>ABC</i>"], 
+        c: 0, 
+        exp: "Đoạn thẳng nối trung điểm hai cạnh của tam giác gọi là đường trung bình." 
+    },
+    { 
+        q: "Tam giác <i>ABC</i> có cạnh <span class='math-expr'><i>BC</i> = 16 cm</span>. Gọi <i>MN</i> là đường trung bình song song với <i>BC</i>. Độ dài <i>MN</i> là:", 
+        a: ["8 cm", "32 cm", "16 cm", "4 cm"], 
+        c: 0, 
+        exp: "Đường trung bình bằng nửa cạnh đáy: MN = BC / 2 = 16 / 2 = 8 cm." 
+    },
+    { 
+        q: "Cho tam giác <i>ABC</i>. Gọi <i>DE</i> là đường trung bình (<i>D</i> trên <i>AB</i>, <i>E</i> trên <i>AC</i>). Biết <span class='math-expr'><i>DE</i> = 7 cm</span>, độ dài <i>BC</i> là:", 
+        a: ["14 cm", "3,5 cm", "7 cm", "21 cm"], 
+        c: 0, 
+        exp: "Cạnh đáy gấp đôi đường trung bình: BC = 2 . DE = 2 . 7 = 14 cm." 
+    },
+    { 
+        q: "Để đo khoảng cách giữa hai mỏm đá <i>A</i> và <i>B</i> ngoài biển, người ta lấy trung điểm <i>M</i> và <i>N</i>, đo được <span class='math-expr'><i>MN</i> = 55 m</span>. Khoảng cách <i>AB</i> là:", 
+        a: ["110 m", "27,5 m", "55 m", "165 m"], 
+        c: 0, 
+        exp: "Khoảng cách AB = 2 . MN = 2 . 55 = 110 m." 
+    },
+    { 
+        q: "Tam giác <i>ABC</i> có chu vi bằng <span class='math-expr'>30 cm</span>. Gọi <i>D</i>, <i>E</i>, <i>F</i> lần lượt là trung điểm 3 cạnh. Chu vi tam giác <i>DEF</i> là:", 
+        a: ["15 cm", "60 cm", "10 cm", "7,5 cm"], 
+        c: 0, 
+        exp: "Mỗi cạnh của tam giác DEF bằng 1/2 cạnh tam giác ABC, nên chu vi bằng 30 : 2 = 15 cm." 
+    },
+    { 
+        q: "Cho tam giác <i>ABC</i> có góc <span class='math-expr'><span class='hat-angle'><i>B</i></span> = 70°</span>, <i>MN</i> là đường trung bình song song <i>BC</i> (<i>M</i> thuộc <i>AB</i>). Góc <span class='math-expr'><span class='hat-angle'><i>AMN</i></span></span> bằng:", 
+        a: ["70°", "110°", "35°", "20°"], 
+        c: 0, 
+        exp: "Vì MN // BC nên góc AMN và góc B là hai góc đồng vị → góc AMN = 70°." 
+    },
+    { 
+        q: "Cho tam giác <i>ABC</i>. Điểm <i>M</i> là trung điểm <i>AB</i>. Đường thẳng qua <i>M</i> song song với <i>BC</i> cắt <i>AC</i> tại <i>N</i>. Khi đó:", 
+        a: ["<i>N</i> là trung điểm của <i>AC</i>", "<i>N</i> là điểm bất kì trên <i>AC</i>", "<i>AN</i> = 2 <i>NC</i>", "<i>NC</i> = 2 <i>AN</i>"], 
+        c: 0, 
+        exp: "Định lí đảo: Đường thẳng qua trung điểm một cạnh và song song cạnh thứ hai thì đi qua trung điểm cạnh thứ ba." 
+    },
+    { 
+        q: "Hai góc kề bù có tổng số đo bằng:", 
+        a: ["180°", "90°", "360°", "120°"], 
+        c: 0, 
+        exp: "Hai góc kề bù luôn có tổng số đo bằng 180°." 
+    },
+    { 
+        q: "Cho hình bình hành <i>ABCD</i> có góc <span class='math-expr'><span class='hat-angle'><i>A</i></span> = 100°</span>. Số đo góc <i>C</i> đối diện là:", 
+        a: ["100°", "80°", "50°", "180°"], 
+        c: 0, 
+        exp: "Trong hình bình hành, hai góc đối bằng nhau: góc C = góc A = 100°." 
+    },
+    { 
+        q: "Hình bình hành có hai đường chéo vuông góc với nhau là hình gì?", 
+        a: ["Hình thoi", "Hình chữ nhật", "Hình thang cân", "Hình tam giác"], 
+        c: 0, 
+        exp: "Dấu hiệu nhận biết: Hình bình hành có 2 đường chéo vuông góc là hình thoi." 
+    }
+];
+
+// RENDER GIAO DIỆN CÂU HỎI
+function loadQuestions() {
+    const container = document.getElementById('quest-container');
+    let html = '';
+    quizData.forEach((item, index) => {
+        // Xáo trộn đáp án
+        const opts = item.a.map((txt, i) => ({ txt, isCorrect: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="qcard-${index}">
+            <div class="quest-header">
+                <span class="quest-badge">Câu ${index + 1}</span>
+                <span>${item.q}</span>
+            </div>
+            <div class="ans-grid">
+                ${opts.map(o => `
+                    <button class="btn-opt" onclick="submitAns(${index}, ${o.isCorrect}, this)">
+                        ${o.txt}
+                    </button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="qexp-${index}">
+                💡 <strong>Bí kíp tháo gỡ:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+let score = 0;
+let hp = 100;
+const answeredMap = {};
+
+function submitAns(idx, isCorrect, btn) {
+    if (answeredMap[idx]) return;
+    answeredMap[idx] = true;
+
+    const parent = document.getElementById(`qcard-${idx}`);
+    const explain = document.getElementById(`qexp-${idx}`);
+    const allBtns = parent.querySelectorAll('.btn-opt');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playAudio('correct');
+    } else {
+        btn.classList.add('wrong');
+        hp = Math.max(0, hp - 8);
+        playAudio('wrong');
+        
+        // Hiện đáp án đúng để học sinh đối chiếu
+        allBtns.forEach(b => {
+            const correctRawText = quizData[idx].a[quizData[idx].c];
+            if (b.innerText.trim() === correctRawText.trim() || b.innerHTML.includes(correctRawText)) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    explain.style.display = 'block';
+
+    // Cập nhật HUD
+    document.getElementById('score-val').innerText = `${score}/20`;
+    document.getElementById('exp-bar').style.width = `${(score / 20) * 100}%`;
+    document.getElementById('hp-val').innerText = hp;
+    document.getElementById('hp-bar').style.width = `${hp}%`;
+
+    // Cập nhật danh hiệu
+    const rankEl = document.getElementById('rank-name');
+    if (score >= 18) { rankEl.innerText = "👑 Đại Tướng Toán Học"; rankEl.style.color = "#10b981"; }
+    else if (score >= 12) { rankEl.innerText = "⚔️ Chiến Binh Cứng Cáp"; rankEl.style.color = "#06b6d4"; }
+    else if (score >= 6) { rankEl.innerText = "🛡️ Tân Binh Nỗ Lực"; rankEl.style.color = "#f59e0b"; }
+}
+
+// Khởi chạy khi DOM sẵn sàng
+window.addEventListener('DOMContentLoaded', () => {
+    loadQuestions();
+});
+</script>
+
+</body>
+</html>
