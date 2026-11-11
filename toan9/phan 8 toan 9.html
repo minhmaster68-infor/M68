@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Bài Tập Về Nhà Toán 9 - Chinh Phục Điểm 9+</title>
+    <!-- KaTeX Thư viện Toán học -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <!-- Three.js đồ họa 3D tương tác -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0284c7;
+            --emerald: #059669;
+            --amber: #d97706;
+            --rose: #e11d48;
+            --dark: #0f172a;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #f8fafc; color: var(--dark); line-height: 1.6; padding: 20px 10px; }
+        .container { max-width: 940px; margin: 0 auto; }
+
+        /* Banner Hero */
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+            color: #fff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(67, 56, 202, 0.4);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .hero h1 { font-size: 1.85rem; margin-bottom: 6px; text-transform: uppercase; }
+
+        /* Bảng điểm & tiến độ nổi */
+        .status-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 99;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .topic-title {
+            margin: 25px 0 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e1b4b;
+        }
+        .topic-icon { width: 8px; height: 24px; border-radius: 4px; display: inline-block; }
+
+        /* Thẻ câu hỏi */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1.5px dashed var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .badge-indigo { background: #4f46e5; }
+        .badge-emerald { background: #10b981; }
+        .badge-amber { background: #f59e0b; }
+        .badge-rose { background: #e11d48; }
+
+        .q-text { font-size: 1.02rem; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
+
+        /* Hình vẽ hoạt hình ngộ nghĩnh */
+        .comic-box {
+            background: #f8fafc;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .comic-box svg { flex-shrink: 0; }
+        .comic-dialog {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #475569;
+            background: #fff;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        /* Nút lựa chọn */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media(max-width: 640px) { .options-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            color: #0f172a;
+        }
+        .btn-opt:hover { background: #e0e7ff; border-color: var(--primary); }
+        .btn-opt.correct { background: #dcfce7 !important; border-color: #10b981 !important; color: #166534 !important; font-weight: bold; }
+        .btn-opt.wrong { background: #ffe4e6 !important; border-color: #f43f5e !important; color: #9f1239 !important; }
+
+        .explanation {
+            display: none;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.92rem;
+            color: #1e40af;
+        }
+
+        /* KHU VỰC GAME 3D */
+        #game-container {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #090d16 100%);
+            color: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-top: 35px;
+            border: 2px solid #4338ca;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        #canvas3d {
+            width: 100%;
+            height: 300px;
+            border-radius: 14px;
+            margin: 15px 0;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+        }
+        .game-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: transform 0.2s;
+        }
+        .game-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <span class="badge" style="background: rgba(255,255,255,0.25); margin-bottom: 8px; display: inline-block;">Nhiệm Vụ Rèn Luyện Tại Nhà</span>
+        <h1>BÀI TẬP VỀ NHÀ TOÁN 9 - TUYỂN CHỌN ĐỘT PHÁ</h1>
+        <p>Bất Phương Trình Bậc Nhất &bull; Tiếp Tuyến Đường Tròn &bull; Trạm Phóng Tên Lửa 3D</p>
+    </div>
+
+    <div class="status-bar">
+        <span>🏆 Điểm của bạn: <span id="score-val" style="color: var(--primary); font-size: 1.35rem;">0</span> / 200</span>
+        <span id="rocket-status">🚀 Trạng thái tên lửa: Đang chờ nạp năng lượng</span>
+    </div>
+
+    <!-- ==================== PHẦN 1 ==================== -->
+    <div class="topic-title">
+        <span class="topic-icon" style="background: #4f46e5;"></span>
+        <span>PHẦN 1: BẤT ĐẲNG THỨC & BẤT PHƯƠNG TRÌNH (10 CÂU)</span>
+    </div>
+
+    <!-- CÂU 1 -->
+    <div class="card" id="q1">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 1</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Quy tắc đổi chiều BĐT</span>
+        </div>
+        <div class="comic-box">
+            <svg width="80" height="70" viewBox="0 0 80 70">
+                <circle cx="40" cy="35" r="28" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                <circle cx="30" cy="30" r="4" fill="#000"/>
+                <circle cx="50" cy="30" r="4" fill="#000"/>
+                <path d="M 28 48 Q 40 38 52 48" stroke="#000" stroke-width="2.5" fill="none"/>
+                <path d="M 10 15 L 25 25" stroke="#ef4444" stroke-width="3"/>
+                <text x="5" y="12" font-size="10" font-weight="bold" fill="#ef4444">&times; (-3)</text>
+            </svg>
+            <div class="comic-dialog">"Bảo Bảo nhớ nha: Cứ nhân hoặc chia số âm là mặt tớ lộn ngược lại ngay! Đổi chiều liền tay!"</div>
+        </div>
+        <div class="q-text">Cho $x < y$. Khẳng định nào sau đây là <strong>ĐÚNG</strong>?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(1, this, false)">A. $-2x < -2y$</button>
+            <button class="btn-opt" onclick="check(1, this, true)">B. $-5x + 3 > -5y + 3$</button>
+            <button class="btn-opt" onclick="check(1, this, false)">C. $3 - x < 3 - y$</button>
+            <button class="btn-opt" onclick="check(1, this, false)">D. $\dfrac{x}{-4} < \dfrac{y}{-4}$</button>
+        </div>
+        <div class="explanation" id="exp1">
+            <strong>Lời giải chi tiết:</strong> Vì $x < y$, khi nhân cả hai vế với số âm $-5$, ta phải đổi chiều BĐT: $-5x > -5y$. Sau đó cộng thêm $3$ vào hai vế: $-5x + 3 > -5y + 3$.
+        </div>
+    </div>
+
+    <!-- CÂU 2 -->
+    <div class="card" id="q2">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 2</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Giải BPT bậc nhất</span>
+        </div>
+        <div class="q-text">Nghiệm của bất phương trình $3x - 6 \ge 0$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(2, this, true)">A. $x \ge 2$</button>
+            <button class="btn-opt" onclick="check(2, this, false)">B. $x \le 2$</button>
+            <button class="btn-opt" onclick="check(2, this, false)">C. $x \ge -2$</button>
+            <button class="btn-opt" onclick="check(2, this, false)">D. $x > 2$</button>
+        </div>
+        <div class="explanation" id="exp2">
+            <strong>Lời giải chi tiết:</strong> $3x - 6 \ge 0 \Leftrightarrow 3x \ge 6 \Leftrightarrow x \ge 2$ (chia số dương $3$ giữ nguyên chiều).
+        </div>
+    </div>
+
+    <!-- CÂU 3 -->
+    <div class="card" id="q3">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 3</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Chống sai dấu</span>
+        </div>
+        <div class="q-text">Tập nghiệm của bất phương trình $-4x + 12 < 0$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(3, this, false)">A. $x < 3$</button>
+            <button class="btn-opt" onclick="check(3, this, true)">B. $x > 3$</button>
+            <button class="btn-opt" onclick="check(3, this, false)">C. $x > -3$</button>
+            <button class="btn-opt" onclick="check(3, this, false)">D. $x < -3$</button>
+        </div>
+        <div class="explanation" id="exp3">
+            <strong>Lời giải chi tiết:</strong> $-4x < -12 \Leftrightarrow x > \dfrac{-12}{-4} \Leftrightarrow x > 3$ (chia cho $-4$ phải đổi chiều từ $<$ sang $>$).
+        </div>
+    </div>
+
+    <!-- CÂU 4 -->
+    <div class="card" id="q4">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 4</span>
+            <span style="font-size: 0.82rem; color: #64748b;">BPT chứa phân thức</span>
+        </div>
+        <div class="q-text">Giải bất phương trình: $\dfrac{x - 1}{2} - \dfrac{x - 2}{3} \ge 1$.</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(4, this, true)">A. $x \ge 5$</button>
+            <button class="btn-opt" onclick="check(4, this, false)">B. $x \le 5$</button>
+            <button class="btn-opt" onclick="check(4, this, false)">C. $x \ge 7$</button>
+            <button class="btn-opt" onclick="check(4, this, false)">D. $x \ge 1$</button>
+        </div>
+        <div class="explanation" id="exp4">
+            <strong>Lời giải chi tiết:</strong> Quy đồng mẫu số chung là $6$:<br>
+            $3(x - 1) - 2(x - 2) \ge 6 \Leftrightarrow 3x - 3 - 2x + 4 \ge 6 \Leftrightarrow x + 1 \ge 6 \Leftrightarrow x \ge 5$.
+        </div>
+    </div>
+
+    <!-- CÂU 5 -->
+    <div class="card" id="q5">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 5</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Tìm nghiệm nguyên</span>
+        </div>
+        <div class="q-text">Số nghiệm nguyên dương của bất phương trình $5 - 2x > -3$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(5, this, true)">A. $3$ nghiệm</button>
+            <button class="btn-opt" onclick="check(5, this, false)">B. $4$ nghiệm</button>
+            <button class="btn-opt" onclick="check(5, this, false)">C. $2$ nghiệm</button>
+            <button class="btn-opt" onclick="check(5, this, false)">D. Vô số</button>
+        </div>
+        <div class="explanation" id="exp5">
+            <strong>Lời giải chi tiết:</strong> $-2x > -8 \Leftrightarrow x < 4$. Các số nguyên dương nhỏ hơn $4$ là $x \in \{1; 2; 3\}$. Có đúng $3$ nghiệm.
+        </div>
+    </div>
+
+    <!-- CÂU 6 -->
+    <div class="card" id="q6">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 6</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Toán thực tế giao thông</span>
+        </div>
+        <div class="q-text">Biển báo giao thông hình tròn viền đỏ nền trắng ghi số 60 có ý nghĩa "Tốc độ tối đa cho phép là $60\text{ km/h}$". Nếu một xe ô tô chạy với vận tốc $v\text{ (km/h)}$ hợp lệ thì điều kiện là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(6, this, false)">A. $v > 60$</button>
+            <button class="btn-opt" onclick="check(6, this, true)">B. $0 < v \le 60$</button>
+            <button class="btn-opt" onclick="check(6, this, false)">C. $v \ge 60$</button>
+            <button class="btn-opt" onclick="check(6, this, false)">D. $v < 60$</button>
+        </div>
+        <div class="explanation" id="exp6">
+            <strong>Lời giải chi tiết:</strong> Tốc độ tối đa cho phép nghĩa là không được vượt quá $60\text{ km/h}$, tức là $v \le 60$ (và $v > 0$ khi xe đang di chuyển).
+        </div>
+    </div>
+
+    <!-- CÂU 7 -->
+    <div class="card" id="q7">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 7</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Toán kinh tế mua sắm</span>
+        </div>
+        <div class="q-text">Bảo có $150.000$ đồng. Bảo mua một cuốn sổ tay giá $35.000$ đồng và một số cây bút bi giá $8.000$ đồng/cây. Hỏi Bảo mua được nhiều nhất bao nhiêu cây bút bi?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(7, this, true)">A. $14$ cây</button>
+            <button class="btn-opt" onclick="check(7, this, false)">B. $15$ cây</button>
+            <button class="btn-opt" onclick="check(7, this, false)">C. $13$ cây</button>
+            <button class="btn-opt" onclick="check(7, this, false)">D. $18$ cây</button>
+        </div>
+        <div class="explanation" id="exp7">
+            <strong>Lời giải chi tiết:</strong> Gọi số bút là $x \in \mathbb{N}^*$. Ta có $35000 + 8000x \le 150000 \Leftrightarrow 8000x \le 115000 \Leftrightarrow x \le 14{,}375$. Do đó $x_{\max} = 14$.
+        </div>
+    </div>
+
+    <!-- CÂU 8 -->
+    <div class="card" id="q8">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 8</span>
+            <span style="font-size: 0.82rem; color: #64748b;">BĐT chứa bình phương</span>
+        </div>
+        <div class="q-text">Khẳng định nào sau đây là <strong>ĐÚNG</strong> với mọi số thực $a$?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(8, this, true)">A. $a^2 - 4a + 5 > 0$</button>
+            <button class="btn-opt" onclick="check(8, this, false)">B. $a^2 - 2a + 1 > 0$</button>
+            <button class="btn-opt" onclick="check(8, this, false)">C. $a^2 + 1 < 0$</button>
+            <button class="btn-opt" onclick="check(8, this, false)">D. $-a^2 \ge 0$</button>
+        </div>
+        <div class="explanation" id="exp8">
+            <strong>Lời giải chi tiết:</strong> Ta có $a^2 - 4a + 5 = (a - 2)^2 + 1 \ge 1 > 0$ với mọi $a \in \mathbb{R}$. (Câu B sai khi $a = 1$ vì $(1-1)^2 = 0$).
+        </div>
+    </div>
+
+    <!-- CÂU 9 -->
+    <div class="card" id="q9">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 9</span>
+            <span style="font-size: 0.82rem; color: #64748b;">BPT vô nghiệm / nghiệm đúng</span>
+        </div>
+        <div class="q-text">Bất phương trình nào sau đây có tập nghiệm là $\mathbb{R}$?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(9, this, true)">A. $2(x - 1) < 2x + 3$</button>
+            <button class="btn-opt" onclick="check(9, this, false)">B. $2x + 1 > 2x + 5$</button>
+            <button class="btn-opt" onclick="check(9, this, false)">C. $x^2 < 0$</button>
+            <button class="btn-opt" onclick="check(9, this, false)">D. $3x - 1 \ge 3x$</button>
+        </div>
+        <div class="explanation" id="exp9">
+            <strong>Lời giải chi tiết:</strong> $2x - 2 < 2x + 3 \Leftrightarrow 0x < 5$ (luôn đúng với mọi $x \in \mathbb{R}$).
+        </div>
+    </div>
+
+    <!-- CÂU 10 -->
+    <div class="card" id="q10">
+        <div class="card-header">
+            <span class="badge badge-indigo">Câu 10</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Điểm 10: BĐT Cô-si</span>
+        </div>
+        <div class="q-text">Cho $x > 0$. Giá trị nhỏ nhất của biểu thức $P = x + \dfrac{9}{x}$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(10, this, true)">A. $6$ khi $x = 3$</button>
+            <button class="btn-opt" onclick="check(10, this, false)">B. $9$ khi $x = 1$</button>
+            <button class="btn-opt" onclick="check(10, this, false)">C. $3$ khi $x = 9$</button>
+            <button class="btn-opt" onclick="check(10, this, false)">D. $10$ khi $x = 3$</button>
+        </div>
+        <div class="explanation" id="exp10">
+            <strong>Lời giải chi tiết:</strong> Áp dụng BĐT Cô-si cho hai số dương $x$ và $\dfrac{9}{x}$:<br>
+            $P = x + \dfrac{9}{x} \ge 2\sqrt{x \cdot \dfrac{9}{x}} = 2 \cdot 3 = 6$. Dấu "=" khi $x = \dfrac{9}{x} \Leftrightarrow x^2 = 9 \Leftrightarrow x = 3$ (do $x > 0$).
+        </div>
+    </div>
+
+    <!-- ==================== PHẦN 2 ==================== -->
+    <div class="topic-title">
+        <span class="topic-icon" style="background: #10b981;"></span>
+        <span>PHẦN 2: TIẾP TUYẾN ĐƯỜNG TRÒN & CUNG DÂY (10 CÂU)</span>
+    </div>
+
+    <!-- CÂU 11 -->
+    <div class="card" id="q11">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 11</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Định nghĩa tiếp tuyến</span>
+        </div>
+        <div class="comic-box">
+            <svg width="80" height="70" viewBox="0 0 80 70">
+                <circle cx="35" cy="35" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                <circle cx="35" cy="35" r="3" fill="#000"/>
+                <line x1="57" y1="5" x2="57" y2="65" stroke="#ef4444" stroke-width="2.5"/>
+                <line x1="35" y1="35" x2="57" y2="35" stroke="#1e1b4b" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <rect x="50" y="30" width="7" height="5" fill="none" stroke="#000" stroke-width="1.2"/>
+            </svg>
+            <div class="comic-dialog">"Tiếp tuyến khó tính lắm: Chỉ chạm nhẹ đúng 1 điểm duy nhất và phải VUÔNG GÓC với bán kính tại tiếp điểm!"</div>
+        </div>
+        <div class="q-text">Đường thẳng $d$ được gọi là tiếp tuyến của đường tròn $(O; R)$ khi:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(11, this, false)">A. Đường thẳng $d$ cắt đường tròn tại $2$ điểm phân biệt</button>
+            <button class="btn-opt" onclick="check(11, this, true)">B. Đường thẳng $d$ vuông góc với bán kính tại tiếp điểm</button>
+            <button class="btn-opt" onclick="check(11, this, false)">C. Khoảng cách từ $O$ đến $d$ lớn hơn $R$</button>
+            <button class="btn-opt" onclick="check(11, this, false)">D. Đường thẳng $d$ đi qua tâm $O$</button>
+        </div>
+        <div class="explanation" id="exp11">
+            <strong>Lời giải chi tiết:</strong> Theo dấu hiệu nhận biết tiếp tuyến: Nếu một đường thẳng đi qua một điểm của đường tròn và vuông góc với bán kính đi qua điểm đó thì đường thẳng ấy là tiếp tuyến.
+        </div>
+    </div>
+
+    <!-- CÂU 12 -->
+    <div class="card" id="q12">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 12</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Khoảng cách từ tâm đến dây</span>
+        </div>
+        <div class="q-text">Cho đường tròn $(O; 5\text{ cm})$ và dây $AB = 8\text{ cm}$. Khoảng cách từ tâm $O$ đến dây $AB$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(12, this, true)">A. $3\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(12, this, false)">B. $4\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(12, this, false)">C. $\sqrt{41}\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(12, this, false)">D. $2{,}5\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp12">
+            <strong>Lời giải chi tiết:</strong> Kẻ $OH \perp AB \Rightarrow H$ là trung điểm $AB \Rightarrow AH = 4\text{ cm}$.<br>
+            Trong tam giác vuông $OHA$: $OH = \sqrt{OA^2 - AH^2} = \sqrt{5^2 - 4^2} = 3\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 13 -->
+    <div class="card" id="q13">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 13</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Tính chất 2 tiếp tuyến cắt nhau</span>
+        </div>
+        <div class="q-text">Từ điểm $A$ ngoài $(O)$, kẻ hai tiếp tuyến $AB, AC$ với đường tròn ($B, C$ là tiếp điểm). Biết $\widehat{BAC} = 70^\circ$, số đo góc ở tâm $\widehat{BOC}$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(13, this, true)">A. $110^\circ$</button>
+            <button class="btn-opt" onclick="check(13, this, false)">B. $70^\circ$</button>
+            <button class="btn-opt" onclick="check(13, this, false)">C. $140^\circ$</button>
+            <button class="btn-opt" onclick="check(13, this, false)">D. $55^\circ$</button>
+        </div>
+        <div class="explanation" id="exp13">
+            <strong>Lời giải chi tiết:</strong> Tứ giác $ABOC$ có $\widehat{ABO} = \widehat{ACO} = 90^\circ \Rightarrow \widehat{BOC} = 360^\circ - 90^\circ - 90^\circ - 70^\circ = 110^\circ$.
+        </div>
+    </div>
+
+    <!-- CÂU 14 -->
+    <div class="card" id="q14">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 14</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Độ dài tiếp tuyến</span>
+        </div>
+        <div class="q-text">Cho điểm $M$ cách tâm $O$ của đường tròn $(O; 6\text{ cm})$ một khoảng $10\text{ cm}$. Kẻ tiếp tuyến $MT$ ($T$ là tiếp điểm). Độ dài đoạn $MT$ là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(14, this, true)">A. $8\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(14, this, false)">B. $16\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(14, this, false)">C. $2\sqrt{34}\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(14, this, false)">D. $4\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp14">
+            <strong>Lời giải chi tiết:</strong> Tam giác $OTM$ vuông tại $T$ có $OT = 6\text{ cm}, OM = 10\text{ cm} \Rightarrow MT = \sqrt{OM^2 - OT^2} = \sqrt{100 - 36} = 8\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 15 -->
+    <div class="card" id="q15">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 15</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Dây lớn nhất</span>
+        </div>
+        <div class="q-text">Trong một đường tròn bán kính $R = 7\text{ cm}$, dây cung có độ dài lớn nhất bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(15, this, true)">A. $14\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(15, this, false)">B. $7\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(15, this, false)">C. $21\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(15, this, false)">D. $7\pi\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp15">
+            <strong>Lời giải chi tiết:</strong> Trong các dây của một đường tròn, đường kính là dây lớn nhất. Độ dài đường kính $d = 2R = 2 \times 7 = 14\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 16 -->
+    <div class="card" id="q16">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 16</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Đường trung trực nối tâm</span>
+        </div>
+        <div class="q-text">Cho $PA$ và $PB$ là hai tiếp tuyến của $(O)$ với $A, B$ là tiếp điểm. Đoạn thẳng $OP$ luôn có tính chất gì với đoạn thẳng $AB$?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(16, this, true)">A. $OP$ là đường trung trực của đoạn thẳng $AB$</button>
+            <button class="btn-opt" onclick="check(16, this, false)">B. $OP$ song song với $AB$</button>
+            <button class="btn-opt" onclick="check(16, this, false)">C. $OP = AB$</button>
+            <button class="btn-opt" onclick="check(16, this, false)">D. $OP$ trùng với $AB$</button>
+        </div>
+        <div class="explanation" id="exp16">
+            <strong>Lời giải chi tiết:</strong> Vì $PA = PB$ (t/c 2 tiếp tuyến cắt nhau) và $OA = OB = R$, nên cả $O$ và $P$ đều cách đều hai đầu mút $A, B \Rightarrow OP$ là đường trung trực của $AB$.
+        </div>
+    </div>
+
+    <!-- CÂU 17 -->
+    <div class="card" id="q17">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 17</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Đường tròn nội tiếp</span>
+        </div>
+        <div class="q-text">Tam giác $ABC$ đều có cạnh bằng $6\text{ cm}$. Bán kính đường tròn nội tiếp tam giác $ABC$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(17, this, true)">A. $\sqrt{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(17, this, false)">B. $2\sqrt{3}\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(17, this, false)">C. $3\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(17, this, false)">D. $\dfrac{\sqrt{3}}{2}\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp17">
+            <strong>Lời giải chi tiết:</strong> Chiều cao tam giác đều $h = \dfrac{a\sqrt{3}}{2} = \dfrac{6\sqrt{3}}{2} = 3\sqrt{3}\text{ cm}$.<br>
+            Bán kính đường tròn nội tiếp $r = \dfrac{1}{3}h = \dfrac{1}{3} \cdot 3\sqrt{3} = \sqrt{3}\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- CÂU 18 -->
+    <div class="card" id="q18">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 18</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Tiếp tuyến tại điểm</span>
+        </div>
+        <div class="q-text">Cho tam giác $ABC$ vuông tại $A$. Đường tròn $(B; BA)$ có vị trí tương đối thế nào với đường thẳng $AC$?</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(18, this, true)">A. Tiếp xúc nhau tại $A$</button>
+            <button class="btn-opt" onclick="check(18, this, false)">B. Cắt nhau tại hai điểm</button>
+            <button class="btn-opt" onclick="check(18, this, false)">C. Không giao nhau</button>
+            <button class="btn-opt" onclick="check(18, this, false)">D. Không xác định được</button>
+        </div>
+        <div class="explanation" id="exp18">
+            <strong>Lời giải chi tiết:</strong> Điểm $A \in (B; BA)$ và $BA \perp AC$ tại $A$ nên $AC$ là tiếp tuyến của $(B) \Rightarrow$ Đường thẳng $AC$ tiếp xúc với đường tròn tại $A$.
+        </div>
+    </div>
+
+    <!-- CÂU 19 -->
+    <div class="card" id="q19">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 19</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Hệ thức tiếp tuyến $R^2 = AC \cdot BD$</span>
+        </div>
+        <div class="q-text">Cho nửa đường tròn $(O; R)$ đường kính $AB$. Hai tiếp tuyến $Ax, By$ cùng phía. Một tiếp tuyến thứ ba tiếp xúc tại $M$ cắt $Ax$ tại $C$ và $By$ tại $D$. Tích $AC \cdot BD$ bằng:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(19, this, true)">A. $R^2$</button>
+            <button class="btn-opt" onclick="check(19, this, false)">B. $2R^2$</button>
+            <button class="btn-opt" onclick="check(19, this, false)">C. $4R^2$</button>
+            <button class="btn-opt" onclick="check(19, this, false)">D. $\dfrac{R^2}{2}$</button>
+        </div>
+        <div class="explanation" id="exp19">
+            <strong>Lời giải chi tiết:</strong> $\Delta COD$ vuông tại $O$, đường cao $OM = R$. Theo hệ thức lượng: $CM \cdot MD = OM^2 = R^2$. Mà $AC = CM, BD = MD \Rightarrow AC \cdot BD = R^2$.
+        </div>
+    </div>
+
+    <!-- CÂU 20 -->
+    <div class="card" id="q20">
+        <div class="card-header">
+            <span class="badge badge-emerald">Câu 20</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Toán thực tế đai truyền</span>
+        </div>
+        <div class="q-text">Hai bánh xe ròng rọc có bán kính cùng bằng $15\text{ cm}$, khoảng cách hai tâm trục bánh xe là $50\text{ cm}$. Chiều dài tối thiểu của sợi dây curoa mắc quanh hai bánh xe là:</div>
+        <div class="options-grid">
+            <button class="btn-opt" onclick="check(20, this, true)">A. $100 + 30\pi\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(20, this, false)">B. $50 + 15\pi\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(20, this, false)">C. $100 + 15\pi\text{ cm}$</button>
+            <button class="btn-opt" onclick="check(20, this, false)">D. $200 + 30\pi\text{ cm}$</button>
+        </div>
+        <div class="explanation" id="exp20">
+            <strong>Lời giải chi tiết:</strong> Dây gồm $2$ đoạn thẳng song song bằng khoảng cách tâm ($2 \times 50 = 100\text{ cm}$) cộng với $2$ nửa cung tròn ghép lại thành $1$ chu vi đường tròn ($2\pi \cdot 15 = 30\pi\text{ cm}$). Tổng cộng: $100 + 30\pi\text{ cm}$.
+        </div>
+    </div>
+
+    <!-- ==================== PHẦN GAME 3D ==================== -->
+    <div id="game-container">
+        <h2>🚀 TRẠM VŨ TRỤ TOÁN HỌC 3D: PHÓNG TÊN LỬA</h2>
+        <p>Mỗi câu trả lời đúng sẽ nạp thêm 10 Điểm và tăng tốc động cơ phản lực của Phi Thuyền Không Gian!</p>
+        <div id="canvas3d"></div>
+        <button class="game-btn" onclick="fireRocket()">🔥 KÍCH HOẠT ĐỘNG CƠ TĂNG TỐC WARP</button>
+    </div>
+</div>
+
+<script>
+    // Kích hoạt KaTeX hiển thị công thức toán
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+        initThreeRocket();
+    });
+
+    let score = 0;
+    const answeredMap = {};
+
+    function check(qId, btn, isCorrect) {
+        if (answeredMap[qId]) return;
+        answeredMap[qId] = true;
+
+        const container = btn.parentElement;
+        const allBtns = container.querySelectorAll('.btn-opt');
+        allBtns.forEach(b => b.disabled = true);
+
+        const exp = document.getElementById('exp' + qId);
+        if (exp) exp.style.display = 'block';
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            score += 10;
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('rocket-status').innerText = `🚀 Đã nạp ${score}/200 Điểm Năng Lượng!`;
+            boostAnimation();
+        } else {
+            btn.classList.add('wrong');
+        }
+    }
+
+    // GAME 3D THREE.JS: MÔ PHỎNG TÊN LỬA VŨ TRỤ
+    let scene, camera, renderer, rocketGroup, fireCone;
+    let speed = 0.015;
+
+    function initThreeRocket() {
+        const box = document.getElementById('canvas3d');
+        const w = box.clientWidth;
+        const h = box.clientHeight;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
+        camera.position.set(0, 0, 7);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(w, h);
+        box.appendChild(renderer.domElement);
+
+        rocketGroup = new THREE.Group();
+
+        // Thân tên lửa (hình trụ)
+        const bodyGeo = new THREE.CylinderGeometry(0.5, 0.6, 2.2, 16);
+        const bodyMat = new THREE.MeshPhongMaterial({ color: 0xe0e7ff, shininess: 80 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        rocketGroup.add(body);
+
+        // Mũi tên lửa (hình nón)
+        const noseGeo = new THREE.ConeGeometry(0.5, 0.9, 16);
+        const noseMat = new THREE.MeshPhongMaterial({ color: 0xef4444, shininess: 90 });
+        const nose = new THREE.Mesh(noseGeo, noseMat);
+        nose.position.y = 1.55;
+        rocketGroup.add(nose);
+
+        // Cánh tên lửa
+        const finGeo = new THREE.BoxGeometry(0.1, 0.6, 1.4);
+        const finMat = new THREE.MeshPhongMaterial({ color: 0x4f46e5 });
+        const fin1 = new THREE.Mesh(finGeo, finMat);
+        fin1.position.y = -0.7;
+        rocketGroup.add(fin1);
+
+        const fin2 = fin1.clone();
+        fin2.rotation.y = Math.PI / 2;
+        rocketGroup.add(fin2);
+
+        // Luồng lửa phản lực
+        const fireGeo = new THREE.ConeGeometry(0.35, 1.2, 16);
+        const fireMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, wireframe: true });
+        fireCone = new THREE.Mesh(fireGeo, fireMat);
+        fireCone.position.y = -1.6;
+        fireCone.rotation.x = Math.PI;
+        rocketGroup.add(fireCone);
+
+        scene.add(rocketGroup);
+
+        // Các hạt sao vũ trụ lấp lánh xung quanh
+        const starsGeo = new THREE.BufferGeometry();
+        const starCount = 200;
+        const starCoords = [];
+        for(let i = 0; i < starCount; i++) {
+            starCoords.push((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+        }
+        starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starCoords, 3));
+        const starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08 });
+        const starField = new THREE.Points(starsGeo, starsMat);
+        scene.add(starField);
+
+        // Ánh sáng
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const ambLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambLight);
+
+        function renderLoop() {
+            requestAnimationFrame(renderLoop);
+            rocketGroup.rotation.y += speed;
+            rocketGroup.position.y = Math.sin(Date.now() * 0.003) * 0.2;
+            fireCone.scale.set(1 + Math.sin(Date.now() * 0.02) * 0.2, 1 + Math.sin(Date.now() * 0.02) * 0.3, 1);
+            renderer.render(scene, camera);
+        }
+        renderLoop();
+    }
+
+    function boostAnimation() {
+        speed = 0.08;
+        fireCone.material.color.setHex(0x10b981);
+        setTimeout(() => {
+            speed = 0.015;
+            fireCone.material.color.setHex(0xf59e0b);
+        }, 1200);
+    }
+
+    function fireRocket() {
+        speed = 0.12;
+        fireCone.scale.set(1.8, 2.5, 1.8);
+        setTimeout(() => {
+            speed = 0.015;
+            fireCone.scale.set(1, 1, 1);
+        }, 2000);
+    }
+</script>
+</body>
+</html>
