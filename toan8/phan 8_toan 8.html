@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách Tại Nhà - Toán 8 Cùng Bảo Bảo</title>
+
+    <!-- CẤU HÌNH MATHJAX 3 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: { fontCache: 'global' },
+            startup: {
+                typeset: false // Để JS tự chủ động gọi typeset sau khi render HTML
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-soft: #e0e7ff;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --card-bg: #28374d;
+            --text-main: #f8fafc;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* HUD Thanh Trạng Thái */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--primary);
+            border-radius: 18px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
+        .hud-val { color: var(--secondary); font-size: 1.25rem; font-weight: 800; }
+        .bar-wrap { width: 140px; height: 12px; background: #334155; border-radius: 999px; overflow: hidden; }
+        .bar-fill { height: 100%; transition: width 0.3s ease; }
+        .exp-fill { background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #0891b2 100%);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero h1 { font-size: 1.9rem; font-weight: 900; margin-bottom: 6px; }
+        .hero p { color: #cbd5e1; font-size: 1rem; }
+
+        /* Khối Bí Kíp Nhanh */
+        .cheat-sheet {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .cheat-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cheat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+        .cheat-box {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.92rem;
+        }
+        .cheat-box.green { border-left-color: var(--success); }
+        .cheat-box.orange { border-left-color: var(--warning); }
+        .cheat-box strong { color: #fff; display: block; margin-bottom: 4px; }
+
+        /* Danh Sách Câu Hỏi */
+        .quest-box {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--border);
+        }
+        .quest-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--primary); }
+        .quest-header {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .quest-badge {
+            background: rgba(79, 70, 229, 0.25);
+            color: #a5b4fc;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+        }
+
+        .ans-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        @media (max-width: 600px) { .ans-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+        }
+        .btn-opt:hover { background: #2b394e; border-color: var(--primary); }
+        .btn-opt.correct { background: rgba(16, 185, 129, 0.25) !important; border-color: var(--success) !important; color: #6ee7b7 !important; }
+        .btn-opt.wrong { background: rgba(239, 68, 68, 0.25) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            background: #192333;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: #38bdf8;
+        }
+
+        /* Định dạng dự phòng khi máy offline */
+        .math-fallback {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 4px;
+            font-style: normal;
+        }
+        .fraction .numerator {
+            border-bottom: 1.5px solid currentColor;
+            padding-bottom: 1px;
+        }
+        .fraction .denominator {
+            padding-top: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HUD THANH TRẠNG THÁI -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>⭐ TIẾN ĐỘ:</span>
+            <div class="bar-wrap">
+                <div class="bar-fill exp-fill" id="exp-bar"></div>
+            </div>
+            <span id="score-val" class="hud-val">0/20</span>
+        </div>
+        <div class="hud-item">
+            <span id="rank-name" style="color: var(--warning); font-weight:800;">🌱 Tân Binh Toán Học</span>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="hero">
+        <h1>🛡️ ĐẤU TRƯỜNG LUYỆN TẬP TẠI NHÀ</h1>
+        <p>Làm Chủ Tính Chất Phân Giác & Nghệ Thuật Phân Tích Đa Thức Thành Nhân Tử</p>
+    </div>
+
+    <!-- KHỐI BÍ KÍP NHỚ NHANH -->
+    <div class="cheat-sheet">
+        <div class="cheat-title">📖 2 BÍ KÍP VÀNG CHO BUỔI HỌC NÀY</div>
+        <div class="cheat-grid">
+            <div class="cheat-box green">
+                <strong>📐 1. Tính Chất Đường Phân Giác:</strong>
+                Trong tam giác, đường phân giác của một góc chia cạnh đối diện thành hai đoạn thẳng tỉ lệ với hai cạnh kề:
+                <div style="margin-top: 6px;">
+                    $\frac{DB}{DC} = \frac{AB}{AC}$ &nbsp;&rArr;&nbsp; $DB \cdot AC = DC \cdot AB$.
+                </div>
+            </div>
+            <div class="cheat-box orange">
+                <strong>⚡ 2. Phân Tích Bằng Nhóm Hạng Tử:</strong>
+                • Nhóm 2 - 2: Đặt nhân tử chung từng cặp để xuất hiện phần giống nhau.<br>
+                • Nhóm 3 - 1: Gom 3 số thành bình phương $(A \pm B)^2$, rồi dùng $A^2 - B^2$.
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 20 BÀI TẬP TƯƠNG TÁC -->
+    <div class="quest-box">
+        <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 16px;">
+            🎯 20 THỬ THÁCH RÈN LUYỆN TẠI NHÀ
+        </div>
+        <div id="quest-container"></div>
+    </div>
+
+</div>
+
+<script>
+// TẠO ÂM THANH BẰNG WEB AUDIO API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    }
+}
+
+// BỘ CHUYỂN ĐỔI TOÁN HỌC DỰ PHÒNG NẾU MẤT MẠNG HOẶC MATHJAX CHƯA TẢI
+function parseMathOffline(str) {
+    return str.replace(/\$([^$]+)\$/g, function(match, math) {
+        let res = math
+            .replace(/\\Delta\s*([A-Za-z]+)/g, 'Δ$1')
+            .replace(/\\in/g, '∈')
+            .replace(/\\text\{\s*cm\s*\}/g, ' cm')
+            .replace(/\\cdot/g, '·')
+            .replace(/\\Rightarrow/g, '⇒')
+            .replace(/\^2/g, '²')
+            .replace(/\^3/g, '³')
+            .replace(/\^4/g, '⁴')
+            .replace(/\^\circ/g, '°');
+
+        // Chuyển \frac{A}{B} thành phân số HTML
+        res = res.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="fraction"><span class="numerator">$1</span><span class="denominator">$2</span></span>');
+        return '<span class="math-fallback">' + res + '</span>';
+    });
+}
+
+// DỮ LIỆU 20 CÂU HỎI
+const homeWorkData = [
+    { q: "Cho $\\Delta ABC$ có tia phân giác $AD$ ($D \\in BC$). Công thức nào sau đây đúng?", a: ["$\\frac{DB}{DC} = \\frac{AB}{AC}$", "$\\frac{DB}{DC} = \\frac{AC}{AB}$", "$\\frac{DB}{AB} = \\frac{AB}{AC}$", "$\\frac{DB}{DC} = \\frac{BC}{AB}$"], c: 0, exp: "Tính chất đường phân giác: $\\frac{DB}{DC} = \\frac{AB}{AC}$." },
+    { q: "Cho $\\Delta ABC$ có phân giác $AD$. Biết $AB = 3\\text{ cm}, AC = 6\\text{ cm}, DB = 2\\text{ cm}$. Độ dài $DC$ là:", a: ["4 cm", "1 cm", "9 cm", "5 cm"], c: 0, exp: "Ta có: $\\frac{DB}{DC} = \\frac{AB}{AC} \\Rightarrow \\frac{2}{DC} = \\frac{3}{6} = \\frac{1}{2} \\Rightarrow DC = 4\\text{ cm}$." },
+    { q: "Cho $\\Delta MNP$ có tia phân giác $MI$ ($I \\in NP$). Biết $MN = 4\\text{ cm}, MP = 6\\text{ cm}$. Tỉ số $\\frac{IN}{IP}$ là:", a: ["2/3", "3/2", "4/10", "6/4"], c: 0, exp: "Tỉ số $\\frac{IN}{IP} = \\frac{MN}{MP} = \\frac{4}{6} = \\frac{2}{3}$." },
+    { q: "Cho $\\Delta ABC$ cân tại $A$ có $AD$ là tia phân giác góc $A$. Biết $BC = 10\\text{ cm}$. Độ dài đoạn $DB$ là:", a: ["5 cm", "10 cm", "2,5 cm", "20 cm"], c: 0, exp: "Trong tam giác cân, đường phân giác xuất phát từ đỉnh đồng thời là trung tuyến, nên $DB = \\frac{BC}{2} = 5\\text{ cm}$." },
+    { q: "Cho $\\Delta DEF$ có $DK$ là phân giác. Biết $DE = 4\\text{ cm}, DF = 8\\text{ cm}$ và $KE = 3\\text{ cm}$. Độ dài $KF$ là:", a: ["6 cm", "4 cm", "8 cm", "5 cm"], c: 0, exp: "$\\frac{KE}{KF} = \\frac{DE}{DF} \\Rightarrow \\frac{3}{KF} = \\frac{4}{8} = \\frac{1}{2} \\Rightarrow KF = 3 \\cdot 2 = 6\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$ có phân giác $AD$. Biết $AB = 5\\text{ cm}, AC = 10\\text{ cm}$ và $BC = 9\\text{ cm}$. Độ dài đoạn $BD$ là:", a: ["3 cm", "6 cm", "4,5 cm", "2 cm"], c: 0, exp: "$\\frac{DB}{DC} = \\frac{AB}{AC} = \\frac{1}{2} \\Rightarrow DB = \\frac{1}{1+2} \\cdot BC = \\frac{1}{3} \\cdot 9 = 3\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$ có phân giác $AD$, biết $DC = 6\\text{ cm}, DB = 3\\text{ cm}, AC = 8\\text{ cm}$. Cạnh $AB$ dài:", a: ["4 cm", "16 cm", "5 cm", "2 cm"], c: 0, exp: "$\\frac{AB}{AC} = \\frac{DB}{DC} \\Rightarrow \\frac{AB}{8} = \\frac{3}{6} = \\frac{1}{2} \\Rightarrow AB = 4\\text{ cm}$." },
+    { q: "Tam giác đều $ABC$ có cạnh bằng $6\\text{ cm}$, $AD$ là phân giác góc $A$. Độ dài đoạn thẳng $DC$ là:", a: ["3 cm", "6 cm", "2 cm", "4 cm"], c: 0, exp: "Tam giác đều cũng là tam giác cân, do đó $D$ là trung điểm $BC \\Rightarrow DC = 3\\text{ cm}$." },
+    { q: "Cho $\\Delta MNP$ có $MQ$ là phân giác trong. Biết $MN = 8\\text{ cm}, MP = 12\\text{ cm}, QP = 6\\text{ cm}$. Đoạn $NQ$ dài:", a: ["4 cm", "9 cm", "3 cm", "6 cm"], c: 0, exp: "$\\frac{NQ}{QP} = \\frac{MN}{MP} \\Rightarrow \\frac{NQ}{6} = \\frac{8}{12} = \\frac{2}{3} \\Rightarrow NQ = 4\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$ vuông tại $A$ có $AB = 6, AC = 8, BC = 10$. Phân giác $AD$. Tỉ số $\\frac{DB}{DC}$ là:", a: ["3/4", "4/3", "3/5", "4/5"], c: 0, exp: "$\\frac{DB}{DC} = \\frac{AB}{AC} = \\frac{6}{8} = \\frac{3}{4}$." },
+    { q: "Phân tích đa thức $x(x - 3) + 2(x - 3)$ thành nhân tử:", a: ["(x - 3)(x + 2)", "(x - 3)(x - 2)", "(x + 3)(x + 2)", "2x(x - 3)"], c: 0, exp: "Đặt nhân tử chung $(x - 3)$, ta được $(x - 3)(x + 2)$." },
+    { q: "Phân tích đa thức $xy + 2x + y + 2$ thành nhân tử:", a: ["(y + 2)(x + 1)", "(y + 2)(x - 1)", "(x + 2)(y + 1)", "(y - 2)(x + 1)"], c: 0, exp: "Nhóm: $x(y + 2) + (y + 2) = (y + 2)(x + 1)$." },
+    { q: "Phân tích đa thức $x^2 - xy + 3x - 3y$ thành nhân tử:", a: ["(x - y)(x + 3)", "(x - y)(x - 3)", "(x + y)(x + 3)", "(x - y)(3x)"], c: 0, exp: "Nhóm: $x(x - y) + 3(x - y) = (x - y)(x + 3)$." },
+    { q: "Phân tích đa thức $x^2 - 9y^2$ thành nhân tử:", a: ["(x - 3y)(x + 3y)", "(x - 9y)(x + 9y)", "(x - 3y)^2", "(x + 3y)^2"], c: 0, exp: "$x^2 - (3y)^2 = (x - 3y)(x + 3y)$." },
+    { q: "Phân tích đa thức $x^2 - 4x + 4 - y^2$ thành nhân tử:", a: ["(x - 2 - y)(x - 2 + y)", "(x - 2 - y)^2", "(x + 2 - y)(x + 2 + y)", "(x - 4 - y)(x - 4 + y)"], c: 0, exp: "Gom nhóm 3-1: $(x - 2)^2 - y^2 = (x - 2 - y)(x - 2 + y)$." },
+    { q: "Phân tích đa thức $x^2 - 2xy + y^2 - 25$ thành nhân tử:", a: ["(x - y - 5)(x - y + 5)", "(x - y - 5)^2", "(x + y - 5)(x + y + 5)", "(x - y - 25)(x + 1)"], c: 0, exp: "$(x - y)^2 - 5^2 = (x - y - 5)(x - y + 5)$." },
+    { q: "Phân tích đa thức $3x(x - 1) - (1 - x)$ thành nhân tử:", a: ["(x - 1)(3x + 1)", "(x - 1)(3x - 1)", "(1 - x)(3x - 1)", "(x - 1)(3x)"], c: 0, exp: "Đổi dấu: $-(1 - x) = +(x - 1) \\Rightarrow 3x(x - 1) + (x - 1) = (x - 1)(3x + 1)$." },
+    { q: "Tìm $x$, biết: $x(x - 5) + 3(x - 5) = 0$:", a: ["x = 5 hoặc x = -3", "x = 5 hoặc x = 3", "x = -5 hoặc x = 3", "x = 5"], c: 0, exp: "$(x - 5)(x + 3) = 0 \\Rightarrow x = 5$ hoặc $x = -3$." },
+    { q: "Phân tích đa thức $x^2 - 4x + 3$ thành nhân tử:", a: ["(x - 1)(x - 3)", "(x + 1)(x + 3)", "(x - 1)(x + 3)", "(x + 1)(x - 3)"], c: 0, exp: "Tách: $x^2 - x - 3x + 3 = x(x - 1) - 3(x - 1) = (x - 1)(x - 3)$." },
+    { q: "Tính nhanh giá trị biểu thức $A = x^2 - 6x + 9$ tại $x = 103$:", a: ["10000", "1000", "10609", "100"], c: 0, exp: "$A = (x - 3)^2 = (103 - 3)^2 = 100^2 = 10000$." }
+];
+
+// RENDER CÁC THẺ BÀI TẬP
+function renderCards() {
+    const container = document.getElementById('quest-container');
+    let html = '';
+    homeWorkData.forEach((item, index) => {
+        const opts = item.a.map((txt, i) => ({ txt, isCorrect: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="qcard-${index}">
+            <div class="quest-header">
+                <span class="quest-badge">Thử thách ${index + 1}</span> ${item.q}
+            </div>
+            <div class="ans-grid">
+                ${opts.map(o => `
+                    <button class="btn-opt" onclick="checkAnswer(${index}, ${o.isCorrect}, this)">${o.txt}</button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="qexp-${index}">
+                💡 <strong>Bí kíp gỡ rối:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    // KÍCH HOẠT VẼ CÔNG THỨC TOÁN
+    triggerMathRender();
+}
+
+function triggerMathRender() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(err => {
+            console.warn('MathJax typeset error, using fallback:', err);
+            applyOfflineFallback();
+        });
+    } else {
+        // Dự phòng khi máy không có mạng
+        setTimeout(applyOfflineFallback, 500);
+    }
+}
+
+function applyOfflineFallback() {
+    const elements = document.querySelectorAll('.quest-header, .btn-opt, .explain-box, .cheat-box');
+    elements.forEach(el => {
+        if (el.innerHTML.includes('$')) {
+            el.innerHTML = parseMathOffline(el.innerHTML);
+        }
+    });
+}
+
+let score = 0;
+const answeredMap = {};
+
+function checkAnswer(idx, isCorrect, btn) {
+    if (answeredMap[idx]) return;
+    answeredMap[idx] = true;
+
+    const parent = document.getElementById(`qcard-${idx}`);
+    const exp = document.getElementById(`qexp-${idx}`);
+    const allBtns = parent.querySelectorAll('.btn-opt');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playSound('correct');
+    } else {
+        btn.classList.add('wrong');
+        playSound('wrong');
+        allBtns.forEach(b => {
+            if (b.innerText.trim() === homeWorkData[idx].a[homeWorkData[idx].c].trim() ||
+                b.innerHTML.includes(homeWorkData[idx].a[homeWorkData[idx].c])) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    exp.style.display = 'block';
+    
+    // Cập nhật lại công thức trong phần giải thích vừa hiện ra
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([exp]);
+    } else {
+        exp.innerHTML = parseMathOffline(exp.innerHTML);
+    }
+
+    // Cập nhật thanh tiến độ
+    document.getElementById('score-val').innerText = `${score}/20`;
+    document.getElementById('exp-bar').style.width = `${(score / 20) * 100}%`;
+
+    // Cập nhật danh hiệu
+    const rankEl = document.getElementById('rank-name');
+    if (score >= 18) { rankEl.innerText = "👑 Đại Kiện Tướng Toán 8"; rankEl.style.color = "#10b981"; }
+    else if (score >= 12) { rankEl.innerText = "⚔️ Chiến Binh Chắc Nền Tảng"; rankEl.style.color = "#06b6d4"; }
+    else if (score >= 6) { rankEl.innerText = "🛡️ Hiệp Sĩ Tiến Bộ"; rankEl.style.color = "#f59e0b"; }
+}
+
+window.onload = renderCards;
+</script>
+
+</body>
+</html>
