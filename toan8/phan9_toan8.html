@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chinh Phục: Lập Phương & Định Lí Thalès</title>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: { typeset: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --card: #273549;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* HUD Status */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary);
+            border-radius: 18px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
+        .hud-val { color: var(--secondary); font-size: 1.25rem; font-weight: 800; }
+        .bar-wrap { width: 130px; height: 12px; background: #334155; border-radius: 999px; overflow: hidden; }
+        .bar-fill { height: 100%; transition: width 0.3s ease; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; }
+
+        /* Hero Header */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        .hero h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 6px; }
+        .hero p { color: #e2e8f0; font-size: 1rem; }
+
+        /* Bí kíp khối */
+        .cheat-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .cheat-title { font-size: 1.15rem; font-weight: 800; color: var(--secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .cheat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .cheat-box {
+            background: var(--card);
+            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 0.92rem;
+        }
+        .cheat-box.green { border-left-color: var(--secondary); }
+        .cheat-box strong { color: #fff; display: block; margin-bottom: 5px; }
+
+        /* Khối bài tập */
+        .quest-box {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--border);
+        }
+        .quest-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--primary); }
+        .quest-header { font-size: 1.02rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .quest-badge {
+            background: rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+        }
+
+        .img-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0;
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px dashed var(--border);
+        }
+
+        .ans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .ans-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .btn-opt:hover { background: #2e3e56; border-color: var(--primary); }
+        .btn-opt.correct { background: rgba(16, 185, 129, 0.25) !important; border-color: var(--secondary) !important; color: #6ee7b7 !important; }
+        .btn-opt.wrong { background: rgba(239, 68, 68, 0.25) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            background: #192333;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: #38bdf8;
+        }
+
+        .math-fb { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; color: #38bdf8; font-weight: 600; }
+        .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-style: normal; }
+        .frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+        .frac .den { padding-top: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HUD TRẠNG THÁI -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>⭐ ĐIỂM SỐ:</span>
+            <div class="bar-wrap">
+                <div class="bar-fill" id="exp-bar"></div>
+            </div>
+            <span id="score-val" class="hud-val">0/20</span>
+        </div>
+        <div class="hud-item">
+            <span id="rank-name" style="color: var(--warning); font-weight:800;">🌱 Bắt Đầu Luyện Tập</span>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="hero">
+        <h1>🛡️ ĐẤU TRƯỜNG TOÁN 8: THALÈS & LẬP PHƯƠNG</h1>
+        <p>Thực Hành Tỉ Lệ Đoạn Thẳng Tam Giác & Hằng Đẳng Thức Bậc Ba</p>
+    </div>
+
+    <!-- KHỐI BÍ KÍP -->
+    <div class="cheat-card">
+        <div class="cheat-title">📖 2 BÍ KÍP VÀNG KHÔNG ĐƯỢC QUÊN</div>
+        <div class="cheat-grid">
+            <div class="cheat-box">
+                <strong>⚡ 1. Hằng Đẳng Thức Lập Phương:</strong>
+                • $A^3 + B^3 = (A + B)(A^2 - AB + B^2)$<br>
+                • $A^3 - B^3 = (A - B)(A^2 + AB + B^2)$<br>
+                <em>Nhớ: Số 8 là $2^3$, số 27 là $3^3$. Ở giữa là $AB$ (không có số 2).</em>
+            </div>
+            <div class="cheat-box green">
+                <strong>📐 2. Định Lí Thalès Thuận (MN // BC):</strong>
+                • $\frac{AM}{AB} = \frac{AN}{AC}$ hoặc $\frac{AM}{MB} = \frac{AN}{NC}$<br>
+                <em>Quy tắc: Đoạn trên chia đoạn dưới = Đoạn trên chia đoạn dưới.</em>
+            </div>
+        </div>
+    </div>
+
+    <!-- BÀI TẬP VỀ NHÀ -->
+    <div class="quest-box">
+        <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 16px;">
+            🎯 20 BÀI TẬP RÈN LUYỆN TẠI NHÀ
+        </div>
+        <div id="quest-container"></div>
+    </div>
+
+</div>
+
+<script>
+// TẠO ÂM THANH WEB AUDIO API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playAudio(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    }
+}
+
+// BỘ CHUYỂN TOÁN DỰ PHÒNG OFFLINE
+function parseMath(str) {
+    return str.replace(/\$([^$]+)\$/g, function(m, f) {
+        let r = f.replace(/\\Delta\s*([A-Za-z]+)/g, 'Δ$1')
+                 .replace(/\\parallel/g, '//')
+                 .replace(/\\text\{\s*cm\s*\}/g, ' cm')
+                 .replace(/\\cdot/g, '·')
+                 .replace(/\\Rightarrow/g, '⇒')
+                 .replace(/\^3/g, '³').replace(/\^2/g, '²');
+        r = r.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+        return '<span class="math-fb">' + r + '</span>';
+    });
+}
+
+// DỮ LIỆU 20 CÂU HỎI KÈM HÌNH VẼ SVG RÕ NÉT
+const hwList = [
+    // 10 câu Đại số (Bài 8)
+    { q: "Viết số $8$ dưới dạng một lũy thừa bậc ba ta được:", a: ["$2^3$", "$4^2$", "$3^2$", "$8^1$"], c: 0, exp: "$2 \\cdot 2 \\cdot 2 = 8$, do đó $8 = 2^3$." },
+    { q: "Biểu thức $(3x)^3$ có giá trị bằng:", a: ["$27x^3$", "$3x^3$", "$9x^3$", "$27x$"], c: 0, exp: "$(3x)^3 = 3^3 \\cdot x^3 = 27x^3$." },
+    { q: "Khai triển $x^3 + 8$ dưới dạng tích ta được:", a: ["$(x + 2)(x^2 - 2x + 4)$", "$(x + 2)(x^2 + 2x + 4)$", "$(x - 2)(x^2 + 2x + 4)$", "$(x + 2)^3$"], c: 0, exp: "$x^3 + 2^3 = (x + 2)(x^2 - 2x + 4)$." },
+    { q: "Khai triển $x^3 - 27$ dưới dạng tích ta được:", a: ["$(x - 3)(x^2 + 3x + 9)$", "$(x - 3)(x^2 - 3x + 9)$", "$(x + 3)(x^2 - 3x + 9)$", "$(x - 3)^3$"], c: 0, exp: "$x^3 - 3^3 = (x - 3)(x^2 + 3x + 9)$." },
+    { q: "Viết biểu thức $(x + 1)(x^2 - x + 1)$ dưới dạng tổng hai lập phương:", a: ["$x^3 + 1$", "$x^3 - 1$", "$(x + 1)^3$", "$x^3 + 3$"], c: 0, exp: "Dạng $(A + B)(A^2 - AB + B^2) = A^3 + B^3 = x^3 + 1$." },
+    { q: "Viết biểu thức $(x - 4)(x^2 + 4x + 16)$ dưới dạng hiệu hai lập phương:", a: ["$x^3 - 64$", "$x^3 + 64$", "$x^3 - 16$", "$(x - 4)^3$"], c: 0, exp: "$x^3 - 4^3 = x^3 - 64$." },
+    { q: "Khai triển đa thức $8x^3 + y^3$ thành nhân tử:", a: ["$(2x + y)(4x^2 - 2xy + y^2)$", "$(2x + y)(2x^2 - 2xy + y^2)$", "$(2x + y)(4x^2 + 2xy + y^2)$", "$(8x + y)(x^2 - 8xy + y^2)$"], c: 0, exp: "$(2x)^3 + y^3 = (2x + y)(4x^2 - 2xy + y^2)$." },
+    { q: "Rút gọn biểu thức $A = (x + 2)(x^2 - 2x + 4) - x^3$ ta được:", a: ["$8$", "$-8$", "$16$", "$0$"], c: 0, exp: "$A = (x^3 + 8) - x^3 = 8$." },
+    { q: "Rút gọn biểu thức $B = (x - 1)(x^2 + x + 1) - (x^3 - 5)$ ta được:", a: ["$4$", "$-6$", "$-4$", "$6$"], c: 0, exp: "$B = (x^3 - 1) - x^3 + 5 = 4$." },
+    { q: "Tính nhanh giá trị biểu thức $P = x^3 - 8$ tại $x = 12$:", a: ["$1720$", "$1728$", "$1000$", "$1712$"], c: 0, exp: "$12^3 - 8 = 1728 - 8 = 1720$." },
+
+    // 10 câu Hình học (Bài 15)
+    { q: "Cho đoạn thẳng $AB = 4\\text{ cm}, CD = 6\\text{ cm}$. Tỉ số $\\frac{AB}{CD}$ là:", a: ["$\\frac{2}{3}$", "$\\frac{3}{2}$", "$\\frac{4}{10}$", "$2$"], c: 0, exp: "Tỉ số $\\frac{AB}{CD} = \\frac{4}{6} = \\frac{2}{3}$." },
+    { q: "Cho $MN = 25\\text{ cm}$ và $EF = 1\\text{ m}$. Tỉ số $\\frac{MN}{EF}$ bằng:", a: ["$\\frac{1}{4}$", "$25$", "$4$", "$\\frac{1}{25}$"], c: 0, exp: "Đổi $1\\text{ m} = 100\\text{ cm}$. Tỉ số là $\\frac{25}{100} = \\frac{1}{4}$." },
+    { 
+        q: "Cho hình vẽ dưới đây, biết $MN \\parallel BC$. Độ dài đoạn thẳng $NC$ là:", 
+        svg: `<svg width="220" height="130" viewBox="0 0 220 130">
+                <polygon points="110,15 30,115 190,115" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                <line x1="62" y1="75" x2="158" y2="75" stroke="#10b981" stroke-width="2.5"/>
+                <text x="105" y="12" fill="#fff" font-weight="bold">A</text>
+                <text x="15" y="125" fill="#fff" font-weight="bold">B</text>
+                <text x="195" y="125" fill="#fff" font-weight="bold">C</text>
+                <text x="45" y="72" fill="#10b981" font-weight="bold">M</text>
+                <text x="165" y="72" fill="#10b981" font-weight="bold">N</text>
+                <text x="75" y="50" fill="#93c5fd" font-size="12">2 cm</text>
+                <text x="35" y="100" fill="#93c5fd" font-size="12">3 cm</text>
+                <text x="135" y="50" fill="#93c5fd" font-size="12">4 cm</text>
+                <text x="170" y="100" fill="#f59e0b" font-size="13" font-weight="bold">x = ?</text>
+              </svg>`,
+        a: ["$6\\text{ cm}$", "$5\\text{ cm}$", "$8\\text{ cm}$", "$4,5\\text{ cm}$"], 
+        c: 0, 
+        exp: "Theo định lí Thalès: $\\frac{AM}{MB} = \\frac{AN}{NC} \\Rightarrow \\frac{2}{3} = \\frac{4}{x} \\Rightarrow x = \\frac{3 \\cdot 4}{2} = 6\\text{ cm}$." 
+    },
+    { 
+        q: "Trong hình vẽ sau, biết $DE \\parallel BC$. Tìm giá trị của $x$:", 
+        svg: `<svg width="220" height="130" viewBox="0 0 220 130">
+                <polygon points="40,20 20,115 180,115" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                <line x1="29" y1="72" x2="117" y2="72" stroke="#f59e0b" stroke-width="2.5"/>
+                <text x="35" y="15" fill="#fff" font-weight="bold">A</text>
+                <text x="5" y="125" fill="#fff" font-weight="bold">B</text>
+                <text x="185" y="125" fill="#fff" font-weight="bold">C</text>
+                <text x="12" y="72" fill="#f59e0b" font-weight="bold">D</text>
+                <text x="125" y="72" fill="#f59e0b" font-weight="bold">E</text>
+                <text x="18" y="48" fill="#93c5fd" font-size="12">3</text>
+                <text x="8" y="98" fill="#93c5fd" font-size="12">6</text>
+                <text x="75" y="48" fill="#f59e0b" font-size="13" font-weight="bold">x</text>
+                <text x="145" y="98" fill="#93c5fd" font-size="12">8</text>
+              </svg>`,
+        a: ["$4$", "$5$", "$3$", "$2$"], 
+        c: 0, 
+        exp: "$\\frac{AD}{DB} = \\frac{AE}{EC} \\Rightarrow \\frac{3}{6} = \\frac{x}{8} \\Rightarrow x = \\frac{3 \\cdot 8}{6} = 4$." 
+    },
+    { q: "Cho $\\Delta ABC$ có $MN \\parallel BC$. Biết $AM = 4\\text{ cm}, AB = 12\\text{ cm}, AN = 5\\text{ cm}$. Độ dài cạnh $AC$ là:", a: ["$15\\text{ cm}$", "$10\\text{ cm}$", "$20\\text{ cm}$", "$8\\text{ cm}$"], c: 0, exp: "$\\frac{AM}{AB} = \\frac{AN}{AC} \\Rightarrow \\frac{4}{12} = \\frac{5}{AC} \\Rightarrow AC = \\frac{12 \\cdot 5}{4} = 15\\text{ cm}$." },
+    { q: "Cho tam giác $ABC$ có $HK \\parallel BC$ ($H \\in AB, K \\in AC$). Khẳng định nào sau đây là **sai**?", a: ["$\\frac{AH}{HB} = \\frac{AC}{AK}$", "$\\frac{AH}{AB} = \\frac{AK}{AC}$", "$\\frac{AH}{HB} = \\frac{AK}{KC}$", "$\\frac{HB}{AB} = \\frac{KC}{AC}$"], c: 0, exp: "Khẳng định $\\frac{AH}{HB} = \\frac{AC}{AK}$ bị ngược tỉ số (sai)." },
+    { q: "Cho $\\Delta ABC$ có $AB = 9\\text{ cm}, AC = 15\\text{ cm}$. Lấy $M \\in AB$ sao cho $AM = 3\\text{ cm}$. Kẻ $MN \\parallel BC$. Độ dài $AN$ là:", a: ["$5\\text{ cm}$", "$6\\text{ cm}$", "$4\\text{ cm}$", "$7,5\\text{ cm}$"], c: 0, exp: "$\\frac{AM}{AB} = \\frac{AN}{AC} \\Rightarrow \\frac{3}{9} = \\frac{AN}{15} \\Rightarrow AN = 5\\text{ cm}$." },
+    { q: "Cho tam giác có đường thẳng $d \\parallel BC$ cắt $AB$ tại $D$ và $AC$ tại $E$. Biết $AD = DB$. Điểm $E$ là gì của $AC$?", a: ["Trung điểm của $AC$", "Điểm bất kì", "Trọng tâm", "Trực tâm"], c: 0, exp: "Vì $AD = DB$ nên $D$ là trung điểm. Đường song song qua trung điểm sẽ đi qua trung điểm cạnh còn lại." },
+    { 
+        q: "Đo khoảng cách bờ sông (Hình SGK trang 76 [cite: 77]): Biết $AC \\parallel BD$, $AE = 400\\text{ m}, AB = 300\\text{ m}, EC = 500\\text{ m}$. Độ dài $ED$ là:", 
+        svg: `<svg width="220" height="110" viewBox="0 0 220 110">
+                <line x1="20" y1="20" x2="20" y2="100" stroke="#fff" stroke-width="2"/>
+                <line x1="20" y1="20" x2="200" y2="100" stroke="#f59e0b" stroke-width="2"/>
+                <line x1="20" y1="60" x2="110" y2="60" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="20" y1="100" x2="200" y2="100" stroke="#3b82f6" stroke-width="2"/>
+                <text x="8" y="25" fill="#fff">E</text>
+                <text x="8" y="65" fill="#fff">A</text>
+                <text x="8" y="105" fill="#fff">B</text>
+                <text x="115" y="65" fill="#3b82f6">C</text>
+                <text x="205" y="105" fill="#3b82f6">D</text>
+              </svg>`,
+        a: ["$875\\text{ m}$", "$700\\text{ m}$", "$600\\text{ m}$", "$1000\\text{ m}$"], 
+        c: 0, 
+        exp: "$EB = 400 + 300 = 700\\text{ m}$. Ta có: $\\frac{EB}{EA} = \\frac{ED}{EC} \\Rightarrow \\frac{700}{400} = \\frac{ED}{500} \\Rightarrow ED = 875\\text{ m}$." 
+    },
+    { q: "Nếu một đường thẳng cắt hai cạnh của một tam giác và định ra trên hai cạnh đó các đoạn thẳng tương ứng tỉ lệ thì đường thẳng đó:", a: ["Song song với cạnh thứ ba", "Vuông góc với cạnh thứ ba", "Trùng với cạnh thứ ba", "Cắt cạnh thứ ba"], c: 0, exp: "Đây chính là nội dung của Định lí Thalès đảo." }
+];
+
+// RENDER GIAO DIỆN CÂU HỎI
+function renderCards() {
+    const box = document.getElementById('quest-container');
+    let html = '';
+    hwList.forEach((item, idx) => {
+        const opts = item.a.map((txt, i) => ({ txt, isC: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="card-${idx}">
+            <div class="quest-header">
+                <span class="quest-badge">Bài ${idx + 1}</span> ${item.q}
+            </div>
+            ${item.svg ? `<div class="img-wrap">${item.svg}</div>` : ''}
+            <div class="ans-grid">
+                ${opts.map(o => `
+                    <button class="btn-opt" onclick="pickAns(${idx}, ${o.isC}, this)">${o.txt}</button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="exp-${idx}">
+                💡 <strong>Bí kíp:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    box.innerHTML = html;
+    applyMath();
+}
+
+function applyMath() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => offlineMath());
+    } else {
+        setTimeout(offlineMath, 400);
+    }
+}
+
+function offlineMath() {
+    document.querySelectorAll('.quest-header, .btn-opt, .explain-box, .cheat-box').forEach(el => {
+        if (el.innerHTML.includes('$')) el.innerHTML = parseMath(el.innerHTML);
+    });
+}
+
+let score = 0;
+const answered = {};
+
+function pickAns(idx, isCorrect, btn) {
+    if (answered[idx]) return;
+    answered[idx] = true;
+
+    const parent = document.getElementById(`card-${idx}`);
+    const exp = document.getElementById(`exp-${idx}`);
+    const btns = parent.querySelectorAll('.btn-opt');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playAudio('correct');
+    } else {
+        btn.classList.add('wrong');
+        playAudio('wrong');
+        btns.forEach(b => {
+            if (b.innerText.trim() === hwList[idx].a[hwList[idx].c].trim() ||
+                b.innerHTML.includes(hwList[idx].a[hwList[idx].c])) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    exp.style.display = 'block';
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([exp]);
+    } else {
+        exp.innerHTML = parseMath(exp.innerHTML);
+    }
+
+    document.getElementById('score-val').innerText = `${score}/20`;
+    document.getElementById('exp-bar').style.width = `${(score / 20) * 100}%`;
+
+    const rank = document.getElementById('rank-name');
+    if (score >= 18) { rank.innerText = "👑 Đại Kiện Tướng"; rank.style.color = "#10b981"; }
+    else if (score >= 12) { rank.innerText = "⚔️ Chiến Binh Xuất Sắc"; rank.style.color = "#38bdf8"; }
+    else if (score >= 6) { rank.innerText = "🛡️ Tân Binh Tiến Bộ"; rank.style.color = "#f59e0b"; }
+}
+
+window.onload = renderCards;
+</script>
+
+</body>
+</html>
