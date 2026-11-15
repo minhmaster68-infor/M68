@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Báo Tường Điện Tử 20/11 - Tập Thể Lớp 7A6</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Google Fonts tiếng Việt mềm mại, thư pháp -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --paper-bg: #fffcf7;
+            --gold-accent: #d97706;
+            --rose-accent: #e11d48;
+            --book-shadow: 0 25px 50px -12px rgba(92, 45, 22, 0.35), 0 10px 20px -5px rgba(92, 45, 22, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at 50% 35%, #fff8eb 0%, #fde6d8 45%, #f5d0c5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            color: #4a2511;
+        }
+
+        /* Họa tiết nền nắng thu nhẹ nhàng */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(225, 29, 72, 0.06) 1px, transparent 1px),
+                radial-gradient(rgba(217, 119, 6, 0.06) 1px, transparent 1px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .font-calligraphy {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-serif-vn {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Sân khấu 3D cho cuốn báo tường */
+        .book-stage {
+            position: relative;
+            width: 94vw;
+            max-width: 1080px;
+            /* Tỷ lệ chuẩn khớp với ảnh báo tường đôi (xấp xỉ 3:2) */
+            aspect-ratio: 3 / 2;
+            max-height: 72vh;
+            perspective: 2400px;
+            z-index: 10;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .book-stage {
+                width: 96vw;
+                max-height: 64vh;
+                perspective: 1600px;
+            }
+        }
+
+        /* Bìa cứng lót dưới cuốn báo tạo độ dày */
+        .book-cover-base {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #881337 0%, #be123c 50%, #9f1239 100%);
+            border-radius: 14px;
+            padding: 8px;
+            box-shadow: var(--book-shadow);
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease;
+        }
+
+        @media (max-width: 640px) {
+            .book-cover-base {
+                padding: 4px;
+                border-radius: 10px;
+            }
+        }
+
+        /* Xếp chồng các trang giấy */
+        .book-spine-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: var(--paper-bg);
+            border-radius: 10px;
+            transform-style: preserve-3d;
+            box-shadow: inset 0 0 25px rgba(136, 19, 55, 0.12);
+        }
+
+        /* Từng tờ báo (Sheet) có thể lật 3D */
+        .paper-sheet {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 1.05s cubic-bezier(0.645, 0.045, 0.355, 1);
+            cursor: pointer;
+            border-radius: 10px;
+            will-change: transform;
+        }
+
+        /* Trạng thái đã lật sang trái */
+        .paper-sheet.flipped {
+            transform: rotateY(-180deg);
+            pointer-events: none;
+        }
+
+        /* Mặt trước và mặt sau của tờ giấy */
+        .sheet-front, .sheet-back {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fffdf9;
+        }
+
+        /* Mặt sau (khi lật qua) */
+        .sheet-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #fff5f7 0%, #fffbeb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset -15px 0 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Hiệu ứng bóng gáy sách ở giữa trang đôi */
+        .spine-crease {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 44px;
+            transform: translateX(-50%);
+            background: linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(65, 25, 10, 0.08) 38%,
+                rgba(40, 15, 5, 0.22) 50%,
+                rgba(65, 25, 10, 0.08) 62%,
+                rgba(0, 0, 0, 0) 100%
+            );
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        /* Hiệu ứng ánh sáng lướt qua khi lật trang */
+        .page-glare {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                105deg,
+                rgba(255, 255, 255, 0) 30%,
+                rgba(255, 255, 255, 0.35) 50%,
+                rgba(255, 255, 255, 0) 70%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 16;
+        }
+
+        .paper-sheet.flipping .page-glare {
+            opacity: 1;
+        }
+
+        /* Mép góc trang gợi ý lật */
+        .corner-curl-hint {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.85) 54%, rgba(225, 29, 72, 0.25) 100%);
+            box-shadow: -3px -3px 8px rgba(0, 0, 0, 0.12);
+            border-top-left-radius: 10px;
+            z-index: 20;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .paper-sheet:hover .corner-curl-hint {
+            width: 64px;
+            height: 64px;
+        }
+
+        /* Ảnh báo tường bên trong trang */
+        .newspaper-img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        /* Vùng khung ảnh thầy cô phát sáng lấp lánh (Hotspot Glow) */
+        .teacher-frame-aura {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 18px;
+            box-shadow: 
+                0 0 22px 4px rgba(255, 105, 135, 0.45),
+                inset 0 0 18px 2px rgba(255, 223, 128, 0.45);
+            border: 2px solid rgba(255, 240, 245, 0.75);
+            animation: auraPulse 3s ease-in-out infinite;
+            z-index: 12;
+        }
+
+        @keyframes auraPulse {
+            0%, 100% {
+                opacity: 0.65;
+                box-shadow: 0 0 18px 3px rgba(244, 63, 94, 0.45), inset 0 0 12px rgba(251, 191, 36, 0.35);
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 32px 8px rgba(244, 63, 94, 0.75), inset 0 0 22px rgba(251, 191, 36, 0.65);
+            }
+        }
+
+        /* Trang kết 5/5 */
+        .finale-page {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 48%, #fff1f2 0%, #ffe4e6 42%, #fecdd3 78%, #fda4af 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        /* Khung viền trang trí hoa văn trang kết */
+        .finale-border {
+            position: absolute;
+            inset: 14px;
+            border: 2px dashed rgba(225, 29, 72, 0.35);
+            border-radius: 14px;
+            pointer-events: none;
+        }
+
+        /* Nội dung chữ nằm giữa trái tim hoa ở trang cuối */
+        .finale-heart-message {
+            position: relative;
+            z-index: 25;
+            max-width: 440px;
+            padding: 1.25rem;
+            animation: gentleHeartBeat 2.2s ease-in-out infinite;
+            text-shadow: 0 2px 12px rgba(255, 255, 255, 0.95), 0 0 25px rgba(255, 241, 242, 1);
+        }
+
+        @keyframes gentleHeartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.045); }
+            30% { transform: scale(0.99); }
+            45% { transform: scale(1.03); }
+            65% { transform: scale(1); }
+        }
+
+        /* Canvas hệ thống cánh hoa trái tim bay lượn phủ lên trên cùng */
+        #petalCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        /* Nút điều khiển nổi bật */
+        .btn-3d {
+            background: linear-gradient(180deg, #fff 0%, #fff1f2 100%);
+            border: 1.5px solid #fda4af;
+            color: #9f1239;
+            box-shadow: 0 4px 12px rgba(159, 18, 57, 0.14);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-3d:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.24);
+        }
+
+        .btn-3d:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn-3d:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn-primary-rose {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+        }
+
+        .btn-primary-rose:hover:not(:disabled) {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+        }
+
+        /* Toast thông báo thay thế alert() */
+        #toastBox {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 100;
+            transform: translateX(140%);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #toastBox.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas vẽ hiệu ứng cánh hoa hình trái tim bay lượn và kết hình trái tim -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Hộp thông báo đẹp mắt (không dùng alert) -->
+    <div id="toastBox" class="bg-white/95 backdrop-blur-md border border-rose-200 text-rose-900 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-sm font-semibold">
+        <span class="text-rose-500 text-lg">🌸</span>
+        <span id="toastMessage">Đã cập nhật trang báo tường!</span>
+    </div>
+
+    <!-- Header tiêu đề trang web -->
+    <header class="w-full max-w-6xl px-4 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2 z-30">
+        <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md text-xl">
+                📖
+            </div>
+            <div>
+                <h1 class="font-calligraphy text-2xl sm:text-3xl font-bold text-rose-800 leading-none">
+                    Tri Ân Thầy Cô 20/11
+                </h1>
+                <p class="text-xs sm:text-sm font-semibold text-amber-800/80">
+                    Báo tường điện tử • Tập thể lớp 7A6 – THCS Tân Dương
+                </p>
+            </div>
+        </div>
+
+        <!-- Các nút tiện ích trên thanh header -->
+        <div class="flex items-center gap-2">
+            <button id="toggleAudioBtn" class="btn-3d px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1.5" title="Bật/tắt âm thanh lật giấy & nhạc nền nhẹ">
+                <span id="audioIcon">🔊</span>
+                <span class="hidden sm:inline">Âm thanh</span>
+            </button>
+            <button id="openUploadModalBtn" class="btn-3d px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1.5" title="Thay đổi hoặc tải ảnh 1.jpg - 4.jpg từ máy tính nếu cần">
+                <span>🖼️</span>
+                <span class="hidden sm:inline">Tải ảnh báo</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sân khấu chính chứa cuốn Báo Tường 3D -->
+    <main class="book-stage" id="bookStage">
+        <div class="book-cover-base">
+            <div class="book-spine-container" id="bookContainer">
+                
+                <!-- TRANG 5 (Nằm dưới cùng): Trang kết đặc biệt nơi các cánh hoa kết lại thành trái tim -->
+                <div class="paper-sheet" id="sheet-4" data-index="4" style="z-index: 1;">
+                    <div class="sheet-front">
+                        <div class="finale-page">
+                            <div class="finale-border"></div>
+                            
+                            <!-- Góc hoa trang trí SVG -->
+                            <div class="absolute top-4 left-4 text-rose-400/70 text-2xl sm:text-3xl animate-pulse">🌸</div>
+                            <div class="absolute top-4 right-4 text-rose-400/70 text-2xl sm:text-3xl animate-pulse">🌸</div>
+                            <div class="absolute bottom-4 left-4 text-amber-500/70 text-2xl sm:text-3xl animate-pulse">🌻</div>
+                            <div class="absolute bottom-4 right-4 text-amber-500/70 text-2xl sm:text-3xl animate-pulse">🌻</div>
+
+                            <!-- Lời kết nằm trong trái tim hoa kết lại -->
+                            <div class="finale-heart-message">
+                                <span class="inline-block px-3 py-1 rounded-full bg-white/80 text-rose-700 text-xs sm:text-sm font-bold tracking-wider uppercase mb-2 shadow-sm">
+                                    Chào Mừng Ngày Nhà Giáo Việt Nam 20/11
+                                </span>
+                                <h2 class="font-calligraphy text-3xl sm:text-5xl font-bold text-rose-700 mb-2 leading-tight">
+                                    7A6 Mãi Nhớ Ơn Thầy Cô
+                                </h2>
+                                <p class="font-serif-vn italic text-sm sm:text-base text-rose-950/90 leading-relaxed mb-4 px-2">
+                                    "Dẫu mai này tung cánh muôn phương,<br>
+                                    Chúng em vẫn mãi khắc ghi công ơn dạy dỗ,<br>
+                                    Tình yêu thương và ngọn lửa tri thức thầy cô đã trao!"
+                                </p>
+                                <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
+                                    <button id="replayHeartBtn" class="btn-primary-rose px-4 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 cursor-pointer">
+                                        <span>💖</span>
+                                        <span>              </span>
+                                    </button>
+                                    <button id="backToStartBtn" class="btn-3d px-4 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 cursor-pointer">
+                                        <span>🔄</span>
+                                        <span>Đọc lại từ đầu</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sheet-back">
+                        <p class="font-calligraphy text-2xl text-rose-700">Tập thể lớp 7A6 trân trọng!</p>
+                    </div>
+                </div>
+
+                <!-- TRANG 4 (4.jpg): Cô giáo Toán - Người truyền cảm hứng của 7A6 -->
+                <div class="paper-sheet" id="sheet-3" data-index="3" style="z-index: 2;">
+                    <div class="sheet-front">
+                        <img src="4.jpg" id="img-page-4" alt="Trang 4: Cô giáo Toán - Người truyền cảm hứng của 7A6" class="newspaper-img">
+                        <!-- Vùng phát sáng quanh khung ảnh Cô giáo Toán (bên trái phía trên) -->
+                        <div class="teacher-frame-aura" style="left: 6.5%; top: 3.5%; width: 32.5%; height: 67%; transform: rotate(-2.5deg);"></div>
+                        <div class="spine-crease"></div>
+                        <div class="page-glare"></div>
+                        <div class="corner-curl-hint" title="Nhấn để lật sang trang kết"></div>
+                    </div>
+                    <div class="sheet-back">
+                        <div class="text-center p-6">
+                            <span class="text-4xl">✨</span>
+                            <p class="font-calligraphy text-3xl text-rose-700 mt-2">Lời kết tri ân...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANG 3 (3.jpg): Cô Giáo Văn - Người gieo hạt yêu thương -->
+                <div class="paper-sheet" id="sheet-2" data-index="2" style="z-index: 3;">
+                    <div class="sheet-front">
+                        <img src="3.jpg" id="img-page-3" alt="Trang 3: Cô Giáo Văn - Người gieo hạt yêu thương" class="newspaper-img">
+                        <!-- Vùng phát sáng quanh khung ảnh Cô Giáo Văn (bên trái giữa) -->
+                        <div class="teacher-frame-aura" style="left: 22.8%; top: 31%; width: 25.5%; height: 55.5%; transform: rotate(-3.5deg);"></div>
+                        <div class="spine-crease"></div>
+                        <div class="page-glare"></div>
+                        <div class="corner-curl-hint" title="Nhấn để lật trang tiếp theo"></div>
+                    </div>
+                    <div class="sheet-back">
+                        <div class="text-center p-6">
+                            <span class="text-4xl">📐</span>
+                            <p class="font-calligraphy text-3xl text-rose-700 mt-2">Cô Giáo Toán của 7A6</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANG 2 (2.jpg): Cô Mai - Người truyền lửa của lớp 7A6 -->
+                <div class="paper-sheet" id="sheet-1" data-index="1" style="z-index: 4;">
+                    <div class="sheet-front">
+                        <img src="2.jpg" id="img-page-2" alt="Trang 2: Cô Mai - Người truyền lửa của lớp 7A6" class="newspaper-img">
+                        <!-- Vùng phát sáng quanh khung ảnh Cô Mai (bên trái giữa) & ảnh lớp (bên phải dưới) -->
+                        <div class="teacher-frame-aura" style="left: 22.5%; top: 28%; width: 25.5%; height: 54%; transform: rotate(-4deg);"></div>
+                        <div class="teacher-frame-aura" style="left: 56.5%; top: 58.5%; width: 35.5%; height: 27.5%;"></div>
+                        <div class="spine-crease"></div>
+                        <div class="page-glare"></div>
+                        <div class="corner-curl-hint" title="Nhấn để lật trang tiếp theo"></div>
+                    </div>
+                    <div class="sheet-back">
+                        <div class="text-center p-6">
+                            <span class="text-4xl">✒️</span>
+                            <p class="font-calligraphy text-3xl text-rose-700 mt-2">Cô Giáo Văn của 7A6</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANG 1 (1.jpg - Nằm trên cùng): Tri ân Thầy Cô - Người lái đò thầm lặng -->
+                <div class="paper-sheet" id="sheet-0" data-index="0" style="z-index: 5;">
+                    <div class="sheet-front">
+                        <img src="1.jpg" id="img-page-1" alt="Trang 1: Tri ân Thầy Cô - Người lái đò thầm lặng" class="newspaper-img">
+                        <!-- Vùng phát sáng quanh 2 khung ảnh tập thể thầy cô -->
+                        <div class="teacher-frame-aura" style="left: 8.5%; top: 27%; width: 40%; height: 32%;"></div>
+                        <div class="teacher-frame-aura" style="left: 76.5%; top: 21.5%; width: 21.5%; height: 29%; transform: rotate(4deg);"></div>
+                        <div class="spine-crease"></div>
+                        <div class="page-glare"></div>
+                        <div class="corner-curl-hint" title="Nhấn để lật trang tiếp theo"></div>
+                    </div>
+                    <div class="sheet-back">
+                        <div class="text-center p-6">
+                            <span class="text-4xl">💐</span>
+                            <p class="font-calligraphy text-3xl text-rose-700 mt-2">Cô Mai - Người truyền lửa</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Thanh điều hướng phía dưới -->
+    <footer class="w-full max-w-4xl px-4 py-3 flex flex-col items-center gap-2 z-30">
+        <div class="flex items-center justify-center gap-3 sm:gap-5 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-rose-200/80">
+            <button id="prevBtn" class="btn-3d px-4 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5" disabled>
+                <span>◀</span>
+                <span>Trang trước</span>
+            </button>
+
+            <div class="flex flex-col items-center min-w-[115px] sm:min-w-[150px]">
+                <span id="pageIndicator" class="text-sm sm:text-base font-bold text-rose-800">
+                    Trang 1 / 5
+                </span>
+                <span id="pageSubtitle" class="text-[11px] sm:text-xs font-medium text-amber-800 truncate max-w-[160px] sm:max-w-[220px]">
+                    Tri ân Thầy Cô 20/11
+                </span>
+            </div>
+
+            <button id="nextBtn" class="btn-3d btn-primary-rose px-4 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                <span>Trang sau</span>
+                <span>▶</span>
+            </button>
+        </div>
+
+        <p class="text-[11px] sm:text-xs text-amber-900/75 text-center">
+            Mẹo: Nhấn trực tiếp vào trang báo, dùng phím mũi tên <b>← / →</b> hoặc vuốt màn hình để lật trang
+        </p>
+    </footer>
+
+    <!-- Modal tùy chọn tải ảnh từ máy tính (phòng trường hợp chạy độc lập chưa có file ảnh cùng thư mục) -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-rose-100">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-calligraphy text-2xl font-bold text-rose-800">Cập Nhật Ảnh Báo Tường</h3>
+                <button id="closeUploadModalBtn" class="w-8 h-8 rounded-full bg-rose-50 text-rose-700 hover:bg-rose-100 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <p class="text-xs text-gray-600 mb-4 leading-relaxed">
+                Trang web mặc định tự động hiển thị 4 file <b>1.jpg, 2.jpg, 3.jpg, 4.jpg</b> nằm cùng thư mục. Nếu bạn mở trực tiếp file HTML mà chưa thấy ảnh, hãy chọn nhanh 4 bức ảnh báo tường từ máy của bạn tại đây:
+            </p>
+            <div class="space-y-3 text-sm">
+                <div class="flex items-center justify-between bg-rose-50/70 p-2.5 rounded-xl border border-rose-100">
+                    <span class="font-semibold text-rose-900">Trang 1 (Bìa Tri Ân):</span>
+                    <input type="file" accept="image/*" data-target="img-page-1" class="file-input text-xs w-44 text-gray-600">
+                </div>
+                <div class="flex items-center justify-between bg-rose-50/70 p-2.5 rounded-xl border border-rose-100">
+                    <span class="font-semibold text-rose-900">Trang 2 (Cô Mai):</span>
+                    <input type="file" accept="image/*" data-target="img-page-2" class="file-input text-xs w-44 text-gray-600">
+                </div>
+                <div class="flex items-center justify-between bg-rose-50/70 p-2.5 rounded-xl border border-rose-100">
+                    <span class="font-semibold text-rose-900">Trang 3 (Cô Giáo Văn):</span>
+                    <input type="file" accept="image/*" data-target="img-page-3" class="file-input text-xs w-44 text-gray-600">
+                </div>
+                <div class="flex items-center justify-between bg-rose-50/70 p-2.5 rounded-xl border border-rose-100">
+                    <span class="font-semibold text-rose-900">Trang 4 (Cô Giáo Toán):</span>
+                    <input type="file" accept="image/*" data-target="img-page-4" class="file-input text-xs w-44 text-gray-600">
+                </div>
+            </div>
+            <div class="mt-5 flex justify-end">
+                <button id="doneUploadBtn" class="btn-primary-rose px-5 py-2 rounded-full text-sm font-bold">Hoàn tất</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =========================================================================
+         * 1. QUẢN LÝ TRẠNG THÁI LẬT TRANG 3D & ÂM THANH LẬT GIẤY (WEB AUDIO API)
+         * =========================================================================
+         */
+        const totalPages = 5; // 4 trang báo tường + 1 trang kết trái tim
+        let currentPage = 0;  // 0 -> 4 (tương ứng Trang 1 -> Trang 5)
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        const sheets = [
+            document.getElementById('sheet-0'),
+            document.getElementById('sheet-1'),
+            document.getElementById('sheet-2'),
+            document.getElementById('sheet-3'),
+            document.getElementById('sheet-4')
+        ];
+
+        const pageTitles = [
+            "Tri ân Thầy Cô - Người lái đò",
+            "Cô Mai - Người truyền lửa 7A6",
+            "Cô Giáo Văn - Gieo hạt yêu thương",
+            "Cô Giáo Toán - Truyền cảm hứng",
+            "Lời kết - Trái tim tri ân 7A6"
+        ];
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const pageSubtitle = document.getElementById('pageSubtitle');
+        const bookContainer = document.getElementById('bookContainer');
+
+        // Hàm tạo âm thanh sột soạt lật trang giấy tự nhiên bằng Web Audio API
+        function playPageFlipSound() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const duration = 0.42;
+                const bufferSize = audioCtx.sampleRate * duration;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    // Tạo nhiễu trắng kết hợp đường bao biên độ giống tiếng giấy lật
+                    const envelope = Math.sin((i / bufferSize) * Math.PI);
+                    output[i] = (Math.random() * 2 - 1) * envelope * 0.45;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+
+                // Bộ lọc thông dải tạo âm ấm như giấy báo
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(950, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + duration * 0.6);
+                filter.Q.value = 1.2;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.32, audioCtx.currentTime + 0.12);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                whiteNoise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                whiteNoise.start();
+            } catch (e) {
+                // Bỏ qua nếu trình duyệt chặn tự động phát âm thanh
+            }
+        }
+
+        // Âm thanh chuông gió lấp lánh nhẹ khi kết thành trái tim ở trang cuối
+        function playHeartChimeSound() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.12);
+                    
+                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime + idx * 0.12);
+                    gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + idx * 0.12 + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.12 + 1.2);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + idx * 0.12);
+                    osc.stop(audioCtx.currentTime + idx * 0.12 + 1.25);
+                });
+            } catch (e) {}
+        }
+
+        // Cập nhật giao diện và thứ tự lớp (z-index) khi chuyển trang
+        function updateBookState() {
+            sheets.forEach((sheet, idx) => {
+                if (idx < currentPage) {
+                    sheet.classList.add('flipped');
+                    sheet.style.zIndex = idx + 1;
+                } else {
+                    sheet.classList.remove('flipped');
+                    sheet.style.zIndex = totalPages - idx + 5;
+                }
+            });
+
+            pageIndicator.textContent = `Trang ${currentPage + 1} / ${totalPages}`;
+            pageSubtitle.textContent = pageTitles[currentPage];
+
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === totalPages - 1;
+
+            // Kích hoạt chế độ kết trái tim khi đến trang cuối (index 4)
+            if (currentPage === totalPages - 1) {
+                activateHeartFormation(true);
+                playHeartChimeSound();
+            } else {
+                activateHeartFormation(false);
+            }
+        }
+
+        function goNextPage() {
+            if (currentPage < totalPages - 1) {
+                const activeSheet = sheets[currentPage];
+                activeSheet.classList.add('flipping');
+                setTimeout(() => activeSheet.classList.remove('flipping'), 900);
+
+                currentPage++;
+                playPageFlipSound();
+                updateBookState();
+            }
+        }
+
+        function goPrevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                const targetSheet = sheets[currentPage];
+                targetSheet.classList.add('flipping');
+                setTimeout(() => targetSheet.classList.remove('flipping'), 900);
+
+                playPageFlipSound();
+                updateBookState();
+            }
+        }
+
+        // Sự kiện nút bấm
+        nextBtn.addEventListener('click', goNextPage);
+        prevBtn.addEventListener('click', goPrevPage);
+
+        // Click trực tiếp lên trang báo để lật
+        sheets.forEach((sheet, idx) => {
+            sheet.addEventListener('click', (e) => {
+                // Không lật nếu bấm vào nút bên trong trang kết
+                if (e.target.closest('button')) return;
+                if (idx === currentPage && currentPage < totalPages - 1) {
+                    goNextPage();
+                }
+            });
+        });
+
+        // Phím mũi tên trái / phải
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') goNextPage();
+            if (e.key === 'ArrowLeft') goPrevPage();
+        });
+
+        // Hỗ trợ vuốt cảm ứng (Swipe) trên điện thoại / máy tính bảng
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const bookStage = document.getElementById('bookStage');
+
+        bookStage.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        bookStage.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 45) {
+                if (diff > 0) goNextPage(); // Vuốt sang trái -> trang sau
+                else goPrevPage();          // Vuốt sang phải -> trang trước
+            }
+        }, { passive: true });
+
+        // Nút bật/tắt âm thanh
+        const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+        const audioIcon = document.getElementById('audioIcon');
+        toggleAudioBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            audioIcon.textContent = soundEnabled ? '🔊' : '🔇';
+            showToast(soundEnabled ? 'Đã bật âm thanh lật trang' : 'Đã tắt âm thanh');
+        });
+
+        // Nút xem lại hiệu ứng kết trái tim và đọc lại từ đầu
+        document.getElementById('replayHeartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            scatterPetalsForReplay();
+            playHeartChimeSound();
+        });
+
+        document.getElementById('backToStartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentPage = 0;
+            playPageFlipSound();
+            updateBookState();
+        });
+
+        /**
+         * =========================================================================
+         * 2. TÍNH NĂNG TẢI ẢNH TỪ MÁY TÍNH & HIỂN THỊ THÔNG BÁO
+         * =========================================================================
+         */
+        function showToast(msg) {
+            const toast = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        const uploadModal = document.getElementById('uploadModal');
+        document.getElementById('openUploadModalBtn').addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+            uploadModal.classList.add('flex');
+        });
+
+        function closeModal() {
+            uploadModal.classList.add('hidden');
+            uploadModal.classList.remove('flex');
+        }
+        document.getElementById('closeUploadModalBtn').addEventListener('click', closeModal);
+        document.getElementById('doneUploadBtn').addEventListener('click', closeModal);
+
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const targetId = e.target.getAttribute('data-target');
+                const imgEl = document.getElementById(targetId);
+                if (imgEl) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        imgEl.src = ev.target.result;
+                        showToast(`Đã cập nhật ${file.name} thành công!`);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // Fallback SVG đẹp mắt nếu trình duyệt không tìm thấy file 1.jpg - 4.jpg khi mở độc lập
+        function createPlaceholderSVG(title, subtitle, colorHex) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+                <defs>
+                    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#fff8f0"/>
+                        <stop offset="100%" stop-color="${colorHex}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="1200" height="800" fill="url(#bg)"/>
+                <rect x="30" y="30" width="1140" height="740" rx="24" fill="none" stroke="#be123c" stroke-width="4" stroke-dasharray="14 8"/>
+                <text x="600" y="340" font-family="sans-serif" font-size="48" font-weight="bold" fill="#9f1239" text-anchor="middle">${title}</text>
+                <text x="600" y="410" font-family="sans-serif" font-size="28" fill="#78350f" text-anchor="middle">${subtitle}</text>
+                <text x="600" y="480" font-family="sans-serif" font-size="22" fill="#be123c" text-anchor="middle">(Nhấn nút "Tải ảnh báo" ở góc trên để chọn file ảnh từ máy của bạn)</text>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
+        const fallbackConfigs = [
+            { id: 'img-page-1', title: 'Trang 1: Tri Ân Thầy Cô - Lớp 7A6', sub: 'Đặt file 1.jpg cùng thư mục hoặc tải lên', color: '#ffe4e6' },
+            { id: 'img-page-2', title: 'Trang 2: Cô Mai - Người Truyền Lửa', sub: 'Đặt file 2.jpg cùng thư mục hoặc tải lên', color: '#fef3c7' },
+            { id: 'img-page-3', title: 'Trang 3: Cô Giáo Văn - Gieo Hạt Yêu Thương', sub: 'Đặt file 3.jpg cùng thư mục hoặc tải lên', color: '#fce7f3' },
+            { id: 'img-page-4', title: 'Trang 4: Cô Giáo Toán - Truyền Cảm Hứng', sub: 'Đặt file 4.jpg cùng thư mục hoặc tải lên', color: '#ffe4e6' }
+        ];
+
+        fallbackConfigs.forEach(cfg => {
+            const el = document.getElementById(cfg.id);
+            el.onerror = function() {
+                this.onerror = null;
+                this.src = createPlaceholderSVG(cfg.title, cfg.sub, cfg.color);
+            };
+        });
+
+        /**
+         * =========================================================================
+         * 3. HỆ THỐNG HẠT CÁNH HOA HÌNH TRÁI TIM BAY LƯỢN & KẾT TRÁI TIM TRANG CUỐI
+         * =========================================================================
+         */
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            if (isHeartMode) {
+                assignHeartTargets();
+            }
+        });
+
+        // Tọa độ tương đối (0..1) của các khung ảnh thầy cô trên từng trang báo
+        // Giúp cánh hoa bay lượn quấn quanh khung hình thầy cô chính xác trên mọi kích thước màn hình
+        const pageFrameOrbits = {
+            0: [ // Trang 1: Ảnh tập thể giáo viên bên trái và phải
+                { rx: 0.285, ry: 0.43, radX: 0.21, radY: 0.17 },
+                { rx: 0.87,  ry: 0.36, radX: 0.11, radY: 0.15 }
+            ],
+            1: [ // Trang 2: Chân dung Cô Mai (giữa trái) & Ảnh tập thể lớp (phải dưới)
+                { rx: 0.352, ry: 0.55, radX: 0.135, radY: 0.27 },
+                { rx: 0.74,  ry: 0.72, radX: 0.18,  radY: 0.14 }
+            ],
+            2: [ // Trang 3: Chân dung Cô Giáo Văn (giữa trái)
+                { rx: 0.355, ry: 0.585, radX: 0.135, radY: 0.28 }
+            ],
+            3: [ // Trang 4: Chân dung Cô Giáo Toán (trên trái)
+                { rx: 0.228, ry: 0.37, radX: 0.165, radY: 0.33 }
+            ],
+            4: [] // Trang 5: Hội tụ thành trái tim lớn giữa trang
+        };
+
+        // Bảng màu cánh hoa hồng phấn, đỏ thắm, đào phai và ánh vàng
+        const petalColors = [
+            { fill: '#ff4d6d', glow: 'rgba(255, 77, 109, 0.55)' },
+            { fill: '#ff758f', glow: 'rgba(255, 117, 143, 0.5)' },
+            { fill: '#ff8fa3', glow: 'rgba(255, 143, 163, 0.5)' },
+            { fill: '#e11d48', glow: 'rgba(225, 29, 72, 0.6)' },
+            { fill: '#fb7185', glow: 'rgba(251, 113, 133, 0.5)' },
+            { fill: '#fda4af', glow: 'rgba(253, 164, 175, 0.5)' },
+            { fill: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)' } // Điểm xuyết cánh hoa vàng nắng
+        ];
+
+        const TOTAL_PETALS = 175; // Số lượng cánh hoa đủ dày để kết trái tim rực rỡ mà vẫn mượt 60fps
+        const petals = [];
+        let isHeartMode = false;
+        let heartBeatPhase = 0;
+
+        class HeartPetal {
+            constructor(index) {
+                this.index = index;
+                // Phân loại: 45% cánh hoa chuyên bay lượn quấn quanh khung ảnh thầy cô, 55% bay tự do khắp trang
+                this.isOrbiter = index < Math.floor(TOTAL_PETALS * 0.45);
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.x = Math.random() * width;
+                this.y = initial ? Math.random() * height : -20 - Math.random() * 100;
+                this.size = 6 + Math.random() * 8.5;
+                this.colorObj = petalColors[Math.floor(Math.random() * petalColors.length)];
+                this.vx = (Math.random() - 0.5) * 1.4;
+                this.vy = 0.7 + Math.random() * 1.3;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = (Math.random() - 0.5) * 0.05;
+                this.wobblePhase = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+
+                // Thuộc tính quỹ đạo quanh khung ảnh thầy cô
+                this.orbitAngle = (this.index / (TOTAL_PETALS * 0.45)) * Math.PI * 2 + Math.random() * 0.4;
+                this.orbitSpeed = (0.012 + Math.random() * 0.012) * (this.index % 2 === 0 ? 1 : -1);
+                this.orbitOffset = (Math.random() - 0.5) * 18;
+
+                // Tọa độ đích khi kết lại thành hình trái tim ở trang cuối
+                this.targetX = width / 2;
+                this.targetY = height / 2;
+                this.heartAngle = 0;
+                this.heartScaleFactor = 1;
+            }
+
+            update() {
+                if (isHeartMode) {
+                    // CHẾ ĐỘ TRANG CUỐI: Bay hội tụ và kết thành hình trái tim đập nhẹ
+                    const rect = bookContainer.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    // Nhịp đập trái tim (heartbeat)
+                    const pulse = 1 + Math.sin(heartBeatPhase) * 0.045 + Math.sin(heartBeatPhase * 2) * 0.02;
+                    
+                    // Công thức đường cong trái tim chuẩn toán học:
+                    // x = 16 sin^3(t)
+                    // y = 13 cos(t) - 5 cos(2t) - 2 cos(3t) - cos(4t)
+                    const t = this.heartAngle;
+                    const baseScale = Math.min(rect.width, rect.height) / 36.5;
+                    const s = baseScale * this.heartScaleFactor * pulse;
+
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+                    // Thêm chút rung rinh tự nhiên như cánh hoa đang thở
+                    this.wobblePhase += 0.04;
+                    const flutterX = Math.cos(this.wobblePhase + this.index) * 2.2;
+                    const flutterY = Math.sin(this.wobblePhase + this.index) * 2.2;
+
+                    this.targetX = centerX + hx * s + flutterX;
+                    this.targetY = centerY + hy * s - (baseScale * 1.5) + flutterY;
+
+                    // Nội suy mượt mà (spring/lerp) kéo cánh hoa bay về vị trí trên trái tim
+                    this.x += (this.targetX - this.x) * 0.055;
+                    this.y += (this.targetY - this.y) * 0.055;
+
+                    // Hướng mũi nhọn trái tim nhỏ xoay nhẹ theo đường viền trái tim lớn
+                    const desiredAngle = Math.sin(this.wobblePhase * 0.5) * 0.35;
+                    this.angle += (desiredAngle - this.angle) * 0.08;
+                    return;
+                }
+
+                // CHẾ ĐỘ TRANG 1 -> 4: Bay lượn bồng bềnh + Quấn quanh khung ảnh thầy cô
+                this.wobblePhase += this.wobbleSpeed;
+                this.angle += this.spin;
+
+                const orbits = pageFrameOrbits[currentPage] || [];
+                if (this.isOrbiter && orbits.length > 0) {
+                    const rect = bookContainer.getBoundingClientRect();
+                    const orbitCfg = orbits[this.index % orbits.length];
+
+                    const cx = rect.left + rect.width * orbitCfg.rx;
+                    const cy = rect.top + rect.height * orbitCfg.ry;
+                    const rx = rect.width * orbitCfg.radX + this.orbitOffset;
+                    const ry = rect.height * orbitCfg.radY + this.orbitOffset;
+
+                    this.orbitAngle += this.orbitSpeed;
+
+                    const destX = cx + Math.cos(this.orbitAngle) * rx + Math.sin(this.wobblePhase) * 6;
+                    const destY = cy + Math.sin(this.orbitAngle) * ry + Math.cos(this.wobblePhase) * 6;
+
+                    // Di chuyển mượt mà vào quỹ đạo quanh ảnh thầy cô
+                    this.x += (destX - this.x) * 0.06;
+                    this.y += (destY - this.y) * 0.06;
+                } else {
+                    // Cánh hoa bay lượn tự do khắp không gian trang báo
+                    this.x += this.vx + Math.sin(this.wobblePhase) * 0.85;
+                    this.y += this.vy;
+
+                    if (this.y > height + 25) {
+                        this.y = -20;
+                        this.x = Math.random() * width;
+                    }
+                    if (this.x > width + 25) this.x = -20;
+                    if (this.x < -25) this.x = width + 20;
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                // Hiệu ứng lật nghiêng 3D nhẹ cho cánh hoa khi bay
+                const flipScaleX = isHeartMode ? 1 : (0.75 + 0.25 * Math.sin(this.wobblePhase * 1.4));
+                ctx.scale(flipScaleX, 1);
+
+                const s = this.size;
+                ctx.fillStyle = this.colorObj.fill;
+
+                // Phát sáng lung linh hơn khi ở chế độ kết trái tim
+                if (isHeartMode) {
+                    ctx.shadowColor = this.colorObj.glow;
+                    ctx.shadowBlur = 10;
+                }
+
+                // Vẽ hình trái tim mềm mại
+                ctx.beginPath();
+                ctx.moveTo(0, s * 0.35);
+                ctx.bezierCurveTo(-s * 0.55, -s * 0.35, -s * 1.1, s * 0.25, 0, s * 1.05);
+                ctx.bezierCurveTo(s * 1.1, s * 0.25, s * 0.55, -s * 0.35, 0, s * 0.35);
+                ctx.closePath();
+                ctx.fill();
+
+                // Điểm ánh sáng trắng nhỏ trên cánh hoa tạo độ bóng
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.38)';
+                ctx.beginPath();
+                ctx.arc(-s * 0.28, s * 0.22, s * 0.16, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        // Khởi tạo đàn cánh hoa trái tim
+        for (let i = 0; i < TOTAL_PETALS; i++) {
+            petals.push(new HeartPetal(i));
+        }
+
+        // Phân bổ góc và độ dày lớp viền trái tim cho từng cánh hoa ở trang cuối
+        function assignHeartTargets() {
+            petals.forEach((p, idx) => {
+                // Chia thành 2 vòng trái tim lồng nhau (vòng ngoài sắc nét + vòng trong tỏa sáng)
+                const isInnerRing = idx % 3 === 0;
+                p.heartAngle = (idx / TOTAL_PETALS) * Math.PI * 2;
+                p.heartScaleFactor = isInnerRing ? (0.86 + Math.random() * 0.08) : (0.98 + Math.random() * 0.07);
+            });
+        }
+
+        function activateHeartFormation(enable) {
+            isHeartMode = enable;
+            if (enable) {
+                assignHeartTargets();
+            } else {
+                // Khi lật ngược lại các trang trước, thả các cánh hoa bay bung ra tự nhiên
+                petals.forEach(p => {
+                    p.vx = (Math.random() - 0.5) * 3.5;
+                    p.vy = 0.6 + Math.random() * 1.6;
+                });
+            }
+        }
+
+        // Hiệu ứng tung cánh hoa ra xung quanh rồi hội tụ lại thành trái tim khi bấm "Xem lại"
+        function scatterPetalsForReplay() {
+            isHeartMode = false;
+            const rect = bookContainer.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            petals.forEach(p => {
+                const randAngle = Math.random() * Math.PI * 2;
+                const dist = 120 + Math.random() * 280;
+                p.x = cx + Math.cos(randAngle) * dist;
+                p.y = cy + Math.sin(randAngle) * dist;
+                p.vx = Math.cos(randAngle) * 2.5;
+                p.vy = Math.sin(randAngle) * 2.5;
+            });
+
+            setTimeout(() => {
+                if (currentPage === totalPages - 1) {
+                    activateHeartFormation(true);
+                }
+            }, 350);
+        }
+
+        // Vòng lặp hoạt ảnh 60fps
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            if (isHeartMode) {
+                heartBeatPhase += 0.055;
+            }
+
+            for (let i = 0; i < petals.length; i++) {
+                petals[i].update();
+                petals[i].draw(ctx);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Khởi động khi trang tải xong
+        window.onload = function() {
+            updateBookState();
+            animate();
+        };
+    </script>
+</body>
+</html>
