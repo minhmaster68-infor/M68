@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no">
+    <title>Báo Tường Điện Tử 20/11 - Tập Thể Lớp 7A6</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- StPageFlip -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+    <!-- Google Fonts thư pháp & tiếng Việt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --paper-bg: #fffcf7;
+            --gold-accent: #d97706;
+            --rose-accent: #e11d48;
+            --book-shadow: 0 30px 60px -12px rgba(92, 45, 22, 0.45), 0 15px 25px -5px rgba(92, 45, 22, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none; /* Khóa toàn bộ cử chỉ mặc định của trình duyệt để chống giật/snap-back */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at 50% 35%, #fff8eb 0%, #fde6d8 45%, #f5d0c5 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            color: #4a2511;
+            user-select: none;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(225, 29, 72, 0.06) 1px, transparent 1px),
+                radial-gradient(rgba(217, 119, 6, 0.06) 1px, transparent 1px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .font-calligraphy { font-family: 'Dancing Script', cursive; }
+        .font-serif-vn { font-family: 'Playfair Display', serif; }
+
+        .book-stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            max-width: 100vw;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        /* Lớp bắt chạm toàn diện (Touch Catcher) nằm phủ lên trên khi cần xử lý Pinch/Pan */
+        #touchOverlayCatcher {
+            position: absolute;
+            inset: 0;
+            z-index: 35;
+            touch-action: none;
+            cursor: default;
+        }
+        .is-zoomed #touchOverlayCatcher {
+            cursor: grab;
+        }
+        .is-zoomed #touchOverlayCatcher:active {
+            cursor: grabbing;
+        }
+
+        /* Khung Viewport phóng to & dịch chuyển */
+        #zoomViewportWrapper {
+            position: relative;
+            transform-origin: center center;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Không đặt CSS transition cố định để tránh bị delay giật ngược khi ngón tay di chuyển */
+        }
+
+        .book-cover-base {
+            position: relative;
+            background: linear-gradient(135deg, #881337 0%, #be123c 50%, #9f1239 100%);
+            border-radius: 14px;
+            padding: 5px;
+            box-shadow: var(--book-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #flipbookContainer {
+            position: relative;
+            background-color: #fffdf9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stf__wrapper, .stf__parent, .stf__block {
+            overflow: hidden !important;
+            border-radius: 8px;
+        }
+
+        #flipbookContainer:not(.ready) .fb-page {
+            display: none;
+        }
+
+        .fb-page {
+            background-color: #fffdf9;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Bóng gáy trang */
+        .fb-page.--left::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; width: 28px;
+            background: linear-gradient(to left, rgba(45, 15, 5, 0.18) 0%, rgba(65, 25, 10, 0.04) 50%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .fb-page.--right::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 28px;
+            background: linear-gradient(to right, rgba(45, 15, 5, 0.18) 0%, rgba(65, 25, 10, 0.04) 50%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* Trang lót 20/11 bên cạnh bìa */
+        .cover-intro-page {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 40%, #fffbf2 0%, #ffeedd 60%, #fed7aa 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 14px;
+            overflow: hidden;
+        }
+
+        .cover-intro-border {
+            position: absolute;
+            inset: 8px;
+            border: 2px dashed rgba(225, 29, 72, 0.45);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .cover-intro-border::after {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            border: 1px solid rgba(217, 119, 6, 0.35);
+            border-radius: 8px;
+        }
+
+        .single-page-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .half-spread-img {
+            position: absolute;
+            top: 0;
+            width: 200%;
+            max-width: none !important;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+            pointer-events: none;
+        }
+        .half-left .half-spread-img { left: 0; }
+        .half-right .half-spread-img { left: -100%; }
+
+        .teacher-frame-aura {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 12;
+        }
+
+        .music-player-top-card {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid #fb7185;
+            box-shadow: 0 8px 20px -3px rgba(225, 29, 72, 0.25);
+            pointer-events: auto !important;
+            z-index: 50;
+        }
+
+        .music-bar {
+            width: 4px;
+            height: 8px;
+            background: #e11d48;
+            border-radius: 99px;
+            animation: bounceBar 1.2s ease-in-out infinite alternate;
+        }
+        .music-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+        .music-bar:nth-child(3) { animation-delay: 0.4s; height: 22px; }
+        .music-bar:nth-child(4) { animation-delay: 0.15s; height: 12px; }
+        .music-bar:nth-child(5) { animation-delay: 0.35s; height: 18px; }
+
+        @keyframes bounceBar {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1.4); }
+        }
+
+        .music-bar.paused {
+            animation-play-state: paused;
+            transform: scaleY(0.3);
+        }
+
+        .finale-half-page {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #fff1f2 0%, #ffe4e6 55%, #fecdd3 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .finale-border-left {
+            position: absolute;
+            top: 8px; bottom: 8px; left: 8px; right: 0;
+            border-top: 2px dashed rgba(225, 29, 72, 0.35);
+            border-bottom: 2px dashed rgba(225, 29, 72, 0.35);
+            border-left: 2px dashed rgba(225, 29, 72, 0.35);
+            border-radius: 10px 0 0 10px;
+            pointer-events: none;
+        }
+
+        .finale-border-right {
+            position: absolute;
+            top: 8px; bottom: 8px; left: 0; right: 8px;
+            border-top: 2px dashed rgba(225, 29, 72, 0.35);
+            border-bottom: 2px dashed rgba(225, 29, 72, 0.35);
+            border-right: 2px dashed rgba(225, 29, 72, 0.35);
+            border-radius: 0 10px 10px 0;
+            pointer-events: none;
+        }
+
+        .heartbeat-box {
+            animation: gentleHeartBeat 2.2s ease-in-out infinite;
+        }
+
+        @keyframes gentleHeartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.035); }
+            30% { transform: scale(0.99); }
+            45% { transform: scale(1.025); }
+            65% { transform: scale(1); }
+        }
+
+        #petalCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        .btn-3d {
+            background: linear-gradient(180deg, #fff 0%, #fff1f2 100%);
+            border: 1.5px solid #fda4af;
+            color: #9f1239;
+            box-shadow: 0 4px 12px rgba(159, 18, 57, 0.14);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-3d:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.24);
+        }
+
+        .btn-3d:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn-primary-rose {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+        }
+
+        .btn-primary-rose:hover:not(:disabled) {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+        }
+
+        #toastBox {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 100;
+            transform: translateX(140%);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #toastBox.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas cánh hoa bay & kết trái tim -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Âm thanh bài hát music.mp3 -->
+    <audio id="bgSongAudio" src="music.mp3" preload="auto"></audio>
+
+    <!-- Hộp Toast thông báo -->
+    <div id="toastBox" class="bg-white/95 backdrop-blur-md border border-rose-200 text-rose-900 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-sm font-semibold">
+        <span class="text-rose-500 text-lg">🌸</span>
+        <span id="toastMessage">Đã cập nhật trang báo tường!</span>
+    </div>
+
+    <!-- Header điều khiển & Thanh Zoom đồng bộ tức thời -->
+    <header class="w-full max-w-7xl px-3 sm:px-4 pt-2 pb-0.5 flex flex-wrap items-center justify-between gap-1.5 z-30 shrink-0">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md text-sm sm:text-base">
+                📖
+            </div>
+            <div>
+                <h1 class="font-calligraphy text-lg sm:text-2xl font-bold text-rose-800 leading-none">
+                    Tri Ân Thầy Cô 20/11
+                </h1>
+                <p class="text-[10px] sm:text-xs font-semibold text-amber-800/80">
+                    Báo tường điện tử • Lớp 7A6 – THCS Tân Dương
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1 sm:gap-1.5">
+            <!-- Cụm công cụ Zoom chuẩn & đồng bộ % liên tục -->
+            <div class="flex items-center bg-white/95 backdrop-blur-md border border-rose-300 rounded-full px-1.5 py-0.5 shadow-md">
+                <button id="zoomOutBtn" class="px-2 py-0.5 text-xs font-extrabold text-rose-700 hover:text-rose-900 active:scale-90" title="Thu nhỏ">🔍−</button>
+                <button id="zoomResetBtn" class="text-[10px] font-bold text-rose-900 px-1 hover:underline cursor-pointer" title="Bấm để đặt về 100%">
+                    <span id="zoomPercentBadge">100%</span>
+                </button>
+                <button id="zoomInBtn" class="px-2 py-0.5 text-xs font-extrabold text-rose-700 hover:text-rose-900 active:scale-90" title="Phóng to để đọc">🔍+</button>
+            </div>
+
+            <button id="fullscreenBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Toàn màn hình">
+                <span>⛶</span>
+                <span class="hidden md:inline">Toàn màn hình</span>
+            </button>
+            <button id="toggleAudioBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Bật/tắt âm thanh lật trang">
+                <span id="audioIcon">🔊</span>
+            </button>
+            <button id="openUploadModalBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Tải ảnh">
+                <span>🖼️</span>
+                <span class="hidden sm:inline">Tải ảnh</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Khung chính sách lật Flipbook -->
+    <main class="book-stage" id="bookStage">
+        <!-- Lớp kính chặn & xử lý cảm ứng Pinch & Pan (Touch Overlay Catcher) -->
+        <div id="touchOverlayCatcher"></div>
+
+        <!-- Khung Viewport phóng to & dịch chuyển -->
+        <div id="zoomViewportWrapper">
+            <div class="book-cover-base" id="bookCoverBase">
+                <div id="flipbookContainer">
+
+                    <!-- 1A. MẶT TRÁI TRANG 1: HỌA TIẾT NGHỆ THUẬT TRI ÂN 20-11 -->
+                    <div class="fb-page">
+                        <div class="cover-intro-page">
+                            <div class="cover-intro-border"></div>
+                            
+                            <div class="w-full text-center z-10 pt-1">
+                                <div class="flex items-center justify-center gap-1.5 mb-1">
+                                    <span class="text-amber-500 text-sm">✨</span>
+                                    <span class="uppercase tracking-wider text-[9px] sm:text-[11px] font-bold text-rose-700 bg-rose-100/90 px-2.5 py-0.5 rounded-full shadow-sm">
+                                        Chào mừng 20-11
+                                    </span>
+                                    <span class="text-amber-500 text-sm">✨</span>
+                                </div>
+                                <h2 class="font-calligraphy text-2xl sm:text-3xl font-extrabold text-rose-800 leading-tight">
+                                    Ngày Nhà Giáo Việt Nam
+                                </h2>
+                                <div class="flex items-center justify-center gap-2 mt-0.5">
+                                    <span class="h-[1px] w-8 bg-amber-400"></span>
+                                    <span class="text-[11px] text-rose-500 font-bold">❦ Tri Ân Người Lái Đò ❦</span>
+                                    <span class="h-[1px] w-8 bg-amber-400"></span>
+                                </div>
+                            </div>
+
+                            <div class="my-auto z-10 w-full flex flex-col items-center px-2">
+                                <div class="relative w-28 sm:w-36 h-24 sm:h-32 flex items-center justify-center">
+                                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                                        <circle cx="100" cy="100" r="76" fill="#fffbeb" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+                                        <path d="M40,135 Q100,118 100,148 Q100,118 160,135 L160,85 Q100,70 100,95 Q100,70 40,85 Z" fill="#ffe4e6" stroke="#e11d48" stroke-width="3"/>
+                                        <line x1="100" y1="95" x2="100" y2="148" stroke="#be123c" stroke-width="2.5"/>
+                                        <path d="M100,45 L106,75 L94,75 Z" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+                                        <polygon points="100,32 108,48 92,48" fill="#e11d48"/>
+                                        <path d="M60,158 Q100,175 140,158 Q125,180 75,180 Z" fill="#b45309"/>
+                                        <line x1="85" y1="140" x2="115" y2="175" stroke="#78350f" stroke-width="2"/>
+                                        <path d="M65,58 Q72,50 80,58 Q88,50 95,58" fill="none" stroke="#be123c" stroke-width="1.8"/>
+                                        <path d="M120,48 Q126,42 132,48 Q138,42 144,48" fill="none" stroke="#be123c" stroke-width="1.5"/>
+                                    </svg>
+                                </div>
+
+                                <div class="mt-1 text-center bg-white/80 backdrop-blur-sm p-2 sm:p-2.5 rounded-xl border border-rose-200/90 shadow-sm max-w-[95%]">
+                                    <p class="font-serif-vn italic text-[10px] sm:text-xs text-rose-950 leading-relaxed font-semibold">
+                                        "Có một nghề bụi phấn bám đầy tay<br>
+                                        Người ta bảo đó là nghề trong sạch nhất<br>
+                                        Có một nghề không trồng cây vào đất<br>
+                                        Mà nở cho đời muôn vạn đóa hoa thơm."
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="w-full text-center z-10 pb-0.5">
+                                <p class="font-calligraphy text-sm sm:text-base font-bold text-amber-900">
+                                    Chi Đội 7A6 • Kính Dâng Thầy Cô
+                                </p>
+                                <div class="flex items-center justify-center gap-1 text-[11px] text-rose-500 mt-0.5">
+                                    <span>🌸</span><span>🌻</span><span>💮</span><span>🌺</span><span>🌹</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1B. MẶT PHẢI TRANG 1: ẢNH BÌA GỐC 1.JPG CHUẨN TỶ LỆ -->
+                    <div class="fb-page">
+                        <img src="1.jpg" class="single-page-img img-sync-1" alt="Bìa báo tường - 1.jpg">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 25%; width: 60%; height: 50%;"></div>
+                    </div>
+
+                    <!-- 2. CẶP 2 (2.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Trái">
+                        <div class="teacher-frame-aura" style="left: 45%; top: 28%; width: 51%; height: 54%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Phải">
+                        <div class="teacher-frame-aura" style="left: 13%; top: 58.5%; width: 71%; height: 27.5%;"></div>
+                    </div>
+
+                    <!-- 3. CẶP 3 (3.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Trái">
+                        <div class="teacher-frame-aura" style="left: 45.6%; top: 31%; width: 51%; height: 55.5%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Phải">
+                        <div class="teacher-frame-aura" style="left: 10%; top: 25%; width: 75%; height: 45%;"></div>
+                    </div>
+
+                    <!-- 4. CẶP 4 (4.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Trái">
+                        <div class="teacher-frame-aura" style="left: 13%; top: 3.5%; width: 65%; height: 67%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Phải">
+                        <div class="teacher-frame-aura" style="left: 12%; top: 50%; width: 78%; height: 42%;"></div>
+                    </div>
+
+                    <!-- 5. CẶP 5 (5.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Trái">
+                        <div class="teacher-frame-aura" style="left: 18%; top: 12%; width: 70%; height: 45%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Phải">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 48%; width: 66%; height: 42%;"></div>
+                    </div>
+
+                    <!-- 6. CẶP 6 (6.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Trái">
+                        <div class="teacher-frame-aura" style="left: 22%; top: 15%; width: 68%; height: 50%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Phải">
+                        <div class="teacher-frame-aura" style="left: 15%; top: 30%; width: 72%; height: 46%;"></div>
+                    </div>
+
+                    <!-- 7. CẶP 7 (7.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Trái">
+                        <div class="teacher-frame-aura" style="left: 15%; top: 20%; width: 75%; height: 48%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Phải">
+                        <div class="teacher-frame-aura" style="left: 18%; top: 25%; width: 70%; height: 50%;"></div>
+                    </div>
+
+                    <!-- 8. CẶP 8 (8.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Trái">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 18%; width: 68%; height: 52%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Phải">
+                        <div class="teacher-frame-aura" style="left: 16%; top: 30%; width: 72%; height: 46%;"></div>
+                    </div>
+
+                    <!-- 9. CẶP 9 (9.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Trái">
+                        <div class="teacher-frame-aura" style="left: 15%; top: 22%; width: 72%; height: 50%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Phải">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 35%; width: 68%; height: 44%;"></div>
+                    </div>
+
+                    <!-- 10. CẶP 10 (10.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Trái">
+                        <div class="teacher-frame-aura" style="left: 18%; top: 18%; width: 70%; height: 48%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Phải">
+                        <div class="teacher-frame-aura" style="left: 22%; top: 25%; width: 66%; height: 52%;"></div>
+                    </div>
+
+                    <!-- 11. CẶP 11: NHÚNG VIDEO YOUTUBE VỚI LINK NX7hQA1uyJg -->
+                    <div class="fb-page">
+                        <div class="w-full h-full p-3 sm:p-4 flex flex-col justify-center items-center bg-gradient-to-br from-rose-50 via-white to-amber-50">
+                            <div class="w-full max-w-[96%] border-2 border-rose-200/80 rounded-2xl p-2.5 shadow-md bg-white/95">
+                                <div class="flex items-center gap-1.5 mb-1.5">
+                                    <span class="text-rose-600 text-lg">▶</span>
+                                    <h3 class="font-calligraphy text-lg sm:text-xl font-bold text-rose-800">Thước Phim Kỷ Niệm 7A6</h3>
+                                </div>
+                                <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
+                                    <iframe id="youtubePlayer" class="w-full h-full" 
+                                            src="https://www.youtube.com/embed/NX7hQA1uyJg?enablejsapi=1&rel=0" 
+                                            title="YouTube video player" frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen></iframe>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-1.5 text-center italic">
+                                    Nhấn để thưởng thức video kỷ niệm đặc biệt của Chi đội 7A6
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fb-page">
+                        <div class="w-full h-full p-4 sm:p-6 flex flex-col justify-center items-center bg-gradient-to-bl from-rose-50 via-pink-50/40 to-white text-center">
+                            <span class="text-3xl sm:text-4xl mb-2 sm:mb-3">🎬✨🎞️</span>
+                            <h3 class="font-calligraphy text-xl sm:text-3xl font-bold text-rose-700 mb-1.5">Ký Ức Đẹp Tuổi Học Trò</h3>
+                            <p class="font-serif-vn italic text-[11px] sm:text-sm text-gray-700 leading-relaxed max-w-xs mb-3">
+                                "Mỗi khoảnh khắc dưới mái trường Tân Dương đều là những hạt ngọc lấp lánh lưu giữ trong tim mỗi học sinh 7A6."
+                            </p>
+                            <div class="p-2.5 bg-rose-100/70 border border-rose-300 rounded-2xl text-[11px] sm:text-xs text-rose-900 font-semibold shadow-sm">
+                                🎉 Kính chúc quý thầy cô luôn mạnh khỏe và hạnh phúc!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12. CẶP 12 (12.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Trái">
+                        <div class="teacher-frame-aura" style="left: 18%; top: 22%; width: 70%; height: 50%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Phải">
+                        <div class="teacher-frame-aura" style="left: 15%; top: 30%; width: 74%; height: 45%;"></div>
+                    </div>
+
+                    <!-- 13. CẶP 13 (13.jpg) CÓ NÚT PHÁT NHẠC MUSIC.MP3 -->
+                    <div class="fb-page half-left">
+                        <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Trái">
+                        <div class="teacher-frame-aura" style="left: 15%; top: 20%; width: 72%; height: 48%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Phải">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 24%; width: 68%; height: 42%;"></div>
+                        
+                        <div id="musicPlayerWrapper" class="music-player-top-card rounded-2xl p-2 sm:p-2.5 flex items-center justify-between gap-2" 
+                             onclick="event.stopPropagation();" 
+                             onmousedown="event.stopPropagation();" 
+                             ontouchstart="event.stopPropagation();" 
+                             onpointerdown="event.stopPropagation();">
+                            <div class="flex items-center gap-2">
+                                <button id="songPlayToggleBtn" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center text-base sm:text-lg shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-transform shrink-0">
+                                    <span id="songPlayIcon">▶</span>
+                                </button>
+                                <div>
+                                    <h4 class="text-[11px] sm:text-xs font-bold text-rose-900 leading-tight">Giai Điệu Tri Ân</h4>
+                                    <span id="songStatusText" class="text-[9px] sm:text-[10px] font-semibold text-amber-800">Bấm nghe nhạc (music.mp3)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-end gap-1 h-5 sm:h-6 px-1 shrink-0">
+                                <div class="music-bar paused"></div>
+                                <div class="music-bar paused"></div>
+                                <div class="music-bar paused"></div>
+                                <div class="music-bar paused"></div>
+                                <div class="music-bar paused"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 14. CẶP 14 (14.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Trái">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 16%; width: 68%; height: 50%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Phải">
+                        <div class="teacher-frame-aura" style="left: 18%; top: 32%; width: 70%; height: 46%;"></div>
+                    </div>
+
+                    <!-- 15. CẶP 15 (15.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Trái">
+                        <div class="teacher-frame-aura" style="left: 16%; top: 24%; width: 72%; height: 48%;"></div>
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Phải">
+                        <div class="teacher-frame-aura" style="left: 20%; top: 28%; width: 68%; height: 50%;"></div>
+                    </div>
+
+                    <!-- 16. CẶP 16: TRANG KẾT THÚC CÙNG HIỆU ỨNG TRÁI TIM KẾT TỤ -->
+                    <div class="fb-page">
+                        <div class="finale-half-page">
+                            <div class="finale-border-left"></div>
+                            <div class="absolute top-2 left-2 text-rose-400/70 text-lg sm:text-2xl animate-pulse">🌸</div>
+                            <div class="absolute bottom-2 left-2 text-amber-500/70 text-lg sm:text-2xl animate-pulse">🌻</div>
+                            <div class="heartbeat-box z-20 px-1 sm:px-2">
+                                <span class="inline-block px-2.5 py-0.5 rounded-full bg-white/85 text-rose-700 text-[9px] sm:text-xs font-bold tracking-wider uppercase mb-1 shadow-sm">
+                                    Kỷ Niệm 20/11
+                                </span>
+                                <h2 class="font-calligraphy text-xl sm:text-4xl font-bold text-rose-700 mb-1 leading-tight">
+                                    Ngàn Lời Tri Ân<br>Gửi Thầy Cô
+                                </h2>
+                                <p class="font-serif-vn italic text-[11px] sm:text-sm text-rose-950/90 leading-relaxed">
+                                    "Cảm ơn thầy cô đã thắp sáng ước mơ,<br>
+                                    Nâng bước chúng em trên từng trang vở!"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fb-page">
+                        <div class="finale-half-page">
+                            <div class="finale-border-right"></div>
+                            <div class="absolute top-2 right-2 text-rose-400/70 text-lg sm:text-2xl animate-pulse">🌸</div>
+                            <div class="absolute bottom-2 right-2 text-amber-500/70 text-lg sm:text-2xl animate-pulse">🌻</div>
+                            <div class="heartbeat-box z-20 px-1 sm:px-2">
+                                <h3 class="font-calligraphy text-xl sm:text-4xl font-bold text-rose-700 mb-1">
+                                    Tập Thể Lớp 7A6
+                                </h3>
+                                <p class="text-[11px] sm:text-sm font-semibold text-amber-900/80 mb-2">
+                                    Trường THCS Tân Dương • Kính tặng!
+                                </p>
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2">
+                                    <button id="replayHeartBtn" class="btn-primary-rose px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer">
+                                        <span>💖</span>
+                                        <span>Kết lại trái tim</span>
+                                    </button>
+                                    <button id="backToStartBtn" class="btn-3d px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer">
+                                        <span>🔄</span>
+                                        <span>Đọc lại từ đầu</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer chuyển trang -->
+    <footer class="w-full max-w-4xl px-3 py-1 sm:py-1.5 flex flex-col items-center gap-1 z-30 shrink-0">
+        <div class="flex items-center justify-center gap-2 sm:gap-4 bg-white/85 backdrop-blur-md px-3 py-1 rounded-full shadow-lg border border-rose-200/80">
+            <button id="prevBtn" class="btn-3d px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" disabled>
+                <span>◀</span>
+                <span class="hidden sm:inline">Trang trước</span>
+            </button>
+
+            <div class="flex flex-col items-center min-w-[110px] sm:min-w-[160px]">
+                <span id="pageIndicator" class="text-xs sm:text-sm font-bold text-rose-800">
+                    Mặt 1 / 16 (Tr.1-2)
+                </span>
+                <span id="pageSubtitle" class="text-[9px] sm:text-xs font-medium text-amber-800 truncate max-w-[150px] sm:max-w-[220px]">
+                    Bìa Tri Ân Thầy Cô 20/11
+                </span>
+            </div>
+
+            <button id="nextBtn" class="btn-3d btn-primary-rose px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                <span class="hidden sm:inline">Trang sau</span>
+                <span>▶</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal tải nhanh ảnh -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-4 sm:p-5 shadow-2xl border border-rose-100 flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="font-calligraphy text-2xl font-bold text-rose-800">Cập Nhật Ảnh Báo Tường</h3>
+                <button id="closeUploadModalBtn" class="w-8 h-8 rounded-full bg-rose-50 text-rose-700 hover:bg-rose-100 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-gray-500 mb-2">
+                Chọn file ảnh từ máy tính để cập nhật trực tiếp:
+            </p>
+            <div id="uploadInputsList" class="space-y-2 overflow-y-auto pr-1 flex-1 text-xs"></div>
+            <div class="mt-3 flex justify-end">
+                <button id="doneUploadBtn" class="btn-primary-rose px-5 py-1.5 rounded-full text-xs font-bold">Hoàn tất</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =========================================================================
+         * 1. HỆ THỐNG ĐIỀU KHIỂN ZOOM & PAN ĐỘC LẬP (KHẮC PHỤC TRIỆT ĐỂ BỊ TRẢ VỀ CŨ)
+         * =========================================================================
+         */
+        const touchCatcher = document.getElementById('touchOverlayCatcher');
+        const zoomViewport = document.getElementById('zoomViewportWrapper');
+        const bookStageEl = document.getElementById('bookStage');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const zoomResetBtn = document.getElementById('zoomResetBtn');
+        const zoomPercentBadge = document.getElementById('zoomPercentBadge');
+
+        // Biến trạng thái cố định (State Lock)
+        let currentScale = 1.0;
+        let currentPanX = 0;
+        let currentPanY = 0;
+        const MIN_SCALE = 1.0;
+        const MAX_SCALE = 3.6;
+
+        // Cập nhật giao diện & Transform
+        function renderTransform(smooth = false) {
+            zoomViewport.style.transition = smooth ? 'transform 0.22s ease-out' : 'none';
+            zoomViewport.style.transform = `translate3d(${currentPanX}px, ${currentPanY}px, 0) scale(${currentScale})`;
+            zoomPercentBadge.textContent = `${Math.round(currentScale * 100)}%`;
+
+            if (currentScale > 1.05) {
+                bookStageEl.classList.add('is-zoomed');
+            } else {
+                bookStageEl.classList.remove('is-zoomed');
+                currentPanX = 0;
+                currentPanY = 0;
+            }
+        }
+
+        // Đặt mức zoom có chốt giá trị
+        function setZoomScale(targetScale, smooth = true) {
+            currentScale = Math.min(Math.max(targetScale, MIN_SCALE), MAX_SCALE);
+            if (currentScale <= 1.02) {
+                currentScale = 1.0;
+                currentPanX = 0;
+                currentPanY = 0;
+            }
+            renderTransform(smooth);
+        }
+
+        zoomInBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(currentScale + 0.4, true);
+        });
+
+        zoomOutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(currentScale - 0.4, true);
+        });
+
+        zoomResetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(1.0, true);
+        });
+
+        // Biến tạm tính toán trong lúc chạm
+        let initialPinchDist = 0;
+        let pinchStartScale = 1.0;
+        let panStartX = 0;
+        let panStartY = 0;
+        let isTouching = false;
+        let isPinchMode = false;
+        let lastTapStamp = 0;
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+
+        function getDistance(t1, t2) {
+            return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        }
+
+        // Bắt đầu chạm
+        touchCatcher.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Chặn hành vi mặc định của Safari / Chrome
+            const touches = e.touches;
+
+            if (touches.length === 2) {
+                // Hai ngón tay: Bắt đầu tính toán tỷ lệ Pinch
+                isPinchMode = true;
+                initialPinchDist = getDistance(touches[0], touches[1]);
+                pinchStartScale = currentScale;
+            } else if (touches.length === 1) {
+                isTouching = true;
+                isPinchMode = false;
+                panStartX = touches[0].clientX - currentPanX;
+                panStartY = touches[0].clientY - currentPanY;
+                swipeStartX = touches[0].clientX;
+                swipeStartY = touches[0].clientY;
+            }
+        }, { passive: false });
+
+        // Đang di chuyển ngón tay
+        touchCatcher.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touches = e.touches;
+
+            if (touches.length === 2 && isPinchMode && initialPinchDist > 0) {
+                const currentDist = getDistance(touches[0], touches[1]);
+                const ratio = currentDist / initialPinchDist;
+                // Cập nhật tỷ lệ thời gian thực
+                currentScale = Math.min(Math.max(pinchStartScale * ratio, MIN_SCALE), MAX_SCALE);
+                renderTransform(false);
+            } else if (touches.length === 1 && isTouching && currentScale > 1.05) {
+                // Đang phóng to -> Cho phép kéo di chuyển tự do khắp trang
+                currentPanX = touches[0].clientX - panStartX;
+                currentPanY = touches[0].clientY - panStartY;
+
+                // Giới hạn biên độ kéo an toàn
+                const maxPanX = (window.innerWidth * (currentScale - 1)) / 1.8;
+                const maxPanY = (window.innerHeight * (currentScale - 1)) / 1.8;
+                currentPanX = Math.min(Math.max(currentPanX, -maxPanX), maxPanX);
+                currentPanY = Math.min(Math.max(currentPanY, -maxPanY), maxPanY);
+
+                renderTransform(false);
+            }
+        }, { passive: false });
+
+        // Nhấc tay ra khỏi màn hình (COMMIT CHỐT GIÁ TRỊ)
+        touchCatcher.addEventListener('touchend', (e) => {
+            e.preventDefault();
+
+            if (e.touches.length < 2 && isPinchMode) {
+                isPinchMode = false;
+                initialPinchDist = 0;
+                // CHỐT CỨNG TỶ LỆ KHI NHẢ TAY: KHÔNG BỊ TRẢ LÙI VỀ 100%
+                if (currentScale < 1.05) {
+                    currentScale = 1.0;
+                    currentPanX = 0;
+                    currentPanY = 0;
+                }
+                renderTransform(true);
+            }
+
+            if (e.touches.length === 0) {
+                isTouching = false;
+            }
+
+            // Xử lý vuốt ngang lật trang khi ở mức 100%
+            if (currentScale <= 1.05 && e.changedTouches.length === 1 && !isPinchMode) {
+                const diffX = e.changedTouches[0].clientX - swipeStartX;
+                const diffY = e.changedTouches[0].clientY - swipeStartY;
+                if (Math.abs(diffX) > 55 && Math.abs(diffY) < 60) {
+                    if (diffX < 0 && pageFlip) pageFlip.flipNext('bottom');
+                    if (diffX > 0 && pageFlip) pageFlip.flipPrev('bottom');
+                }
+            }
+
+            // Chạm đúp (Double tap) để phóng to nhanh 2.2x hoặc trả về 100%
+            const now = Date.now();
+            if (now - lastTapStamp < 280 && e.changedTouches.length === 1 && !isPinchMode) {
+                if (currentScale > 1.15) {
+                    setZoomScale(1.0, true);
+                } else {
+                    setZoomScale(2.3, true);
+                }
+            }
+            lastTapStamp = now;
+        }, { passive: false });
+
+        /**
+         * =========================================================================
+         * 2. KHỞI TẠO STPAGEFLIP ĐÃ TẮT BẮT CHUỘT/CHẠM ĐỂ TRÁNH GIẬT TRANG
+         * =========================================================================
+         */
+        let pageFlip = null;
+        let currentSpread = 0;
+        const totalSpreads = 16;
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        const spreadTitles = [
+            "Mặt 1: Bìa Tri Ân Thầy Cô 20/11",
+            "Mặt 2: Cô Mai - Người truyền lửa 7A6",
+            "Mặt 3: Cô Giáo Văn - Gieo hạt yêu thương",
+            "Mặt 4: Cô Giáo Toán - Truyền cảm hứng",
+            "Mặt 5: Hoạt động học tập & rèn luyện",
+            "Mặt 6: Sáng tạo tuổi hoa 7A6",
+            "Mặt 7: Tình bạn dưới mái trường",
+            "Mặt 8: Tiết học hạnh phúc",
+            "Mặt 9: Nụ cười rạng rỡ tuổi thơ",
+            "Mặt 10: Vườn ươm tri thức",
+            "Mặt 11: Video Kỷ Niệm 7A6 (YouTube)",
+            "Mặt 12: Những kỷ niệm thân thương",
+            "Mặt 13: Giai điệu mến thương (music.mp3)",
+            "Mặt 14: Vững bước tương lai",
+            "Mặt 15: Mái trường mến yêu",
+            "Mặt 16: Lời kết - Trái tim tri ân"
+        ];
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const pageSubtitle = document.getElementById('pageSubtitle');
+        const flipbookContainer = document.getElementById('flipbookContainer');
+
+        function calculateExactBookDimensions() {
+            const stageRect = bookStageEl.getBoundingClientRect();
+            const availW = Math.max(300, stageRect.width - 12);
+            const availH = Math.max(200, stageRect.height - 10);
+
+            const targetRatio = 1.41; 
+            let bookH = availH;
+            let bookW = Math.floor(bookH * targetRatio);
+
+            if (bookW > availW) {
+                bookW = availW;
+                bookH = Math.floor(bookW / targetRatio);
+            }
+
+            bookW = Math.floor(bookW / 2) * 2;
+            bookH = Math.floor(bookH);
+
+            flipbookContainer.style.width = `${bookW}px`;
+            flipbookContainer.style.height = `${bookH}px`;
+
+            return {
+                singleWidth: bookW / 2,
+                singleHeight: bookH
+            };
+        }
+
+        function initFlipbook() {
+            const dims = calculateExactBookDimensions();
+
+            pageFlip = new St.PageFlip(flipbookContainer, {
+                width: dims.singleWidth,
+                height: dims.singleHeight,
+                size: "fixed",
+                drawShadow: true,
+                maxShadowOpacity: 0.35,
+                flippingTime: 800,
+                usePortrait: false,
+                startZIndex: 10,
+                autoSize: false,
+                showCover: false,
+                mobileScrollSupport: false,
+                swipeDistance: 50,
+                clickEventForward: true,
+                useMouseEvents: false // Vô hiệu hóa bắt chuột/tay của thư viện để triệt tiêu lỗi cuốn mép trang
+            });
+
+            pageFlip.loadFromHTML(document.querySelectorAll('.fb-page'));
+            flipbookContainer.classList.add('ready');
+
+            pageFlip.on('flip', (e) => {
+                const pageIndex = e.data;
+                currentSpread = Math.floor(pageIndex / 2);
+                playPageFlipSound();
+                updateUIState();
+                if (currentScale > 1.0) setZoomScale(1.0, true);
+            });
+
+            updateUIState();
+        }
+
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!pageFlip) return;
+                const savedPage = pageFlip.getCurrentPageIndex();
+                const dims = calculateExactBookDimensions();
+                pageFlip.update({
+                    width: dims.singleWidth,
+                    height: dims.singleHeight
+                });
+                pageFlip.turnToPage(savedPage);
+            }, 150);
+        });
+
+        function updateUIState() {
+            const leftNum = currentSpread * 2 + 1;
+            const rightNum = currentSpread * 2 + 2;
+            pageIndicator.textContent = `Mặt ${currentSpread + 1} / ${totalSpreads} (Tr.${leftNum}-${rightNum})`;
+            pageSubtitle.textContent = spreadTitles[currentSpread] || "";
+
+            prevBtn.disabled = currentSpread === 0;
+            nextBtn.disabled = currentSpread === totalSpreads - 1;
+
+            if (currentSpread === totalSpreads - 1) {
+                activateHeartFormation(true);
+                playHeartChimeSound();
+            } else {
+                activateHeartFormation(false);
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (pageFlip) pageFlip.flipNext('bottom');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (pageFlip) pageFlip.flipPrev('bottom');
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (!pageFlip) return;
+            if (e.key === 'ArrowRight') pageFlip.flipNext('bottom');
+            if (e.key === 'ArrowLeft') pageFlip.flipPrev('bottom');
+        });
+
+        document.getElementById('fullscreenBtn').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        });
+
+        document.getElementById('replayHeartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            scatterPetalsForReplay();
+            playHeartChimeSound();
+        });
+
+        document.getElementById('backToStartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (pageFlip) pageFlip.flip(0, 'top');
+        });
+
+        /**
+         * =========================================================================
+         * 3. ÂM THANH LẬT TRANG & PHÁT NHẠC MUSIC.MP3
+         * =========================================================================
+         */
+        function playPageFlipSound() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const duration = 0.38;
+                const bufferSize = audioCtx.sampleRate * duration;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    const envelope = Math.sin((i / bufferSize) * Math.PI);
+                    output[i] = (Math.random() * 2 - 1) * envelope * 0.42;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(950, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + duration * 0.6);
+                filter.Q.value = 1.2;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                whiteNoise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                whiteNoise.start();
+            } catch (e) {}
+        }
+
+        function playHeartChimeSound() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.12);
+                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime + idx * 0.12);
+                    gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + idx * 0.12 + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.12 + 1.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + idx * 0.12);
+                    osc.stop(audioCtx.currentTime + idx * 0.12 + 1.25);
+                });
+            } catch (e) {}
+        }
+
+        document.getElementById('toggleAudioBtn').addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            document.getElementById('audioIcon').textContent = soundEnabled ? '🔊' : '🔇';
+            showToast(soundEnabled ? 'Đã bật âm thanh lật trang' : 'Đã tắt âm thanh');
+        });
+
+        // Nhạc music.mp3
+        const bgSongAudio = document.getElementById('bgSongAudio');
+        const songPlayToggleBtn = document.getElementById('songPlayToggleBtn');
+        const songPlayIcon = document.getElementById('songPlayIcon');
+        const songStatusText = document.getElementById('songStatusText');
+        const musicBars = document.querySelectorAll('.music-bar');
+
+        const musicPlayerWrapper = document.getElementById('musicPlayerWrapper');
+        ['click', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'pointerdown'].forEach(evt => {
+            musicPlayerWrapper.addEventListener(evt, (e) => {
+                e.stopPropagation();
+            }, { passive: false });
+        });
+
+        songPlayToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (bgSongAudio.paused) {
+                bgSongAudio.play().then(() => {
+                    songPlayIcon.textContent = '⏸';
+                    songStatusText.textContent = 'Đang phát: Khúc ca 20/11';
+                    musicBars.forEach(b => b.classList.remove('paused'));
+                }).catch(() => {
+                    showToast('Vui lòng đặt file music.mp3 cùng thư mục!');
+                });
+            } else {
+                bgSongAudio.pause();
+                songPlayIcon.textContent = '▶';
+                songStatusText.textContent = 'Tạm dừng bài hát';
+                musicBars.forEach(b => b.classList.add('paused'));
+            }
+        });
+
+        bgSongAudio.addEventListener('ended', () => {
+            songPlayIcon.textContent = '▶';
+            songStatusText.textContent = 'Đã phát xong';
+            musicBars.forEach(b => b.classList.add('paused'));
+        });
+
+        /**
+         * =========================================================================
+         * 4. QUẢN LÝ TẢI ẢNH (MODAL)
+         * =========================================================================
+         */
+        function showToast(msg) {
+            const toast = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        const uploadModal = document.getElementById('uploadModal');
+        const uploadInputsList = document.getElementById('uploadInputsList');
+
+        for (let i = 1; i <= 15; i++) {
+            if (i === 11) continue;
+            const row = document.createElement('div');
+            row.className = "flex items-center justify-between bg-rose-50/70 p-1.5 rounded-lg border border-rose-100";
+            row.innerHTML = `
+                <span class="font-semibold text-rose-900">${i === 1 ? 'Ảnh Bìa 1.jpg' : `Ảnh ${i}.jpg`}:</span>
+                <input type="file" accept="image/*" data-sync="img-sync-${i}" class="file-input text-xs w-40 text-gray-600">
+            `;
+            uploadInputsList.appendChild(row);
+        }
+
+        document.getElementById('openUploadModalBtn').addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+            uploadModal.classList.add('flex');
+        });
+
+        function closeModal() {
+            uploadModal.classList.add('hidden');
+            uploadModal.classList.remove('flex');
+        }
+        document.getElementById('closeUploadModalBtn').addEventListener('click', closeModal);
+        document.getElementById('doneUploadBtn').addEventListener('click', closeModal);
+
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const syncClass = e.target.getAttribute('data-sync');
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    document.querySelectorAll('.' + syncClass).forEach(img => {
+                        img.src = ev.target.result;
+                    });
+                    showToast(`Đã nạp ${file.name} thành công!`);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function createPlaceholderSVG(title, subtitle) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850">
+                <defs>
+                    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#fff8f0"/>
+                        <stop offset="100%" stop-color="#ffe4e6"/>
+                    </linearGradient>
+                </defs>
+                <rect width="1200" height="850" fill="url(#bg)"/>
+                <rect x="30" y="30" width="1140" height="790" rx="24" fill="none" stroke="#be123c" stroke-width="4" stroke-dasharray="14 8"/>
+                <text x="600" y="380" font-family="sans-serif" font-size="40" font-weight="bold" fill="#9f1239" text-anchor="middle">${title}</text>
+                <text x="600" y="440" font-family="sans-serif" font-size="24" fill="#78350f" text-anchor="middle">${subtitle}</text>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
+        for (let i = 1; i <= 15; i++) {
+            if (i === 11) continue;
+            document.querySelectorAll(`.img-sync-${i}`).forEach(el => {
+                el.onerror = function() {
+                    this.onerror = null;
+                    this.src = createPlaceholderSVG(i === 1 ? 'Bìa Báo Tường Lớp 7A6' : `Ảnh Trang ${i}`, `Đặt file ${i}.jpg cùng thư mục hoặc tải lên`);
+                };
+            });
+        }
+
+        /**
+         * =========================================================================
+         * 5. HẠT HOA BAY & TRÁI TIM KẾT TỤ
+         * =========================================================================
+         */
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            if (isHeartMode) assignHeartTargets();
+        });
+
+        const pageFrameOrbits = {
+            0: [{ rx: 0.25, ry: 0.50, radX: 0.16, radY: 0.25 }, { rx: 0.75, ry: 0.50, radX: 0.18, radY: 0.28 }],
+            1: [{ rx: 0.35, ry: 0.55, radX: 0.14, radY: 0.26 }, { rx: 0.74, ry: 0.72, radX: 0.18, radY: 0.15 }],
+            2: [{ rx: 0.35, ry: 0.58, radX: 0.14, radY: 0.28 }, { rx: 0.75, ry: 0.45, radX: 0.16, radY: 0.22 }],
+            3: [{ rx: 0.23, ry: 0.37, radX: 0.16, radY: 0.32 }, { rx: 0.76, ry: 0.65, radX: 0.17, radY: 0.20 }],
+            4: [{ rx: 0.32, ry: 0.35, radX: 0.18, radY: 0.22 }, { rx: 0.72, ry: 0.68, radX: 0.17, radY: 0.21 }],
+            5: [{ rx: 0.34, ry: 0.40, radX: 0.17, radY: 0.24 }, { rx: 0.70, ry: 0.52, radX: 0.18, radY: 0.23 }],
+            6: [{ rx: 0.28, ry: 0.44, radX: 0.19, radY: 0.24 }, { rx: 0.74, ry: 0.50, radX: 0.18, radY: 0.25 }],
+            7: [{ rx: 0.33, ry: 0.42, radX: 0.17, radY: 0.26 }, { rx: 0.72, ry: 0.53, radX: 0.18, radY: 0.22 }],
+            8: [{ rx: 0.30, ry: 0.46, radX: 0.18, radY: 0.25 }, { rx: 0.74, ry: 0.56, radX: 0.17, radY: 0.21 }],
+            9: [{ rx: 0.32, ry: 0.42, radX: 0.18, radY: 0.24 }, { rx: 0.73, ry: 0.51, radX: 0.17, radY: 0.26 }],
+            10: [{ rx: 0.5, ry: 0.5, radX: 0.35, radY: 0.30 }], // YouTube Video NX7hQA1uyJg
+            11: [{ rx: 0.32, ry: 0.45, radX: 0.18, radY: 0.24 }, { rx: 0.72, ry: 0.52, radX: 0.19, radY: 0.22 }],
+            12: [{ rx: 0.30, ry: 0.44, radX: 0.18, radY: 0.24 }, { rx: 0.74, ry: 0.45, radX: 0.17, radY: 0.21 }],
+            13: [{ rx: 0.33, ry: 0.41, radX: 0.17, radY: 0.25 }, { rx: 0.72, ry: 0.55, radX: 0.18, radY: 0.23 }],
+            14: [{ rx: 0.31, ry: 0.48, radX: 0.18, radY: 0.24 }, { rx: 0.75, ry: 0.52, radX: 0.17, radY: 0.25 }],
+            15: []
+        };
+
+        const petalColors = [
+            { fill: '#ff4d6d', glow: 'rgba(255, 77, 109, 0.55)' },
+            { fill: '#ff758f', glow: 'rgba(255, 117, 143, 0.5)' },
+            { fill: '#ff8fa3', glow: 'rgba(255, 143, 163, 0.5)' },
+            { fill: '#e11d48', glow: 'rgba(225, 29, 72, 0.6)' },
+            { fill: '#fb7185', glow: 'rgba(251, 113, 133, 0.5)' },
+            { fill: '#fda4af', glow: 'rgba(253, 164, 175, 0.5)' },
+            { fill: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)' }
+        ];
+
+        const TOTAL_PETALS = 180;
+        const petals = [];
+        let isHeartMode = false;
+        let heartBeatPhase = 0;
+
+        class HeartPetal {
+            constructor(index) {
+                this.index = index;
+                this.isOrbiter = index < Math.floor(TOTAL_PETALS * 0.45);
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.x = Math.random() * width;
+                this.y = initial ? Math.random() * height : -20 - Math.random() * 100;
+                this.size = 6 + Math.random() * 8.5;
+                this.colorObj = petalColors[Math.floor(Math.random() * petalColors.length)];
+                this.vx = (Math.random() - 0.5) * 1.4;
+                this.vy = 0.7 + Math.random() * 1.3;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = (Math.random() - 0.5) * 0.05;
+                this.wobblePhase = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+
+                this.orbitAngle = (this.index / (TOTAL_PETALS * 0.45)) * Math.PI * 2 + Math.random() * 0.4;
+                this.orbitSpeed = (0.012 + Math.random() * 0.012) * (this.index % 2 === 0 ? 1 : -1);
+                this.orbitOffset = (Math.random() - 0.5) * 18;
+
+                this.targetX = width / 2;
+                this.targetY = height / 2;
+                this.heartAngle = 0;
+                this.heartScaleFactor = 1;
+            }
+
+            update() {
+                const rect = flipbookContainer.getBoundingClientRect();
+
+                if (isHeartMode) {
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const pulse = 1 + Math.sin(heartBeatPhase) * 0.045 + Math.sin(heartBeatPhase * 2) * 0.02;
+
+                    const t = this.heartAngle;
+                    const baseScale = Math.min(rect.width, rect.height) / 36.5;
+                    const s = baseScale * this.heartScaleFactor * pulse;
+
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+                    this.wobblePhase += 0.04;
+                    const flutterX = Math.cos(this.wobblePhase + this.index) * 2.2;
+                    const flutterY = Math.sin(this.wobblePhase + this.index) * 2.2;
+
+                    this.targetX = centerX + hx * s + flutterX;
+                    this.targetY = centerY + hy * s - (baseScale * 1.5) + flutterY;
+
+                    this.x += (this.targetX - this.x) * 0.055;
+                    this.y += (this.targetY - this.y) * 0.055;
+
+                    const desiredAngle = Math.sin(this.wobblePhase * 0.5) * 0.35;
+                    this.angle += (desiredAngle - this.angle) * 0.08;
+                    return;
+                }
+
+                this.wobblePhase += this.wobbleSpeed;
+                this.angle += this.spin;
+
+                const orbits = pageFrameOrbits[currentSpread] || [];
+                if (this.isOrbiter && orbits.length > 0) {
+                    const orbitCfg = orbits[this.index % orbits.length];
+                    const cx = rect.left + rect.width * orbitCfg.rx;
+                    const cy = rect.top + rect.height * orbitCfg.ry;
+                    const rx = rect.width * orbitCfg.radX + this.orbitOffset;
+                    const ry = rect.height * orbitCfg.radY + this.orbitOffset;
+
+                    this.orbitAngle += this.orbitSpeed;
+
+                    const destX = cx + Math.cos(this.orbitAngle) * rx + Math.sin(this.wobblePhase) * 6;
+                    const destY = cy + Math.sin(this.orbitAngle) * ry + Math.cos(this.wobblePhase) * 6;
+
+                    this.x += (destX - this.x) * 0.06;
+                    this.y += (destY - this.y) * 0.06;
+                } else {
+                    this.x += this.vx + Math.sin(this.wobblePhase) * 0.85;
+                    this.y += this.vy;
+
+                    if (this.y > height + 25) {
+                        this.y = -20;
+                        this.x = Math.random() * width;
+                    }
+                    if (this.x > width + 25) this.x = -20;
+                    if (this.x < -25) this.x = width + 20;
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                const flipScaleX = isHeartMode ? 1 : (0.75 + 0.25 * Math.sin(this.wobblePhase * 1.4));
+                ctx.scale(flipScaleX, 1);
+
+                const s = this.size;
+                ctx.fillStyle = this.colorObj.fill;
+
+                if (isHeartMode) {
+                    ctx.shadowColor = this.colorObj.glow;
+                    ctx.shadowBlur = 10;
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(0, s * 0.35);
+                ctx.bezierCurveTo(-s * 0.55, -s * 0.35, -s * 1.1, s * 0.25, 0, s * 1.05);
+                ctx.bezierCurveTo(s * 1.1, s * 0.25, s * 0.55, -s * 0.35, 0, s * 0.35);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+                ctx.beginPath();
+                ctx.arc(-s * 0.28, s * 0.22, s * 0.16, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < TOTAL_PETALS; i++) {
+            petals.push(new HeartPetal(i));
+        }
+
+        function assignHeartTargets() {
+            petals.forEach((p, idx) => {
+                const isInnerRing = idx % 3 === 0;
+                p.heartAngle = (idx / TOTAL_PETALS) * Math.PI * 2;
+                p.heartScaleFactor = isInnerRing ? (0.86 + Math.random() * 0.08) : (0.98 + Math.random() * 0.07);
+            });
+        }
+
+        function activateHeartFormation(enable) {
+            isHeartMode = enable;
+            if (enable) {
+                assignHeartTargets();
+            } else {
+                petals.forEach(p => {
+                    p.vx = (Math.random() - 0.5) * 3.5;
+                    p.vy = 0.6 + Math.random() * 1.6;
+                });
+            }
+        }
+
+        function scatterPetalsForReplay() {
+            isHeartMode = false;
+            const rect = flipbookContainer.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            petals.forEach(p => {
+                const randAngle = Math.random() * Math.PI * 2;
+                const dist = 120 + Math.random() * 280;
+                p.x = cx + Math.cos(randAngle) * dist;
+                p.y = cy + Math.sin(randAngle) * dist;
+                p.vx = Math.cos(randAngle) * 2.5;
+                p.vy = Math.sin(randAngle) * 2.5;
+            });
+
+            setTimeout(() => {
+                if (currentSpread === totalSpreads - 1) {
+                    activateHeartFormation(true);
+                }
+            }, 350);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            if (isHeartMode) heartBeatPhase += 0.055;
+
+            for (let i = 0; i < petals.length; i++) {
+                petals[i].update();
+                petals[i].draw(ctx);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initFlipbook();
+            animate();
+        });
+    </script>
+</body>
+</html>
