@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no">
+    <title>Báo Tường Điện Tử 20/11 - Tập Thể Lớp 7A6</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- StPageFlip -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+    <!-- Google Fonts thư pháp & tiếng Việt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --paper-bg: #fffcf7;
+            --gold-accent: #d97706;
+            --rose-accent: #e11d48;
+            --book-shadow: 0 30px 60px -12px rgba(92, 45, 22, 0.45), 0 15px 25px -5px rgba(92, 45, 22, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at 50% 35%, #fff8eb 0%, #fde6d8 45%, #f5d0c5 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            color: #4a2511;
+            user-select: none;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(225, 29, 72, 0.06) 1px, transparent 1px),
+                radial-gradient(rgba(217, 119, 6, 0.06) 1px, transparent 1px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .font-calligraphy { font-family: 'Dancing Script', cursive; }
+        .font-serif-vn { font-family: 'Playfair Display', serif; }
+
+        .book-stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            max-width: 100vw;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .is-zoomed {
+            cursor: grab;
+        }
+        .is-zoomed:active {
+            cursor: grabbing;
+        }
+
+        #zoomViewportWrapper {
+            position: relative;
+            transform-origin: center center;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-cover-base {
+            position: relative;
+            background: linear-gradient(135deg, #881337 0%, #be123c 50%, #9f1239 100%);
+            border-radius: 14px;
+            padding: 5px;
+            box-shadow: var(--book-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #flipbookContainer {
+            position: relative;
+            background-color: #fffdf9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stf__wrapper, .stf__parent, .stf__block {
+            overflow: hidden !important;
+            border-radius: 8px;
+        }
+
+        #flipbookContainer:not(.ready) .fb-page {
+            display: none;
+        }
+
+        .fb-page {
+            background-color: #fffdf9;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .fb-page.--left::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; width: 28px;
+            background: linear-gradient(to left, rgba(45, 15, 5, 0.18) 0%, rgba(65, 25, 10, 0.04) 50%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .fb-page.--right::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 28px;
+            background: linear-gradient(to right, rgba(45, 15, 5, 0.18) 0%, rgba(65, 25, 10, 0.04) 50%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .cover-intro-page {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 40%, #fffbf2 0%, #ffeedd 60%, #fed7aa 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 14px;
+            overflow: hidden;
+        }
+
+        .cover-intro-border {
+            position: absolute;
+            inset: 8px;
+            border: 2px dashed rgba(225, 29, 72, 0.45);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .cover-intro-border::after {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            border: 1px solid rgba(217, 119, 6, 0.35);
+            border-radius: 8px;
+        }
+
+        .single-page-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .half-spread-img {
+            position: absolute;
+            top: 0;
+            width: 200%;
+            max-width: none !important;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+            pointer-events: none;
+        }
+        .half-left .half-spread-img { left: 0; }
+        .half-right .half-spread-img { left: -100%; }
+
+        /* CỤM ĐIỀU KHIỂN NHẠC TRANG BỤI PHẤN - GÓC TRÊN PHẢI */
+        .bui-phan-top-stack {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            pointer-events: auto !important;
+            z-index: 60 !important;
+            touch-action: manipulation;
+        }
+
+        /* KHUNG PHÁT NHẠC BỤI PHẤN THU GỌN */
+        .music-player-top-card {
+            position: relative;
+            width: auto;
+            max-width: fit-content;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid #fb7185;
+            box-shadow: 0 4px 14px -2px rgba(225, 29, 72, 0.25);
+            border-radius: 9999px;
+            padding: 3px 8px;
+            pointer-events: auto !important;
+            touch-action: manipulation;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .music-player-top-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 16px -2px rgba(225, 29, 72, 0.35);
+        }
+
+        /* NÚT TẮT/BẬT NHẠC NỀN TRONG CÁC TRANG */
+        .bg-toggle-pill {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid #fb7185;
+            color: #9f1239;
+            pointer-events: auto !important;
+            touch-action: manipulation;
+        }
+        .bg-toggle-pill.is-muted {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .interactive-page-bar {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 60 !important;
+            touch-action: manipulation;
+        }
+
+        /* THANH NÚT ĐỌC LẠI Ở TRANG CUỐI (18.JPG) */
+        .finale-action-card {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: auto;
+            max-width: fit-content;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid #fda4af;
+            box-shadow: 0 4px 14px -2px rgba(225, 29, 72, 0.25);
+            border-radius: 9999px;
+            padding: 4px 6px;
+            pointer-events: auto !important;
+            z-index: 60 !important;
+            touch-action: manipulation;
+        }
+
+        .music-bar {
+            width: 3px;
+            height: 5px;
+            background: #e11d48;
+            border-radius: 99px;
+            animation: bounceBar 1.2s ease-in-out infinite alternate;
+        }
+        .music-bar:nth-child(2) { animation-delay: 0.2s; height: 11px; }
+        .music-bar:nth-child(3) { animation-delay: 0.4s; height: 15px; }
+        .music-bar:nth-child(4) { animation-delay: 0.15s; height: 8px; }
+
+        @keyframes bounceBar {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1.4); }
+        }
+
+        .music-bar.paused {
+            animation-play-state: paused;
+            transform: scaleY(0.3);
+        }
+
+        /* KHUNG VIDEO YOUTUBE */
+        .video-box-wrapper {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 60 !important;
+            touch-action: auto !important;
+        }
+        .video-box-wrapper iframe {
+            pointer-events: auto !important;
+        }
+
+        /* NÚT MŨI TÊN LẬT TRANG NỔI Ở LỀ TRÁI & PHẢI */
+        .side-nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 45;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 241, 242, 0.88) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(251, 113, 133, 0.65);
+            color: #be123c;
+            box-shadow: 0 10px 25px -5px rgba(159, 18, 57, 0.28), 0 0 0 4px rgba(255, 255, 255, 0.38);
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            touch-action: manipulation;
+        }
+
+        .side-nav-arrow::before {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            border-radius: 9999px;
+            border: 1px dashed rgba(217, 119, 6, 0.42);
+            pointer-events: none;
+            transition: transform 0.35s ease;
+        }
+
+        .side-nav-arrow.left-arrow {
+            left: 10px;
+        }
+
+        .side-nav-arrow.right-arrow {
+            right: 10px;
+        }
+
+        @media (min-width: 640px) {
+            .side-nav-arrow {
+                width: 54px;
+                height: 54px;
+            }
+            .side-nav-arrow.left-arrow { left: 20px; }
+            .side-nav-arrow.right-arrow { right: 20px; }
+        }
+
+        @media (min-width: 1024px) {
+            .side-nav-arrow {
+                width: 60px;
+                height: 60px;
+            }
+            .side-nav-arrow.left-arrow { left: 28px; }
+            .side-nav-arrow.right-arrow { right: 28px; }
+        }
+
+        .side-nav-arrow svg {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.25s ease;
+        }
+
+        @media (min-width: 640px) {
+            .side-nav-arrow svg {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        .side-nav-arrow:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: #ffffff;
+            border-color: #fda4af;
+            box-shadow: 0 14px 30px -5px rgba(225, 29, 72, 0.48), 0 0 0 5px rgba(254, 205, 211, 0.55);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .side-nav-arrow:hover:not(:disabled)::before {
+            border-color: rgba(254, 243, 199, 0.65);
+            transform: rotate(30deg);
+        }
+
+        .side-nav-arrow.left-arrow:hover:not(:disabled) svg {
+            transform: translateX(-2.5px);
+        }
+
+        .side-nav-arrow.right-arrow:hover:not(:disabled) svg {
+            transform: translateX(2.5px);
+        }
+
+        .side-nav-arrow:active:not(:disabled) {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .side-nav-arrow:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+        }
+
+        .btn-3d {
+            background: linear-gradient(180deg, #fff 0%, #fff1f2 100%);
+            border: 1.5px solid #fda4af;
+            color: #9f1239;
+            box-shadow: 0 4px 12px rgba(159, 18, 57, 0.14);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-3d:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.24);
+        }
+
+        .btn-3d:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn-primary-rose {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+        }
+
+        .btn-primary-rose:hover:not(:disabled) {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+        }
+
+        #toastBox {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 100;
+            transform: translateX(140%);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #toastBox.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Nút mũi tên lật trang nổi ở chính giữa lề trái và lề phải -->
+    <button id="sidePrevBtn" class="side-nav-arrow left-arrow" type="button" title="Lật về trang trước" aria-label="Trang trước" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+            <path d="M19 18l-6-6 6-6" opacity="0.45"/>
+        </svg>
+    </button>
+
+    <button id="sideNextBtn" class="side-nav-arrow right-arrow" type="button" title="Lật sang trang sau" aria-label="Trang sau">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+            <path d="M5 18l6-6-6-6" opacity="0.45"/>
+        </svg>
+    </button>
+
+    <!-- Nhạc nền xuyên suốt toàn trang web: camonthayco.mp3 -->
+    <audio id="bgThemeAudio" src="camonthayco.mp3" autoplay loop preload="auto"></audio>
+
+    <!-- Âm thanh bài hát Bụi Phấn ở trang 10: music.mp3 -->
+    <audio id="bgSongAudio" src="music.mp3" preload="auto"></audio>
+
+    <!-- Hộp Toast thông báo -->
+    <div id="toastBox" class="bg-white/95 backdrop-blur-md border border-rose-200 text-rose-900 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-sm font-semibold">
+        <span class="text-rose-500 text-lg">🌸</span>
+        <span id="toastMessage">Đã cập nhật trang báo tường!</span>
+    </div>
+
+    <!-- Header điều khiển & Thanh Zoom đồng bộ -->
+    <header class="w-full max-w-7xl px-3 sm:px-4 pt-2 pb-0.5 flex flex-wrap items-center justify-between gap-1.5 z-40 shrink-0">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md text-sm sm:text-base">
+                📖
+            </div>
+            <div>
+                <h1 class="font-calligraphy text-lg sm:text-2xl font-bold text-rose-800 leading-none">
+                    Tri Ân Thầy Cô 20/11
+                </h1>
+                <p class="text-[10px] sm:text-xs font-semibold text-amber-800/80">
+                    Báo tường điện tử • Lớp 7A6 – THCS Tân Dương
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1 sm:gap-1.5">
+            <!-- Cụm công cụ Zoom chuẩn & đồng bộ % -->
+            <div class="flex items-center bg-white/95 backdrop-blur-md border border-rose-300 rounded-full px-1.5 py-0.5 shadow-md">
+                <button id="zoomOutBtn" class="px-2 py-0.5 text-xs font-extrabold text-rose-700 hover:text-rose-900 active:scale-90" title="Thu nhỏ">🔍−</button>
+                <button id="zoomResetBtn" class="text-[10px] font-bold text-rose-900 px-1 hover:underline cursor-pointer" title="Bấm để đặt về 100%">
+                    <span id="zoomPercentBadge">100%</span>
+                </button>
+                <button id="zoomInBtn" class="px-2 py-0.5 text-xs font-extrabold text-rose-700 hover:text-rose-900 active:scale-90" title="Phóng to để đọc">🔍+</button>
+            </div>
+
+            <!-- Nút bật/tắt nhạc nền camonthayco.mp3 -->
+            <button id="bgMusicHeaderBtn" class="btn-3d px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Bật/tắt nhạc nền (camonthayco.mp3)">
+                <span id="bgMusicHeaderIcon">🎵</span>
+                <span id="bgMusicHeaderText" class="hidden sm:inline">Bật nhạc nền</span>
+            </button>
+
+            <button id="fullscreenBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Toàn màn hình">
+                <span>⛶</span>
+                <span class="hidden md:inline">Toàn màn hình</span>
+            </button>
+            <button id="toggleAudioBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Bật/tắt tiếng lật trang">
+                <span id="audioIcon">🔊</span>
+            </button>
+            <button id="openUploadModalBtn" class="btn-3d px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1" title="Tải ảnh">
+                <span>🖼️</span>
+                <span class="hidden sm:inline">Tải ảnh</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Khung chính sách lật Flipbook -->
+    <main class="book-stage" id="bookStage">
+        <!-- Khung Viewport phóng to & dịch chuyển -->
+        <div id="zoomViewportWrapper">
+            <div class="book-cover-base" id="bookCoverBase">
+                <div id="flipbookContainer">
+
+                    <!-- 1. MẶT 1 (NGUYÊN BẢN) -->
+                    <!-- Mặt trái trang 1 -->
+                    <div class="fb-page">
+                        <div class="cover-intro-page">
+                            <div class="cover-intro-border"></div>
+                            
+                            <div class="w-full text-center z-10 pt-1">
+                                <div class="flex items-center justify-center gap-1.5 mb-1">
+                                    <span class="text-amber-500 text-sm">✨</span>
+                                    <span class="uppercase tracking-wider text-[9px] sm:text-[11px] font-bold text-rose-700 bg-rose-100/90 px-2.5 py-0.5 rounded-full shadow-sm">
+                                        Chào mừng 20-11
+                                    </span>
+                                    <span class="text-amber-500 text-sm">✨</span>
+                                </div>
+                                <h2 class="font-calligraphy text-2xl sm:text-3xl font-extrabold text-rose-800 leading-tight">
+                                    Ngày Nhà Giáo Việt Nam
+                                </h2>
+                                <div class="flex items-center justify-center gap-2 mt-0.5">
+                                    <span class="h-[1px] w-8 bg-amber-400"></span>
+                                    <span class="text-[11px] text-rose-500 font-bold">❦ Tri Ân Người Lái Đò ❦</span>
+                                    <span class="h-[1px] w-8 bg-amber-400"></span>
+                                </div>
+                            </div>
+
+                            <div class="my-auto z-10 w-full flex flex-col items-center px-2">
+                                <div class="relative w-28 sm:w-36 h-24 sm:h-32 flex items-center justify-center">
+                                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                                        <circle cx="100" cy="100" r="76" fill="#fffbeb" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+                                        <path d="M40,135 Q100,118 100,148 Q100,118 160,135 L160,85 Q100,70 100,95 Q100,70 40,85 Z" fill="#ffe4e6" stroke="#e11d48" stroke-width="3"/>
+                                        <line x1="100" y1="95" x2="100" y2="148" stroke="#be123c" stroke-width="2.5"/>
+                                        <path d="M100,45 L106,75 L94,75 Z" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+                                        <polygon points="100,32 108,48 92,48" fill="#e11d48"/>
+                                        <path d="M60,158 Q100,175 140,158 Q125,180 75,180 Z" fill="#b45309"/>
+                                        <line x1="85" y1="140" x2="115" y2="175" stroke="#78350f" stroke-width="2"/>
+                                        <path d="M65,58 Q72,50 80,58 Q88,50 95,58" fill="none" stroke="#be123c" stroke-width="1.8"/>
+                                        <path d="M120,48 Q126,42 132,48 Q138,42 144,48" fill="none" stroke="#be123c" stroke-width="1.5"/>
+                                    </svg>
+                                </div>
+
+                                <div class="mt-1 text-center bg-white/80 backdrop-blur-sm p-2 sm:p-2.5 rounded-xl border border-rose-200/90 shadow-sm max-w-[95%]">
+                                    <p class="font-serif-vn italic text-[10px] sm:text-xs text-rose-950 leading-relaxed font-semibold">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="w-full text-center z-10 pb-0.5">
+                                <p class="font-calligraphy text-sm sm:text-base font-bold text-amber-900">
+                                    Chi Đội 7A6 • Kính Dâng Thầy Cô
+                                </p>
+                                <div class="flex items-center justify-center gap-1 text-[11px] text-rose-500 mt-0.5">
+                                    <span>🌸</span><span>🌻</span><span>💮</span><span>🌺</span><span>🌹</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mặt phải trang 1: 1.jpg -->
+                    <div class="fb-page">
+                        <img src="1.jpg" class="single-page-img img-sync-1" alt="Bìa báo tường - 1.jpg">
+                    </div>
+
+                    <!-- 2. CẶP 2 (2.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Phải">
+                    </div>
+
+                    <!-- 3. CẶP 3 (3.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Phải">
+                    </div>
+
+                    <!-- 4. CẶP 4 (4.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Phải">
+                    </div>
+
+                    <!-- 5. CẶP 5 (5.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Phải">
+                    </div>
+
+                    <!-- 6. CẶP 6 (6.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Phải">
+                    </div>
+
+                    <!-- 7. CẶP 7 (7.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Phải">
+                    </div>
+
+                    <!-- 8. CẶP 8 (8.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Phải">
+                    </div>
+
+                    <!-- 9. CẶP 9 (9.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Phải">
+                    </div>
+
+                    <!-- 10. CẶP 10 (10.jpg) CÓ NÚT PHÁT BỤI PHẤN & NÚT TẮT NHẠC NỀN -->
+                    <div class="fb-page half-left">
+                        <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Phải">
+
+                        <!-- Cụm nút âm nhạc Bụi Phấn & tắt nhạc nền ở góc trên phải -->
+                        <div id="buiPhanControlsWrapper" class="bui-phan-top-stack flex flex-col items-end gap-1.5">
+                            <!-- Nút phát bài Bụi Phấn -->
+                            <div id="musicPlayerWrapper" class="music-player-top-card flex items-center gap-1.5 cursor-pointer shadow-md" title="Bấm nghe nhạc Bụi Phấn / tạm dừng">
+                                <button id="songPlayToggleBtn" type="button" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center text-[10px] sm:text-xs shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-transform shrink-0">
+                                    <span id="songPlayIcon">▶</span>
+                                </button>
+                                <div class="flex flex-col leading-tight pr-0.5">
+                                    <h4 class="text-[10px] sm:text-[11px] font-bold text-rose-900 leading-none">Bụi Phấn</h4>
+                                    <span id="songStatusText" class="text-[8px] sm:text-[9px] font-medium text-amber-800">Phát nhạc</span>
+                                </div>
+                                
+                                <div class="flex items-end gap-0.5 h-3.5 sm:h-4 px-0.5 shrink-0">
+                                    <div class="music-bar paused"></div>
+                                    <div class="music-bar paused"></div>
+                                    <div class="music-bar paused"></div>
+                                    <div class="music-bar paused"></div>
+                                </div>
+                            </div>
+
+                            <!-- Nút tắt/bật nhạc nền (camonthayco.mp3) ngay tại trang Bụi Phấn -->
+                            <button id="buiPhanBgToggleBtn" type="button" class="bg-toggle-pill flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] sm:text-[11px] font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95" title="Tắt hoặc bật lại nhạc nền để nghe Bụi Phấn">
+                                <span class="bg-toggle-icon">🎵</span>
+                                <span class="bg-toggle-label">Bật nhạc nền</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 11. CẶP 11 (11.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="11.jpg" class="half-spread-img img-sync-11" alt="Trang 11 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="11.jpg" class="half-spread-img img-sync-11" alt="Trang 11 Phải">
+                    </div>
+
+                    <!-- 12. CẶP 12 (12.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Phải">
+                    </div>
+
+                    <!-- 13. CẶP 13 (13.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Phải">
+                    </div>
+
+                    <!-- 14. CẶP 14 (14.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Phải">
+                    </div>
+
+                    <!-- 15. CẶP 15 (15.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Phải">
+                    </div>
+
+                    <!-- 16. CẶP 16 (16.jpg) -->
+                    <div class="fb-page half-left">
+                        <img src="16.jpg" class="half-spread-img img-sync-16" alt="Trang 16 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="16.jpg" class="half-spread-img img-sync-16" alt="Trang 16 Phải">
+                    </div>
+
+                    <!-- 17. CẶP 17: NHÚNG VIDEO YOUTUBE + NÚT TẮT NHẠC NỀN -->
+                    <div class="fb-page">
+                        <div class="w-full h-full p-3 sm:p-4 flex flex-col justify-center items-center bg-gradient-to-br from-rose-50 via-white to-amber-50">
+                            <div class="w-full max-w-[96%] border-2 border-rose-200/80 rounded-2xl p-2.5 shadow-md bg-white/95">
+                                <div class="flex items-center gap-1.5 mb-1.5">
+                                    <span class="text-rose-600 text-lg">▶</span>
+                                    <h3 class="font-calligraphy text-lg sm:text-xl font-bold text-rose-800">Thước Phim Kỷ Niệm 7A6</h3>
+                                </div>
+                                <div id="videoContainer" class="video-box-wrapper relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
+                                    <iframe id="youtubePlayer" class="w-full h-full" 
+                                            src="https://www.youtube.com/embed/NX7hQA1uyJg?enablejsapi=1&rel=0" 
+                                            title="YouTube video player" frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                            allowfullscreen></iframe>
+                                </div>
+                                <div id="movieBgMusicBar" class="interactive-page-bar mt-2 flex flex-col sm:flex-row items-center justify-between gap-1.5">
+                                    <p class="text-[10px] text-gray-500 text-center sm:text-left italic">
+                                        Nhấn vào video để thưởng thức kỷ niệm 7A6
+                                    </p>
+                                    <button id="movieBgToggleBtn" type="button" class="bg-toggle-pill flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-sm cursor-pointer transition-all hover:scale-105 active:scale-95 shrink-0" title="Tắt hoặc bật lại nhạc nền để tập trung xem Movie">
+                                        <span class="bg-toggle-icon">🎵</span>
+                                        <span class="bg-toggle-label">Bật nhạc nền</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fb-page">
+                        <div class="w-full h-full p-4 sm:p-6 flex flex-col justify-center items-center bg-gradient-to-bl from-rose-50 via-pink-50/40 to-white text-center">
+                            <span class="text-3xl sm:text-4xl mb-2 sm:mb-3">🎬✨🎞️</span>
+                            <h3 class="font-calligraphy text-xl sm:text-3xl font-bold text-rose-700 mb-1.5">Ký Ức Đẹp Tuổi Học Trò</h3>
+                            <p class="font-serif-vn italic text-[11px] sm:text-sm text-gray-700 leading-relaxed max-w-xs mb-3">
+                                "Mỗi khoảnh khắc dưới mái trường Tân Dương đều là những hạt ngọc lấp lánh lưu giữ trong tim mỗi học sinh 7A6."
+                            </p>
+                            <div class="p-2.5 bg-rose-100/70 border border-rose-300 rounded-2xl text-[11px] sm:text-xs text-rose-900 font-semibold shadow-sm">
+                                🎉 Kính chúc quý thầy cô luôn mạnh khỏe và hạnh phúc!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 18. CẶP 18 (18.jpg) - TRANG KẾT THÚC -->
+                    <div class="fb-page half-left">
+                        <img src="18.jpg" class="half-spread-img img-sync-18" alt="Trang 18 Trái">
+                    </div>
+                    <div class="fb-page half-right">
+                        <img src="18.jpg" class="half-spread-img img-sync-18" alt="Trang 18 Phải">
+
+                        <!-- Thanh nút đọc lại đặt gọn ở góc dưới phải -->
+                        <div id="finaleActionBar" class="finale-action-card flex items-center gap-1.5">
+                            <button id="backToStartBtn" type="button" class="btn-3d px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer">
+                                <span>🔄</span>
+                                <span>Đọc lại từ đầu</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer chuyển trang -->
+    <footer class="w-full max-w-4xl px-3 py-1 sm:py-1.5 flex flex-col items-center gap-1 z-40 shrink-0">
+        <div class="flex items-center justify-center gap-2 sm:gap-4 bg-white/85 backdrop-blur-md px-3 py-1 rounded-full shadow-lg border border-rose-200/80">
+            <button id="prevBtn" class="btn-3d px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" disabled>
+                <span>◀</span>
+                <span class="hidden sm:inline">Trang trước</span>
+            </button>
+
+            <div class="flex flex-col items-center min-w-[110px] sm:min-w-[160px]">
+                <span id="pageIndicator" class="text-xs sm:text-sm font-bold text-rose-800">
+                    Mặt 1 / 18 (Tr.1-2)
+                </span>
+                <span id="pageSubtitle" class="text-[9px] sm:text-xs font-medium text-amber-800 truncate max-w-[150px] sm:max-w-[220px]">
+                    Bìa Tri Ân Thầy Cô 20/11
+                </span>
+            </div>
+
+            <button id="nextBtn" class="btn-3d btn-primary-rose px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                <span class="hidden sm:inline">Trang sau</span>
+                <span>▶</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal tải nhanh ảnh -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-4 sm:p-5 shadow-2xl border border-rose-100 flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="font-calligraphy text-2xl font-bold text-rose-800">Cập Nhật Ảnh Báo Tường</h3>
+                <button id="closeUploadModalBtn" class="w-8 h-8 rounded-full bg-rose-50 text-rose-700 hover:bg-rose-100 flex items-center justify-center font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-gray-500 mb-2">
+                Chọn file ảnh từ thiết bị để xem trước trực tiếp:
+            </p>
+            <div id="uploadInputsList" class="space-y-2 overflow-y-auto pr-1 flex-1 text-xs"></div>
+            <div class="mt-3 flex justify-end">
+                <button id="doneUploadBtn" class="btn-primary-rose px-5 py-1.5 rounded-full text-xs font-bold">Hoàn tất</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =========================================================================
+         * 1. HỆ THỐNG ĐIỀU KHIỂN CẢM ỨNG ZOOM & PAN
+         * =========================================================================
+         */
+        const bookStageEl = document.getElementById('bookStage');
+        const zoomViewport = document.getElementById('zoomViewportWrapper');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const zoomResetBtn = document.getElementById('zoomResetBtn');
+        const zoomPercentBadge = document.getElementById('zoomPercentBadge');
+
+        let currentScale = 1.0;
+        let currentPanX = 0;
+        let currentPanY = 0;
+        const MIN_SCALE = 1.0;
+        const MAX_SCALE = 3.6;
+
+        function clampPanCoordinates() {
+            if (currentScale <= 1.05) {
+                currentPanX = 0;
+                currentPanY = 0;
+                return;
+            }
+            const maxPanX = (window.innerWidth * (currentScale - 1)) / 1.8;
+            const maxPanY = (window.innerHeight * (currentScale - 1)) / 1.8;
+            currentPanX = Math.min(Math.max(currentPanX, -maxPanX), maxPanX);
+            currentPanY = Math.min(Math.max(currentPanY, -maxPanY), maxPanY);
+        }
+
+        function renderTransform(smooth = false) {
+            zoomViewport.style.transition = smooth ? 'transform 0.24s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+            zoomViewport.style.transform = `translate3d(${currentPanX}px, ${currentPanY}px, 0) scale(${currentScale})`;
+            zoomPercentBadge.textContent = `${Math.round(currentScale * 100)}%`;
+
+            if (currentScale > 1.05) {
+                bookStageEl.classList.add('is-zoomed');
+            } else {
+                bookStageEl.classList.remove('is-zoomed');
+            }
+        }
+
+        function setZoomScale(targetScale, smooth = true) {
+            currentScale = Math.min(Math.max(targetScale, MIN_SCALE), MAX_SCALE);
+            if (currentScale <= 1.05) {
+                currentScale = 1.0;
+                currentPanX = 0;
+                currentPanY = 0;
+            } else {
+                clampPanCoordinates();
+            }
+            renderTransform(smooth);
+        }
+
+        zoomInBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(currentScale + 0.35, true);
+        });
+
+        zoomOutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(currentScale - 0.35, true);
+        });
+
+        zoomResetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setZoomScale(1.0, true);
+        });
+
+        const GESTURE_NONE = 0;
+        const GESTURE_PAN = 1;
+        const GESTURE_PINCH = 2;
+        let gestureState = GESTURE_NONE;
+
+        let initialPinchDist = 0;
+        let pinchStartScale = 1.0;
+        let panStartX = 0;
+        let panStartY = 0;
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+        let lastTapStamp = 0;
+        let pinchCooldownUntil = 0;
+        let isTouchingInteractive = false;
+
+        function getDistance(t1, t2) {
+            return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        }
+
+        bookStageEl.addEventListener('touchstart', (e) => {
+            const target = e.target;
+            
+            if (target.closest('#buiPhanControlsWrapper, #musicPlayerWrapper, #movieBgMusicBar, #finaleActionBar, #videoContainer, #youtubePlayer, button, a, input, select')) {
+                isTouchingInteractive = true;
+                gestureState = GESTURE_NONE;
+                return;
+            }
+            isTouchingInteractive = false;
+
+            const touches = e.touches;
+            if (touches.length >= 2) {
+                e.preventDefault();
+                gestureState = GESTURE_PINCH;
+                initialPinchDist = getDistance(touches[0], touches[1]);
+                pinchStartScale = currentScale;
+            } else if (touches.length === 1) {
+                if (Date.now() < pinchCooldownUntil) return;
+                
+                gestureState = GESTURE_PAN;
+                panStartX = touches[0].clientX - currentPanX;
+                panStartY = touches[0].clientY - currentPanY;
+                swipeStartX = touches[0].clientX;
+                swipeStartY = touches[0].clientY;
+
+                if (currentScale > 1.05) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+
+        bookStageEl.addEventListener('touchmove', (e) => {
+            if (isTouchingInteractive) return;
+
+            const touches = e.touches;
+            if (touches.length >= 2 && gestureState === GESTURE_PINCH && initialPinchDist > 0) {
+                e.preventDefault();
+                const currentDist = getDistance(touches[0], touches[1]);
+                const ratio = currentDist / initialPinchDist;
+                currentScale = Math.min(Math.max(pinchStartScale * ratio, MIN_SCALE), MAX_SCALE);
+                renderTransform(false);
+            } else if (touches.length === 1 && gestureState === GESTURE_PAN && currentScale > 1.05) {
+                e.preventDefault();
+                currentPanX = touches[0].clientX - panStartX;
+                currentPanY = touches[0].clientY - panStartY;
+                clampPanCoordinates();
+                renderTransform(false);
+            }
+        }, { passive: false });
+
+        bookStageEl.addEventListener('touchend', (e) => {
+            if (isTouchingInteractive) {
+                isTouchingInteractive = false;
+                gestureState = GESTURE_NONE;
+                return;
+            }
+
+            if (gestureState === GESTURE_PINCH) {
+                gestureState = GESTURE_NONE;
+                pinchCooldownUntil = Date.now() + 400;
+
+                if (currentScale < 1.1) {
+                    currentScale = 1.0;
+                    currentPanX = 0;
+                    currentPanY = 0;
+                } else {
+                    clampPanCoordinates();
+                }
+                renderTransform(true);
+                return;
+            }
+
+            if (e.touches.length === 0) {
+                const now = Date.now();
+                if (now < pinchCooldownUntil) {
+                    gestureState = GESTURE_NONE;
+                    return;
+                }
+
+                if (currentScale <= 1.05 && gestureState === GESTURE_PAN && e.changedTouches.length === 1) {
+                    const diffX = e.changedTouches[0].clientX - swipeStartX;
+                    const diffY = e.changedTouches[0].clientY - swipeStartY;
+                    if (Math.abs(diffX) > 55 && Math.abs(diffY) < 60) {
+                        if (diffX < 0 && pageFlip) pageFlip.flipNext('bottom');
+                        if (diffX > 0 && pageFlip) pageFlip.flipPrev('bottom');
+                    }
+                }
+
+                if (e.changedTouches.length === 1 && (now - lastTapStamp < 280)) {
+                    if (currentScale > 1.15) {
+                        setZoomScale(1.0, true);
+                    } else {
+                        setZoomScale(2.2, true);
+                    }
+                }
+                lastTapStamp = now;
+                gestureState = GESTURE_NONE;
+            }
+        }, { passive: false });
+
+        /**
+         * =========================================================================
+         * 2. KHỞI TẠO STPAGEFLIP (TỔNG 18 MẶT SÁCH)
+         * =========================================================================
+         */
+        let pageFlip = null;
+        let currentSpread = 0;
+        const totalSpreads = 18;
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        const spreadTitles = [
+            "Mặt 1: Bìa Tri Ân Thầy Cô 20/11",
+            "Mặt 2: Cô Mai - Người truyền lửa 7A6",
+            "Mặt 3: Cô Giáo Văn - Gieo hạt yêu thương",
+            "Mặt 4: Cô Giáo Toán - Truyền cảm hứng",
+            "Mặt 5: Hoạt động học tập & rèn luyện",
+            "Mặt 6: Sáng tạo tuổi hoa 7A6",
+            "Mặt 7: Tình bạn dưới mái trường",
+            "Mặt 8: Tiết học hạnh phúc",
+            "Mặt 9: Nụ cười rạng rỡ tuổi thơ",
+            "Mặt 10: Giai điệu mến thương (music.mp3)",
+            "Mặt 11: Vườn ươm tri thức",
+            "Mặt 12: Những kỷ niệm thân thương",
+            "Mặt 13: Khoảnh khắc đáng nhớ",
+            "Mặt 14: Vững bước tương lai",
+            "Mặt 15: Mái trường mến yêu",
+            "Mặt 16: Tự hào trang sách tuổi thơ",
+            "Mặt 17: Video Kỷ Niệm 7A6 (YouTube)",
+            "Mặt 18: Lưu bút tuổi học trò & Lời tri ân"
+        ];
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const sidePrevBtn = document.getElementById('sidePrevBtn');
+        const sideNextBtn = document.getElementById('sideNextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const pageSubtitle = document.getElementById('pageSubtitle');
+        const flipbookContainer = document.getElementById('flipbookContainer');
+
+        function calculateExactBookDimensions() {
+            const stageRect = bookStageEl.getBoundingClientRect();
+            const availW = Math.max(300, stageRect.width - 12);
+            const availH = Math.max(200, stageRect.height - 10);
+
+            const targetRatio = 1.41; 
+            let bookH = availH;
+            let bookW = Math.floor(bookH * targetRatio);
+
+            if (bookW > availW) {
+                bookW = availW;
+                bookH = Math.floor(bookW / targetRatio);
+            }
+
+            bookW = Math.floor(bookW / 2) * 2;
+            bookH = Math.floor(bookH);
+
+            flipbookContainer.style.width = `${bookW}px`;
+            flipbookContainer.style.height = `${bookH}px`;
+
+            return {
+                singleWidth: bookW / 2,
+                singleHeight: bookH
+            };
+        }
+
+        function initFlipbook() {
+            const dims = calculateExactBookDimensions();
+
+            pageFlip = new St.PageFlip(flipbookContainer, {
+                width: dims.singleWidth,
+                height: dims.singleHeight,
+                size: "fixed",
+                drawShadow: true,
+                maxShadowOpacity: 0.35,
+                flippingTime: 800,
+                usePortrait: false,
+                startZIndex: 10,
+                autoSize: false,
+                showCover: false,
+                mobileScrollSupport: false,
+                swipeDistance: 50,
+                clickEventForward: false,
+                useMouseEvents: false,
+                disableFlipByClick: true,
+                showPageCorners: false
+            });
+
+            pageFlip.loadFromHTML(document.querySelectorAll('.fb-page'));
+            flipbookContainer.classList.add('ready');
+
+            pageFlip.on('flip', (e) => {
+                const pageIndex = e.data;
+                currentSpread = Math.floor(pageIndex / 2);
+                playPageFlipSound();
+                updateUIState();
+                if (currentScale > 1.0) setZoomScale(1.0, true);
+            });
+
+            updateUIState();
+        }
+
+        let resizeTimer = null;
+        let lastWinW = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (currentScale > 1.05 && Math.abs(window.innerWidth - lastWinW) < 50) return;
+            lastWinW = window.innerWidth;
+
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!pageFlip) return;
+                const savedPage = pageFlip.getCurrentPageIndex();
+                const dims = calculateExactBookDimensions();
+                pageFlip.update({
+                    width: dims.singleWidth,
+                    height: dims.singleHeight
+                });
+                pageFlip.turnToPage(savedPage);
+            }, 150);
+        });
+
+        function updateUIState() {
+            const leftNum = currentSpread * 2 + 1;
+            const rightNum = currentSpread * 2 + 2;
+            pageIndicator.textContent = `Mặt ${currentSpread + 1} / ${totalSpreads} (Tr.${leftNum}-${rightNum})`;
+            pageSubtitle.textContent = spreadTitles[currentSpread] || "";
+
+            const isFirst = currentSpread === 0;
+            const isLast = currentSpread === totalSpreads - 1;
+
+            prevBtn.disabled = isFirst;
+            nextBtn.disabled = isLast;
+            sidePrevBtn.disabled = isFirst;
+            sideNextBtn.disabled = isLast;
+        }
+
+        function goToNextPage(e) {
+            if (e) e.stopPropagation();
+            if (pageFlip) pageFlip.flipNext('bottom');
+        }
+
+        function goToPrevPage(e) {
+            if (e) e.stopPropagation();
+            if (pageFlip) pageFlip.flipPrev('bottom');
+        }
+
+        nextBtn.addEventListener('click', goToNextPage);
+        prevBtn.addEventListener('click', goToPrevPage);
+        sideNextBtn.addEventListener('click', goToNextPage);
+        sidePrevBtn.addEventListener('click', goToPrevPage);
+
+        window.addEventListener('keydown', (e) => {
+            if (!pageFlip) return;
+            if (e.key === 'ArrowRight') pageFlip.flipNext('bottom');
+            if (e.key === 'ArrowLeft') pageFlip.flipPrev('bottom');
+        });
+
+        document.getElementById('fullscreenBtn').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        });
+
+        const finaleActionBar = document.getElementById('finaleActionBar');
+        ['touchstart', 'touchend', 'mousedown', 'mouseup', 'pointerdown'].forEach(evt => {
+            finaleActionBar.addEventListener(evt, (e) => {
+                e.stopPropagation();
+            }, { passive: false });
+        });
+
+        document.getElementById('backToStartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (pageFlip) pageFlip.flip(0, 'top');
+        });
+
+        /**
+         * =========================================================================
+         * 3. ÂM THANH LẬT TRANG, NHẠC NỀN TỰ ĐỘNG (CAMONTHAYCO.MP3) & BỤI PHẤN (MUSIC.MP3)
+         * =========================================================================
+         */
+        function playPageFlipSound() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const duration = 0.38;
+                const bufferSize = audioCtx.sampleRate * duration;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    const envelope = Math.sin((i / bufferSize) * Math.PI);
+                    output[i] = (Math.random() * 2 - 1) * envelope * 0.42;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(950, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + duration * 0.6);
+                filter.Q.value = 1.2;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                whiteNoise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                whiteNoise.start();
+            } catch (e) {}
+        }
+
+        document.getElementById('toggleAudioBtn').addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            document.getElementById('audioIcon').textContent = soundEnabled ? '🔊' : '🔇';
+            showToast(soundEnabled ? 'Đã bật tiếng lật trang' : 'Đã tắt tiếng lật trang');
+        });
+
+        // --- HỆ THỐNG NHẠC NỀN TỰ ĐỘNG: camonthayco.mp3 ---
+        const bgThemeAudio = document.getElementById('bgThemeAudio');
+        bgThemeAudio.volume = 0.55;
+
+        const bgMusicHeaderBtn = document.getElementById('bgMusicHeaderBtn');
+        const bgMusicHeaderIcon = document.getElementById('bgMusicHeaderIcon');
+        const bgMusicHeaderText = document.getElementById('bgMusicHeaderText');
+
+        const buiPhanControlsWrapper = document.getElementById('buiPhanControlsWrapper');
+        const buiPhanBgToggleBtn = document.getElementById('buiPhanBgToggleBtn');
+        const movieBgMusicBar = document.getElementById('movieBgMusicBar');
+        const movieBgToggleBtn = document.getElementById('movieBgToggleBtn');
+
+        let isBgMusicPlaying = !bgThemeAudio.paused;
+        let userExplicitlyMutedBg = false;
+        let isStartingBgMusic = false;
+        let autoplayHintShown = false;
+
+        function syncBgMusicUI() {
+            if (isBgMusicPlaying) {
+                bgMusicHeaderIcon.textContent = '🎶';
+                bgMusicHeaderText.textContent = 'Tắt nhạc nền';
+                bgMusicHeaderBtn.classList.add('btn-primary-rose');
+                bgMusicHeaderBtn.classList.remove('btn-3d');
+            } else {
+                bgMusicHeaderIcon.textContent = '🎵';
+                bgMusicHeaderText.textContent = 'Bật nhạc nền';
+                bgMusicHeaderBtn.classList.remove('btn-primary-rose');
+                bgMusicHeaderBtn.classList.add('btn-3d');
+            }
+
+            [buiPhanBgToggleBtn, movieBgToggleBtn].forEach(btn => {
+                if (!btn) return;
+                const iconEl = btn.querySelector('.bg-toggle-icon');
+                const labelEl = btn.querySelector('.bg-toggle-label');
+                if (isBgMusicPlaying) {
+                    iconEl.textContent = '🔇';
+                    labelEl.textContent = 'Tắt nhạc nền';
+                    btn.classList.remove('is-muted');
+                } else {
+                    iconEl.textContent = '🎵';
+                    labelEl.textContent = 'Bật nhạc nền';
+                    btn.classList.add('is-muted');
+                }
+            });
+        }
+
+        bgThemeAudio.addEventListener('play', () => {
+            isBgMusicPlaying = true;
+            syncBgMusicUI();
+            removeFirstGestureListeners();
+        });
+
+        bgThemeAudio.addEventListener('pause', () => {
+            isBgMusicPlaying = false;
+            syncBgMusicUI();
+        });
+
+        function startBgMusic(showErrorToast = false) {
+            if (userExplicitlyMutedBg || isStartingBgMusic) return;
+            if (!bgThemeAudio.paused) {
+                isBgMusicPlaying = true;
+                syncBgMusicUI();
+                removeFirstGestureListeners();
+                return;
+            }
+
+            isStartingBgMusic = true;
+            const playPromise = bgThemeAudio.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.then(() => {
+                    isStartingBgMusic = false;
+                    isBgMusicPlaying = true;
+                    syncBgMusicUI();
+                    removeFirstGestureListeners();
+                }).catch((err) => {
+                    isStartingBgMusic = false;
+                    isBgMusicPlaying = false;
+                    syncBgMusicUI();
+                    if (err && err.name === 'NotAllowedError') {
+                        if (!autoplayHintShown) {
+                            autoplayHintShown = true;
+                            showToast('Chạm vào trang hoặc bấm nút để tự động bật nhạc nền 🎵');
+                        }
+                    } else if (showErrorToast) {
+                        showToast('Vui lòng kiểm tra file camonthayco.mp3 cùng thư mục!');
+                    }
+                });
+            } else {
+                isStartingBgMusic = false;
+            }
+        }
+
+        function pauseBgMusicByUser(silent = false) {
+            bgThemeAudio.pause();
+            isBgMusicPlaying = false;
+            userExplicitlyMutedBg = true;
+            syncBgMusicUI();
+            if (!silent) showToast('Đã tắt nhạc nền');
+        }
+
+        let lastBgToggleStamp = 0;
+        function toggleBgMusic(e) {
+            if (e) e.stopPropagation();
+            const now = Date.now();
+            if (now - lastBgToggleStamp < 300) return;
+            lastBgToggleStamp = now;
+
+            if (!bgThemeAudio.paused) {
+                pauseBgMusicByUser(false);
+            } else {
+                userExplicitlyMutedBg = false;
+                // Nếu Bụi Phấn đang phát thì tạm dừng Bụi Phấn để không bị chồng nhạc
+                if (!bgSongAudio.paused) {
+                    bgSongAudio.pause();
+                    songPlayIcon.textContent = '▶';
+                    songStatusText.textContent = 'Tạm dừng';
+                    musicBars.forEach(b => b.classList.add('paused'));
+                }
+                bgThemeAudio.play().then(() => {
+                    isBgMusicPlaying = true;
+                    syncBgMusicUI();
+                    removeFirstGestureListeners();
+                    showToast('Đang phát nhạc nền: Cảm ơn thầy cô');
+                }).catch(() => {
+                    showToast('Vui lòng kiểm tra file camonthayco.mp3 cùng thư mục!');
+                });
+            }
+        }
+
+        bgMusicHeaderBtn.addEventListener('click', toggleBgMusic);
+        buiPhanBgToggleBtn.addEventListener('click', toggleBgMusic);
+        movieBgToggleBtn.addEventListener('click', toggleBgMusic);
+
+        // Chặn xung đột sự kiện lật trang / zoom khi bấm nút trong trang sách
+        [buiPhanControlsWrapper, movieBgMusicBar].forEach(el => {
+            if (!el) return;
+            ['touchstart', 'touchend', 'mousedown', 'mouseup', 'pointerdown'].forEach(evt => {
+                el.addEventListener(evt, (e) => {
+                    e.stopPropagation();
+                }, { passive: false });
+            });
+        });
+
+        // Bắt sự kiện ở pha CAPTURE trên window để mọi thao tác đầu tiên (kể cả bấm nút Next/Prev có stopPropagation) đều kích hoạt nhạc nền tự động
+        function unlockBgMusicOnFirstGesture(e) {
+            if (userExplicitlyMutedBg || isBgMusicPlaying || !bgSongAudio.paused) return;
+            if (e.target && e.target.closest('#bgMusicHeaderBtn, #buiPhanBgToggleBtn, #movieBgToggleBtn, #songPlayToggleBtn')) return;
+            startBgMusic(false);
+        }
+
+        function removeFirstGestureListeners() {
+            window.removeEventListener('click', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('touchend', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('mouseup', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('keydown', unlockBgMusicOnFirstGesture, true);
+        }
+
+        window.addEventListener('click', unlockBgMusicOnFirstGesture, { capture: true });
+        window.addEventListener('touchend', unlockBgMusicOnFirstGesture, { capture: true, passive: true });
+        window.addEventListener('mouseup', unlockBgMusicOnFirstGesture, { capture: true });
+        window.addEventListener('keydown', unlockBgMusicOnFirstGesture, { capture: true });
+
+        // Thử kích hoạt tự động khi file audio sẵn sàng
+        bgThemeAudio.addEventListener('canplay', () => {
+            if (!userExplicitlyMutedBg && bgThemeAudio.paused && bgSongAudio.paused) {
+                startBgMusic(false);
+            }
+        });
+
+        // --- NHẠC BỤI PHẤN: music.mp3 (Trang 10) ---
+        const bgSongAudio = document.getElementById('bgSongAudio');
+        const songPlayToggleBtn = document.getElementById('songPlayToggleBtn');
+        const songPlayIcon = document.getElementById('songPlayIcon');
+        const songStatusText = document.getElementById('songStatusText');
+        const musicBars = document.querySelectorAll('.music-bar');
+        const musicPlayerWrapper = document.getElementById('musicPlayerWrapper');
+
+        let lastMusicToggleStamp = 0;
+        function togglePlayMusic(e) {
+            if (e) e.stopPropagation();
+            const now = Date.now();
+            if (now - lastMusicToggleStamp < 350) return;
+            lastMusicToggleStamp = now;
+
+            if (bgSongAudio.paused) {
+                // Tự động tạm tắt nhạc nền nếu đang bật để nghe rõ Bụi Phấn
+                const bgWasPlaying = !bgThemeAudio.paused;
+                if (bgWasPlaying) {
+                    pauseBgMusicByUser(true);
+                }
+
+                bgSongAudio.play().then(() => {
+                    songPlayIcon.textContent = '⏸';
+                    songStatusText.textContent = 'Đang phát...';
+                    musicBars.forEach(b => b.classList.remove('paused'));
+                    if (bgWasPlaying) {
+                        showToast('Đang phát Bụi Phấn (đã tắt nhạc nền)');
+                    }
+                }).catch(() => {
+                    showToast('Vui lòng kiểm tra file music.mp3 cùng thư mục!');
+                });
+            } else {
+                bgSongAudio.pause();
+                songPlayIcon.textContent = '▶';
+                songStatusText.textContent = 'Tạm dừng';
+                musicBars.forEach(b => b.classList.add('paused'));
+            }
+        }
+
+        songPlayToggleBtn.addEventListener('click', togglePlayMusic);
+        musicPlayerWrapper.addEventListener('click', togglePlayMusic);
+
+        ['touchstart', 'touchend', 'mousedown', 'mouseup', 'pointerdown'].forEach(evt => {
+            musicPlayerWrapper.addEventListener(evt, (e) => {
+                e.stopPropagation();
+            }, { passive: false });
+        });
+
+        bgSongAudio.addEventListener('ended', () => {
+            songPlayIcon.textContent = '▶';
+            songStatusText.textContent = 'Đã phát xong';
+            musicBars.forEach(b => b.classList.add('paused'));
+        });
+
+        /**
+         * =========================================================================
+         * 4. QUẢN LÝ TẢI ẢNH (HỖ TRỢ 1.JPG - 16.JPG VÀ 18.JPG, BỎ QUA 17)
+         * =========================================================================
+         */
+        function showToast(msg) {
+            const toast = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        const uploadModal = document.getElementById('uploadModal');
+        const uploadInputsList = document.getElementById('uploadInputsList');
+
+        for (let i = 1; i <= 18; i++) {
+            if (i === 17) continue;
+            const row = document.createElement('div');
+            row.className = "flex items-center justify-between bg-rose-50/70 p-1.5 rounded-lg border border-rose-100";
+            row.innerHTML = `
+                <span class="font-semibold text-rose-900">${i === 1 ? 'Ảnh Bìa 1.jpg' : `Ảnh ${i}.jpg`}:</span>
+                <input type="file" accept="image/*" data-sync="img-sync-${i}" class="file-input text-xs w-40 text-gray-600">
+            `;
+            uploadInputsList.appendChild(row);
+        }
+
+        document.getElementById('openUploadModalBtn').addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+            uploadModal.classList.add('flex');
+        });
+
+        function closeModal() {
+            uploadModal.classList.add('hidden');
+            uploadModal.classList.remove('flex');
+        }
+        document.getElementById('closeUploadModalBtn').addEventListener('click', closeModal);
+        document.getElementById('doneUploadBtn').addEventListener('click', closeModal);
+
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const syncClass = e.target.getAttribute('data-sync');
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    document.querySelectorAll('.' + syncClass).forEach(img => {
+                        img.src = ev.target.result;
+                    });
+                    showToast(`Đã nạp ${file.name} thành công!`);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function createPlaceholderSVG(title, subtitle) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850">
+                <defs>
+                    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#fff8f0"/>
+                        <stop offset="100%" stop-color="#ffe4e6"/>
+                    </linearGradient>
+                </defs>
+                <rect width="1200" height="850" fill="url(#bg)"/>
+                <rect x="30" y="30" width="1140" height="790" rx="24" fill="none" stroke="#be123c" stroke-width="4" stroke-dasharray="14 8"/>
+                <text x="600" y="380" font-family="sans-serif" font-size="40" font-weight="bold" fill="#9f1239" text-anchor="middle">${title}</text>
+                <text x="600" y="440" font-family="sans-serif" font-size="24" fill="#78350f" text-anchor="middle">${subtitle}</text>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
+        for (let i = 1; i <= 18; i++) {
+            if (i === 17) continue;
+            document.querySelectorAll(`.img-sync-${i}`).forEach(el => {
+                el.onerror = function() {
+                    this.onerror = null;
+                    this.src = createPlaceholderSVG(i === 1 ? 'Bìa Báo Tường Lớp 7A6' : `Ảnh Trang ${i}`, `Đặt file ${i}.jpg cùng thư mục hoặc tải lên`);
+                };
+            });
+        }
+
+        // Thử bật nhạc nền ngay và sau khi DOM tải xong
+        syncBgMusicUI();
+        startBgMusic(false);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initFlipbook();
+            syncBgMusicUI();
+            startBgMusic(false);
+        });
+    </script>
+</body>
+</html>
