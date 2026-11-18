@@ -246,6 +246,77 @@
             touch-action: manipulation;
         }
 
+        /* KHUNG VIDEO RỘNG TRÀN CẢ 2 TRANG SÁCH Ở MẶT 17 */
+        .spread-video-overlay {
+            position: absolute;
+            inset: 5px;
+            z-index: 50;
+            border-radius: 8px;
+            background: radial-gradient(circle at 50% 45%, #fff9fb 0%, #fff1f2 60%, #fef3c7 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 6px 10px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
+            overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+            .spread-video-overlay {
+                padding: 10px 16px;
+            }
+        }
+
+        .spread-video-overlay::before {
+            content: "";
+            position: absolute;
+            inset: 5px;
+            border: 1.5px dashed rgba(225, 29, 72, 0.25);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .spread-video-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .spread-video-stage {
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            container-type: size;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 55;
+        }
+
+        .spread-video-frame {
+            width: 100%;
+            max-width: calc(100cqh * 16 / 9);
+            max-height: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid rgba(251, 113, 133, 0.55);
+            box-shadow: 0 14px 30px -6px rgba(136, 19, 55, 0.28);
+            pointer-events: auto !important;
+            touch-action: auto !important;
+        }
+
+        .spread-video-frame iframe {
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: auto !important;
+        }
+
         /* THANH NÚT ĐỌC LẠI Ở TRANG CUỐI (18.JPG) */
         .finale-action-card {
             position: absolute;
@@ -283,17 +354,6 @@
         .music-bar.paused {
             animation-play-state: paused;
             transform: scaleY(0.3);
-        }
-
-        /* KHUNG VIDEO YOUTUBE */
-        .video-box-wrapper {
-            pointer-events: auto !important;
-            position: relative;
-            z-index: 60 !important;
-            touch-action: auto !important;
-        }
-        .video-box-wrapper iframe {
-            pointer-events: auto !important;
         }
 
         /* NÚT MŨI TÊN LẬT TRANG NỔI Ở LỀ TRÁI & PHẢI */
@@ -731,43 +791,19 @@
                         <img src="16.jpg" class="half-spread-img img-sync-16" alt="Trang 16 Phải">
                     </div>
 
-                    <!-- 17. CẶP 17: NHÚNG VIDEO YOUTUBE + NÚT TẮT NHẠC NỀN -->
+                    <!-- 17. CẶP 17: NỀN SÁCH KHI LẬT TRANG VIDEO (VIDEO RỘNG 2 TRANG HIỆN Ở OVERLAY PHÍA TRÊN) -->
                     <div class="fb-page">
-                        <div class="w-full h-full p-3 sm:p-4 flex flex-col justify-center items-center bg-gradient-to-br from-rose-50 via-white to-amber-50">
-                            <div class="w-full max-w-[96%] border-2 border-rose-200/80 rounded-2xl p-2.5 shadow-md bg-white/95">
-                                <div class="flex items-center gap-1.5 mb-1.5">
-                                    <span class="text-rose-600 text-lg">▶</span>
-                                    <h3 class="font-calligraphy text-lg sm:text-xl font-bold text-rose-800">Thước Phim Kỷ Niệm 7A6</h3>
-                                </div>
-                                <div id="videoContainer" class="video-box-wrapper relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
-                                    <iframe id="youtubePlayer" class="w-full h-full" 
-                                            src="https://www.youtube.com/embed/NX7hQA1uyJg?enablejsapi=1&rel=0" 
-                                            title="YouTube video player" frameborder="0" 
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                            allowfullscreen></iframe>
-                                </div>
-                                <div id="movieBgMusicBar" class="interactive-page-bar mt-2 flex flex-col sm:flex-row items-center justify-between gap-1.5">
-                                    <p class="text-[10px] text-gray-500 text-center sm:text-left italic">
-                                        Nhấn vào video để thưởng thức kỷ niệm 7A6
-                                    </p>
-                                    <button id="movieBgToggleBtn" type="button" class="bg-toggle-pill flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-sm cursor-pointer transition-all hover:scale-105 active:scale-95 shrink-0" title="Tắt hoặc bật lại nhạc nền để tập trung xem Movie">
-                                        <span class="bg-toggle-icon">🎵</span>
-                                        <span class="bg-toggle-label">Bật nhạc nền</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="w-full h-full p-4 flex flex-col justify-center items-center bg-gradient-to-br from-rose-50 via-white to-amber-50 text-center">
+                            <span class="text-4xl mb-2">🎬</span>
+                            <h3 class="font-calligraphy text-2xl sm:text-3xl font-bold text-rose-800">Thước Phim Kỷ Niệm</h3>
+                            <p class="text-xs text-amber-800/80 mt-1">Tập thể Chi đội 7A6</p>
                         </div>
                     </div>
                     <div class="fb-page">
-                        <div class="w-full h-full p-4 sm:p-6 flex flex-col justify-center items-center bg-gradient-to-bl from-rose-50 via-pink-50/40 to-white text-center">
-                            <span class="text-3xl sm:text-4xl mb-2 sm:mb-3">🎬✨🎞️</span>
-                            <h3 class="font-calligraphy text-xl sm:text-3xl font-bold text-rose-700 mb-1.5">Ký Ức Đẹp Tuổi Học Trò</h3>
-                            <p class="font-serif-vn italic text-[11px] sm:text-sm text-gray-700 leading-relaxed max-w-xs mb-3">
-                                "Mỗi khoảnh khắc dưới mái trường Tân Dương đều là những hạt ngọc lấp lánh lưu giữ trong tim mỗi học sinh 7A6."
-                            </p>
-                            <div class="p-2.5 bg-rose-100/70 border border-rose-300 rounded-2xl text-[11px] sm:text-xs text-rose-900 font-semibold shadow-sm">
-                                🎉 Kính chúc quý thầy cô luôn mạnh khỏe và hạnh phúc!
-                            </div>
+                        <div class="w-full h-full p-4 flex flex-col justify-center items-center bg-gradient-to-bl from-rose-50 via-pink-50/40 to-amber-50 text-center">
+                            <span class="text-4xl mb-2">✨🎞️</span>
+                            <h3 class="font-calligraphy text-2xl sm:text-3xl font-bold text-rose-700">Ký Ức Tuổi Học Trò</h3>
+                            <p class="text-xs text-rose-900/70 mt-1">Trường THCS Tân Dương</p>
                         </div>
                     </div>
 
@@ -787,6 +823,36 @@
                         </div>
                     </div>
 
+                </div>
+
+                <!-- KHUNG VIDEO YOUTUBE RỘNG TOÀN BỘ 2 TRANG SÁCH (CHỈ HIỆN KHI ĐANG XEM MẶT 17) -->
+                <div id="spreadVideoOverlay" class="spread-video-overlay">
+                    <div id="movieBgMusicBar" class="interactive-page-bar flex items-center justify-between gap-2 pb-1 sm:pb-1.5 shrink-0">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="text-rose-600 text-sm sm:text-lg shrink-0">🎬</span>
+                            <h3 class="font-calligraphy text-base sm:text-2xl font-bold text-rose-800 truncate">
+                                Thước Phim Kỷ Niệm 7A6
+                            </h3>
+                        </div>
+                        <button id="movieBgToggleBtn" type="button" class="bg-toggle-pill flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-sm cursor-pointer transition-all hover:scale-105 active:scale-95 shrink-0" title="Tắt hoặc bật lại nhạc nền để tập trung xem Movie">
+                            <span class="bg-toggle-icon">🎵</span>
+                            <span class="bg-toggle-label">Bật nhạc nền</span>
+                        </button>
+                    </div>
+
+                    <div class="spread-video-stage">
+                        <div id="videoContainer" class="spread-video-frame">
+                            <iframe id="youtubePlayer"
+                                    src="https://www.youtube.com/embed/7pUW9phsLfM?enablejsapi=1&rel=0"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <p class="text-[9px] sm:text-[11px] text-rose-800/80 font-medium text-center italic pt-1 shrink-0">
+                        Nhấn trực tiếp vào khung hình để xem toàn màn hình hoặc thưởng thức thước phim kỷ niệm của lớp 7A6
+                    </p>
                 </div>
             </div>
         </div>
@@ -1061,6 +1127,32 @@
         const pageIndicator = document.getElementById('pageIndicator');
         const pageSubtitle = document.getElementById('pageSubtitle');
         const flipbookContainer = document.getElementById('flipbookContainer');
+        const spreadVideoOverlay = document.getElementById('spreadVideoOverlay');
+
+        function pauseYoutubeVideo() {
+            const ytIframe = document.getElementById('youtubePlayer');
+            if (ytIframe && ytIframe.contentWindow) {
+                try {
+                    ytIframe.contentWindow.postMessage(JSON.stringify({
+                        event: 'command',
+                        func: 'pauseVideo',
+                        args: ''
+                    }), '*');
+                } catch (e) {}
+            }
+        }
+
+        function updateSpreadVideoVisibility(isFlippingNow = false) {
+            if (!spreadVideoOverlay) return;
+            if (!isFlippingNow && currentSpread === 16) {
+                spreadVideoOverlay.classList.add('active');
+            } else {
+                if (spreadVideoOverlay.classList.contains('active')) {
+                    pauseYoutubeVideo();
+                }
+                spreadVideoOverlay.classList.remove('active');
+            }
+        }
 
         function calculateExactBookDimensions() {
             const stageRect = bookStageEl.getBoundingClientRect();
@@ -1113,6 +1205,14 @@
             pageFlip.loadFromHTML(document.querySelectorAll('.fb-page'));
             flipbookContainer.classList.add('ready');
 
+            pageFlip.on('changeState', (e) => {
+                if (e.data === 'flipping' || e.data === 'user_fold') {
+                    updateSpreadVideoVisibility(true);
+                } else if (e.data === 'read') {
+                    updateSpreadVideoVisibility(false);
+                }
+            });
+
             pageFlip.on('flip', (e) => {
                 const pageIndex = e.data;
                 currentSpread = Math.floor(pageIndex / 2);
@@ -1156,6 +1256,8 @@
             nextBtn.disabled = isLast;
             sidePrevBtn.disabled = isFirst;
             sideNextBtn.disabled = isLast;
+
+            updateSpreadVideoVisibility(false);
         }
 
         function goToNextPage(e) {
@@ -1359,7 +1461,6 @@
                 pauseBgMusicByUser(false);
             } else {
                 userExplicitlyMutedBg = false;
-                // Nếu Bụi Phấn đang phát thì tạm dừng Bụi Phấn để không bị chồng nhạc
                 if (!bgSongAudio.paused) {
                     bgSongAudio.pause();
                     songPlayIcon.textContent = '▶';
@@ -1433,7 +1534,6 @@
             lastMusicToggleStamp = now;
 
             if (bgSongAudio.paused) {
-                // Tự động tạm tắt nhạc nền nếu đang bật để nghe rõ Bụi Phấn
                 const bgWasPlaying = !bgThemeAudio.paused;
                 if (bgWasPlaying) {
                     pauseBgMusicByUser(true);
