@@ -194,13 +194,6 @@
         .half-left .half-spread-img { left: 0; }
         .half-right .half-spread-img { left: -100%; }
 
-        .teacher-frame-aura {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0;
-            z-index: 12;
-        }
-
         /* CỤM ĐIỀU KHIỂN NHẠC TRANG BỤI PHẤN - GÓC TRÊN PHẢI */
         .bui-phan-top-stack {
             position: absolute;
@@ -253,7 +246,7 @@
             touch-action: manipulation;
         }
 
-        /* THANH NÚT KẾT TRÁI TIM & ĐỌC LẠI Ở TRANG CUỐI (18.JPG) */
+        /* THANH NÚT ĐỌC LẠI Ở TRANG CUỐI (18.JPG) */
         .finale-action-card {
             position: absolute;
             bottom: 10px;
@@ -301,15 +294,6 @@
         }
         .video-box-wrapper iframe {
             pointer-events: auto !important;
-        }
-
-        #petalCanvas {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 25;
         }
 
         /* NÚT MŨI TÊN LẬT TRANG NỔI Ở LỀ TRÁI & PHẢI */
@@ -460,9 +444,6 @@
 </head>
 <body>
 
-    <!-- Canvas cánh hoa bay & kết trái tim -->
-    <canvas id="petalCanvas"></canvas>
-
     <!-- Nút mũi tên lật trang nổi ở chính giữa lề trái và lề phải -->
     <button id="sidePrevBtn" class="side-nav-arrow left-arrow" type="button" title="Lật về trang trước" aria-label="Trang trước" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
@@ -479,7 +460,7 @@
     </button>
 
     <!-- Nhạc nền xuyên suốt toàn trang web: camonthayco.mp3 -->
-    <audio id="bgThemeAudio" src="camonthayco.mp3" loop preload="auto"></audio>
+    <audio id="bgThemeAudio" src="camonthayco.mp3" autoplay loop preload="auto"></audio>
 
     <!-- Âm thanh bài hát Bụi Phấn ở trang 10: music.mp3 -->
     <audio id="bgSongAudio" src="music.mp3" preload="auto"></audio>
@@ -601,97 +582,78 @@
                     <!-- Mặt phải trang 1: 1.jpg -->
                     <div class="fb-page">
                         <img src="1.jpg" class="single-page-img img-sync-1" alt="Bìa báo tường - 1.jpg">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 25%; width: 60%; height: 50%;"></div>
                     </div>
 
                     <!-- 2. CẶP 2 (2.jpg) -->
                     <div class="fb-page half-left">
                         <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Trái">
-                        <div class="teacher-frame-aura" style="left: 45%; top: 28%; width: 51%; height: 54%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="2.jpg" class="half-spread-img img-sync-2" alt="Trang 2 Phải">
-                        <div class="teacher-frame-aura" style="left: 13%; top: 58.5%; width: 71%; height: 27.5%;"></div>
                     </div>
 
                     <!-- 3. CẶP 3 (3.jpg) -->
                     <div class="fb-page half-left">
                         <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Trái">
-                        <div class="teacher-frame-aura" style="left: 45.6%; top: 31%; width: 51%; height: 55.5%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="3.jpg" class="half-spread-img img-sync-3" alt="Trang 3 Phải">
-                        <div class="teacher-frame-aura" style="left: 10%; top: 25%; width: 75%; height: 45%;"></div>
                     </div>
 
                     <!-- 4. CẶP 4 (4.jpg) -->
                     <div class="fb-page half-left">
                         <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Trái">
-                        <div class="teacher-frame-aura" style="left: 13%; top: 3.5%; width: 65%; height: 67%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="4.jpg" class="half-spread-img img-sync-4" alt="Trang 4 Phải">
-                        <div class="teacher-frame-aura" style="left: 12%; top: 50%; width: 78%; height: 42%;"></div>
                     </div>
 
                     <!-- 5. CẶP 5 (5.jpg) -->
                     <div class="fb-page half-left">
                         <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 12%; width: 70%; height: 45%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="5.jpg" class="half-spread-img img-sync-5" alt="Trang 5 Phải">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 48%; width: 66%; height: 42%;"></div>
                     </div>
 
                     <!-- 6. CẶP 6 (6.jpg) -->
                     <div class="fb-page half-left">
                         <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Trái">
-                        <div class="teacher-frame-aura" style="left: 22%; top: 15%; width: 68%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="6.jpg" class="half-spread-img img-sync-6" alt="Trang 6 Phải">
-                        <div class="teacher-frame-aura" style="left: 15%; top: 30%; width: 72%; height: 46%;"></div>
                     </div>
 
                     <!-- 7. CẶP 7 (7.jpg) -->
                     <div class="fb-page half-left">
                         <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Trái">
-                        <div class="teacher-frame-aura" style="left: 15%; top: 20%; width: 75%; height: 48%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="7.jpg" class="half-spread-img img-sync-7" alt="Trang 7 Phải">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 25%; width: 70%; height: 50%;"></div>
                     </div>
 
                     <!-- 8. CẶP 8 (8.jpg) -->
                     <div class="fb-page half-left">
                         <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Trái">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 18%; width: 68%; height: 52%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="8.jpg" class="half-spread-img img-sync-8" alt="Trang 8 Phải">
-                        <div class="teacher-frame-aura" style="left: 16%; top: 30%; width: 72%; height: 46%;"></div>
                     </div>
 
                     <!-- 9. CẶP 9 (9.jpg) -->
                     <div class="fb-page half-left">
                         <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Trái">
-                        <div class="teacher-frame-aura" style="left: 15%; top: 22%; width: 72%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="9.jpg" class="half-spread-img img-sync-9" alt="Trang 9 Phải">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 35%; width: 68%; height: 44%;"></div>
                     </div>
 
                     <!-- 10. CẶP 10 (10.jpg) CÓ NÚT PHÁT BỤI PHẤN & NÚT TẮT NHẠC NỀN -->
                     <div class="fb-page half-left">
                         <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 18%; width: 70%; height: 48%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="10.jpg" class="half-spread-img img-sync-10" alt="Trang 10 Phải">
-                        <div class="teacher-frame-aura" style="left: 22%; top: 25%; width: 66%; height: 52%;"></div>
 
                         <!-- Cụm nút âm nhạc Bụi Phấn & tắt nhạc nền ở góc trên phải -->
                         <div id="buiPhanControlsWrapper" class="bui-phan-top-stack flex flex-col items-end gap-1.5">
@@ -724,61 +686,49 @@
                     <!-- 11. CẶP 11 (11.jpg) -->
                     <div class="fb-page half-left">
                         <img src="11.jpg" class="half-spread-img img-sync-11" alt="Trang 11 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 20%; width: 70%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="11.jpg" class="half-spread-img img-sync-11" alt="Trang 11 Phải">
-                        <div class="teacher-frame-aura" style="left: 16%; top: 28%; width: 72%; height: 46%;"></div>
                     </div>
 
                     <!-- 12. CẶP 12 (12.jpg) -->
                     <div class="fb-page half-left">
                         <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 22%; width: 70%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="12.jpg" class="half-spread-img img-sync-12" alt="Trang 12 Phải">
-                        <div class="teacher-frame-aura" style="left: 15%; top: 30%; width: 74%; height: 45%;"></div>
                     </div>
 
                     <!-- 13. CẶP 13 (13.jpg) -->
                     <div class="fb-page half-left">
                         <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Trái">
-                        <div class="teacher-frame-aura" style="left: 15%; top: 20%; width: 72%; height: 48%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="13.jpg" class="half-spread-img img-sync-13" alt="Trang 13 Phải">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 24%; width: 68%; height: 42%;"></div>
                     </div>
 
                     <!-- 14. CẶP 14 (14.jpg) -->
                     <div class="fb-page half-left">
                         <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Trái">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 16%; width: 68%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="14.jpg" class="half-spread-img img-sync-14" alt="Trang 14 Phải">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 32%; width: 70%; height: 46%;"></div>
                     </div>
 
                     <!-- 15. CẶP 15 (15.jpg) -->
                     <div class="fb-page half-left">
                         <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Trái">
-                        <div class="teacher-frame-aura" style="left: 16%; top: 24%; width: 72%; height: 48%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="15.jpg" class="half-spread-img img-sync-15" alt="Trang 15 Phải">
-                        <div class="teacher-frame-aura" style="left: 20%; top: 28%; width: 68%; height: 50%;"></div>
                     </div>
 
                     <!-- 16. CẶP 16 (16.jpg) -->
                     <div class="fb-page half-left">
                         <img src="16.jpg" class="half-spread-img img-sync-16" alt="Trang 16 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 20%; width: 70%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="16.jpg" class="half-spread-img img-sync-16" alt="Trang 16 Phải">
-                        <div class="teacher-frame-aura" style="left: 16%; top: 26%; width: 68%; height: 52%;"></div>
                     </div>
 
                     <!-- 17. CẶP 17: NHÚNG VIDEO YOUTUBE + NÚT TẮT NHẠC NỀN -->
@@ -821,24 +771,18 @@
                         </div>
                     </div>
 
-                    <!-- 18. CẶP 18 (18.jpg) - TRANG KẾT THÚC CÙNG HIỆU ỨNG TRÁI TIM KẾT TỤ -->
+                    <!-- 18. CẶP 18 (18.jpg) - TRANG KẾT THÚC -->
                     <div class="fb-page half-left">
                         <img src="18.jpg" class="half-spread-img img-sync-18" alt="Trang 18 Trái">
-                        <div class="teacher-frame-aura" style="left: 18%; top: 20%; width: 70%; height: 50%;"></div>
                     </div>
                     <div class="fb-page half-right">
                         <img src="18.jpg" class="half-spread-img img-sync-18" alt="Trang 18 Phải">
-                        <div class="teacher-frame-aura" style="left: 16%; top: 26%; width: 68%; height: 52%;"></div>
 
-                        <!-- Thanh nút kết lại trái tim & đọc lại đặt gọn ở góc dưới phải -->
+                        <!-- Thanh nút đọc lại đặt gọn ở góc dưới phải -->
                         <div id="finaleActionBar" class="finale-action-card flex items-center gap-1.5">
-                            <button id="replayHeartBtn" type="button" class="btn-primary-rose px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer">
-                                <span>💖</span>
-                                <span>Kết lại trái tim</span>
-                            </button>
                             <button id="backToStartBtn" type="button" class="btn-3d px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer">
                                 <span>🔄</span>
-                                <span>Đọc lại</span>
+                                <span>Đọc lại từ đầu</span>
                             </button>
                         </div>
                     </div>
@@ -1107,7 +1051,7 @@
             "Mặt 15: Mái trường mến yêu",
             "Mặt 16: Tự hào trang sách tuổi thơ",
             "Mặt 17: Video Kỷ Niệm 7A6 (YouTube)",
-            "Mặt 18: Lưu bút tuổi học trò & Trái tim tri ân"
+            "Mặt 18: Lưu bút tuổi học trò & Lời tri ân"
         ];
 
         const prevBtn = document.getElementById('prevBtn');
@@ -1212,13 +1156,6 @@
             nextBtn.disabled = isLast;
             sidePrevBtn.disabled = isFirst;
             sideNextBtn.disabled = isLast;
-
-            if (isLast) {
-                activateHeartFormation(true);
-                playHeartChimeSound();
-            } else {
-                activateHeartFormation(false);
-            }
         }
 
         function goToNextPage(e) {
@@ -1257,12 +1194,6 @@
             }, { passive: false });
         });
 
-        document.getElementById('replayHeartBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            scatterPetalsForReplay();
-            playHeartChimeSound();
-        });
-
         document.getElementById('backToStartBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             if (pageFlip) pageFlip.flip(0, 'top');
@@ -1270,7 +1201,7 @@
 
         /**
          * =========================================================================
-         * 3. ÂM THANH LẬT TRANG, NHẠC NỀN (CAMONTHAYCO.MP3) & BỤI PHẤN (MUSIC.MP3)
+         * 3. ÂM THANH LẬT TRANG, NHẠC NỀN TỰ ĐỘNG (CAMONTHAYCO.MP3) & BỤI PHẤN (MUSIC.MP3)
          * =========================================================================
          */
         function playPageFlipSound() {
@@ -1310,34 +1241,13 @@
             } catch (e) {}
         }
 
-        function playHeartChimeSound() {
-            if (!soundEnabled) return;
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [523.25, 659.25, 783.99, 1046.50];
-                notes.forEach((freq, idx) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.16);
-                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime + idx * 0.16);
-                    gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + idx * 0.16 + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.16 + 1.4);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime + idx * 0.16);
-                    osc.stop(audioCtx.currentTime + idx * 0.16 + 1.45);
-                });
-            } catch (e) {}
-        }
-
         document.getElementById('toggleAudioBtn').addEventListener('click', () => {
             soundEnabled = !soundEnabled;
             document.getElementById('audioIcon').textContent = soundEnabled ? '🔊' : '🔇';
             showToast(soundEnabled ? 'Đã bật tiếng lật trang' : 'Đã tắt tiếng lật trang');
         });
 
-        // --- HỆ THỐNG NHẠC NỀN: camonthayco.mp3 ---
+        // --- HỆ THỐNG NHẠC NỀN TỰ ĐỘNG: camonthayco.mp3 ---
         const bgThemeAudio = document.getElementById('bgThemeAudio');
         bgThemeAudio.volume = 0.55;
 
@@ -1350,8 +1260,10 @@
         const movieBgMusicBar = document.getElementById('movieBgMusicBar');
         const movieBgToggleBtn = document.getElementById('movieBgToggleBtn');
 
-        let isBgMusicPlaying = false;
+        let isBgMusicPlaying = !bgThemeAudio.paused;
         let userExplicitlyMutedBg = false;
+        let isStartingBgMusic = false;
+        let autoplayHintShown = false;
 
         function syncBgMusicUI() {
             if (isBgMusicPlaying) {
@@ -1382,19 +1294,50 @@
             });
         }
 
+        bgThemeAudio.addEventListener('play', () => {
+            isBgMusicPlaying = true;
+            syncBgMusicUI();
+            removeFirstGestureListeners();
+        });
+
+        bgThemeAudio.addEventListener('pause', () => {
+            isBgMusicPlaying = false;
+            syncBgMusicUI();
+        });
+
         function startBgMusic(showErrorToast = false) {
-            if (userExplicitlyMutedBg) return;
-            bgThemeAudio.play().then(() => {
+            if (userExplicitlyMutedBg || isStartingBgMusic) return;
+            if (!bgThemeAudio.paused) {
                 isBgMusicPlaying = true;
                 syncBgMusicUI();
                 removeFirstGestureListeners();
-            }).catch((err) => {
-                isBgMusicPlaying = false;
-                syncBgMusicUI();
-                if (showErrorToast && err && err.name !== 'NotAllowedError') {
-                    showToast('Vui lòng kiểm tra file camonthayco.mp3 cùng thư mục!');
-                }
-            });
+                return;
+            }
+
+            isStartingBgMusic = true;
+            const playPromise = bgThemeAudio.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.then(() => {
+                    isStartingBgMusic = false;
+                    isBgMusicPlaying = true;
+                    syncBgMusicUI();
+                    removeFirstGestureListeners();
+                }).catch((err) => {
+                    isStartingBgMusic = false;
+                    isBgMusicPlaying = false;
+                    syncBgMusicUI();
+                    if (err && err.name === 'NotAllowedError') {
+                        if (!autoplayHintShown) {
+                            autoplayHintShown = true;
+                            showToast('Chạm vào trang hoặc bấm nút để tự động bật nhạc nền 🎵');
+                        }
+                    } else if (showErrorToast) {
+                        showToast('Vui lòng kiểm tra file camonthayco.mp3 cùng thư mục!');
+                    }
+                });
+            } else {
+                isStartingBgMusic = false;
+            }
         }
 
         function pauseBgMusicByUser(silent = false) {
@@ -1448,7 +1391,7 @@
             });
         });
 
-        // Tự động phát nhạc nền ngay ở thao tác chạm/click đầu tiên nếu trình duyệt chặn autoplay ban đầu
+        // Bắt sự kiện ở pha CAPTURE trên window để mọi thao tác đầu tiên (kể cả bấm nút Next/Prev có stopPropagation) đều kích hoạt nhạc nền tự động
         function unlockBgMusicOnFirstGesture(e) {
             if (userExplicitlyMutedBg || isBgMusicPlaying || !bgSongAudio.paused) return;
             if (e.target && e.target.closest('#bgMusicHeaderBtn, #buiPhanBgToggleBtn, #movieBgToggleBtn, #songPlayToggleBtn')) return;
@@ -1456,14 +1399,23 @@
         }
 
         function removeFirstGestureListeners() {
-            document.removeEventListener('click', unlockBgMusicOnFirstGesture);
-            document.removeEventListener('touchstart', unlockBgMusicOnFirstGesture);
-            document.removeEventListener('keydown', unlockBgMusicOnFirstGesture);
+            window.removeEventListener('click', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('touchend', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('mouseup', unlockBgMusicOnFirstGesture, true);
+            window.removeEventListener('keydown', unlockBgMusicOnFirstGesture, true);
         }
 
-        document.addEventListener('click', unlockBgMusicOnFirstGesture);
-        document.addEventListener('touchstart', unlockBgMusicOnFirstGesture, { passive: true });
-        document.addEventListener('keydown', unlockBgMusicOnFirstGesture);
+        window.addEventListener('click', unlockBgMusicOnFirstGesture, { capture: true });
+        window.addEventListener('touchend', unlockBgMusicOnFirstGesture, { capture: true, passive: true });
+        window.addEventListener('mouseup', unlockBgMusicOnFirstGesture, { capture: true });
+        window.addEventListener('keydown', unlockBgMusicOnFirstGesture, { capture: true });
+
+        // Thử kích hoạt tự động khi file audio sẵn sàng
+        bgThemeAudio.addEventListener('canplay', () => {
+            if (!userExplicitlyMutedBg && bgThemeAudio.paused && bgSongAudio.paused) {
+                startBgMusic(false);
+            }
+        });
 
         // --- NHẠC BỤI PHẤN: music.mp3 (Trang 10) ---
         const bgSongAudio = document.getElementById('bgSongAudio');
@@ -1600,295 +1552,12 @@
             });
         }
 
-        /**
-         * =========================================================================
-         * 5. HẠT HOA BAY NHẸ NHÀNG & TRÁI TIM KẾT TỤ TƯƠNG PHẢN CAO, CHẬM RÃI
-         * =========================================================================
-         */
-        const canvas = document.getElementById('petalCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            if (isHeartMode) assignHeartTargets();
-        });
-
-        const pageFrameOrbits = {
-            0: [{ rx: 0.25, ry: 0.50, radX: 0.16, radY: 0.25 }, { rx: 0.75, ry: 0.50, radX: 0.18, radY: 0.28 }],
-            1: [{ rx: 0.35, ry: 0.55, radX: 0.14, radY: 0.26 }, { rx: 0.74, ry: 0.72, radX: 0.18, radY: 0.15 }],
-            2: [{ rx: 0.35, ry: 0.58, radX: 0.14, radY: 0.28 }, { rx: 0.75, ry: 0.45, radX: 0.16, radY: 0.22 }],
-            3: [{ rx: 0.23, ry: 0.37, radX: 0.16, radY: 0.32 }, { rx: 0.76, ry: 0.65, radX: 0.17, radY: 0.20 }],
-            4: [{ rx: 0.32, ry: 0.35, radX: 0.18, radY: 0.22 }, { rx: 0.72, ry: 0.68, radX: 0.17, radY: 0.21 }],
-            5: [{ rx: 0.34, ry: 0.40, radX: 0.17, radY: 0.24 }, { rx: 0.70, ry: 0.52, radX: 0.18, radY: 0.23 }],
-            6: [{ rx: 0.28, ry: 0.44, radX: 0.19, radY: 0.24 }, { rx: 0.74, ry: 0.50, radX: 0.18, radY: 0.25 }],
-            7: [{ rx: 0.33, ry: 0.42, radX: 0.17, radY: 0.26 }, { rx: 0.72, ry: 0.53, radX: 0.18, radY: 0.22 }],
-            8: [{ rx: 0.30, ry: 0.46, radX: 0.18, radY: 0.25 }, { rx: 0.74, ry: 0.56, radX: 0.17, radY: 0.21 }],
-            9: [{ rx: 0.32, ry: 0.42, radX: 0.18, radY: 0.24 }, { rx: 0.73, ry: 0.51, radX: 0.17, radY: 0.26 }],
-            10: [{ rx: 0.31, ry: 0.44, radX: 0.18, radY: 0.24 }, { rx: 0.72, ry: 0.50, radX: 0.18, radY: 0.23 }],
-            11: [{ rx: 0.32, ry: 0.45, radX: 0.18, radY: 0.24 }, { rx: 0.72, ry: 0.52, radX: 0.19, radY: 0.22 }],
-            12: [{ rx: 0.30, ry: 0.44, radX: 0.18, radY: 0.24 }, { rx: 0.74, ry: 0.45, radX: 0.17, radY: 0.21 }],
-            13: [{ rx: 0.33, ry: 0.41, radX: 0.17, radY: 0.25 }, { rx: 0.72, ry: 0.55, radX: 0.18, radY: 0.23 }],
-            14: [{ rx: 0.31, ry: 0.48, radX: 0.18, radY: 0.24 }, { rx: 0.75, ry: 0.52, radX: 0.17, radY: 0.25 }],
-            15: [{ rx: 0.30, ry: 0.45, radX: 0.18, radY: 0.24 }, { rx: 0.72, ry: 0.50, radX: 0.18, radY: 0.23 }],
-            16: [{ rx: 0.5, ry: 0.5, radX: 0.35, radY: 0.30 }], // Mặt 17: Video YouTube
-            17: [] // Mặt 18 (18.jpg): Trang cuối kết thúc, chuyển sang chế độ kết trái tim
-        };
-
-        // Màu sắc nhẹ nhàng cho các trang đọc thông thường
-        const petalColors = [
-            { fill: '#ff4d6d', glow: 'rgba(255, 77, 109, 0.55)' },
-            { fill: '#ff758f', glow: 'rgba(255, 117, 143, 0.5)' },
-            { fill: '#ff8fa3', glow: 'rgba(255, 143, 163, 0.5)' },
-            { fill: '#e11d48', glow: 'rgba(225, 29, 72, 0.6)' },
-            { fill: '#fb7185', glow: 'rgba(251, 113, 133, 0.5)' },
-            { fill: '#fda4af', glow: 'rgba(253, 164, 175, 0.5)' },
-            { fill: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)' }
-        ];
-
-        // Bảng màu TƯƠNG PHẢN CAO dành riêng cho trái tim trên trang cuối (nổi bật trên nền hồng/kem)
-        const heartContrastColors = [
-            { fill: '#991b1b', stroke: '#fef08a', glow: 'rgba(253, 224, 71, 0.75)' },
-            { fill: '#7f1d1d', stroke: '#fde047', glow: 'rgba(251, 191, 36, 0.75)' },
-            { fill: '#b91c1c', stroke: '#fef9c3', glow: 'rgba(254, 240, 138, 0.7)' },
-            { fill: '#881337', stroke: '#fde68a', glow: 'rgba(253, 230, 138, 0.7)' },
-            { fill: '#6b21a8', stroke: '#fef08a', glow: 'rgba(233, 213, 255, 0.7)' },
-            { fill: '#c2410c', stroke: '#fef9c3', glow: 'rgba(253, 224, 71, 0.65)' },
-            { fill: '#d97706', stroke: '#450a0a', glow: 'rgba(255, 255, 255, 0.8)' }
-        ];
-
-        const AMBIENT_VISIBLE_PETALS = 65;
-        const AMBIENT_ORBITERS = 18;
-        const TOTAL_PETALS = 360;
-        const petals = [];
-        let isHeartMode = false;
-        let heartBeatPhase = 0;
-        let heartModeStartTime = 0;
-
-        class HeartPetal {
-            constructor(index) {
-                this.index = index;
-                this.isOrbiter = index < AMBIENT_ORBITERS;
-                this.reset(true);
-            }
-
-            reset(initial = false) {
-                this.x = Math.random() * width;
-                this.y = initial ? Math.random() * height : -20 - Math.random() * 80;
-                this.size = 6.5 + Math.random() * 6.5;
-                this.colorObj = petalColors[Math.floor(Math.random() * petalColors.length)];
-                this.heartColorObj = heartContrastColors[Math.floor(Math.random() * heartContrastColors.length)];
-
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = 0.28 + Math.random() * 0.42;
-                this.angle = Math.random() * Math.PI * 2;
-                this.spin = (Math.random() - 0.5) * 0.016;
-                this.wobblePhase = Math.random() * Math.PI * 2;
-                this.wobbleSpeed = 0.009 + Math.random() * 0.011;
-
-                this.orbitAngle = (this.index / AMBIENT_ORBITERS) * Math.PI * 2 + Math.random() * 0.4;
-                this.orbitSpeed = (0.004 + Math.random() * 0.004) * (this.index % 2 === 0 ? 1 : -1);
-                this.orbitOffset = (Math.random() - 0.5) * 18;
-
-                this.alpha = this.index < AMBIENT_VISIBLE_PETALS ? 0.85 : 0;
-                this.targetX = width / 2;
-                this.targetY = height / 2;
-                this.heartAngle = 0;
-                this.heartScaleFactor = 1;
-                this.heartSpeedFactor = 0.8 + Math.random() * 0.4;
-            }
-
-            update(now) {
-                const rect = flipbookContainer.getBoundingClientRect();
-
-                if (isHeartMode) {
-                    this.alpha += (1.0 - this.alpha) * 0.045;
-
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    const pulse = 1 + Math.sin(heartBeatPhase) * 0.042 + Math.sin(heartBeatPhase * 2) * 0.018;
-
-                    const t = this.heartAngle;
-                    const baseScale = Math.min(rect.width, rect.height) / 36.5;
-                    const s = baseScale * this.heartScaleFactor * pulse;
-
-                    const hx = 16 * Math.pow(Math.sin(t), 3);
-                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-
-                    this.wobblePhase += 0.022;
-                    const flutterX = Math.cos(this.wobblePhase + this.index) * 2.0;
-                    const flutterY = Math.sin(this.wobblePhase + this.index) * 2.0;
-
-                    this.targetX = centerX + hx * s + flutterX;
-                    this.targetY = centerY + hy * s - (baseScale * 1.5) + flutterY;
-
-                    const elapsedSec = Math.max(0, (now - heartModeStartTime) / 1000);
-                    const ramp = Math.min(1, elapsedSec / 7.5);
-                    const ease = (0.0018 + (ramp * ramp) * 0.0095) * this.heartSpeedFactor;
-
-                    this.x += (this.targetX - this.x) * ease;
-                    this.y += (this.targetY - this.y) * ease;
-
-                    const desiredAngle = Math.sin(this.wobblePhase * 0.5) * 0.32;
-                    this.angle += (desiredAngle - this.angle) * 0.035;
-                    return;
-                }
-
-                const targetAlpha = this.index < AMBIENT_VISIBLE_PETALS ? 0.85 : 0;
-                this.alpha += (targetAlpha - this.alpha) * 0.035;
-                if (this.alpha < 0.01) return;
-
-                this.wobblePhase += this.wobbleSpeed;
-                this.angle += this.spin;
-
-                const orbits = pageFrameOrbits[currentSpread] || [];
-                if (this.isOrbiter && orbits.length > 0) {
-                    const orbitCfg = orbits[this.index % orbits.length];
-                    const cx = rect.left + rect.width * orbitCfg.rx;
-                    const cy = rect.top + rect.height * orbitCfg.ry;
-                    const rx = rect.width * orbitCfg.radX + this.orbitOffset;
-                    const ry = rect.height * orbitCfg.radY + this.orbitOffset;
-
-                    this.orbitAngle += this.orbitSpeed;
-
-                    const destX = cx + Math.cos(this.orbitAngle) * rx + Math.sin(this.wobblePhase) * 6;
-                    const destY = cy + Math.sin(this.orbitAngle) * ry + Math.cos(this.wobblePhase) * 6;
-
-                    this.x += (destX - this.x) * 0.028;
-                    this.y += (destY - this.y) * 0.028;
-                } else {
-                    this.x += this.vx + Math.sin(this.wobblePhase) * 0.38;
-                    this.y += this.vy;
-
-                    if (this.y > height + 25) {
-                        this.y = -20;
-                        this.x = Math.random() * width;
-                    }
-                    if (this.x > width + 25) this.x = -20;
-                    if (this.x < -25) this.x = width + 20;
-                }
-            }
-
-            draw(ctx) {
-                if (this.alpha < 0.01) return;
-
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-
-                const flipScaleX = isHeartMode ? 1 : (0.78 + 0.22 * Math.sin(this.wobblePhase * 1.2));
-                ctx.scale(flipScaleX, 1);
-
-                const palette = isHeartMode ? this.heartColorObj : this.colorObj;
-                const s = isHeartMode ? this.size * 1.12 : this.size;
-                ctx.fillStyle = palette.fill;
-
-                if (isHeartMode) {
-                    ctx.shadowColor = palette.glow;
-                    ctx.shadowBlur = 9;
-                }
-
-                ctx.beginPath();
-                ctx.moveTo(0, s * 0.35);
-                ctx.bezierCurveTo(-s * 0.55, -s * 0.35, -s * 1.1, s * 0.25, 0, s * 1.05);
-                ctx.bezierCurveTo(s * 1.1, s * 0.25, s * 0.55, -s * 0.35, 0, s * 0.35);
-                ctx.closePath();
-                ctx.fill();
-
-                if (isHeartMode) {
-                    ctx.shadowBlur = 0;
-                    ctx.strokeStyle = palette.stroke;
-                    ctx.lineWidth = 0.9;
-                    ctx.stroke();
-                }
-
-                ctx.fillStyle = isHeartMode ? 'rgba(254, 249, 195, 0.5)' : 'rgba(255, 255, 255, 0.35)';
-                ctx.beginPath();
-                ctx.arc(-s * 0.28, s * 0.22, s * 0.16, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < TOTAL_PETALS; i++) {
-            petals.push(new HeartPetal(i));
-        }
-
-        function assignHeartTargets() {
-            petals.forEach((p, idx) => {
-                p.heartAngle = (idx / TOTAL_PETALS) * Math.PI * 2;
-                const layer = idx % 6;
-                if (layer === 0) {
-                    p.heartScaleFactor = 0.78 + Math.random() * 0.06;
-                } else if (layer <= 2) {
-                    p.heartScaleFactor = 0.89 + Math.random() * 0.05;
-                } else {
-                    p.heartScaleFactor = 0.99 + Math.random() * 0.04;
-                }
-            });
-        }
-
-        function activateHeartFormation(enable) {
-            isHeartMode = enable;
-            if (enable) {
-                heartModeStartTime = performance.now();
-                assignHeartTargets();
-                petals.forEach(p => {
-                    if (p.alpha < 0.08) {
-                        p.x = Math.random() * width;
-                        p.y = Math.random() * height;
-                    }
-                });
-            } else {
-                petals.forEach(p => {
-                    p.vx = (Math.random() - 0.5) * 0.45;
-                    p.vy = 0.28 + Math.random() * 0.42;
-                });
-            }
-        }
-
-        function scatterPetalsForReplay() {
-            isHeartMode = false;
-            const rect = flipbookContainer.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-
-            petals.forEach(p => {
-                const randAngle = Math.random() * Math.PI * 2;
-                const dist = 160 + Math.random() * 320;
-                p.x = cx + Math.cos(randAngle) * dist;
-                p.y = cy + Math.sin(randAngle) * dist;
-                p.vx = Math.cos(randAngle) * 0.9;
-                p.vy = Math.sin(randAngle) * 0.9;
-                p.alpha = 0.95;
-            });
-
-            setTimeout(() => {
-                if (currentSpread === totalSpreads - 1) {
-                    activateHeartFormation(true);
-                }
-            }, 500);
-        }
-
-        function animate(now) {
-            ctx.clearRect(0, 0, width, height);
-            if (isHeartMode) heartBeatPhase += 0.028;
-
-            for (let i = 0; i < petals.length; i++) {
-                petals[i].update(now);
-                petals[i].draw(ctx);
-            }
-            requestAnimationFrame(animate);
-        }
+        // Thử bật nhạc nền ngay và sau khi DOM tải xong
+        syncBgMusicUI();
+        startBgMusic(false);
 
         window.addEventListener('DOMContentLoaded', () => {
             initFlipbook();
-            requestAnimationFrame(animate);
             syncBgMusicUI();
             startBgMusic(false);
         });
