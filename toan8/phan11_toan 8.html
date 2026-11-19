@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyến Du Hành Không Gian - Luyện Tập Toán 8 Cùng Bảo Bảo</title>
+
+    <!-- MathJax 3 cho hiển thị công thức toán học -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: { typeset: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #0b0f19;
+            --surface: #151d30;
+            --card: #1e2942;
+            --text-main: #f8fafc;
+            --border: #2e3d5c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* HUD Thanh Trạng Thái Tàu Vũ Trụ */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(21, 29, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--secondary);
+            border-radius: 20px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25);
+            margin-bottom: 25px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
+        .hud-val { color: var(--accent); font-size: 1.3rem; font-weight: 800; }
+        .fuel-wrap { width: 140px; height: 14px; background: #0b0f19; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+        .fuel-fill { height: 100%; transition: width 0.3s ease; background: linear-gradient(90deg, #f59e0b, #10b981); width: 0%; }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #0891b2 100%);
+            border-radius: 24px;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 30px rgba(67, 56, 202, 0.3);
+        }
+        .hero h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 6px; }
+        .hero p { color: #cbd5e1; font-size: 1rem; }
+
+        /* Rocket Launch Station Card */
+        .rocket-zone {
+            background: linear-gradient(180deg, #171f38 0%, #111827 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+        .rocket-icon {
+            font-size: 3rem;
+            display: inline-block;
+            transition: transform 0.5s ease;
+        }
+        .rocket-icon.launching {
+            animation: rocketFly 2s forwards ease-in-out;
+        }
+        @keyframes rocketFly {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.2); }
+            100% { transform: translateY(-200px) scale(0); opacity: 0; }
+        }
+
+        /* Bí Kíp Nhanh Card */
+        .cheat-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .cheat-title { font-size: 1.15rem; font-weight: 800; color: var(--secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .cheat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .cheat-box {
+            background: var(--card);
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.92rem;
+        }
+        .cheat-box.green { border-left-color: var(--success); }
+        .cheat-box strong { color: #fff; display: block; margin-bottom: 5px; }
+
+        /* Khối Bài Tập */
+        .quest-box {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid var(--border);
+        }
+        .quest-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--secondary); }
+        .quest-header { font-size: 1.02rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .quest-badge {
+            background: rgba(99, 102, 241, 0.25);
+            color: #a5b4fc;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+        }
+
+        .img-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0;
+            background: #111827;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+        }
+
+        .ans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .ans-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: #151d30;
+            color: #e2e8f0;
+            border: 2px solid #2e3d5c;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .btn-opt:hover { background: #222e48; border-color: var(--secondary); }
+        .btn-opt.correct { background: rgba(16, 185, 129, 0.25) !important; border-color: var(--success) !important; color: #6ee7b7 !important; }
+        .btn-opt.wrong { background: rgba(239, 68, 68, 0.25) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            background: #0f172a;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: #38bdf8;
+        }
+
+        .math-fb { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; color: #38bdf8; font-weight: 600; }
+        .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-style: normal; }
+        .frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+        .frac .den { padding-top: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HUD TRẠNG THÁI TÀU VŨ TRỤ -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>⛽ NHIÊN LIỆU:</span>
+            <div class="fuel-wrap">
+                <div class="fuel-fill" id="fuel-bar"></div>
+            </div>
+            <span id="fuel-pct" class="hud-val">0%</span>
+        </div>
+        <div class="hud-item">
+            <span>⭐ ĐIỂM:</span>
+            <span id="score-val" class="hud-val">0/20</span>
+        </div>
+        <div class="hud-item">
+            <span id="rank-name" style="color: var(--secondary); font-weight:800;">🚀 Chuẩn Bị Phóng</span>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="hero">
+        <h1>🌌 TRẠM KHÔNG GIAN TOÁN HỌC 8</h1>
+        <p>Thu Thập Nhiên Liệu Bằng Cách Giải Quyết 20 Thử Thách Nhóm Hạng Tử & Đường Trung Bình</p>
+    </div>
+
+    <!-- KHU VỰC TÀU PHÓNG -->
+    <div class="rocket-zone">
+        <div class="rocket-icon" id="rocket-emoji">🚀</div>
+        <div id="rocket-status" style="font-weight: 800; font-size: 1.1rem; color: #38bdf8; margin-top: 6px;">
+            Tàu Apollo-8 đang chờ nạp đủ 100% nhiên liệu để cất cánh!
+        </div>
+    </div>
+
+    <!-- BÍ KÍP NHỚ NHANH -->
+    <div class="cheat-card">
+        <div class="cheat-title">📖 BÍ KÍP VÀNG KHÔNG GIAN CẦN NHỚ</div>
+        <div class="cheat-grid">
+            <div class="cheat-box">
+                <strong>⚡ 1. Kỹ Thuật Nhóm Hạng Tử:</strong>
+                • Nhóm 2 - 2: Rút nhân tử chung của từng cặp.<br>
+                • Bẫy dấu trừ: $-x + 3 = -(x - 3)$ (nhớ còn số 1).<br>
+                • Tìm $x$: Đưa về $A \cdot B = 0 \Rightarrow A = 0$ hoặc $B = 0$.
+            </div>
+            <div class="cheat-box green">
+                <strong>📐 2. Đường Trung Bình & Thalès Thực Tế:</strong>
+                • Đường trung bình: $MN = \frac{1}{2}BC \Leftrightarrow BC = 2 \cdot MN$.<br>
+                • Bài toán bóng nắng: $\frac{\text{Chiều cao}}{\text{Bóng nắng}} = \text{Tỉ số không đổi}$.<br>
+                • Trung tuyến tam giác vuông: $AM = \frac{1}{2}\text{Cạnh huyền } BC$.
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 20 BÀI TẬP VỀ NHÀ -->
+    <div class="quest-box">
+        <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 16px;">
+            🎯 20 THỬ THÁCH THỰC CHIẾN TẠI NHÀ
+        </div>
+        <div id="quest-container"></div>
+    </div>
+
+</div>
+
+<script>
+// TẠO ÂM THANH BẰNG WEB AUDIO API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playAudio(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    } else if (type === 'launch') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 1.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+    }
+}
+
+// BỘ CHUYỂN TOÁN DỰ PHÒNG OFFLINE
+function parseMath(str) {
+    return str.replace(/\$([^$]+)\$/g, function(m, f) {
+        let r = f.replace(/\\Delta\s*([A-Za-z]+)/g, 'Δ$1')
+                 .replace(/\\parallel/g, '//')
+                 .replace(/\\text\{\s*cm\s*\}/g, ' cm')
+                 .replace(/\\text\{\s*m\s*\}/g, ' m')
+                 .replace(/\\cdot/g, '·')
+                 .replace(/\\Rightarrow/g, '⇒')
+                 .replace(/\^2/g, '²')
+                 .replace(/\^3/g, '³')
+                 .replace(/\^\circ/g, '°');
+        r = r.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+        return '<span class="math-fb">' + r + '</span>';
+    });
+}
+
+// 20 CÂU HỎI MỨC ĐỘ TRUNG BÌNH CÓ HÌNH SVG CHUẨN
+const hwList = [
+    // 10 câu Đại số (Nhóm hạng tử & Tìm x)
+    { q: "Phân tích đa thức $x^2 - xy + 3x - 3y$ thành nhân tử:", a: ["$(x - y)(x + 3)$", "$(x - y)(x - 3)$", "$(x + y)(x + 3)$", "$(x - y)(3x)$"], c: 0, exp: "Nhóm: $x(x - y) + 3(x - y) = (x - y)(x + 3)$." },
+    { q: "Phân tích đa thức $xy + 2x + 4y + 8$ thành nhân tử:", a: ["$(y + 2)(x + 4)$", "$(y + 2)(x - 4)$", "$(y - 2)(x + 4)$", "$(x + 2)(y + 4)$"], c: 0, exp: "Nhóm: $x(y + 2) + 4(y + 2) = (y + 2)(x + 4)$." },
+    { q: "Phân tích đa thức $x(x - 3) - x + 3$ thành nhân tử (Bẫy dấu trừ):", a: ["$(x - 3)(x - 1)$", "$(x - 3)(x + 1)$", "$(x - 3)x$", "$(x - 3)(x - 3)$"], c: 0, exp: "Đổi dấu: $-x + 3 = -(x - 3)$. Biểu thức thành $x(x - 3) - 1 \\cdot (x - 3) = (x - 3)(x - 1)$." },
+    { q: "Phân tích đa thức $x^2 - 4y^2 + x + 2y$ thành nhân tử:", a: ["$(x + 2y)(x - 2y + 1)$", "$(x - 2y)(x + 2y + 1)$", "$(x - 2y)(x - 2y + 1)$", "$(x + 2y)(x + 2y - 1)$"], c: 0, exp: "$(x - 2y)(x + 2y) + (x + 2y) = (x + 2y)(x - 2y + 1)$." },
+    { q: "Phân tích đa thức nhóm 3-1: $x^2 - 4x + 4 - y^2$ thành nhân tử:", a: ["$(x - 2 - y)(x - 2 + y)$", "$(x - 2 - y)^2$", "$(x + 2 - y)(x + 2 + y)$", "$(x - 4 - y)(x - 4 + y)$"], c: 0, exp: "Nhóm 3 số đầu: $(x - 2)^2 - y^2 = (x - 2 - y)(x - 2 + y)$." },
+    { q: "Phân tích đa thức $x^2 - y^2 + 6y - 9$ thành nhân tử (Bẫy đổi dấu nhóm sau):", a: ["$(x - y + 3)(x + y - 3)$", "$(x - y - 3)(x + y + 3)$", "$(x - y + 3)^2$", "$(x + y - 3)^2$"], c: 0, exp: "$x^2 - (y^2 - 6y + 9) = x^2 - (y - 3)^2 = [x - (y - 3)][x + (y - 3)] = (x - y + 3)(x + y - 3)$." },
+    { q: "Tìm $x$, biết: $x(x - 4) = 0$:", a: ["$x = 0$ hoặc $x = 4$", "$x = 4$", "$x = -4$", "$x = 0$ hoặc $x = -4$"], c: 0, exp: "Tích bằng 0 thì $x = 0$ hoặc $x - 4 = 0 \\Rightarrow x = 4$." },
+    { q: "Tìm $x$, biết: $x(x - 3) + 2x - 6 = 0$:", a: ["$x = 3$ hoặc $x = -2$", "$x = 3$ hoặc $x = 2$", "$x = -3$ hoặc $x = 2$", "$x = 3$"], c: 0, exp: "$x(x - 3) + 2(x - 3) = 0 \\Rightarrow (x - 3)(x + 2) = 0 \\Rightarrow x = 3$ hoặc $x = -2$." },
+    { q: "Tìm $x$, biết: $(x - 2)^2 - 9 = 0$:", a: ["$x = 5$ hoặc $x = -1$", "$x = 5$ hoặc $x = 1$", "$x = -5$ hoặc $x = 1$", "$x = 5$"], c: 0, exp: "$(x - 2 - 3)(x - 2 + 3) = 0 \\Rightarrow (x - 5)(x + 1) = 0 \\Rightarrow x = 5$ hoặc $x = -1$." },
+    { q: "Tính nhanh giá trị biểu thức $A = x^2 - y^2 + 4x + 4$ tại $x = 98, y = 30$:", a: ["$9100$", "$10000$", "$9000$", "$8100$"], c: 0, exp: "$A = (x + 2)^2 - y^2 = (98 + 2)^2 - 30^2 = 100^2 - 30^2 = 10000 - 900 = 9100$." },
+
+    // 10 câu Hình học (Đường trung bình & Thalès mở rộng)
+    { 
+        q: "Cho $\\Delta ABC$ có $M, N$ lần lượt là trung điểm của $AB, AC$. Độ dài $BC = 18\\text{ cm}$. Độ dài đoạn thẳng $MN$ là:", 
+        svg: `<svg width="220" height="120" viewBox="0 0 220 120">
+                <polygon points="110,15 30,105 190,105" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                <line x1="70" y1="60" x2="150" y2="60" stroke="#10b981" stroke-width="2.5"/>
+                <text x="105" y="12" fill="#fff">A</text>
+                <text x="18" y="112" fill="#fff">B</text>
+                <text x="195" y="112" fill="#fff">C</text>
+                <text x="50" y="58" fill="#10b981">M</text>
+                <text x="156" y="58" fill="#10b981">N</text>
+                <text x="100" y="118" fill="#38bdf8" font-size="12">18 cm</text>
+              </svg>`,
+        a: ["$9\\text{ cm}$", "$36\\text{ cm}$", "$18\\text{ cm}$", "$4,5\\text{ cm}$"], 
+        c: 0, 
+        exp: "Đường trung bình bằng một nửa cạnh đáy: $MN = \\frac{BC}{2} = \\frac{18}{2} = 9\\text{ cm}$." 
+    },
+    { q: "Cho $\\Delta ABC$ có đường trung bình $DE = 7,5\\text{ cm}$ ($DE \\parallel BC$). Độ dài cạnh đáy $BC$ là:", a: ["$15\\text{ cm}$", "$3,75\\text{ cm}$", "$7,5\\text{ cm}$", "$22,5\\text{ cm}$"], c: 0, exp: "Cạnh đáy gấp đôi đường trung bình: $BC = 2 \\cdot DE = 2 \\cdot 7,5 = 15\\text{ cm}$." },
+    { q: "Tam giác $ABC$ có chu vi bằng $36\\text{ cm}$. Chu vi tam giác có 3 đỉnh là 3 trung điểm các cạnh của $\\Delta ABC$ là:", a: ["$18\\text{ cm}$", "$72\\text{ cm}$", "$9\\text{ cm}$", "$12\\text{ cm}$"], c: 0, exp: "Mỗi cạnh bằng một nửa nên chu vi bằng một nửa: $36 : 2 = 18\\text{ cm}$." },
+    { 
+        q: "Cho hình thang $ABCD$ ($AB \\parallel CD$). $M, N$ lần lượt là trung điểm của hai cạnh bên $AD$ và $BC$. Độ dài đoạn $MN$ là:", 
+        svg: `<svg width="220" height="110" viewBox="0 0 220 110">
+                <polygon points="50,20 150,20 190,95 20,95" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                <line x1="35" y1="57" x2="170" y2="57" stroke="#f59e0b" stroke-width="2.5"/>
+                <text x="45" y="15" fill="#fff">A</text>
+                <text x="150" y="15" fill="#fff">B</text>
+                <text x="195" y="105" fill="#fff">C</text>
+                <text x="10" y="105" fill="#fff">D</text>
+                <text x="15" y="60" fill="#f59e0b">M</text>
+                <text x="175" y="60" fill="#f59e0b">N</text>
+                <text x="95" y="16" fill="#38bdf8" font-size="12">6 cm</text>
+                <text x="100" y="110" fill="#38bdf8" font-size="12">10 cm</text>
+              </svg>`,
+        a: ["$8\\text{ cm}$", "$16\\text{ cm}$", "$4\\text{ cm}$", "$7\\text{ cm}$"], 
+        c: 0, 
+        exp: "Đoạn thẳng nối trung điểm 2 cạnh bên hình thang $= \\frac{6 + 10}{2} = 8\\text{ cm}$." 
+    },
+    { q: "Cho $\\Delta ABC$ vuông tại $A$ có cạnh huyền $BC = 12\\text{ cm}$. Gọi $M$ là trung điểm của $BC$. Độ dài đoạn $AM$ là:", a: ["$6\\text{ cm}$", "$12\\text{ cm}$", "$24\\text{ cm}$", "$3\\text{ cm}$"], c: 0, exp: "Trong tam giác vuông, đường trung tuyến ứng với cạnh huyền bằng nửa cạnh huyền: $AM = \\frac{12}{2} = 6\\text{ cm}$." },
+    { 
+        q: "Bài toán bóng cọc: Một cọc tiêu cao $1,5\\text{ m}$ cắm thẳng đứng có bóng dài $1\\text{ m}$. Cùng thời điểm đó một tòa nhà có bóng dài $20\\text{ m}$. Chiều cao tòa nhà là:", 
+        svg: `<svg width="220" height="110" viewBox="0 0 220 110">
+                <line x1="30" y1="95" x2="30" y2="50" stroke="#f59e0b" stroke-width="3"/>
+                <line x1="30" y1="95" x2="60" y2="95" stroke="#38bdf8" stroke-width="3"/>
+                <line x1="30" y1="50" x2="60" y2="95" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <rect x="120" y="15" width="40" height="80" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                <line x1="160" y1="95" x2="210" y2="95" stroke="#38bdf8" stroke-width="3"/>
+                <text x="15" y="75" fill="#f59e0b" font-size="11">1,5m</text>
+                <text x="35" y="108" fill="#38bdf8" font-size="11">1m</text>
+                <text x="175" y="108" fill="#38bdf8" font-size="11">20m</text>
+                <text x="130" y="55" fill="#10b981" font-weight="bold">h = ?</text>
+              </svg>`,
+        a: ["$30\\text{ m}$", "$25\\text{ m}$", "$15\\text{ m}$", "$40\\text{ m}$"], 
+        c: 0, 
+        exp: "Theo định lí Thalès: $\\frac{h}{1,5} = \\frac{20}{1} \\Rightarrow h = 1,5 \\cdot 20 = 30\\text{ m}$." 
+    },
+    { q: "Cho $\\Delta ABC$ có $AB = 8\\text{ cm}, AC = 12\\text{ cm}$. Trên $AB$ lấy $M$ sao cho $AM = 2\\text{ cm}$, trên $AC$ lấy $N$ sao cho $AN = 3\\text{ cm}$. Khẳng định nào đúng?", a: ["$MN \\parallel BC$", "$MN$ cắt $BC$", "$MN \\perp BC$", "$MN = BC$"], c: 0, exp: "$\\frac{AM}{AB} = \\frac{2}{8} = \\frac{1}{4}$; $\\frac{AN}{AC} = \\frac{3}{12} = \\frac{1}{4}$. Vì tỉ số bằng nhau nên $MN \\parallel BC$ (Thalès đảo)." },
+    { q: "Cho tam giác đều $ABC$ có cạnh bằng $10\\text{ cm}$. Đoạn nối trung điểm hai cạnh $AB$ và $AC$ dài bao nhiêu?", a: ["$5\\text{ cm}$", "$10\\text{ cm}$", "$2,5\\text{ cm}$", "$7,5\\text{ cm}$"], c: 0, exp: "Độ dài đường trung bình $= \\frac{10}{2} = 5\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$, $M$ là trung điểm $AB$, $N$ là trung điểm $AC$. Nếu góc $C = 50^\\circ$ thì góc $ANM$ bằng:", a: ["$50^\\circ$", "$130^\\circ$", "$25^\\circ$", "$100^\\circ$"], c: 0, exp: "Vì $MN \\parallel BC$ nên góc $ANM$ và góc $C$ là hai góc đồng vị &rarr; góc $ANM = 50^\\circ$." },
+    { q: "Một cái thang dài dựa vào tường. Thanh chắn ngang nối đúng trung điểm hai tay thang dài $0,4\\text{ m}$. Khoảng cách giữa hai chân thang chạm đất là:", a: ["$0,8\\text{ m}$", "$0,2\\text{ m}$", "$0,4\\text{ m}$", "$1,2\\text{ m}$"], c: 0, exp: "Khoảng cách giữa hai chân thang $= 2 \\cdot 0,4 = 0,8\\text{ m}$." }
+];
+
+// RENDER THẺ BÀI TẬP
+function renderCards() {
+    const box = document.getElementById('quest-container');
+    let html = '';
+    hwList.forEach((item, idx) => {
+        const opts = item.a.map((txt, i) => ({ txt, isC: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="card-${idx}">
+            <div class="quest-header">
+                <span class="quest-badge">Thử thách ${idx + 1}</span> ${item.q}
+            </div>
+            ${item.svg ? `<div class="img-wrap">${item.svg}</div>` : ''}
+            <div class="ans-grid">
+                ${opts.map(o => `
+                    <button class="btn-opt" onclick="pickAns(${idx}, ${o.isC}, this)">${o.txt}</button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="exp-${idx}">
+                💡 <strong>Bí kíp trạm không gian:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    box.innerHTML = html;
+    applyMath();
+}
+
+function applyMath() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => offlineMath());
+    } else {
+        setTimeout(offlineMath, 400);
+    }
+}
+
+function offlineMath() {
+    document.querySelectorAll('.quest-header, .btn-opt, .explain-box, .cheat-box').forEach(el => {
+        if (el.innerHTML.includes('$')) el.innerHTML = parseMath(el.innerHTML);
+    });
+}
+
+let score = 0;
+const answered = {};
+
+function pickAns(idx, isCorrect, btn) {
+    if (answered[idx]) return;
+    answered[idx] = true;
+
+    const parent = document.getElementById(`card-${idx}`);
+    const exp = document.getElementById(`exp-${idx}`);
+    const btns = parent.querySelectorAll('.btn-opt');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playAudio('correct');
+    } else {
+        btn.classList.add('wrong');
+        playAudio('wrong');
+        btns.forEach(b => {
+            if (b.innerText.trim() === hwList[idx].a[hwList[idx].c].trim() ||
+                b.innerHTML.includes(hwList[idx].a[hwList[idx].c])) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    exp.style.display = 'block';
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([exp]);
+    } else {
+        exp.innerHTML = parseMath(exp.innerHTML);
+    }
+
+    // Cập nhật điểm & thanh nhiên liệu tàu vũ trụ
+    document.getElementById('score-val').innerText = `${score}/20`;
+    const fuelPct = score * 5;
+    document.getElementById('fuel-pct').innerText = `${fuelPct}%`;
+    document.getElementById('fuel-bar').style.width = `${fuelPct}%`;
+
+    checkRocket(fuelPct);
+}
+
+function checkRocket(pct) {
+    const status = document.getElementById('rocket-status');
+    const rank = document.getElementById('rank-name');
+
+    if (pct >= 100) {
+        status.innerText = "🎉 100% NHIÊN LIỆU! TÀU APOLLO-8 ĐÃ PHÓNG THÀNH CÔNG VÀO VŨ TRỤ!";
+        status.style.color = "#10b981";
+        rank.innerText = "👑 Phi Hành Gia Xuất Sắc";
+        rank.style.color = "#10b981";
+        document.getElementById('rocket-emoji').classList.add('launching');
+        playAudio('launch');
+    } else if (pct >= 60) {
+        status.innerText = "⚡ Đã nạp được " + pct + "% nhiên liệu! Tàu đang khởi động động cơ đẩy!";
+        rank.innerText = "⚔️ Kỹ Sư Không Gian";
+        rank.style.color = "#38bdf8";
+    } else if (pct >= 30) {
+        status.innerText = "⛽ Đã nạp được " + pct + "% nhiên liệu. Cố lên Bảo Bảo!";
+        rank.innerText = "🛡️ Học Viên Bay";
+        rank.style.color = "#f59e0b";
+    }
+}
+
+window.onload = renderCards;
+</script>
+
+</body>
+</html>
