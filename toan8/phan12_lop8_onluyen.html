@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Hội Sắc Màu Toán 8 - Vòng Quay May Mắn Cùng Bảo Bảo</title>
+
+    <!-- MathJax 3 cho hiển thị công thức chuẩn -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            startup: { typeset: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --pink: #ff2a85;
+            --purple: #8b5cf6;
+            --cyan: #06b6d4;
+            --yellow: #f59e0b;
+            --green: #10b981;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #172554 100%);
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --border: rgba(255, 255, 255, 0.15);
+            --text-main: #f8fafc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); line-height: 1.6; padding: 15px; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* HUD Thanh Sắc Màu */
+        .hud-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--pink);
+            border-radius: 24px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(255, 42, 133, 0.3);
+            margin-bottom: 25px;
+        }
+        .hud-item { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.95rem; }
+        .hud-val { color: var(--yellow); font-size: 1.35rem; font-weight: 900; }
+        .spin-badge { background: linear-gradient(90deg, #ec4899, #8b5cf6); padding: 4px 12px; border-radius: 999px; color: #fff; font-size: 0.85rem; }
+
+        /* Hero Header */
+        .hero {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+            border-radius: 26px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(236, 72, 153, 0.35);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .hero h1 { font-size: 1.95rem; font-weight: 900; margin-bottom: 6px; letter-spacing: 0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .hero p { color: #f1f5f9; font-size: 1.05rem; }
+
+        /* Khu Vực Vòng Quay May Mắn */
+        .wheel-zone {
+            background: var(--card-bg);
+            border: 2px solid var(--purple);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+        .wheel-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 15px auto;
+        }
+        #wheel-canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+            border: 4px solid #fff;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid var(--pink);
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        }
+        .btn-spin {
+            background: linear-gradient(90deg, #ec4899, #f59e0b);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 32px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-spin:hover { transform: scale(1.05); }
+        .btn-spin:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .reward-log { font-weight: 700; color: #38bdf8; margin-top: 10px; min-height: 24px; }
+
+        /* Bí Kíp Nhanh Card */
+        .cheat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .cheat-title { font-size: 1.2rem; font-weight: 800; color: var(--yellow); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .cheat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .cheat-box {
+            background: rgba(15, 23, 42, 0.7);
+            border-left: 4px solid var(--pink);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.92rem;
+        }
+        .cheat-box.cyan { border-left-color: var(--cyan); }
+        .cheat-box strong { color: #fff; display: block; margin-bottom: 5px; }
+
+        /* Khối Bài Tập */
+        .quest-box {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .quest-card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .quest-card:hover { border-color: var(--pink); transform: translateY(-2px); }
+        .quest-header { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .quest-badge {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            color: #fff;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+            font-weight: 800;
+        }
+
+        .img-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 14px 0;
+            background: #0f172a;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px dashed var(--border);
+        }
+
+        .ans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .ans-grid { grid-template-columns: 1fr; } }
+
+        .btn-opt {
+            background: rgba(30, 41, 59, 0.8);
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .btn-opt:hover { background: #334155; border-color: var(--cyan); }
+        .btn-opt.correct { background: rgba(16, 185, 129, 0.3) !important; border-color: var(--green) !important; color: #6ee7b7 !important; }
+        .btn-opt.wrong { background: rgba(239, 68, 68, 0.3) !important; border-color: #ef4444 !important; color: #fca5a5 !important; }
+
+        .explain-box {
+            display: none;
+            margin-top: 12px;
+            background: #0f172a;
+            border-left: 4px solid var(--yellow);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: #fde047;
+        }
+
+        .math-fb { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; color: #38bdf8; font-weight: 600; }
+        .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-style: normal; }
+        .frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+        .frac .den { padding-top: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HUD THANH SẮC MÀU -->
+    <div class="hud-bar">
+        <div class="hud-item">
+            <span>⭐ ĐIỂM:</span>
+            <span id="score-val" class="hud-val">0/20</span>
+        </div>
+        <div class="hud-item">
+            <span class="spin-badge" id="spin-badge">🎟️ 0 Lượt Quay</span>
+        </div>
+        <div class="hud-item">
+            <span id="rank-name" style="color: var(--cyan); font-weight:800;">🎈 Người Chơi Vui Vẻ</span>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="hero">
+        <h1>🎡 LỄ HỘI SẮC MÀU TOÁN HỌC 8</h1>
+        <p>Thu Thập Vé Quay Bằng Cách Chinh Phục 20 Thử Thách Phân Giác & Nhân Tử</p>
+    </div>
+
+    <!-- MINIGAME: VÒNG QUAY MAY MẮN -->
+    <div class="wheel-zone">
+        <div style="font-weight: 900; font-size: 1.25rem; color: #facc15;">🎪 VÒNG QUAY BÁNH XE MAY MẮN</div>
+        <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 4px;">Cứ làm đúng 4 câu hỏi, con sẽ nhận được 1 lượt quay trúng thưởng!</p>
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheel-canvas" width="260" height="260"></canvas>
+        </div>
+        <button class="btn-spin" id="spin-btn" onclick="spinWheel()" disabled>QUAY NGAY (CẦN VÉ)</button>
+        <div class="reward-log" id="reward-log">Hãy trả lời đúng 4 câu đầu tiên để nhận vé quay nhé!</div>
+    </div>
+
+    <!-- BÍ KÍP NHANH -->
+    <div class="cheat-card">
+        <div class="cheat-title">📖 2 BÍ KÍP VÀNG KHÔNG ĐƯỢC QUÊN</div>
+        <div class="cheat-grid">
+            <div class="cheat-box">
+                <strong>⚡ 1. Phân Tích Đa Thức Thành Nhân Tử:</strong>
+                • Rút nhân tử chung trước: $2x^2 - 8 = 2(x^2 - 4) = 2(x - 2)(x + 2)$<br>
+                • Tách hạng tử: $x^2 + 5x + 6 = (x + 2)(x + 3)$ (Tích $= 6$, Tổng $= 5$)<br>
+                • Tìm $x$: Đưa về dạng tích $A \cdot B = 0 \Rightarrow A = 0$ hoặc $B = 0$
+            </div>
+            <div class="cheat-box cyan">
+                <strong>📐 2. Tính Chất Đường Phân Giác:</strong>
+                • Trong $\Delta ABC$, $AD$ là phân giác góc $A$ ($D \in BC$):<br>
+                $\frac{DB}{DC} = \frac{AB}{AC}$ &nbsp;&rArr;&nbsp; Đoạn trái / Đoạn phải = Cạnh trái / Cạnh phải<br>
+                • Phân giác chia đôi góc; Trung tuyến chia đôi cạnh!
+            </div>
+        </div>
+    </div>
+
+    <!-- KHỐI 20 BÀI TẬP -->
+    <div class="quest-box">
+        <div style="font-size: 1.25rem; font-weight: 900; color: #fff; margin-bottom: 16px;">
+            🎯 20 THỬ THÁCH SẮC MÀU
+        </div>
+        <div id="quest-container"></div>
+    </div>
+
+</div>
+
+<script>
+// TẠO ÂM THANH WEB AUDIO API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playAudio(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    } else if (type === 'wheel') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    }
+}
+
+// BỘ CHUYỂN ĐỔI TOÁN HỌC DỰ PHÒNG OFFLINE
+function parseMath(str) {
+    return str.replace(/\$([^$]+)\$/g, function(m, f) {
+        let r = f.replace(/\\Delta\s*([A-Za-z]+)/g, 'Δ$1')
+                 .replace(/\\parallel/g, '//')
+                 .replace(/\\text\{\s*cm\s*\}/g, ' cm')
+                 .replace(/\\text\{\s*m\s*\}/g, ' m')
+                 .replace(/\\cdot/g, '·')
+                 .replace(/\\Rightarrow/g, '⇒')
+                 .replace(/\^2/g, '²')
+                 .replace(/\^3/g, '³')
+                 .replace(/\^\circ/g, '°');
+        r = r.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+        return '<span class="math-fb">' + r + '</span>';
+    });
+}
+
+// DỮ LIỆU VÒNG QUAY MAY MẮN
+const wheelRewards = [
+    { text: "⭐ Ngôi Sao", color: "#ec4899" },
+    { text: "🍬 Kẹo Ngọt", color: "#8b5cf6" },
+    { text: "👑 Vương Miện", color: "#f59e0b" },
+    { text: "💎 Kim Cương", color: "#06b6d4" },
+    { text: "🚀 Tên Lửa", color: "#10b981" },
+    { text: "🎉 Pháo Hoa", color: "#f43f5e" }
+];
+
+let wheelAngle = 0;
+let isSpinning = false;
+let spinTickets = 0;
+
+function drawWheel() {
+    const canvas = document.getElementById('wheel-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const numSlices = wheelRewards.length;
+    const sliceAngle = (2 * Math.PI) / numSlices;
+
+    ctx.clearRect(0, 0, 260, 260);
+
+    wheelRewards.forEach((rew, i) => {
+        const start = wheelAngle + i * sliceAngle;
+        const end = start + sliceAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(130, 130);
+        ctx.arc(130, 130, 126, start, end);
+        ctx.fillStyle = rew.color;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(130, 130);
+        ctx.rotate(start + sliceAngle / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 13px Segoe UI";
+        ctx.fillText(rew.text, 115, 5);
+        ctx.restore();
+    });
+}
+
+function spinWheel() {
+    if (isSpinning || spinTickets <= 0) return;
+    isSpinning = true;
+    spinTickets--;
+    updateSpinBadge();
+
+    const spinButton = document.getElementById('spin-btn');
+    spinButton.disabled = true;
+
+    const extraSpins = 5 + Math.random() * 4;
+    const targetAngle = wheelAngle + extraSpins * 2 * Math.PI;
+    const duration = 3000;
+    const start = performance.now();
+    const initialAngle = wheelAngle;
+
+    function animateWheel(time) {
+        const elapsed = time - start;
+        const t = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - t, 3);
+
+        wheelAngle = initialAngle + (targetAngle - initialAngle) * easeOut;
+        drawWheel();
+
+        if (t < 1) {
+            requestAnimationFrame(animateWheel);
+        } else {
+            isSpinning = false;
+            if (spinTickets > 0) spinButton.disabled = false;
+            playAudio('correct');
+
+            // Xác định phần thưởng
+            const normalized = (2 * Math.PI - (wheelAngle % (2 * Math.PI)) - Math.PI / 2) % (2 * Math.PI);
+            const positiveAngle = normalized < 0 ? normalized + 2 * Math.PI : normalized;
+            const sliceIndex = Math.floor(positiveAngle / ((2 * Math.PI) / wheelRewards.length));
+            const reward = wheelRewards[sliceIndex];
+
+            document.getElementById('reward-log').innerHTML = `🎊 <strong>Tuyệt vời! Con vừa quay trúng: ${reward.text}!</strong>`;
+        }
+    }
+    requestAnimationFrame(animateWheel);
+}
+
+function updateSpinBadge() {
+    document.getElementById('spin-badge').innerText = `🎟️ ${spinTickets} Lượt Quay`;
+    const spinBtn = document.getElementById('spin-btn');
+    if (spinTickets > 0 && !isSpinning) {
+        spinBtn.disabled = false;
+        spinBtn.innerText = `QUAY NGAY (${spinTickets} VÉ)`;
+    } else {
+        spinBtn.disabled = true;
+        spinBtn.innerText = `QUAY NGAY (CẦN VÉ)`;
+    }
+}
+
+// 20 CÂU HỎI MỨC ĐỘ TRUNG BÌNH CÓ HÌNH VECTOR SVG RÕ NÉT
+const hwList = [
+    // 10 câu Đại số (Phân tích nhân tử phối hợp & Tìm x)
+    { q: "Phân tích đa thức $2x^2 - 8$ thành nhân tử:", a: ["$2(x - 2)(x + 2)$", "$2(x - 4)(x + 4)$", "$(2x - 4)(2x + 4)$", "$2(x - 2)^2$"], c: 0, exp: "Rút số 2 ra ngoài: $2(x^2 - 4) = 2(x - 2)(x + 2)$." },
+    { q: "Phân tích đa thức $3x^2 - 6x + 3$ thành nhân tử:", a: ["$3(x - 1)^2$", "$3(x + 1)^2$", "$3(x - 1)(x + 1)$", "$(3x - 3)^2$"], c: 0, exp: "$3(x^2 - 2x + 1) = 3(x - 1)^2$." },
+    { q: "Phân tích đa thức $x^3 - 4x$ thành nhân tử:", a: ["$x(x - 2)(x + 2)$", "$x(x - 4)(x + 4)$", "$x(x - 2)^2$", "$(x^2 - 2)(x + 2)$"], c: 0, exp: "Rút $x$: $x(x^2 - 4) = x(x - 2)(x + 2)$." },
+    { q: "Phân tích đa thức $x^2 + 5x + 6$ bằng cách tách hạng tử:", a: ["$(x + 2)(x + 3)$", "$(x + 1)(x + 6)$", "$(x - 2)(x - 3)$", "$(x + 5)(x + 1)$"], c: 0, exp: "Tách $5x = 2x + 3x \\Rightarrow x(x + 2) + 3(x + 2) = (x + 2)(x + 3)$." },
+    { q: "Phân tích đa thức $x^2 - 7x + 12$ bằng cách tách hạng tử:", a: ["$(x - 3)(x - 4)$", "$(x + 3)(x + 4)$", "$(x - 2)(x - 6)$", "$(x - 1)(x - 12)$"], c: 0, exp: "Tách $-7x = -3x - 4x \\Rightarrow x(x - 3) - 4(x - 3) = (x - 3)(x - 4)$." },
+    { q: "Tìm $x$, biết: $x^3 - 9x = 0$:", a: ["$x \\in \\{0; 3; -3\\}$", "$x \\in \\{3; -3\\}$", "$x = 0$ hoặc $x = 9$", "$x = 3$"], c: 0, exp: "$x(x^2 - 9) = 0 \\Rightarrow x(x - 3)(x + 3) = 0 \\Rightarrow x \\in \\{0; 3; -3\\}$." },
+    { q: "Tìm $x$, biết: $(x - 2)^2 - 16 = 0$:", a: ["$x = 6$ hoặc $x = -2$", "$x = 6$ hoặc $x = 2$", "$x = -6$ hoặc $x = 2$", "$x = 18$"], c: 0, exp: "$(x - 2 - 4)(x - 2 + 4) = 0 \\Rightarrow (x - 6)(x + 2) = 0 \\Rightarrow x = 6$ hoặc $x = -2$." },
+    { q: "Kết quả của phép chia $(x^2 - 9) : (x + 3)$ là:", a: ["$x - 3$", "$x + 3$", "$1$", "$x - 9$"], c: 0, exp: "$\\frac{(x - 3)(x + 3)}{x + 3} = x - 3$." },
+    { q: "Tính nhanh giá trị của $M = 87^2 + 26 \\cdot 87 + 13^2$:", a: ["$10000$", "$1000$", "$10404$", "$8700$"], c: 0, exp: "$M = (87 + 13)^2 = 100^2 = 10000$." },
+    { q: "Phân tích đa thức $x(x - y) + 5(x - y)$ thành nhân tử:", a: ["$(x - y)(x + 5)$", "$(x - y)(x - 5)$", "$(x + y)(x + 5)$", "$5x(x - y)$"], c: 0, exp: "Đặt nhân tử chung $(x - y)$: $(x - y)(x + 5)$." },
+
+    // 10 câu Hình học (Bài 17: Đường phân giác tam giác)
+    { 
+        q: "Cho $\\Delta ABC$ có tia phân giác $AD$ ($D \\in BC$). Công thức tỉ số nào đúng?", 
+        svg: `<svg width="220" height="120" viewBox="0 0 220 120">
+                <polygon points="100,15 30,105 190,105" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+                <line x1="100" y1="15" x2="115" y2="105" stroke="#ec4899" stroke-width="2.5"/>
+                <path d="M 94 35 Q 100 40 106 35" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                <text x="95" y="12" fill="#fff" font-weight="bold">A</text>
+                <text x="18" y="112" fill="#fff" font-weight="bold">B</text>
+                <text x="195" y="112" fill="#fff" font-weight="bold">C</text>
+                <text x="115" y="118" fill="#ec4899" font-weight="bold">D</text>
+              </svg>`,
+        a: ["$\\frac{DB}{DC} = \\frac{AB}{AC}$", "$\\frac{DB}{DC} = \\frac{AC}{AB}$", "$\\frac{DB}{AB} = \\frac{AB}{AC}$", "$\\frac{DB}{DC} = \\frac{BC}{AB}$"], 
+        c: 0, 
+        exp: "Tính chất đường phân giác: $\\frac{DB}{DC} = \\frac{AB}{AC}$." 
+    },
+    { 
+        q: "Trong hình vẽ dưới đây, biết $AD$ là tia phân giác góc $A$. Độ dài đoạn thẳng $x$ là:", 
+        svg: `<svg width="220" height="120" viewBox="0 0 220 120">
+                <polygon points="100,15 30,105 190,105" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+                <line x1="100" y1="15" x2="110" y2="105" stroke="#ec4899" stroke-width="2.5"/>
+                <text x="95" y="12" fill="#fff">A</text>
+                <text x="18" y="112" fill="#fff">B</text>
+                <text x="195" y="112" fill="#fff">C</text>
+                <text x="108" y="118" fill="#ec4899">D</text>
+                <text x="50" y="55" fill="#facc15" font-size="12">4 cm</text>
+                <text x="150" y="55" fill="#facc15" font-size="12">6 cm</text>
+                <text x="60" y="115" fill="#38bdf8" font-size="12">2 cm</text>
+                <text x="145" y="115" fill="#ec4899" font-size="13" font-weight="bold">x = ?</text>
+              </svg>`,
+        a: ["$3\\text{ cm}$", "$4\\text{ cm}$", "$5\\text{ cm}$", "$2,5\\text{ cm}$"], 
+        c: 0, 
+        exp: "$\\frac{2}{x} = \\frac{4}{6} \\Rightarrow x = \\frac{2 \\cdot 6}{4} = 3\\text{ cm}$." 
+    },
+    { q: "Cho $\\Delta MNP$ có $MI$ là phân giác góc $M$. Biết $MN = 5\\text{ cm}, MP = 8\\text{ cm}, IP = 4\\text{ cm}$. Độ dài đoạn $IN$ là:", a: ["$2,5\\text{ cm}$", "$2\\text{ cm}$", "$3\\text{ cm}$", "$4\\text{ cm}$"], c: 0, exp: "$\\frac{IN}{IP} = \\frac{MN}{MP} \\Rightarrow \\frac{IN}{4} = \\frac{5}{8} \\Rightarrow IN = 2,5\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$ có phân giác $AD$. Biết $AB = 6\\text{ cm}, AC = 9\\text{ cm}$. Tỉ số $\\frac{DB}{DC}$ là:", a: ["$\\frac{2}{3}$", "$\\frac{3}{2}$", "$\\frac{6}{15}$", "$\\frac{9}{6}$"], c: 0, exp: "$\\frac{DB}{DC} = \\frac{AB}{AC} = \\frac{6}{9} = \\frac{2}{3}$." },
+    { q: "Cho $\\Delta ABC$ cân tại $A$ có $AD$ là tia phân giác góc $A$. Biết $BC = 12\\text{ cm}$. Độ dài $BD$ là:", a: ["$6\\text{ cm}$", "$12\\text{ cm}$", "$4\\text{ cm}$", "$3\\text{ cm}$"], c: 0, exp: "Tam giác cân thì phân giác ở đỉnh cũng là trung tuyến $\\Rightarrow BD = \\frac{12}{2} = 6\\text{ cm}$." },
+    { q: "Cho $\\Delta ABC$ vuông tại $A$ ($AB = 3, AC = 4, BC = 5$), phân giác $BE$ ($E \\in AC$). Tỉ số $\\frac{EA}{EC}$ bằng:", a: ["$\\frac{3}{5}$", "$\\frac{4}{5}$", "$\\frac{3}{4}$", "$\\frac{5}{3}$"], c: 0, exp: "$\\frac{EA}{EC} = \\frac{BA}{BC} = \\frac{3}{5}$." },
+    { q: "Cho $\\Delta DEF$ có tia phân giác $DK$. Biết $DE = 4\\text{ cm}, DF = 6\\text{ cm}$ và $EF = 10\\text{ cm}$. Đoạn $KE$ dài:", a: ["$4\\text{ cm}$", "$6\\text{ cm}$", "$5\\text{ cm}$", "$3\\text{ cm}$"], c: 0, exp: "$\\frac{KE}{KF} = \\frac{4}{6} = \\frac{2}{3} \\Rightarrow KE = \\frac{2}{2+3} \\cdot 10 = 4\\text{ cm}$." },
+    { q: "Đường thẳng chia một góc của tam giác thành hai góc bằng nhau được gọi là:", a: ["Đường phân giác", "Đường trung tuyến", "Đường trung trực", "Đường cao"], c: 0, exp: "Định nghĩa: Đường chia đôi góc là đường phân giác." },
+    { q: "Cho $\\Delta ABC$ có phân giác $AD$, biết $DB = 3\\text{ cm}, DC = 5\\text{ cm}, AB = 6\\text{ cm}$. Độ dài cạnh $AC$ là:", a: ["$10\\text{ cm}$", "$9\\text{ cm}$", "$8\\text{ cm}$", "$12\\text{ cm}$"], c: 0, exp: "$\\frac{AB}{AC} = \\frac{DB}{DC} \\Rightarrow \\frac{6}{AC} = \\frac{3}{5} \\Rightarrow AC = \\frac{6 \\cdot 5}{3} = 10\\text{ cm}$." },
+    { q: "Tam giác đều cạnh $8\\text{ cm}$ có đường phân giác xuất phát từ đỉnh chia cạnh đáy thành hai đoạn có độ dài là:", a: ["$4\\text{ cm}$ và $4\\text{ cm}$", "$3\\text{ cm}$ và $5\\text{ cm}$", "$2\\text{ cm}$ và $6\\text{ cm}$", "$8\\text{ cm}$ và $0\\text{ cm}$"], c: 0, exp: "Tam giác đều thì phân giác cũng là trung tuyến, chia đôi cạnh đáy: $8 : 2 = 4\\text{ cm}$." }
+];
+
+// RENDER THẺ BÀI TẬP
+function renderCards() {
+    const box = document.getElementById('quest-container');
+    let html = '';
+    hwList.forEach((item, idx) => {
+        const opts = item.a.map((txt, i) => ({ txt, isC: i === item.c }));
+        opts.sort(() => Math.random() - 0.5);
+
+        html += `
+        <div class="quest-card" id="card-${idx}">
+            <div class="quest-header">
+                <span class="quest-badge">Thử thách ${idx + 1}</span> ${item.q}
+            </div>
+            ${item.svg ? `<div class="img-wrap">${item.svg}</div>` : ''}
+            <div class="ans-grid">
+                ${opts.map(o => `
+                    <button class="btn-opt" onclick="pickAns(${idx}, ${o.isC}, this)">${o.txt}</button>
+                `).join('')}
+            </div>
+            <div class="explain-box" id="exp-${idx}">
+                💡 <strong>Bí kíp sắc màu:</strong> ${item.exp}
+            </div>
+        </div>
+        `;
+    });
+    box.innerHTML = html;
+    applyMath();
+}
+
+function applyMath() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => offlineMath());
+    } else {
+        setTimeout(offlineMath, 400);
+    }
+}
+
+function offlineMath() {
+    document.querySelectorAll('.quest-header, .btn-opt, .explain-box, .cheat-box').forEach(el => {
+        if (el.innerHTML.includes('$')) el.innerHTML = parseMath(el.innerHTML);
+    });
+}
+
+let score = 0;
+const answered = {};
+
+function pickAns(idx, isCorrect, btn) {
+    if (answered[idx]) return;
+    answered[idx] = true;
+
+    const parent = document.getElementById(`card-${idx}`);
+    const exp = document.getElementById(`exp-${idx}`);
+    const btns = parent.querySelectorAll('.btn-opt');
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        score++;
+        playAudio('correct');
+
+        // Cứ mỗi 4 câu đúng được tặng 1 vé quay
+        if (score % 4 === 0) {
+            spinTickets++;
+            updateSpinBadge();
+            document.getElementById('reward-log').innerHTML = `🎉 <strong>Chúc mừng! Con vừa nhận thêm 1 Vé Quay May Mắn!</strong>`;
+        }
+    } else {
+        btn.classList.add('wrong');
+        playAudio('wrong');
+        btns.forEach(b => {
+            if (b.innerText.trim() === hwList[idx].a[hwList[idx].c].trim() ||
+                b.innerHTML.includes(hwList[idx].a[hwList[idx].c])) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    exp.style.display = 'block';
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([exp]);
+    } else {
+        exp.innerHTML = parseMath(exp.innerHTML);
+    }
+
+    document.getElementById('score-val').innerText = `${score}/20`;
+
+    const rank = document.getElementById('rank-name');
+    if (score >= 18) { rank.innerText = "👑 Đại Kiện Tướng Sắc Màu"; rank.style.color = "#10b981"; }
+    else if (score >= 12) { rank.innerText = "⭐ Ngôi Sao Sáng"; rank.style.color = "#38bdf8"; }
+    else if (score >= 6) { rank.innerText = "🎈 Tân Binh Tiến Bộ"; rank.style.color = "#f59e0b"; }
+}
+
+window.onload = function() {
+    renderCards();
+    drawWheel();
+};
+</script>
+
+</body>
+</html>
